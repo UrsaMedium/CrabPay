@@ -4,16 +4,10 @@ import 'package:crabpay/home_view/bloc/home_pages_bloc/home_pages_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
   //int _bottomNavigationBarIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePagesBloc, HomePagesState>(
@@ -25,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
           appBar: AppBar(title: Text('Crab Pay')),
           body: _bodyBuilder(state),
           bottomNavigationBar: NavigationBar(
+            selectedIndex: state.index,
             onDestinationSelected: (value) {
               final bloc = context.read<HomePagesBloc>();
               if (value == 0) bloc.add(HomePagesEventHomeSelected());

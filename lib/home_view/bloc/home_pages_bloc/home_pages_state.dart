@@ -2,18 +2,19 @@ import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
 abstract class HomePagesState {
-  const HomePagesState();
+  final int index;
+  const HomePagesState({required this.index});
  // implement view emition 
 }
 
 class HomePagesStateHomePage extends HomePagesState {
-  const HomePagesStateHomePage();
+  const HomePagesStateHomePage() : super(index: 0);
 }
 
 class HomePagesStateStorePage extends HomePagesState {
-  const HomePagesStateStorePage();
+  const HomePagesStateStorePage() : super(index: 1);
 }
 
 class HomePagesStateWalletPage extends HomePagesState {
-  const HomePagesStateWalletPage();
+  const HomePagesStateWalletPage() : super(index: 2);
 }
