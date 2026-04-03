@@ -1,4 +1,4 @@
-import 'package:crabpay/home_view/bloc/home_pages_bloc/home_pages_bloc.dart';
+import 'package:crabpay/home_view/bloc/home_pages_navigation_bloc/home_pages_bloc.dart';
 import 'package:crabpay/home_view/home_view.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';

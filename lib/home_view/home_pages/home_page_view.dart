@@ -5,6 +5,12 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Column(
+      children: [
+        Text('Home Row One'),
+        Text('Home Row Two'),
+        Text('Home Row Three'),
+      ],
+    );
   }
 }
