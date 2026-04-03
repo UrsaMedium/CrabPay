@@ -9,3 +9,7 @@ class HomePagesEventOnPageChange extends HomePagesEvent {
   final int index;
   const HomePagesEventOnPageChange({required this.index});
 }
+
+class HomePagesEventOnEvent extends HomePagesEvent {
+  const HomePagesEventOnEvent();
+}

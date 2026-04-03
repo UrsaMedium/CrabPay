@@ -15,27 +15,10 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final PageController _pageController = PageController();
-  int _selectedIndex = 0;
-
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-  }
-
-  void _onPageChanged(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  void _onItemTapped(int selectedIndex) {
-    
-    _pageController.animateToPage(
-      selectedIndex,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -44,95 +27,47 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(title: Text('Crab Pay')),
       body: PageView(
         controller: _pageController,
-        onPageChanged: _onPageChanged, 
+        onPageChanged: _emitOnPageChangeEventAndChangeTab,
         children: const [HomePageView(), StorePageView(), WalletPageView()],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped, 
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.storefront_outlined),
-            selectedIcon: Icon(Icons.storefront),
-            label: 'Sotre',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            selectedIcon: Icon(Icons.account_balance_wallet),
-            label: 'Wallet',
-          ),
-        ],
+      bottomNavigationBar: BlocBuilder<HomePagesBloc, HomePagesState>(
+        builder: (context, state) {
+          return NavigationBar(
+            selectedIndex: state.index,
+            onDestinationSelected: _emitOnTabTapEventAndChangePage,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home_filled),
+                label: 'Home',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.storefront_outlined),
+                selectedIcon: Icon(Icons.storefront),
+                label: 'Sotre',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.account_balance_wallet_outlined),
+                selectedIcon: Icon(Icons.account_balance_wallet),
+                label: 'Wallet',
+              ),
+            ],
+          );
+        },
       ),
     );
   }
+
+  void _emitOnTabTapEventAndChangePage(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    context.read<HomePagesBloc>().add(HomePagesEventOnPageChange(index: index));
+  }
+
+  void _emitOnPageChangeEventAndChangeTab(int index) {
+    context.read<HomePagesBloc>().add(HomePagesEventOnPageChange(index: index));
+  }
 }
-
-// class HomeView extends StatefulWidget {
-//   const HomeView({super.key});
-
-//   @override
-//   State<HomeView> createState() => _HomeViewState();
-// }
-
-// class _HomeViewState extends State<HomeView> {
-//   final PageController _pageController = PageController();
-//   int _bottomBarIndex = 0;
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _pageController.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Crab Pay')),
-//       body: PageView(
-//         controller: _pageController,
-//         onPageChanged: (index) {
-//           // context.read<HomePagesBloc>().add(
-//           //   HomePagesEventOnPageChange(index: index),
-//           // );
-//           _bottomBarIndex = index;
-//         },
-//         children: [HomePageView(), StorePageView(), WalletPageView()],
-//       ),
-//       bottomNavigationBar: NavigationBar(
-//         selectedIndex: _bottomBarIndex,
-//         onDestinationSelected: (index) {
-//           // context.read<HomePagesBloc>().add(
-//           //   HomePagesEventOnPageChange(index: index),
-//           // );
-//           _pageController.animateToPage(
-//             index,
-//             duration: const Duration(microseconds: 300),
-//             curve: Curves.easeInBack,
-//           );
-//         },
-//         destinations: const [
-//           NavigationDestination(
-//             icon: Icon(Icons.home_outlined),
-//             selectedIcon: Icon(Icons.home_filled),
-//             label: 'Home',
-//           ),
-//           NavigationDestination(
-//             icon: Icon(Icons.storefront_outlined),
-//             selectedIcon: Icon(Icons.storefront),
-//             label: 'Sotre',
-//           ),
-//           NavigationDestination(
-//             icon: Icon(Icons.account_balance_wallet_outlined),
-//             selectedIcon: Icon(Icons.account_balance_wallet),
-//             label: 'Wallet',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
