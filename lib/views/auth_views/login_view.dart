@@ -30,6 +30,10 @@ class _LoginViewState extends State<LoginView> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        // shape: RoundedRectangleBorder(
+        //   side: BorderSide(color: colorScheme.surfaceBright),
+        //   borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
+        // ),
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
       ),
       body: Padding(
@@ -58,7 +62,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 labelText: 'Email',
                 filled: true,
-                fillColor: colorScheme.onSecondaryFixed,
+                //fillColor: colorScheme.surfaceContainerHighest,
               ),
               autocorrect: false,
               onSubmitted: (_) {
@@ -75,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 labelText: 'Password',
                 filled: true,
-                fillColor: colorScheme.onSecondaryFixed,
+                // fillColor: colorScheme.surfaceContainerHighest,
               ),
               autocorrect: false,
               obscureText: true,
@@ -116,8 +120,8 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
+                // backgroundColor: colorScheme.primary,
+                // foregroundColor: colorScheme.onPrimary,
                 minimumSize: const Size(double.infinity, 55),
               ),
               child: const Text('Sign Up'),

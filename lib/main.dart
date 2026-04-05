@@ -9,7 +9,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const CrabPayApp());
 }
 
@@ -21,22 +21,37 @@ class CrabPayApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
+        ColorScheme lightScheme;
+        if (lightDynamic != null) {
+          lightScheme = ColorScheme.fromSeed(
+            seedColor: lightDynamic.primary,
+            brightness: Brightness.light,
+            // contrastLevel: 0.5,
+            // dynamicSchemeVariant: DynamicSchemeVariant.vibrant,
+          );
+        } else {
+          lightScheme = ColorScheme.fromSeed(seedColor: Colors.red);
+        }
+
+        ColorScheme darkScheme;
+        if (darkDynamic != null) {
+          darkScheme = ColorScheme.fromSeed(
+            seedColor: darkDynamic.primary,
+            brightness: Brightness.dark,
+            // contrastLevel: 0.5,
+            // dynamicSchemeVariant: DynamicSchemeVariant.vibrant,
+          );
+        } else {
+          darkScheme = ColorScheme.fromSeed(
+            seedColor: Colors.red,
+            brightness: Brightness.dark,
+          );
+        }
+
         return MaterialApp(
           title: 'CrabPay Demo',
-          theme: ThemeData(
-            colorScheme:
-                lightDynamic ?? ColorScheme.fromSeed(seedColor: Colors.red),
-            useMaterial3: true,
-          ),
-          darkTheme: ThemeData(
-            colorScheme:
-                darkDynamic ??
-                ColorScheme.fromSeed(
-                  seedColor: Colors.red,
-                  brightness: Brightness.dark,
-                ),
-            useMaterial3: true,
-          ),
+          theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+          darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
           home: BlocProvider(
             create: (context) => HomeViewBloc(),
             child: const LoginView(),

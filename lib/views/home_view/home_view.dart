@@ -25,9 +25,16 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: colorScheme.surfaceBright, width: 1),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
+        ),
         title: Text('Crab Pay'),
+        //backgroundColor: colorScheme.surfaceDim,
+        //elevation: 1,
         actions: [
           BlocListener<HomeViewBloc, HomeViewState>(
             listener: (context, state) {
@@ -54,31 +61,34 @@ class _HomeViewState extends State<HomeView> {
       ),
       bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
         builder: (context, state) {
-          return NavigationBar(
-            selectedIndex: _pageIndex,
-            onDestinationSelected: _emitOnTabTapEventAndChangePage,
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home_filled),
-                label: 'Home',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.storefront_outlined),
-                selectedIcon: Icon(Icons.storefront),
-                label: 'Store',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.message_outlined),
-                selectedIcon: Icon(Icons.message_rounded),
-                label: 'Ask',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.shopping_cart_checkout_outlined),
-                selectedIcon: Icon(Icons.shopping_cart_rounded),
-                label: 'Cart',
-              ),
-            ],
+          return ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            child: NavigationBar(
+              selectedIndex: _pageIndex,
+              onDestinationSelected: _emitOnTabTapEventAndChangePage,
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  selectedIcon: Icon(Icons.home_filled),
+                  label: 'Home',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.storefront_outlined),
+                  selectedIcon: Icon(Icons.storefront),
+                  label: 'Store',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.message_outlined),
+                  selectedIcon: Icon(Icons.message_rounded),
+                  label: 'Ask',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.shopping_cart_checkout_outlined),
+                  selectedIcon: Icon(Icons.shopping_cart_rounded),
+                  label: 'Cart',
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -92,11 +102,15 @@ class _HomeViewState extends State<HomeView> {
       curve: Curves.easeInOut,
     );
     _pageIndex = index;
-    context.read<HomeViewBloc>().add(HomeViewOnPageSwipeEvent(pageIndex: index));
+    context.read<HomeViewBloc>().add(
+      HomeViewOnPageSwipeEvent(pageIndex: index),
+    );
   }
 
   void _emitOnPageChangeEventAndChangeTab(int index) {
     _pageIndex = index;
-    context.read<HomeViewBloc>().add(HomeViewOnPageSwipeEvent(pageIndex: index));
+    context.read<HomeViewBloc>().add(
+      HomeViewOnPageSwipeEvent(pageIndex: index),
+    );
   }
 }
