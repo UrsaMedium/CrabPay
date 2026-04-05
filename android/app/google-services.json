@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "129752397583",
+    "project_id": "crabpay",
+    "storage_bucket": "crabpay.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129752397583:android:494ac22157236f4a06b07a",
+        "android_client_info": {
+          "package_name": "com.example.crabpay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO1D2p7J-Z4Nmfaqdk7-kjDcp2YpyK8QA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

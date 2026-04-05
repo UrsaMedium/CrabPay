@@ -1,15 +1,20 @@
-import 'package:crabpay/home_view/bloc/home_pages_navigation_bloc/home_pages_bloc.dart';
-import 'package:crabpay/home_view/home_view.dart';
+import 'package:crabpay/views/auth_views/login_view.dart';
+import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
+import 'package:crabpay/views/home_view/home_view.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  runApp(const CrabPayApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CrabPayApp extends StatelessWidget {
+  const CrabPayApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -17,24 +22,24 @@ class MyApp extends StatelessWidget {
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'CrabPay Demo',
           theme: ThemeData(
             colorScheme:
-                lightDynamic ?? ColorScheme.fromSeed(seedColor: Colors.green),
+                lightDynamic ?? ColorScheme.fromSeed(seedColor: Colors.red),
             useMaterial3: true,
           ),
           darkTheme: ThemeData(
             colorScheme:
                 darkDynamic ??
                 ColorScheme.fromSeed(
-                  seedColor: Colors.green,
+                  seedColor: Colors.red,
                   brightness: Brightness.dark,
                 ),
             useMaterial3: true,
           ),
           home: BlocProvider(
-            create: (context) => HomePagesBloc(),
-            child: const HomeView(),
+            create: (context) => HomeViewBloc(),
+            child: const LoginView(),
           ),
         );
       },
