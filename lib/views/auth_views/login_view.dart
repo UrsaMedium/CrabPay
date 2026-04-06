@@ -51,7 +51,10 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             Container(height: 10),
-            Text('Login in will be happening here', textAlign: TextAlign.left),
+            Text(
+              'Logging in will be happening here',
+              textAlign: TextAlign.left,
+            ),
             Container(height: 40),
             TextField(
               focusNode: _emailFocusNode,
@@ -109,7 +112,10 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Don\'t have an account? Then'),
+                  child: Text(
+                    'Don\'t have an account? Then',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                 ),
                 Expanded(
                   child: Divider(thickness: 1, color: colorScheme.outline),
@@ -124,7 +130,10 @@ class _LoginViewState extends State<LoginView> {
                 // foregroundColor: colorScheme.onPrimary,
                 minimumSize: const Size(double.infinity, 55),
               ),
-              child: const Text('Sign Up'),
+              child: const Text(
+                'Sign Up',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
             ),
           ],
         ),
