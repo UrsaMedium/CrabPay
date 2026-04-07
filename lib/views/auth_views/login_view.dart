@@ -1,3 +1,4 @@
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -27,13 +28,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        // shape: RoundedRectangleBorder(
-        //   side: BorderSide(color: colorScheme.surfaceBright),
-        //   borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
-        // ),
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
       ),
       body: Padding(
@@ -47,12 +43,12 @@ class _LoginViewState extends State<LoginView> {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
-                color: colorScheme.primaryFixedDim,
+                color: context.appColorScheme.primaryFixedDim,
               ),
             ),
             Container(height: 10),
             Text(
-              'Logging in will be happening here',
+              'Authorization will be happening here',
               textAlign: TextAlign.left,
             ),
             Container(height: 40),
@@ -65,7 +61,6 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 labelText: 'Email',
                 filled: true,
-                //fillColor: colorScheme.surfaceContainerHighest,
               ),
               autocorrect: false,
               onSubmitted: (_) {
@@ -82,7 +77,6 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 labelText: 'Password',
                 filled: true,
-                // fillColor: colorScheme.surfaceContainerHighest,
               ),
               autocorrect: false,
               obscureText: true,
@@ -95,20 +89,15 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             Container(height: 40),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-                minimumSize: const Size(double.infinity, 55),
-              ),
-              child: const Text('Sign In'),
-            ),
+            appBigElevatedButton(text: 'Sign In', context: context),
             Container(height: 11),
             Row(
               children: [
                 Expanded(
-                  child: Divider(thickness: 1, color: colorScheme.outline),
+                  child: Divider(
+                    thickness: 1,
+                    color: context.appColorScheme.outline,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -118,22 +107,18 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 Expanded(
-                  child: Divider(thickness: 1, color: colorScheme.outline),
+                  child: Divider(
+                    thickness: 1,
+                    color: context.appColorScheme.outline,
+                  ),
                 ),
               ],
             ),
             Container(height: 11),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                // backgroundColor: colorScheme.primary,
-                // foregroundColor: colorScheme.onPrimary,
-                minimumSize: const Size(double.infinity, 55),
-              ),
-              child: const Text(
-                'Sign Up',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+            appBigElevatedButton(
+              text: 'Sign Up',
+              context: context,
+              isPrimary: false,
             ),
           ],
         ),

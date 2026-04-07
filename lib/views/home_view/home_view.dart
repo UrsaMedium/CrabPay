@@ -5,6 +5,7 @@ import 'package:crabpay/views/home_view/home_pages/cart_page_view.dart';
 import 'package:crabpay/views/home_view/home_pages/home_page_view.dart';
 import 'package:crabpay/views/home_view/home_pages/store_page_view.dart';
 import 'package:crabpay/views/home_view/home_pages/ask_page_view.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,21 +26,16 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: colorScheme.surfaceBright, width: 1),
+          side: BorderSide(color: context.appColorScheme.surfaceBright, width: 1),
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
         ),
         title: Text('Crab Pay'),
-        //backgroundColor: colorScheme.surfaceDim,
-        //elevation: 1,
         actions: [
           BlocListener<HomeViewBloc, HomeViewState>(
-            listener: (context, state) {
-              // TODO: implement listener
-            },
+            listener: (context, state) {},
             child: IconButton(
               onPressed: () {
                 context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());

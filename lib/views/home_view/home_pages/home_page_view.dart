@@ -5,9 +5,7 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      //backgroundColor: colorScheme.surfaceDim,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(

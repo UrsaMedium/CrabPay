@@ -1,3 +1,4 @@
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class RegisterView extends StatefulWidget {
@@ -30,7 +31,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
@@ -46,7 +46,7 @@ class _RegisterViewState extends State<RegisterView> {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
-                color: colorScheme.primaryFixedDim,
+                color: context.appColorScheme.primaryFixedDim,
               ),
             ),
             Container(height: 10),
@@ -93,46 +93,24 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ),
             Container(height: 64),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.primary,
-                foregroundColor: colorScheme.onPrimary,
-                minimumSize: Size(double.infinity, 50),
-              ),
-              child: Text(
-                'Submit',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
+            appBigElevatedButton(text: 'Submit', context: context),
             Container(height: 11),
             Row(
               children: [
                 Expanded(
-                  child: Divider(thickness: 1, color: colorScheme.outline),
+                  child: Divider(thickness: 1, color: context.appColorScheme.outline),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('You have one already? Then'),
                 ),
                 Expanded(
-                  child: Divider(thickness: 1, color: colorScheme.outline),
+                  child: Divider(thickness: 1, color: context.appColorScheme.outline),
                 ),
               ],
             ),
             Container(height: 11),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                // backgroundColor: colorScheme.onPrimary,
-                // foregroundColor: colorScheme.primary,
-                minimumSize: Size(double.infinity, 50),
-              ),
-              child: Text(
-                'Sign In',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
+            appBigElevatedButton(text: 'Sign In', context: context, isPrimary: false),
           ],
         ),
       ),
