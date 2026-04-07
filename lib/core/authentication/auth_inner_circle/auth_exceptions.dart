@@ -9,3 +9,7 @@ class GenericAuthException implements Exception {}
 class NoUserSignInException implements Exception {}
 
 class AuthExceptions implements Exception {}
+
+class WeakPasswordAuthException implements Exception {}
+
+class InvalidEmailAuthException implements Exception {}

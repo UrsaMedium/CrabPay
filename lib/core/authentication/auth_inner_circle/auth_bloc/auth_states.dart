@@ -1,3 +1,4 @@
+import 'package:crabpay/core/authentication/auth_binding_circle/auth_user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
@@ -39,14 +40,14 @@ class AuthStateNeedsVerification extends AuthState {
   const AuthStateNeedsVerification({required super.isLoading});
 }
 
-class AuthStateLoggedOut extends AuthState with EquatableMixin {
-  final Exception? exception;
-  const AuthStateLoggedOut({
-    required this.exception,
-    required super.isLoading,
-    String? loadingText,
-  });
+  class AuthStateLoggedOut extends AuthState with EquatableMixin {
+    final Exception? exception;
+    const AuthStateLoggedOut({
+      required this.exception,
+      required super.isLoading,
+      String? loadingText,
+    });
 
-  @override
-  List<Object?> get props => [exception, isLoading];
-}
+    @override
+    List<Object?> get props => [exception, isLoading];
+  }

@@ -20,10 +20,9 @@ class AuthEventLogIn extends AuthEvent {
 }
 
 class AuthEventRegister extends AuthEvent {
-  final String name;
   final String email;
   final String password;
-  const AuthEventRegister(this.name, this.email, this.password);
+  const AuthEventRegister(this.email, this.password);
 }
 
 class AuthEventForgotPassword extends AuthEvent {
