@@ -1,5 +1,6 @@
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -31,87 +32,115 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Create Account',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: context.appColorScheme.primaryFixedDim,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              if (GoRouter.of(context).canPop()) {
+                context.pop();
+              }
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Create Account',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  color: context.appColorScheme.primaryFixedDim,
+                ),
               ),
-            ),
-            Container(height: 10),
-            Text('Create an account to shop, top up, and get 24/7 support.'),
-            Container(height: 40),
-            TextField(
-              focusNode: _nameTextFieldFocus,
-              autofocus: false,
-              autocorrect: false,
-              onSubmitted: (_) =>
-                  FocusScope.of(context).requestFocus(_emailTextFieldFocus),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+              Container(height: 10),
+              Text('Create an account to shop, top up, and get 24/7 support.'),
+              Container(height: 40),
+              TextField(
+                focusNode: _nameTextFieldFocus,
+                autofocus: false,
+                autocorrect: false,
+                onSubmitted: (_) =>
+                    FocusScope.of(context).requestFocus(_emailTextFieldFocus),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  label: Text('Name*'),
+                  filled: true,
                 ),
-                label: Text('Name*'),
-                filled: true,
               ),
-            ),
-            Container(height: 16),
-            TextField(
-              focusNode: _emailTextFieldFocus,
-              autocorrect: false,
-              onSubmitted: (_) =>
-                  FocusScope.of(context).requestFocus(_passwordTextFieldFocus),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+              Container(height: 16),
+              TextField(
+                focusNode: _emailTextFieldFocus,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                onSubmitted: (_) => FocusScope.of(
+                  context,
+                ).requestFocus(_passwordTextFieldFocus),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  label: Text('Email*'),
+                  filled: true,
                 ),
-                label: Text('Email*'),
-                filled: true,
               ),
-            ),
-            Container(height: 16),
-            TextField(
-              focusNode: _passwordTextFieldFocus,
-              autocorrect: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+              Container(height: 16),
+              TextField(
+                focusNode: _passwordTextFieldFocus,
+                autocorrect: false,
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  label: Text('Password*'),
+                  filled: true,
                 ),
-                label: Text('Password*'),
-                filled: true,
               ),
-            ),
-            Container(height: 64),
-            appBigElevatedButton(text: 'Submit', context: context),
-            Container(height: 11),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(thickness: 1, color: context.appColorScheme.outline),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('You have one already? Then'),
-                ),
-                Expanded(
-                  child: Divider(thickness: 1, color: context.appColorScheme.outline),
-                ),
-              ],
-            ),
-            Container(height: 11),
-            appBigElevatedButton(text: 'Sign In', context: context, isPrimary: false),
-          ],
+              Container(height: 64),
+              appBigElevatedButton(text: 'Submit', context: context),
+              Container(height: 11),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: context.appColorScheme.outline,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('You have one already? Then'),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: context.appColorScheme.outline,
+                    ),
+                  ),
+                ],
+              ),
+              Container(height: 11),
+              appBigElevatedButton(
+                text: 'Sign In',
+                context: context,
+                isPrimary: false,
+              ),
+            ],
+          ),
         ),
       ),
     );

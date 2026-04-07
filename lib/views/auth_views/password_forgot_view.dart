@@ -1,5 +1,6 @@
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PasswordForgotView extends StatefulWidget {
   const PasswordForgotView({super.key});
@@ -11,44 +12,59 @@ class PasswordForgotView extends StatefulWidget {
 class _PasswordForgotViewState extends State<PasswordForgotView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Reset Password',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: context.appColorScheme.primaryFixedDim,
-              ),
-            ),
-            Container(height: 10),
-            Text(
-              'Enter your email address and we\'ll send you instructions to reset your password',
-            ),
-            Container(height: 40),
-            TextField(
-              autocorrect: false,
-              autofocus: false,
-
-              decoration: InputDecoration(
-                filled: true,
-                label: Text('Email'),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              if (GoRouter.of(context).canPop()) {
+                context.pop();
+              }
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Reset Password',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  color: context.appColorScheme.primaryFixedDim,
                 ),
               ),
-            ),
-            Container(height: 40),
-            appBigElevatedButton(text: 'Send Reset Link', context: context),
-          ],
+              Container(height: 10),
+              Text(
+                'Enter your email address and we\'ll send you instructions to reset your password',
+              ),
+              Container(height: 40),
+              TextField(
+                autocorrect: false,
+                autofocus: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  filled: true,
+                  label: Text('Email'),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                ),
+              ),
+              Container(height: 40),
+              appBigElevatedButton(text: 'Send Reset Link', context: context),
+            ],
+          ),
         ),
       ),
     );

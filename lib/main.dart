@@ -7,6 +7,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -14,6 +15,34 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const CrabPayApp());
 }
+
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) => const HomeView(),
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'login',
+          builder: (BuildContext context, GoRouterState state) =>
+              const LoginView(),
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'register',
+              builder: (BuildContext context, GoRouterState state) =>
+                  const RegisterView(),
+            ),
+            GoRoute(
+              path: 'password-forgot',
+              builder: (BuildContext context, GoRouterState state) =>
+                  const PasswordForgotView(),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
+);
 
 class CrabPayApp extends StatelessWidget {
   const CrabPayApp({super.key});
@@ -48,13 +77,13 @@ class CrabPayApp extends StatelessWidget {
           );
         }
 
-        return MaterialApp(
-          title: 'CrabPay Demo',
-          theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
-          darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-          home: BlocProvider(
-            create: (context) => HomeViewBloc(),
-            child: const PasswordForgotView(),
+        return BlocProvider(
+          create: (context) => HomeViewBloc(),
+          child: MaterialApp.router(
+            title: 'CrabPay Demo',
+            theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+            darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+            routerConfig: _router,
           ),
         );
       },

@@ -1,3 +1,4 @@
+import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_state.dart';
@@ -8,6 +9,7 @@ import 'package:crabpay/views/home_view/home_pages/ask_page_view.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -38,7 +40,8 @@ class _HomeViewState extends State<HomeView> {
             listener: (context, state) {},
             child: IconButton(
               onPressed: () {
-                context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+                context.go('/login');
+                // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
               },
               icon: Icon(Icons.account_circle_rounded),
             ),
