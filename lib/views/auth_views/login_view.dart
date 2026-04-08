@@ -43,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {

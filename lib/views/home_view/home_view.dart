@@ -27,23 +27,24 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    // showLoading(context);
     return Scaffold(
       appBar: AppBar(
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: context.appColorScheme.surfaceBright, width: 1),
+          side: BorderSide(
+            color: context.appColorScheme.surfaceBright,
+            width: 1,
+          ),
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
         ),
         title: Text('Crab Pay'),
         actions: [
-          BlocListener<HomeViewBloc, HomeViewState>(
-            listener: (context, state) {},
-            child: IconButton(
-              onPressed: () {
-                context.go('/login_view');
-                // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
-              },
-              icon: Icon(Icons.account_circle_rounded),
-            ),
+          IconButton(
+            onPressed: () {
+              context.go('/login_view');
+              // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+            },
+            icon: Icon(Icons.account_circle_rounded),
           ),
         ],
       ),
@@ -60,7 +61,9 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
         builder: (context, state) {
           return ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(18),
+            ),
             child: NavigationBar(
               selectedIndex: _pageIndex,
               onDestinationSelected: _emitOnTabTapEventAndChangePage,

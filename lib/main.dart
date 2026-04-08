@@ -1,3 +1,7 @@
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
@@ -20,7 +24,10 @@ final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) => const HomeView(),
+      builder: (BuildContext context, GoRouterState state) => BlocProvider(
+        create: (context) => HomeViewBloc(),
+        child: const HomeView(),
+      ),
       routes: <RouteBase>[
         GoRoute(
           path: 'login_view',
@@ -67,8 +74,6 @@ class CrabPayApp extends StatelessWidget {
           darkScheme = ColorScheme.fromSeed(
             seedColor: darkDynamic.primary,
             brightness: Brightness.dark,
-            // contrastLevel: 0.5,
-            // dynamicSchemeVariant: DynamicSchemeVariant.vibrant,
           );
         } else {
           darkScheme = ColorScheme.fromSeed(
@@ -78,12 +83,27 @@ class CrabPayApp extends StatelessWidget {
         }
 
         return BlocProvider(
-          create: (context) => HomeViewBloc(),
-          child: MaterialApp.router(
-            title: 'CrabPay Demo',
-            theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
-            darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-            routerConfig: _router,
+          create: (context) => AuthBloc(FirebaseOuterInterface()),
+          child: BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state.isLoading) {
+                showLoading(context);
+              } else {
+                hideLoading();
+              }
+            },
+            child: MaterialApp.router(
+              title: 'CrabPay Demo',
+              theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+              darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+              routerConfig: _router,
+              builder: (context, child) {
+                return Overlay(
+                  key: overlayKey,
+                  initialEntries: [OverlayEntry(builder: (context) => child!)],
+                );
+              },
+            ),
           ),
         );
       },

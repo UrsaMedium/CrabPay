@@ -3,3 +3,22 @@ import 'package:flutter/material.dart';
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;
 }
+
+//loading
+final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
+OverlayEntry? _overlayEntry;
+
+void showLoading(BuildContext context) {
+  _overlayEntry = OverlayEntry(
+    builder: (context) => Container(
+      color: context.appColorScheme.onPrimary,
+      child: const Center(child: CircularProgressIndicator()),
+    ),
+  );
+  Overlay.of(context).insert(_overlayEntry!);
+}
+
+void hideLoading() {
+  _overlayEntry?.remove();
+  _overlayEntry = null;
+}
