@@ -62,7 +62,18 @@ class _PasswordForgotViewState extends State<PasswordForgotView> {
                 ),
               ),
               Container(height: 40),
-              appBigElevatedButton(text: 'Send Reset Link', context: context),
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.appColorScheme.primary,
+                  foregroundColor: context.appColorScheme.onPrimary,
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text(
+                  'Send Reset Link',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
             ],
           ),
         ),

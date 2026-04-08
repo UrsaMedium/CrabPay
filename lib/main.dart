@@ -23,17 +23,17 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) => const HomeView(),
       routes: <RouteBase>[
         GoRoute(
-          path: 'login',
+          path: 'login_view',
           builder: (BuildContext context, GoRouterState state) =>
               const LoginView(),
           routes: <RouteBase>[
             GoRoute(
-              path: 'register',
+              path: 'register_view',
               builder: (BuildContext context, GoRouterState state) =>
                   const RegisterView(),
             ),
             GoRoute(
-              path: 'password-forgot',
+              path: 'password-forgot_view',
               builder: (BuildContext context, GoRouterState state) =>
                   const PasswordForgotView(),
             ),

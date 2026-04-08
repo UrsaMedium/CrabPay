@@ -111,7 +111,18 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
               Container(height: 64),
-              appBigElevatedButton(text: 'Submit', context: context),
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.appColorScheme.primary,
+                  foregroundColor: context.appColorScheme.onPrimary,
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
               Container(height: 11),
               Row(
                 children: [
@@ -134,10 +145,15 @@ class _RegisterViewState extends State<RegisterView> {
                 ],
               ),
               Container(height: 11),
-              appBigElevatedButton(
-                text: 'Sign In',
-                context: context,
-                isPrimary: false,
+              ElevatedButton(
+                onPressed: () => context.go('/login_view'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text(
+                  'Sign In',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ],
           ),

@@ -11,19 +11,25 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   late FocusNode _emailFocusNode;
+  late final TextEditingController _email;
   late FocusNode _passwordFocusNode;
+  late final TextEditingController _password;
 
   @override
   void initState() {
     super.initState();
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
+    _email = TextEditingController();
+    _password = TextEditingController();
   }
 
   @override
   void dispose() {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
+    _email.dispose();
+    _password.dispose();
     super.dispose();
   }
 
@@ -68,6 +74,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               Container(height: 40),
               TextField(
+                controller: _email,
                 focusNode: _emailFocusNode,
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
@@ -85,6 +92,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               Container(height: 16),
               TextField(
+                controller: _password,
                 focusNode: _passwordFocusNode,
                 autofocus: false,
                 decoration: InputDecoration(
@@ -100,12 +108,28 @@ class _LoginViewState extends State<LoginView> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => context.go('/login/password-forgot'),
+                  onPressed: () =>
+                      context.go('/login_view/password-forgot_view'),
                   child: Text('Forgot Password?'),
                 ),
               ),
               Container(height: 40),
-              appBigElevatedButton(text: 'Sign In', context: context),
+              ElevatedButton(
+                onPressed: () {
+                  if (GoRouter.of(context).canPop()) {
+                    context.pop();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.appColorScheme.primary,
+                  foregroundColor: context.appColorScheme.onPrimary,
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text(
+                  'Sign In',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
               Container(height: 11),
               Row(
                 children: [
@@ -134,10 +158,15 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Container(height: 11),
-              appBigElevatedButton(
-                text: 'Sign Up',
-                context: context,
-                isPrimary: false,
+              ElevatedButton(
+                onPressed: () => context.go('/login_view/register_view'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text(
+                  'Sign Up',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ),
             ],
           ),

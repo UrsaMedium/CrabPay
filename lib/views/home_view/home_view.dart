@@ -39,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
             listener: (context, state) {},
             child: IconButton(
               onPressed: () {
-                context.go('/login');
+                context.go('/login_view');
                 // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
               },
               icon: Icon(Icons.account_circle_rounded),
