@@ -1,3 +1,5 @@
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_state.dart';
@@ -39,12 +41,26 @@ class _HomeViewState extends State<HomeView> {
         ),
         title: Text('Crab Pay'),
         actions: [
-          IconButton(
-            onPressed: () {
-              context.go('/login_view');
-              // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthStateLoggedIn) {
+                return IconButton(
+                  onPressed: () {
+                    context.go('/login_view');
+                    // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+                  },
+                  icon: Icon(Icons.account_circle_rounded),
+                );
+              } else {
+                return IconButton(
+                  onPressed: () {
+                    context.go('/login_view');
+                    // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+                  },
+                  icon: Icon(Icons.account_circle_outlined),
+                );
+              }
             },
-            icon: Icon(Icons.account_circle_rounded),
           ),
         ],
       ),
@@ -61,9 +77,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
         builder: (context, state) {
           return ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(18),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
             child: NavigationBar(
               selectedIndex: _pageIndex,
               onDestinationSelected: _emitOnTabTapEventAndChangePage,
