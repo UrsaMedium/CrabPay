@@ -1,4 +1,5 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -24,25 +25,34 @@ final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) => BlocProvider(
-        create: (context) => HomeViewBloc(),
-        child: const HomeView(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => AuthBloc(FirebaseOuterInterface()),
+        child: LimboView(),
       ),
       routes: <RouteBase>[
         GoRoute(
-          path: 'login_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              const LoginView(),
+          path: 'home_view',
+          builder: (BuildContext context, GoRouterState state) => BlocProvider(
+            create: (context) => HomeViewBloc(),
+            child: const HomeView(),
+          ),
           routes: <RouteBase>[
             GoRoute(
-              path: 'register_view',
+              path: 'login_view',
               builder: (BuildContext context, GoRouterState state) =>
-                  const RegisterView(),
-            ),
-            GoRoute(
-              path: 'password-forgot_view',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const PasswordForgotView(),
+                  const LoginView(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'register_view',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const RegisterView(),
+                ),
+                GoRoute(
+                  path: 'password-forgot_view',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const PasswordForgotView(),
+                ),
+              ],
             ),
           ],
         ),
@@ -82,31 +92,48 @@ class CrabPayApp extends StatelessWidget {
           );
         }
 
-        return BlocProvider(
-          create: (context) => AuthBloc(FirebaseOuterInterface()),
-          child: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state.isLoading) {
-                showLoading(context);
-              } else {
-                hideLoading();
-              }
-            },
-            child: MaterialApp.router(
-              title: 'CrabPay Demo',
-              theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
-              darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-              routerConfig: _router,
-              builder: (context, child) {
-                return Overlay(
-                  key: overlayKey,
-                  initialEntries: [OverlayEntry(builder: (context) => child!)],
-                );
-              },
-            ),
-          ),
+        return MaterialApp.router(
+          title: 'CrabPay Demo',
+          theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+          darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+          routerConfig: _router,
+          builder: (context, child) {
+            return Overlay(
+              key: overlayKey,
+              initialEntries: [OverlayEntry(builder: (context) => child!)],
+            );
+          },
         );
       },
     );
   }
 }
+
+class LimboView extends StatelessWidget {
+  const LimboView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.isLoading) {
+          showLoading(context);
+        } else {
+          hideLoading();
+        }
+      },
+      builder: (context, state) {
+        return const HomeView();
+      },
+    );
+  }
+}
+
+
+// context.read<AuthBloc>().add(const AuthEventInitialize());      listener: (context, state) {
+        
+//         if (state.isLoading) {
+//           showLoading(context);
+//         } else {
+//           hideLoading();
+//         }

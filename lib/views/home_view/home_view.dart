@@ -1,4 +1,5 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
@@ -8,6 +9,7 @@ import 'package:crabpay/views/home_view/home_pages/home_page_view.dart';
 import 'package:crabpay/views/home_view/home_pages/store_page_view.dart';
 import 'package:crabpay/views/home_view/home_pages/ask_page_view.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/home_view/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +31,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // showLoading(context);
     return Scaffold(
       appBar: AppBar(
         shape: RoundedRectangleBorder(
@@ -46,8 +47,10 @@ class _HomeViewState extends State<HomeView> {
               if (state is AuthStateLoggedIn) {
                 return IconButton(
                   onPressed: () {
-                    context.go('/login_view');
-                    // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => ProfileView(),
+                    );
                   },
                   icon: Icon(Icons.account_circle_rounded),
                 );
@@ -55,7 +58,6 @@ class _HomeViewState extends State<HomeView> {
                 return IconButton(
                   onPressed: () {
                     context.go('/login_view');
-                    // context.read<HomeViewBloc>().add(HomeViewOnProfileTapEvent());
                   },
                   icon: Icon(Icons.account_circle_outlined),
                 );
