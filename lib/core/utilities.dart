@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;
@@ -24,26 +23,9 @@ void hideLoading() {
   _overlayEntry = null;
 }
 
-Widget appDialog(BuildContext context, String messege) {
-  return Dialog(
-    child: Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(messege),
-          TextButton(
-            onPressed: () => context.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    ),
-  );
-}
 
 void showScnackBarMessege(BuildContext context, String messege) {
+  print(messege + '_____________________________________________________________________________________________');
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(messege),

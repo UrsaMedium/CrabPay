@@ -36,17 +36,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // when an user asks to reset their password
     on<AuthEventForgotPassword>((event, emit) async {
-      emit(
-        const AuthStateForgotPassword(
-          exception: null,
-          hasSentEmail: false,
-          isLoading: false,
-        ),
-      );
-      final email = event.email;
-      if (email == null) {
-        return; // user went to forgot-password screen
-      }
+      // emit(
+      //   const AuthStateForgotPassword(
+      //     exception: null,
+      //     hasSentEmail: false,
+      //     isLoading: false,
+      //   ),
+      // );
+      // final email = event.email;
+      // if (email == null) {
+      //   return; // user went to forgot-password screen
+      // }
 
       // reset email sent
       emit(
@@ -79,12 +79,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // user tries to register
     on<AuthEventRegister>((event, emit) async {
+      emit(AuthStateRegistering(exception: null, isLoading: true));
       final email = event.email;
       final password = event.password;
       try {
         await interface.createUser(email: email, password: password);
         await interface.sendEmailVerification();
-        emit(const AuthStateNeedsVerification(isLoading: false));
       } on Exception catch (e) {
         emit(AuthStateRegistering(exception: e, isLoading: false));
       }
@@ -105,8 +105,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (!user.isEmailVerified) {
           emit(const AuthStateNeedsVerification(isLoading: false));
         } else {
-        emit(const AuthStateLoggedOut(exception: null, isLoading: false));
-        emit(AuthStateLoggedIn(user: user, isLoading: false));
+          emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+          emit(AuthStateLoggedIn(user: user, isLoading: false));
         }
       } on Exception catch (e) {
         emit(AuthStateLoggedOut(exception: e, isLoading: false));
@@ -115,7 +115,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<AuthEventSentEmailVerification>((event, emit) async {
       await interface.sendEmailVerification();
-      emit(state);
+      emit(AuthStateNeedsVerification(isLoading: false));
     });
   }
 }

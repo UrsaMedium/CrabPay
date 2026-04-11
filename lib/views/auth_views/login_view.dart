@@ -1,5 +1,9 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/dialogs/on_login_dialog.dart';
+import 'package:crabpay/core/dialogs/on_password_forgot.dart';
+import 'package:crabpay/core/dialogs/on_regester_dialog.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,32 +17,87 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  late FocusNode _emailFocusNode;
-  late final TextEditingController _email;
-  late FocusNode _passwordFocusNode;
-  late final TextEditingController _password;
+  // late FocusNode _emailFocusNode;
+  // late final TextEditingController _email;
+  // late FocusNode _passwordFocusNode;
+  // late final TextEditingController _password;
 
-  @override
-  void initState() {
-    super.initState();
-    _emailFocusNode = FocusNode();
-    _passwordFocusNode = FocusNode();
-    _email = TextEditingController();
-    _password = TextEditingController();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _emailFocusNode = FocusNode();
+  //   _passwordFocusNode = FocusNode();
+  //   _email = TextEditingController();
+  //   _password = TextEditingController();
+  // }
 
-  @override
-  void dispose() {
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _emailFocusNode.dispose();
+  //   _passwordFocusNode.dispose();
+  //   _email.dispose();
+  //   _password.dispose();
+  //   super.dispose();
+  // }
+  bool? huh = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (state.isLoading) {
+          showLoading(context);
+        } else {
+          hideLoading();
+          showScnackBarMessege(context, state.toString());
+          if (state is AuthStateRegistering) {
+            await showOnRegisterDialog(context);
+          } else if (state is AuthStateNeedsVerification &&
+              GoRouterState.of(context).uri.path == '/login_view') {
+            huh = await showOnLoginDialog(context);
+          } else if (state is AuthStateForgotPassword &&
+              GoRouterState.of(context).uri.path ==
+                  '/login_view/password-forgot_view' &&
+              state.hasSentEmail) {
+            await showOnPasswordResetDialog(context);
+          } else if (state is AuthStateForgotPassword &&
+              GoRouterState.of(context).uri.path ==
+                  '/login_view/password-forgot_view' &&
+              !state.hasSentEmail) {
+            await showOnLoginDialog(context);
+          }
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthStateNeedsVerification) {
+          context.read<AuthBloc>().add(const AuthEventLogOut());
+          context.go('/');
+        } else if (huh == true) {
+          huh = false;
+          context.read<AuthBloc>().add(AuthEventSentEmailVerification());
+          context.go('/');
+        } else if (state is AuthStateRegistering) {
+          context.read<AuthBloc>().add(const AuthEventLogOut());
+          context.go('/');
+        } else if (state is AuthStateForgotPassword) {
+          context.read<AuthBloc>().add(const AuthEventLogOut());
+          context.go('/');
+        }
+        return actualLoginUi(context, state);
+      },
+    );
+  }
+}
+
+Widget actualLoginUi(BuildContext context, AuthState state) {
+  FocusNode emailFocusNode = FocusNode();
+  TextEditingController email = TextEditingController();
+  FocusNode passwordFocusNode = FocusNode();
+  TextEditingController password = TextEditingController();
+
+  return GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),
+    child: Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -71,8 +130,8 @@ class _LoginViewState extends State<LoginView> {
             ),
             Container(height: 40),
             TextField(
-              controller: _email,
-              focusNode: _emailFocusNode,
+              controller: email,
+              focusNode: emailFocusNode,
               autofocus: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -84,13 +143,13 @@ class _LoginViewState extends State<LoginView> {
               ),
               autocorrect: false,
               onSubmitted: (_) {
-                FocusScope.of(context).requestFocus(_passwordFocusNode);
+                FocusScope.of(context).requestFocus(passwordFocusNode);
               },
             ),
             Container(height: 16),
             TextField(
-              controller: _password,
-              focusNode: _passwordFocusNode,
+              controller: password,
+              focusNode: passwordFocusNode,
               autofocus: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -113,7 +172,7 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
               onPressed: () async {
                 context.read<AuthBloc>().add(
-                  AuthEventLogIn(_email.text, _password.text),
+                  AuthEventLogIn(email.text, password.text),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -164,6 +223,6 @@ class _LoginViewState extends State<LoginView> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }

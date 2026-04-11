@@ -1,5 +1,4 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/home_view/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
@@ -44,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              if (state is AuthStateLoggedIn) {
+              if (state is AuthStateLoggedIn || state is AuthStateNeedsVerification) {
                 return IconButton(
                   onPressed: () {
                     showModalBottomSheet(

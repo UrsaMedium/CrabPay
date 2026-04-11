@@ -1,3 +1,4 @@
+import 'package:crabpay/core/dialogs/on_login_dialog.dart';
 import 'package:flutter/material.dart';
 
 class HomePageView extends StatelessWidget {
@@ -11,7 +12,7 @@ class HomePageView extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TextButton(onPressed: () {}, child: Text('data')),
+              child: TextButton(onPressed: () async  {await showOnLoginDialog(context); return;}, child: Text('data')),
             ),
           ),
           SliverToBoxAdapter(

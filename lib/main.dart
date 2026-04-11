@@ -1,6 +1,5 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
@@ -18,47 +17,45 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const CrabPayApp());
+  runApp(
+    BlocProvider(
+      create: (context) => AuthBloc(FirebaseOuterInterface()),
+      child: const CrabPayApp(),
+    ),
+  );
 }
 
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => BlocProvider(
-        create: (context) => AuthBloc(FirebaseOuterInterface()),
-        child: LimboView(),
+      builder: (BuildContext context, GoRouterState state) => BlocProvider(
+        create: (context) => HomeViewBloc(),
+        child: const HomeView(),
       ),
       routes: <RouteBase>[
         GoRoute(
-          path: 'home_view',
-          builder: (BuildContext context, GoRouterState state) => BlocProvider(
-            create: (context) => HomeViewBloc(),
-            child: const HomeView(),
-          ),
+          path: 'login_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              const LoginView(),
           routes: <RouteBase>[
             GoRoute(
-              path: 'login_view',
+              path: 'register_view',
               builder: (BuildContext context, GoRouterState state) =>
-                  const LoginView(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: 'register_view',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const RegisterView(),
-                ),
-                GoRoute(
-                  path: 'password-forgot_view',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const PasswordForgotView(),
-                ),
-              ],
+                  const RegisterView(),
+            ),
+            GoRoute(
+              path: 'password-forgot_view',
+              builder: (BuildContext context, GoRouterState state) =>
+                  const PasswordForgotView(),
             ),
           ],
         ),
       ],
     ),
   ],
+  //   ),
+  // ],
 );
 
 class CrabPayApp extends StatelessWidget {
@@ -67,6 +64,7 @@ class CrabPayApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    context.read<AuthBloc>().add(const AuthEventInitialize());
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         ColorScheme lightScheme;
@@ -109,25 +107,53 @@ class CrabPayApp extends StatelessWidget {
   }
 }
 
-class LimboView extends StatelessWidget {
-  const LimboView({super.key});
+// class LimboView extends StatelessWidget {
+//   const LimboView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state.isLoading) {
-          showLoading(context);
-        } else {
-          hideLoading();
-        }
-      },
-      builder: (context, state) {
-        return const HomeView();
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     String whatIsState = '';
+//     context.read<AuthBloc>().add(const AuthEventInitialize());
+//     return BlocListener<AuthBloc, AuthState>(
+//       listener: (context, state) async {
+//         whatIsState = state.toString();
+//         if (state.isLoading) {
+//           showLoading(context);
+//         } else {
+//           hideLoading();
+//           if (state is AuthStateLoggedIn) {
+//             context.go('/home_view');
+//             showScnackBarMessege(context, 'You are Logging In');
+//             // showDialog(context: context, builder: (context) => appDialog(context, ''));
+//           } else if (state is AuthStateNeedsVerification) {
+//             context.go('/home_view');
+//             showScnackBarMessege(context, 'You need verify your account');
+//             appDialog(context, 'messege');
+//             // await appDialog(context, '');
+//           } else if (state is AuthStateLoggedOut) {
+//             context.go('/home_view/login_view');
+//             // await appDialog(context, '');
+//             showScnackBarMessege(context, 'Please, Sign In');
+//           } else if (state is AuthStateRegistering) {
+//             // await appDialog(context, '');
+//             showScnackBarMessege(context, 'You are Signing Up');
+//           } else if (state is AuthStateUninitialized) {
+//             // await appDialog(context, '');
+//             showScnackBarMessege(context, 'Uninitialized');
+//           } else if (state is AuthStateForgotPassword) {
+//             // await appDialog(context, '');
+//             showScnackBarMessege(context, 'Huh, Looser');
+//           }
+//         }
+//       },
+//       child: BlocBuilder<AuthBloc, AuthState>(
+//         builder: (context, state) {
+//           return Column(children: [Text(whatIsState)]);
+//         },
+//       ),
+//     );
+//   }
+// }
 
 
 // context.read<AuthBloc>().add(const AuthEventInitialize());      listener: (context, state) {
