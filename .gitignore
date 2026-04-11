@@ -46,3 +46,4 @@ app.*.map.json
 
 # Specific files i don't want to add
 /lib/firebase_options.dart
+android/app/google-services.json
