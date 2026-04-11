@@ -25,7 +25,8 @@ void hideLoading() {
 
 
 void showScnackBarMessege(BuildContext context, String messege) {
-  print(messege + '_____________________________________________________________________________________________');
+  // ignore: avoid_print
+  print('${messege}_____________________________________________________________________________________________');
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(messege),

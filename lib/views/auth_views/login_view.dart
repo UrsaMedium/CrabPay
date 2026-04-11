@@ -50,28 +50,23 @@ class _LoginViewState extends State<LoginView> {
         } else {
           hideLoading();
           showScnackBarMessege(context, state.toString());
-          if (state is AuthStateRegistering) {
-            await showOnRegisterDialog(context);
-          } else if (state is AuthStateNeedsVerification &&
+          if (state is AuthStateNeedsVerification &&
               GoRouterState.of(context).uri.path == '/login_view') {
             huh = await showOnLoginDialog(context);
-          } else if (state is AuthStateForgotPassword &&
+          } else if (state is AuthStateRegistering &&
               GoRouterState.of(context).uri.path ==
-                  '/login_view/password-forgot_view' &&
-              state.hasSentEmail) {
+                  '/login_view/register_view' && state.exception == null) {
+            await showOnRegisterDialog(context);
+          } else if (state is AuthStateForgotPassword && state.exception == null) {
             await showOnPasswordResetDialog(context);
-          } else if (state is AuthStateForgotPassword &&
-              GoRouterState.of(context).uri.path ==
-                  '/login_view/password-forgot_view' &&
-              !state.hasSentEmail) {
-            await showOnLoginDialog(context);
+          } else if (state is AuthStateLoggedIn) {
+            context.go('/');
           }
         }
       },
       builder: (context, state) {
         if (state is AuthStateNeedsVerification) {
           context.read<AuthBloc>().add(const AuthEventLogOut());
-          context.go('/');
         } else if (huh == true) {
           huh = false;
           context.read<AuthBloc>().add(AuthEventSentEmailVerification());
@@ -83,6 +78,7 @@ class _LoginViewState extends State<LoginView> {
           context.read<AuthBloc>().add(const AuthEventLogOut());
           context.go('/');
         }
+
         return actualLoginUi(context, state);
       },
     );
@@ -95,133 +91,130 @@ Widget actualLoginUi(BuildContext context, AuthState state) {
   FocusNode passwordFocusNode = FocusNode();
   TextEditingController password = TextEditingController();
 
-  return GestureDetector(
-    onTap: () => FocusScope.of(context).unfocus(),
-    child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (GoRouter.of(context).canPop()) {
-              context.pop();
-            }
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
+  return Scaffold(
+    resizeToAvoidBottomInset: false,
+    appBar: AppBar(
+      leading: IconButton(
+        onPressed: () {
+          if (GoRouter.of(context).canPop()) {
+            context.pop();
+          }
+        },
+        icon: Icon(Icons.arrow_back),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Please, Sign In',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: context.appColorScheme.primaryFixedDim,
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Please, Sign In',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+              color: context.appColorScheme.primaryFixedDim,
+            ),
+          ),
+          Container(height: 10),
+          Text(
+            'Authorization will be happening here',
+            textAlign: TextAlign.left,
+          ),
+          Container(height: 40),
+          TextField(
+            controller: email,
+            focusNode: emailFocusNode,
+            autofocus: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
+              labelText: 'Email',
+              filled: true,
             ),
-            Container(height: 10),
-            Text(
-              'Authorization will be happening here',
-              textAlign: TextAlign.left,
+            autocorrect: false,
+            onSubmitted: (_) {
+              FocusScope.of(context).requestFocus(passwordFocusNode);
+            },
+          ),
+          Container(height: 16),
+          TextField(
+            controller: password,
+            focusNode: passwordFocusNode,
+            autofocus: false,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+              ),
+              labelText: 'Password',
+              filled: true,
             ),
-            Container(height: 40),
-            TextField(
-              controller: email,
-              focusNode: emailFocusNode,
-              autofocus: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+            autocorrect: false,
+            obscureText: true,
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () => context.go('/login_view/password-forgot_view'),
+              child: Text('Forgot Password?'),
+            ),
+          ),
+          Container(height: 40),
+          ElevatedButton(
+            onPressed: () async {
+              context.read<AuthBloc>().add(
+                AuthEventLogIn(email.text, password.text),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.appColorScheme.primary,
+              foregroundColor: context.appColorScheme.onPrimary,
+              minimumSize: Size(double.infinity, 50),
+            ),
+            child: Text(
+              'Sign In',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+          Container(height: 11),
+          Row(
+            children: [
+              Expanded(
+                child: Divider(
+                  thickness: 1,
+                  color: context.appColorScheme.outline,
                 ),
-                labelText: 'Email',
-                filled: true,
               ),
-              autocorrect: false,
-              onSubmitted: (_) {
-                FocusScope.of(context).requestFocus(passwordFocusNode);
-              },
-            ),
-            Container(height: 16),
-            TextField(
-              controller: password,
-              focusNode: passwordFocusNode,
-              autofocus: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Don\'t have an account? Then',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
-                labelText: 'Password',
-                filled: true,
               ),
-              autocorrect: false,
-              obscureText: true,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => context.go('/login_view/password-forgot_view'),
-                child: Text('Forgot Password?'),
-              ),
-            ),
-            Container(height: 40),
-            ElevatedButton(
-              onPressed: () async {
-                context.read<AuthBloc>().add(
-                  AuthEventLogIn(email.text, password.text),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: context.appColorScheme.primary,
-                foregroundColor: context.appColorScheme.onPrimary,
-                minimumSize: Size(double.infinity, 50),
-              ),
-              child: Text(
-                'Sign In',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-            Container(height: 11),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    thickness: 1,
-                    color: context.appColorScheme.outline,
-                  ),
+              Expanded(
+                child: Divider(
+                  thickness: 1,
+                  color: context.appColorScheme.outline,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Don\'t have an account? Then',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    thickness: 1,
-                    color: context.appColorScheme.outline,
-                  ),
-                ),
-              ],
-            ),
-            Container(height: 11),
-            ElevatedButton(
-              onPressed: () => context.go('/login_view/register_view'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
               ),
-              child: Text(
-                'Sign Up',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+            ],
+          ),
+          Container(height: 11),
+          ElevatedButton(
+            onPressed: () => context.go('/login_view/register_view'),
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 50),
             ),
-          ],
-        ),
+            child: Text(
+              'Sign Up',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+        ],
       ),
     ),
   );

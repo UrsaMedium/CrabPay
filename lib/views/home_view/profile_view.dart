@@ -1,3 +1,4 @@
+import 'package:crabpay/core/authentication/auth_binding_circle/auth_binding_service.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -18,44 +19,61 @@ class ProfileView extends StatelessWidget {
         }
       },
       child: SizedBox(
-        height: 300,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Row(),
-                Expanded(
-                  child: Divider(
-                    thickness: 1,
-                    color: context.appColorScheme.outline,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () =>
-                      context.read<AuthBloc>().add(AuthEventLogOut()),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: context.appColorScheme.primary,
-                    foregroundColor: context.appColorScheme.onPrimary,
-                    minimumSize: Size(double.infinity, 50),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.logout_outlined),
-                      Text(
-                        '  Sign Out',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Your profile:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: context.appColorScheme.primary,
+                            ),
+                          ),
+                          Text(
+                            appUserEmail() ?? 'If you see me. You are in limbo',
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>
+                          context.read<AuthBloc>().add(AuthEventLogOut()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: context.appColorScheme.primary,
+                        foregroundColor: context.appColorScheme.onPrimary,
+                        minimumSize: Size(0, 50),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.logout_outlined),
+                          Text(
+                            '  Sign Out',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Container(height: 10),
+                Container(height: 8),
+                Divider(thickness: 1, color: context.appColorScheme.outline),
+                Container(height: 8),
+                
               ],
             ),
           ),

@@ -48,6 +48,7 @@ class _HomeViewState extends State<HomeView> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
+                      showDragHandle: true,
                       builder: (BuildContext context) => ProfileView(),
                     );
                   },

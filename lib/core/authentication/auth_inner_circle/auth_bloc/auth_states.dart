@@ -6,7 +6,8 @@ import 'package:flutter/foundation.dart' show immutable;
 abstract class AuthState {
   final bool isLoading;
   final String? loadingText;
-  const AuthState({required this.isLoading, this.loadingText});
+  final Exception? bloodyAuthException;
+  const AuthState({required this.isLoading, this.loadingText, this.bloodyAuthException});
 }
 
 class AuthStateUninitialized extends AuthState {

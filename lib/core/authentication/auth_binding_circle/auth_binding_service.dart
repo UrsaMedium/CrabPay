@@ -35,3 +35,7 @@ class AuthBindingService implements AuthInnerInterface {
   Future<void> sendPasswordReset({required String toEmail}) =>
       interface.sendPasswordReset(toEmail: toEmail);
 }
+
+String? appUserEmail() {
+  return AuthBindingService.fireBase().currentUser?.email;
+}
