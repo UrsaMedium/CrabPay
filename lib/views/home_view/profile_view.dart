@@ -47,8 +47,9 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () =>
-                          context.read<AuthBloc>().add(AuthEventLogOut()),
+                      onPressed: () => context.read<AuthBloc>().add(
+                        AuthEventLogOut(context: context),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.appColorScheme.primary,
                         foregroundColor: context.appColorScheme.onPrimary,
@@ -73,7 +74,6 @@ class ProfileView extends StatelessWidget {
                 Container(height: 8),
                 Divider(thickness: 1, color: context.appColorScheme.outline),
                 Container(height: 8),
-                
               ],
             ),
           ),

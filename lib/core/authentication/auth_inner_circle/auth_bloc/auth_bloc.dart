@@ -1,99 +1,164 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_exceptions.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_inner_interface.dart';
+import 'package:crabpay/core/dialogs/on_login_dialog.dart';
+import 'package:crabpay/core/dialogs/on_password_forgot.dart';
+import 'package:crabpay/core/dialogs/on_regester_dialog.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(AuthInnerInterface interface)
-    : super(const AuthStateUninitialized(isLoading: true)) {
+    : super(const AuthStateUninitialized()) {
     // when the app is launched the initialization is emited
     on<AuthEventInitialize>((event, emit) async {
+      showLoading(event.context);
       await interface.initialize();
       final user = interface.currentUser;
       if (user == null) {
-        emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+        emit(
+          const AuthStateLoggedOut(
+            bloodyAuthException: null,
+            reason: 'No User Found',
+          ),
+        );
+        hideLoading();
       } else if (!user.isEmailVerified) {
-        emit(const AuthStateNeedsVerification(isLoading: false));
+        try {
+          await interface.logOut();
+          hideLoading();
+          emit(
+            AuthStateLoggedOut(
+              bloodyAuthException: null,
+              reason: 'The User Email Is Not Verified',
+            ),
+          );
+        } on Exception catch (e) {
+          hideLoading();
+          emit(
+            AuthStateLoggedOut(
+              bloodyAuthException: e,
+              reason:
+                  'Some Exception. Tried To Log Out - Email Is Not Verified',
+            ),
+          );
+        }
       } else {
-        emit(AuthStateLoggedIn(user: user, isLoading: false));
+        hideLoading();
+        emit(AuthStateLoggedIn(user: user));
       }
-    });
-
-    // when an unauthorized user tries to perfom authorazied only action
-    on<AuthEventNotAuthorized>((event, emit) async {
-      emit(const AuthStateLoggedOut(exception: null, isLoading: false));
     });
 
     // when an user wants to log out
     on<AuthEventLogOut>((event, emit) async {
+      showLoading(event.context);
       try {
         await interface.logOut();
-        emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+        hideLoading();
+        emit(
+          const AuthStateLoggedOut(
+            bloodyAuthException: null,
+            reason: 'User Is Loged Out',
+          ),
+        );
       } on Exception catch (e) {
-        emit(AuthStateLoggedOut(exception: e, isLoading: false));
+        hideLoading();
+        emit(
+          AuthStateLoggedOut(
+            bloodyAuthException: e,
+            reason: 'Some Exception. Log Out Failure',
+          ),
+        );
       }
     });
 
     // when an user asks to reset their password
     on<AuthEventForgotPassword>((event, emit) async {
-      bool didSendEmail;
-      Exception? exception;
+      showLoading(event.context);
       try {
         await interface.sendPasswordReset(toEmail: event.email);
-        didSendEmail = true;
-        exception = null;
+        hideLoading();
+        if (event.context.mounted) showOnPasswordResetDialog(event.context);
+        emit(
+          const AuthStateLoggedOut(
+            bloodyAuthException: null,
+            reason: 'Password Reset Email Is Sent',
+          ),
+        );
       } on Exception catch (e) {
-        didSendEmail = false;
-        exception = e;
+        hideLoading();
+        emit(
+          AuthStateLoggedOut(
+            bloodyAuthException: e,
+            reason: 'Some Exception.  Password Reset Emai Is Not Sent',
+          ),
+        );
       }
-
-      emit(
-        AuthStateForgotPassword(
-          exception: exception,
-          hasSentEmail: didSendEmail,
-          isLoading: false,
-        ),
-      );
     });
 
     // user tries to register
     on<AuthEventRegister>((event, emit) async {
-      emit(
-        AuthStateRegistering(exception: DecoyAuthException(), isLoading: true),
-      );
-      final email = event.email;
-      final password = event.password;
+      showLoading(event.context);
       try {
-        await interface.createUser(email: email, password: password);
+        await interface.createUser(
+          email: event.email,
+          password: event.password,
+        );
         await interface.sendEmailVerification();
-        emit(AuthStateRegistering(exception: null, isLoading: false));
+        hideLoading();
+        if (event.context.mounted) await showOnRegisterDialog(event.context);
+        emit(
+          AuthStateLoggedOut(
+            bloodyAuthException: null,
+            reason: 'Register Success',
+          ),
+        );
       } on Exception catch (e) {
-        emit(AuthStateRegistering(exception: e, isLoading: false));
+        hideLoading();
+        emit(
+          AuthStateLoggedOut(
+            bloodyAuthException: e,
+            reason: 'Some Exception. Register Failur',
+          ),
+        );
       }
     });
 
     on<AuthEventLogIn>((event, emit) async {
-      // emit(
-      //   const AuthStateLoggedOut(
-      //     exception: null,
-      //     isLoading: true,
-      //     loadingText: 'Authorizing',
-      //   ),
-      // );
-      final email = event.email;
-      final password = event.password;
+      showLoading(event.context);
       try {
-        final user = await interface.logIn(email: email, password: password);
-        emit(AuthStateLoggedIn(user: user, isLoading: false));
+        final user = await interface.logIn(
+          email: event.email,
+          password: event.password,
+        );
+        if (user.isEmailVerified) {
+          hideLoading();
+          emit(AuthStateLoggedIn(user: user));
+        } else {
+          hideLoading();
+          if (event.context.mounted) {
+            bool? sendVerification = await showOnLoginDialog(event.context);
+            if (event.context.mounted) showLoading(event.context);
+            if (sendVerification == true) interface.sendEmailVerification();
+          }
+          await interface.logOut();
+          hideLoading();
+          emit(
+            AuthStateLoggedOut(
+              bloodyAuthException: null,
+              reason: 'User Email Is Not Verified',
+            ),
+          );
+        }
       } on Exception catch (e) {
-        emit(AuthStateLoggedOut(exception: e, isLoading: false));
+        hideLoading();
+        emit(
+          AuthStateLoggedOut(
+            bloodyAuthException: e,
+            reason: 'Some Exception. Log In Failure',
+          ),
+        );
       }
-    });
-
-    on<AuthEventSentEmailVerification>((event, emit) async {
-      await interface.sendEmailVerification();
-      emit(AuthStateNeedsVerification(isLoading: false));
     });
   }
 }

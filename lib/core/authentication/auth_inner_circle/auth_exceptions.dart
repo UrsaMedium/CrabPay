@@ -14,4 +14,4 @@ class WeakPasswordAuthException implements Exception {}
 
 class InvalidEmailAuthException implements Exception {}
 
-class DecoyAuthException implements Exception {}
+class EmailVerificationNeeded implements Exception {}

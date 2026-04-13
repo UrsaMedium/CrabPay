@@ -43,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              if (state is AuthStateLoggedIn || state is AuthStateNeedsVerification) {
+              if (state is AuthStateLoggedIn) {
                 return IconButton(
                   onPressed: () {
                     showModalBottomSheet(

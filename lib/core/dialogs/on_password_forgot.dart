@@ -5,7 +5,7 @@ Future<void> showOnPasswordResetDialog(BuildContext context) {
   return showAppGenericDialog(
     context: context,
     title: 'Reset Link Sent',
-    message: 'Check the email we have sent to change the password',
+    message: 'Check the email we have sent you to change the password',
     optionBuilder: () => {'OK': null},
   );
 }

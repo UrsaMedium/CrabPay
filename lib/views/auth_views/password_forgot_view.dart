@@ -72,7 +72,10 @@ class _PasswordForgotViewState extends State<PasswordForgotView> {
               ElevatedButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(
-                    AuthEventForgotPassword(email: _emailControler.text),
+                    AuthEventForgotPassword(
+                      email: _emailControler.text,
+                      context: context,
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(

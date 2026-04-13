@@ -4,51 +4,26 @@ import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
 abstract class AuthState {
-  final bool isLoading;
-  final String? loadingText;
   final Exception? bloodyAuthException;
-  const AuthState({required this.isLoading, this.loadingText, this.bloodyAuthException});
+  const AuthState({this.bloodyAuthException});
 }
 
 class AuthStateUninitialized extends AuthState {
-  const AuthStateUninitialized({required super.isLoading});
-}
-
-class AuthStateRegistering extends AuthState {
-  final Exception? exception;
-  const AuthStateRegistering({
-    required this.exception,
-    required super.isLoading,
-  });
-}
-
-class AuthStateForgotPassword extends AuthState {
-  final Exception? exception;
-  final bool hasSentEmail;
-  const AuthStateForgotPassword({
-    required this.exception,
-    required this.hasSentEmail,
-    required super.isLoading,
-  });
+  const AuthStateUninitialized();
 }
 
 class AuthStateLoggedIn extends AuthState {
   final AuthUser user;
-  const AuthStateLoggedIn({required this.user, required super.isLoading});
-}
-
-class AuthStateNeedsVerification extends AuthState {
-  const AuthStateNeedsVerification({required super.isLoading});
+  const AuthStateLoggedIn({required this.user});
 }
 
   class AuthStateLoggedOut extends AuthState with EquatableMixin {
-    final Exception? exception;
+    final String? reason;
     const AuthStateLoggedOut({
-      required this.exception,
-      required super.isLoading,
-      String? loadingText,
+      required super.bloodyAuthException,
+      String? loadingText, this.reason,
     });
 
     @override
-    List<Object?> get props => [exception, isLoading];
+    List<Object?> get props => [bloodyAuthException, reason];
   }

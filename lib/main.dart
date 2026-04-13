@@ -64,7 +64,7 @@ class CrabPayApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    context.read<AuthBloc>().add(const AuthEventInitialize());
+    context.read<AuthBloc>().add(AuthEventInitialize(context: context));
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         ColorScheme lightScheme;

@@ -108,6 +108,7 @@ class _RegisterViewState extends State<RegisterView> {
                     AuthEventRegister(
                       _emailController.text,
                       _passwordController.text,
+                      context: context,
                     ),
                   );
                 },
