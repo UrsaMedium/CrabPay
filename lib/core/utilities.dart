@@ -32,7 +32,7 @@ void showScnackBarMessege(BuildContext context, String messege) {
       content: Text(messege),
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height - 100,
+        bottom: MediaQuery.of(context).size.height - 200,
         left: 10,
         right: 10,
       ),

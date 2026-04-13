@@ -1,4 +1,4 @@
-import 'package:crabpay/core/dialogs/on_login_dialog.dart';
+import 'package:crabpay/views/dialogs/on_login_dialog.dart';
 import 'package:flutter/material.dart';
 
 class HomePageView extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_inner_interface.dart';
-import 'package:crabpay/core/dialogs/on_login_dialog.dart';
-import 'package:crabpay/core/dialogs/on_password_forgot.dart';
-import 'package:crabpay/core/dialogs/on_regester_dialog.dart';
+import 'package:crabpay/views/dialogs/on_login_dialog.dart';
+import 'package:crabpay/views/dialogs/on_password_forgot.dart';
+import 'package:crabpay/views/dialogs/on_regester_dialog.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

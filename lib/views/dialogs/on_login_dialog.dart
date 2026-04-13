@@ -1,4 +1,4 @@
-import 'package:crabpay/core/dialogs/generic_dialog.dart';
+import 'package:crabpay/views/dialogs/generic_dialog.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> showOnLoginDialog(BuildContext context) {
