@@ -19,6 +19,7 @@ class ProfileView extends StatelessWidget {
         }
       },
       child: SizedBox(
+        height: 200,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

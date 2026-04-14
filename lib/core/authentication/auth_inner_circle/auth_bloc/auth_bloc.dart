@@ -55,6 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         await interface.logOut();
         hideLoading();
+        // print('User Is Loged Out' + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, 'User Is Loged Out');
+        // print('User Is Loged Out' + '_________________________________________________________________________________');
         emit(
           const AuthStateLoggedOut(
             bloodyAuthException: null,
@@ -63,6 +66,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       } on Exception catch (e) {
         hideLoading();
+        // print(e.toString() + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, e.toString());
+        // print(e.toString() + '_________________________________________________________________________________');
         emit(
           AuthStateLoggedOut(
             bloodyAuthException: e,
@@ -78,7 +84,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         await interface.sendPasswordReset(toEmail: event.email);
         hideLoading();
-        if (event.context.mounted) showOnPasswordResetDialog(event.context);
+        if (event.context.mounted) await showOnPasswordResetDialog(event.context);
+        // print('Password Reset Email Is Sent' + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, 'Password Reset Email Is Sent');
+        // print('Password Reset Email Is Sent' + '_________________________________________________________________________________');
         emit(
           const AuthStateLoggedOut(
             bloodyAuthException: null,
@@ -87,6 +96,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       } on Exception catch (e) {
         hideLoading();
+        // print(e.toString() + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, e.toString());
+        // print(e.toString() + '_________________________________________________________________________________');
         emit(
           AuthStateLoggedOut(
             bloodyAuthException: e,
@@ -107,6 +119,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await interface.sendEmailVerification();
         hideLoading();
         if (event.context.mounted) await showOnRegisterDialog(event.context);
+        // print('Register Success' + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, 'Register Success');
+        // print('Register Success' + '_________________________________________________________________________________');
         emit(
           AuthStateLoggedOut(
             bloodyAuthException: null,
@@ -115,6 +130,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       } on Exception catch (e) {
         hideLoading();
+        // print(e.toString() + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, e.toString());
+        // print(e.toString() + '_________________________________________________________________________________');
         emit(
           AuthStateLoggedOut(
             bloodyAuthException: e,
@@ -126,6 +144,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<AuthEventLogIn>((event, emit) async {
       showLoading(event.context);
+      // print('LOGIN' + '_________________________________________________________________________________');
+      // print(event.email + event.password + '___________________________');
+      // print('LOGIN' + '_________________________________________________________________________________');
       try {
         final user = await interface.logIn(
           email: event.email,
@@ -133,6 +154,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
         if (user.isEmailVerified) {
           hideLoading();
+          // print('LOGIN' + '_________________________________________________________________________________');
+          // showScnackBarMessege(event.context, 'LOGIN');
+          // print('LOGIN' + '_________________________________________________________________________________');
           emit(AuthStateLoggedIn(user: user));
         } else {
           hideLoading();
@@ -143,6 +167,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
           await interface.logOut();
           hideLoading();
+          // print('User Email Is Not Verified' + '_________________________________________________________________________________');
+          // showScnackBarMessege(event.context, 'User Email Is Not Verified');
+          // print('User Email Is Not Verified' + '_________________________________________________________________________________');
           emit(
             AuthStateLoggedOut(
               bloodyAuthException: null,
@@ -152,6 +179,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } on Exception catch (e) {
         hideLoading();
+        // print(e.toString() + '_________________________________________________________________________________');
+        // showScnackBarMessege(event.context, e.toString());
+        // print('Some Exception. Log In Failure' + '_________________________________________________________________________________');
         emit(
           AuthStateLoggedOut(
             bloodyAuthException: e,
