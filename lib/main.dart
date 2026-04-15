@@ -91,6 +91,7 @@ class CrabPayApp extends StatelessWidget {
         }
 
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: 'CrabPay Demo',
           theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
           darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),

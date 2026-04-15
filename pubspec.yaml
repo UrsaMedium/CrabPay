@@ -63,7 +63,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets: 
+      - lib/assets/images/gas-gas-gas.jpg
+      - lib/assets/images/pubg.webp 
+      - lib/assets/images/steam-ru.webp
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
