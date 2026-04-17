@@ -1,15 +1,19 @@
+import 'package:crabpay/core/product_data/product_controller.dart';
+import 'package:crabpay/core/product_data/product_model.dart';
 import 'package:flutter/material.dart';
 
 class CardView extends StatelessWidget {
-  const CardView({super.key});
+  static const routeName = 'card-view';
+  final String productId;
+  const CardView({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset('lib/assets/images/gas-gas-gas.jpg'),
-        Text('data'),
-      ],
+    AppProductController productController = AppProductController();
+    AppProduct product = productController.findById(productId);
+
+    return Scaffold(
+      body: Column(children: [Image.asset(product.image), Text(product.name)]),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,13 @@ final GoRouter _router = GoRouter(
         child: const HomeView(),
       ),
       routes: <RouteBase>[
+        GoRoute(
+          path: CardView.routeName,
+          name: CardView.routeName,
+          builder: (BuildContext context, GoRouterState state) {
+            return CardView(productId: state.uri.queryParameters['id'] ?? '1');
+          },
+        ),
         GoRoute(
           path: 'login_view',
           builder: (BuildContext context, GoRouterState state) =>

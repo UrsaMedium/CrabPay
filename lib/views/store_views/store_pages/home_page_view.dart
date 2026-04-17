@@ -1,5 +1,7 @@
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -23,6 +25,7 @@ class _HomePageViewState extends State<HomePageView> {
               'GAS GAS GAS',
               'I\'m gonna step on the gas',
               'Tonight I\'ll fly',
+              '1',
             ),
           ),
           SliverToBoxAdapter(
@@ -33,6 +36,7 @@ class _HomePageViewState extends State<HomePageView> {
               'Pew Pew',
               'I fock in ass',
               'Buy me, daddy',
+              'pew-pew-game',
             ),
           ),
           SliverToBoxAdapter(
@@ -43,6 +47,7 @@ class _HomePageViewState extends State<HomePageView> {
               'Gaben, baby',
               'Make gaben happy',
               'Throw money',
+              'gaben-game',
             ),
           ),
         ],
@@ -57,6 +62,7 @@ class _HomePageViewState extends State<HomePageView> {
     String h1Line,
     String h2Line,
     String buttonText,
+    String path,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
@@ -96,7 +102,12 @@ class _HomePageViewState extends State<HomePageView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        return context.goNamed(
+                          CardView.routeName,
+                          pathParameters: {'id': path},
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.appColorScheme.primary,
                         foregroundColor: context.appColorScheme.onPrimary,
