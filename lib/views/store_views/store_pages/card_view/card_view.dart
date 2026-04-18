@@ -1,6 +1,7 @@
 import 'package:crabpay/core/product_data/product_controller.dart';
 import 'package:crabpay/core/product_data/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CardView extends StatelessWidget {
   static const routeName = 'card-view';
@@ -13,6 +14,16 @@ class CardView extends StatelessWidget {
     AppProduct product = productController.findById(productId);
 
     return Scaffold(
+      appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              if (GoRouter.of(context).canPop()) {
+                context.pop();
+              }
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+        ),
       body: Column(children: [Image.asset(product.image), Text(product.name)]),
     );
   }

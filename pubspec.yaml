@@ -65,7 +65,7 @@ flutter:
   uses-material-design: true
   assets: 
       - lib/assets/images/gas-gas-gas.jpg
-      - lib/assets/images/pubg.webp 
+      - lib/assets/images/pubg.webp
       - lib/assets/images/steam-ru.webp
   # To add assets to your application, add an assets section, like this:
   # assets:

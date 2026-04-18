@@ -36,10 +36,10 @@ final GoRouter _router = GoRouter(
       ),
       routes: <RouteBase>[
         GoRoute(
-          path: CardView.routeName,
+          path: '${CardView.routeName}/:productId',
           name: CardView.routeName,
           builder: (BuildContext context, GoRouterState state) {
-            return CardView(productId: state.uri.queryParameters['id'] ?? '1');
+            return CardView(productId: state.pathParameters['productId'] ?? '0');  //state.uri.queryParameters['id'] ?? '0'
           },
         ),
         GoRoute(

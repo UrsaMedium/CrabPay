@@ -1,9 +1,10 @@
+import 'package:crabpay/core/product_data/product_data.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePageView extends StatefulWidget {
+  // final String id;
   const HomePageView({super.key});
 
   @override
@@ -16,39 +17,23 @@ class _HomePageViewState extends State<HomePageView> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: Container(height: 8)),
-          SliverToBoxAdapter(
-            child: _appHomeCard(
-              context,
-              18 / 7,
-              'lib/assets/images/gas-gas-gas.jpg',
-              'GAS GAS GAS',
-              'I\'m gonna step on the gas',
-              'Tonight I\'ll fly',
-              '1',
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _appHomeCard(
-              context,
-              18 / 7,
-              'lib/assets/images/pubg.webp',
-              'Pew Pew',
-              'I fock in ass',
-              'Buy me, daddy',
-              'pew-pew-game',
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _appHomeCard(
-              context,
-              18 / 7,
-              'lib/assets/images/steam-ru.webp',
-              'Gaben, baby',
-              'Make gaben happy',
-              'Throw money',
-              'gaben-game',
-            ),
+          SliverFixedExtentList(
+            delegate: SliverChildBuilderDelegate((
+              BuildContext context,
+              int index,
+            ) {
+              // return Text(index.toString());
+              return _appHomeCard(
+                context,
+                18 / 7,
+                appProducts[index].image,
+                appProducts[index].name,
+                appProducts[index].description,
+                appProducts[index].name,
+                appProducts[index].id,
+              );
+            }, childCount: appProducts.length),
+            itemExtent: 242,
           ),
         ],
       ),
@@ -62,7 +47,7 @@ class _HomePageViewState extends State<HomePageView> {
     String h1Line,
     String h2Line,
     String buttonText,
-    String path,
+    String id,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
@@ -103,9 +88,9 @@ class _HomePageViewState extends State<HomePageView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        return context.goNamed(
-                          CardView.routeName,
-                          pathParameters: {'id': path},
+                        context.goNamed(
+                          'card-view',
+                          pathParameters: {'productId': id},
                         );
                       },
                       style: ElevatedButton.styleFrom(
