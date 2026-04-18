@@ -13,8 +13,10 @@ class CardView extends StatelessWidget {
     AppProductController productController = AppProductController();
     AppProduct product = productController.findById(productId);
 
-    return Scaffold(
-      appBar: AppBar(
+    return Hero(
+      tag: 'card-hero-${product.id}',
+      child: Scaffold(
+        appBar: AppBar(
           leading: IconButton(
             onPressed: () {
               if (GoRouter.of(context).canPop()) {
@@ -24,7 +26,10 @@ class CardView extends StatelessWidget {
             icon: Icon(Icons.arrow_back),
           ),
         ),
-      body: Column(children: [Image.asset(product.image), Text(product.name)]),
+        body: Column(
+          children: [Image.asset(product.image), Text(product.name)],
+        ),
+      ),
     );
   }
 }

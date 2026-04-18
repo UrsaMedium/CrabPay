@@ -80,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, state) {
           return ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            child: NavigationBar(
+            child: NavigationBar(              
               selectedIndex: _pageIndex,
               onDestinationSelected: _emitOnTabTapEventAndChangePage,
               destinations: const [

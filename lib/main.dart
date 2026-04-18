@@ -38,8 +38,16 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: '${CardView.routeName}/:productId',
           name: CardView.routeName,
-          builder: (BuildContext context, GoRouterState state) {
-            return CardView(productId: state.pathParameters['productId'] ?? '0');  //state.uri.queryParameters['id'] ?? '0'
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: CardView(
+                productId: state.pathParameters['productId'] ?? '0',
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+            );
           },
         ),
         GoRoute(

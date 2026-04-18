@@ -1,4 +1,5 @@
 import 'package:crabpay/core/product_data/product_data.dart';
+import 'package:crabpay/core/product_data/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,16 +23,7 @@ class _HomePageViewState extends State<HomePageView> {
               BuildContext context,
               int index,
             ) {
-              // return Text(index.toString());
-              return _appHomeCard(
-                context,
-                18 / 7,
-                appProducts[index].image,
-                appProducts[index].name,
-                appProducts[index].description,
-                appProducts[index].name,
-                appProducts[index].id,
-              );
+              return _appHomeCard(context, 18 / 7, appProducts[index]);
             }, childCount: appProducts.length),
             itemExtent: 242,
           ),
@@ -43,67 +35,66 @@ class _HomePageViewState extends State<HomePageView> {
   Widget _appHomeCard(
     BuildContext context,
     double ratio,
-    String picture,
-    String h1Line,
-    String h2Line,
-    String buttonText,
-    String id,
+    AppProduct currentProduct,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      child: Card(
-        clipBehavior: .antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: .circular(32)),
-        color: context.appColorScheme.surfaceContainerHighest,
-        child: Column(
-          crossAxisAlignment: .start,
-          children: [
-            AspectRatio(
-              aspectRatio: ratio,
-              child: Image.asset(picture, fit: .cover),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: .start,
-                        children: [
-                          Text(
-                            h1Line,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: context.appColorScheme.primary,
-                            ),
-                          ),
-                          Text(h2Line),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.goNamed(
-                          'card-view',
-                          pathParameters: {'productId': id},
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: context.appColorScheme.primary,
-                        foregroundColor: context.appColorScheme.onPrimary,
-                      ),
-                      child: Text(buttonText),
-                    ),
-                  ),
-                ],
+    return Hero(
+      tag: 'card-hero-${currentProduct.id}',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Card(
+          clipBehavior: .antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: .circular(32)),
+          color: context.appColorScheme.surfaceContainer,
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              AspectRatio(
+                aspectRatio: ratio,
+                child: Image.asset(currentProduct.image, fit: .cover),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              currentProduct.name,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: context.appColorScheme.primary,
+                              ),
+                            ),
+                            Text(currentProduct.description),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.goNamed(
+                            'card-view',
+                            pathParameters: {'productId': currentProduct.id},
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: context.appColorScheme.primary,
+                          foregroundColor: context.appColorScheme.onPrimary,
+                        ),
+                        child: Text(currentProduct.price.toString()),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
