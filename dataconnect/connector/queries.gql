@@ -1,0 +1,9 @@
+query GetAllProductsQuery @auth(level: PUBLIC) {
+    products {
+        id
+        name
+        description
+        price
+        imageUrl
+    }
+}

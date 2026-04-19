@@ -1,0 +1,11 @@
+mutation addProductMutation($productId: String!, $name: String!, $price: Float!, $description: String, $imageUrl: String) @auth(level: PUBLIC) {
+    product_insert(
+        data: {
+            productId: $productId,
+            name: $name,
+            price: $price,
+            description: $description,
+            imageUrl: $imageUrl
+        }
+    )
+}
