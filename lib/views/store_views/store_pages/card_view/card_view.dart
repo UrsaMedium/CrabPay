@@ -1,5 +1,6 @@
 import 'package:crabpay/core/product_data/product_controller.dart';
 import 'package:crabpay/core/product_data/product_model.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +28,20 @@ class CardView extends StatelessWidget {
           ),
         ),
         body: Column(
-          children: [Image.asset(product.image), Text(product.name)],
+          children: [
+            Image.asset(product.image),
+            Text(product.name),
+            Expanded(child: Container()),
+            ElevatedButton(
+              onPressed: () {
+                showBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) => BuyBottomSheet(),
+                );
+              },
+              child: Text("Buy"),
+            ),
+          ],
         ),
       ),
     );
