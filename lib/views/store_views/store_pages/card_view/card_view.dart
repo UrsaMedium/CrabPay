@@ -34,7 +34,7 @@ class CardView extends StatelessWidget {
             Expanded(child: Container()),
             ElevatedButton(
               onPressed: () {
-                showBottomSheet(
+                showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) => BuyBottomSheet(),
                 );

@@ -5,19 +5,42 @@ class BuyBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('data'),
-        TextField(),
-        TextField(),
-        RadioMenuButton(
-          value: 'value',
-          groupValue: 'groupValue',
-          onChanged: (_) {},
-          child: AboutDialog(),
+    return SizedBox.expand(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: Text('data')),
+            SliverToBoxAdapter(child: TextField()),
+            SliverToBoxAdapter(child: TextField()),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  RadioMenuButton(
+                    value: 'value',
+                    groupValue: 'groupValue',
+                    onChanged: (_) {},
+                    child: Text('data'),
+                  ),
+                  RadioMenuButton(
+                    value: 'value',
+                    groupValue: 'groupValue',
+                    onChanged: (_) {},
+                    child: Text('data'),
+                  ),
+                  RadioMenuButton(
+                    value: 'value',
+                    groupValue: 'groupValue',
+                    onChanged: (_) {},
+                    child: Text('data'),
+                  ),
+                  
+                ],
+              ),
+            ),
+          ],
         ),
-        RadioGroup(onChanged: (_) {}, child: AboutDialog()),
-      ],
+      ),
     );
   }
 }
