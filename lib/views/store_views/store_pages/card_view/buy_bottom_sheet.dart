@@ -10,7 +10,12 @@ class BuyBottomSheet extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(child: Text('data')),
+            SliverToBoxAdapter(
+              child: Container(
+                alignment: AlignmentGeometry.bottomRight,
+                child: Text('data'),
+              ),
+            ),
             SliverToBoxAdapter(child: TextField()),
             SliverToBoxAdapter(child: TextField()),
             SliverToBoxAdapter(
@@ -34,7 +39,6 @@ class BuyBottomSheet extends StatelessWidget {
                     onChanged: (_) {},
                     child: Text('data'),
                   ),
-                  
                 ],
               ),
             ),
