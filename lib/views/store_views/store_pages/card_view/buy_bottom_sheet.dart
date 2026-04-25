@@ -12,7 +12,7 @@ class BuyBottomSheet extends StatelessWidget {
           slivers: [
             SliverToBoxAdapter(
               child: Container(
-                alignment: AlignmentGeometry.bottomRight,
+                alignment: AlignmentGeometry.center,
                 child: Text('data'),
               ),
             ),
