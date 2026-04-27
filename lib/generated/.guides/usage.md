@@ -1,8 +1,8 @@
 # Basic Usage
 
 ```dart
-CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
 CrabpayConnectorConnector.instance.addProductMutation(addProductMutationVariables).execute();
+CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
 
 ```
 
