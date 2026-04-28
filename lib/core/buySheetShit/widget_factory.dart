@@ -59,40 +59,8 @@ Widget theAppWidgetBuilder(
         ),
       );
       case 'TextField':
-        return TextField(
-          
-          // TextField(
-          //           controller: _email,
-          //           focusNode: _emailFocusNode,
-          //           autofocus: false,
-          //           keyboardType: TextInputType.emailAddress,
-          //           onChanged: (_) => _doRedOnError = false,
-          //           decoration: InputDecoration(
-          //             enabledBorder: OutlineInputBorder(
-          //               borderSide: BorderSide(
-          //                 color: _doRedOnError
-          //                     ? context.appColorScheme.onError
-          //                     : context.appColorScheme.primaryFixed,
-          //               ),
-          //               borderRadius: BorderRadius.all(Radius.circular(100)),
-          //             ),
-          //             focusedBorder: OutlineInputBorder(
-          //               borderSide: BorderSide(
-          //                 color: _doRedOnError
-          //                     ? context.appColorScheme.onError
-          //                     : context.appColorScheme.primaryFixed,
-          //               ),
-          //               borderRadius: BorderRadius.all(Radius.circular(100)),
-          //             ),
-          //             labelText: 'Email',
-          //             filled: true,
-          //           ),
-          //           autocorrect: false,
-          //           onSubmitted: (_) {
-          //             FocusScope.of(context).requestFocus(_passwordFocusNode);
-          //           },
-          //         );
-        );
+        TextEditingController textFieldController = TextEditingController();
+        return TextField(controller: textFieldController,);
     default:
       return Text('ERROR');
   }

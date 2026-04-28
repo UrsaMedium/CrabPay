@@ -6,6 +6,14 @@ abstract class CartBlocEvent {
   const CartBlocEvent();
 }
 
-class ItemAddCartBlocEvent {
-  const ItemAddCartBlocEvent();
+class AddItemCartBlocEvent {
+  const AddItemCartBlocEvent();
+}
+
+class DeleteItemCartBlocEvent {
+  const DeleteItemCartBlocEvent();
+} 
+
+class DeleteAllItemsCartBlocEvent {
+  const DeleteAllItemsCartBlocEvent();
 } 
