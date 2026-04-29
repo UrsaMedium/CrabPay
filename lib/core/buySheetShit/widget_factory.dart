@@ -1,3 +1,4 @@
+import 'package:crabpay/core/product_data/cart_items.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,8 @@ Color widgetPropertyColor(BuildContext context, String color) {
 }
 
 
+
+
 Widget theAppWidgetBuilder(
   BuildContext context,
   String whatWidget,
@@ -60,8 +63,53 @@ Widget theAppWidgetBuilder(
       );
       case 'TextField':
         TextEditingController textFieldController = TextEditingController();
-        return TextField(controller: textFieldController,);
+        return TextField(controller: textFieldController, onChanged: (value) {
+           appCartItems[widgetProperties['text'] ?? ''] = textFieldController.toString();
+        },);
+      case 'radio':
+
     default:
       return Text('ERROR');
+  }
+}
+
+class GenreRadioGroup extends StatefulWidget {
+  const GenreRadioGroup({super.key});
+
+  @override
+  State<GenreRadioGroup> createState() => GenreRadioGroupState();
+}
+
+class GenreRadioGroupState extends State<GenreRadioGroup> {
+  Genre? _genre;
+
+  @override
+  Widget build(BuildContext context) {
+    return RadioGroup<Genre>(
+      groupValue: _genre,
+      onChanged: (Genre? value) {
+        setState(() {
+          _genre = value;
+        });
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Selected: $_genre'),
+          const ListTile(
+            title: Text('Metal'),
+            leading: Radio<Genre>(toggleable: true, value: Genre.metal),
+          ),
+          const ListTile(
+            title: Text('Jazz'),
+            leading: Radio<Genre>(value: Genre.jazz),
+          ),
+          const ListTile(
+            title: Text('Blues'),
+            leading: Radio<Genre>(value: Genre.blues),
+          ),
+        ],
+      ),
+    );
   }
 }

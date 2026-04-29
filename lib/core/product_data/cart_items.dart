@@ -1,4 +1,4 @@
-Map<String, Object> cartItems = {};
+Map<String, Object> appCartItems = {};
 
 
 
