@@ -1,3 +1,4 @@
+import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatelessWidget {
@@ -39,6 +40,10 @@ class BuyBottomSheet extends StatelessWidget {
                     onChanged: (_) {},
                     child: Text('data'),
                   ),
+                  theAppWidgetBuilder(context, 'Text', {'text': 'test line'}),
+                  theAppWidgetBuilder(context, 'DropdownMenu', {'ko': 'ko', 'so': 'so'}),
+                  theAppWidgetBuilder(context, 'TextField', {}),
+                  theAppWidgetBuilder(context, 'radio', {'ko': 'ko', 'so': 'so'})
                 ],
               ),
             ),

@@ -129,10 +129,10 @@ Widget theAppWidgetBuilder(
         child: Text(
           widgetProperties['text'] ?? 'no data/',
           style: TextStyle(
-            color: widgetPropertyColor(context, widgetProperties['color']!),
+            color: widgetPropertyColor(context, widgetProperties['color'] ?? ''),
             fontSize: double.tryParse(widgetProperties['fontSize'] ?? '14'),
             fontWeight: FontWeight(
-              int.tryParse(widgetProperties['fontWeight']!) ?? 400,
+              int.tryParse(widgetProperties['fontWeight'] ?? '400')!,
             ),
           ),
         ),

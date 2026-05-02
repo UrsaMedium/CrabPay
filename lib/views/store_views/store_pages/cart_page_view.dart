@@ -19,12 +19,12 @@ class TestDropDownMenu extends StatefulWidget {
 class _TestDropDownMenuState extends State<TestDropDownMenu> {
   final List<String> _entries = ['1', '2', '3', '4'];
   final TextEditingController _selectedItem = TextEditingController();
-  String _selected = '';
+  String selected = '';
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<String>(
       onSelected: (value) => setState(() {
-        _selected = value!;
+        selected = value!;
       }),
       controller: _selectedItem,
       dropdownMenuEntries: <DropdownMenuEntry<String>>[
