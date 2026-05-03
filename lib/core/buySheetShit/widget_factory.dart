@@ -45,11 +45,11 @@ class WhatWidgetRadio extends StatefulWidget {
 }
 
 class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
-  String _groupValue = 'roo';
+  late String? _groupValue;
 
   void radioReacts(String? value) {
     setState(() {
-      _groupValue = value ?? 'err';
+      _groupValue = value;
     });
   }
 
@@ -114,42 +114,51 @@ class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
     );
   }
 }
+ 
+// Returns custom widget based on the recived data: 
+// - whatItemProperty - requared String - what property of an item, that should be displayd in the item sheet
+// - whatItemHandler - requared String - what widget is ment to handel the property data
+// - handlerProperties - Map<String, String>? - properties that shapes the handler widget
+// - whatData - Map<String, String>? - the data that is ment to be handeled by a widget and retruned
+
 
 Widget theAppWidgetBuilder(
   BuildContext context,
-  String whatWidget,
-  Map<String, String> widgetProperties,
+  String whatItemProperty,
+  String whatItemHandler,
+  Map<String, String>? handlerProperties,
+  Map<String, String>? whatData,
 ) {
-  switch (whatWidget) {
+  switch (whatItemHandler) {
     case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
       return Container(
         alignment: widgetPropertyAlignment(
-          widgetProperties['alignment'] ?? 'center',
+          handlerProperties?['alignment'] ?? 'center',
         ),
         child: Text(
-          widgetProperties['text'] ?? 'no data/',
+          handlerProperties?['text'] ?? 'no data/',
           style: TextStyle(
-            color: widgetPropertyColor(context, widgetProperties['color'] ?? ''),
-            fontSize: double.tryParse(widgetProperties['fontSize'] ?? '14'),
+            color: widgetPropertyColor(context, handlerProperties?['color'] ?? ''),
+            fontSize: double.tryParse(handlerProperties?['fontSize'] ?? '14'),
             fontWeight: FontWeight(
-              int.tryParse(widgetProperties['fontWeight'] ?? '400')!,
+              int.tryParse(handlerProperties?['fontWeight'] ?? '400')!,
             ),
           ),
         ),
       );
-    case 'TextField':
+    case 'InputField': // pass the name of entered data
       TextEditingController textFieldController = TextEditingController();
       return TextField(
         controller: textFieldController,
         onChanged: (value) {
-          appCartItems[widgetProperties['text'] ?? ''] = textFieldController
+          appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
               .toString();
         },
       );
-    case 'radio':
-      return WhatWidgetRadio(radios: widgetProperties);
-    case 'DropdownMenu':
-      return WhatWidgetDropdownMenu(entries: widgetProperties);
+    case 'RadioList': // pass map of option name : option
+      return WhatWidgetRadio(radios: whatData ?? {'error': 'error'});
+    case 'DropdownList': // pass map of option name : option
+      return WhatWidgetDropdownMenu(entries: whatData ?? {'error': 'error'});
     default:
       return Text('ERROR');
   }

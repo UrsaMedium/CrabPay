@@ -40,10 +40,27 @@ class BuyBottomSheet extends StatelessWidget {
                     onChanged: (_) {},
                     child: Text('data'),
                   ),
-                  theAppWidgetBuilder(context, 'Text', {'text': 'test line'}),
-                  theAppWidgetBuilder(context, 'DropdownMenu', {'ko': 'ko', 'so': 'so'}),
-                  theAppWidgetBuilder(context, 'TextField', {}),
-                  theAppWidgetBuilder(context, 'radio', {'ko': 'ko', 'so': 'so'})
+                  theAppWidgetBuilder(context, 'Product Name', 'Text', {
+                    'text': 'test line',
+                  }, null),
+                  theAppWidgetBuilder(
+                    context,
+                    'Product Name',
+                    'DropdownMenu',
+                    null,
+                    {'ko': 'ko', 'so': 'so'},
+                  ),
+                  theAppWidgetBuilder(
+                    context,
+                    'Product Name',
+                    'TextField',
+                    {},
+                    null,
+                  ),
+                  theAppWidgetBuilder(context, 'Product Name', 'radio', null, {
+                    'ko': 'ko',
+                    'so': 'so',
+                  }),
                 ],
               ),
             ),
