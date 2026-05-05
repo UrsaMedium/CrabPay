@@ -1,8 +1,8 @@
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/product_data/data_binding_circle.dart';
-import 'package:crabpay/core/product_data/data_outer_circle.dart';
+import 'package:crabpay/core/product_data/products/data_binding_circle.dart';
+import 'package:crabpay/core/product_data/products/data_outer_circle.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';

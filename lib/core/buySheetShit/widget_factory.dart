@@ -1,4 +1,4 @@
-import 'package:crabpay/core/product_data/cart_items.dart';
+import 'package:crabpay/core/product_data/prduct_properties/cart_items.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 

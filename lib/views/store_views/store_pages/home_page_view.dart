@@ -1,5 +1,5 @@
-import 'package:crabpay/core/product_data/data_binding_circle.dart';
-import 'package:crabpay/core/product_data/product_model.dart';
+import 'package:crabpay/core/product_data/products/data_binding_circle.dart';
+import 'package:crabpay/core/product_data/products/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
