@@ -5,8 +5,6 @@ import 'dart:convert';
 
 part 'get_all_products_query.dart';
 
-part 'add_product_mutation.dart';
-
 
 
 
@@ -18,11 +16,6 @@ class CrabpayConnectorConnector {
   
   GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
     return GetAllProductsQueryVariablesBuilder(dataConnect, );
-  }
-  
-  
-  AddProductMutationVariablesBuilder addProductMutation ({required String productId, required String name, required double price, }) {
-    return AddProductMutationVariablesBuilder(dataConnect, productId: productId,name: name,price: price,);
   }
   
 

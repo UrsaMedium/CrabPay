@@ -1,0 +1,17 @@
+{
+    "id": "exp",
+    "name": "Gas",
+    "image": "lib/assets/images/gas-gas-gas.jpg",
+    "description": "Product description",
+    "price": 123,
+    "productPropertiesArrayByName": [
+        "userIdText",
+        "userIdInputField",
+        "regionText",
+        "regionDropdownList",
+        "serverText",
+        "serverTextField",
+        "pricesText",
+        "pricesRadio"
+    ]
+}

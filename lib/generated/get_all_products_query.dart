@@ -20,14 +20,14 @@ class GetAllProductsQueryVariablesBuilder {
 class GetAllProductsQueryProducts {
   final String id;
   final String name;
-  final String? description;
+  final String description;
   final double price;
   final String? imageUrl;
   GetAllProductsQueryProducts.fromJson(dynamic json):
   
   id = nativeFromJson<String>(json['id']),
   name = nativeFromJson<String>(json['name']),
-  description = json['description'] == null ? null : nativeFromJson<String>(json['description']),
+  description = nativeFromJson<String>(json['description']),
   price = nativeFromJson<double>(json['price']),
   imageUrl = json['imageUrl'] == null ? null : nativeFromJson<String>(json['imageUrl']);
   @override
@@ -55,9 +55,7 @@ class GetAllProductsQueryProducts {
     Map<String, dynamic> json = {};
     json['id'] = nativeToJson<String>(id);
     json['name'] = nativeToJson<String>(name);
-    if (description != null) {
-      json['description'] = nativeToJson<String?>(description);
-    }
+    json['description'] = nativeToJson<String>(description);
     json['price'] = nativeToJson<double>(price);
     if (imageUrl != null) {
       json['imageUrl'] = nativeToJson<String?>(imageUrl);
@@ -68,7 +66,7 @@ class GetAllProductsQueryProducts {
   GetAllProductsQueryProducts({
     required this.id,
     required this.name,
-    this.description,
+    required this.description,
     required this.price,
     this.imageUrl,
   });

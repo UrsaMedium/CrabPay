@@ -114,13 +114,12 @@ class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
     );
   }
 }
- 
-// Returns custom widget based on the recived data: 
+
+// Returns custom widget based on the recived data:
 // - whatItemProperty - requared String - what property of an item, that should be displayd in the item sheet
 // - whatItemHandler - requared String - what widget is ment to handel the property data
 // - handlerProperties - Map<String, String>? - properties that shapes the handler widget
 // - whatData - Map<String, String>? - the data that is ment to be handeled by a widget and retruned
-
 
 Widget theAppWidgetBuilder(
   BuildContext context,
@@ -138,7 +137,10 @@ Widget theAppWidgetBuilder(
         child: Text(
           handlerProperties?['text'] ?? 'no data/',
           style: TextStyle(
-            color: widgetPropertyColor(context, handlerProperties?['color'] ?? ''),
+            color: widgetPropertyColor(
+              context,
+              handlerProperties?['color'] ?? '',
+            ),
             fontSize: double.tryParse(handlerProperties?['fontSize'] ?? '14'),
             fontWeight: FontWeight(
               int.tryParse(handlerProperties?['fontWeight'] ?? '400')!,
@@ -159,6 +161,8 @@ Widget theAppWidgetBuilder(
       return WhatWidgetRadio(radios: whatData ?? {'error': 'error'});
     case 'DropdownList': // pass map of option name : option
       return WhatWidgetDropdownMenu(entries: whatData ?? {'error': 'error'});
+    case 'divider':
+      return Divider();
     default:
       return Text('ERROR');
   }

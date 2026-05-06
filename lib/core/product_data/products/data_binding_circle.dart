@@ -10,7 +10,7 @@ void dataConsolidation() {
         id: element.id,
         name: element.name,
         image: element.imageUrl!,
-        description: element.description!,
+        description: element.description,
         price: element.price,
       ),
     );
