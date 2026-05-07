@@ -1,0 +1,33 @@
+mutation AddProduct(
+  $description: String!
+  $imageUrl: String!
+  $name: String!
+  $price: Float!
+) @auth(level: PUBLIC) {
+  product_insert(
+    data: {
+      description: $description
+      imageUrl: $imageUrl
+      name: $name
+      price: $price
+    }
+  )
+}
+
+mutation AddProductPropertiesToProduct(
+  $productId: UUID!
+  $attributes: Any!
+  $dataHandler: Any!
+  $handler: String!
+  $propertyName: String!
+) @auth(level: PUBLIC) {
+  productProperties_insert(
+    data: {
+      productId: $productId
+      attributes: $attributes
+      dataHandler: $dataHandler
+      handler: $handler
+      propertyName: $propertyName
+    }
+  )
+}
