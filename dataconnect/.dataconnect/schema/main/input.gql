@@ -5,11 +5,11 @@ It has the same format as `Product_Key`, but is only used as mutation return val
 """
 scalar Product_KeyOutput
 """
-✨ `ProductProperties_KeyOutput` returns the primary key fields of table type `ProductProperties`.
+✨ `ProductProperty_KeyOutput` returns the primary key fields of table type `ProductProperty`.
 
-It has the same format as `ProductProperties_Key`, but is only used as mutation return value.
+It has the same format as `ProductProperty_Key`, but is only used as mutation return value.
 """
-scalar ProductProperties_KeyOutput
+scalar ProductProperty_KeyOutput
 """
 ✨ Generated data input type for table 'Product'. It includes all necessary fields for creating or upserting rows into table.
 """
@@ -96,9 +96,9 @@ input Product_Filter {
   """
   price: Float_Filter
   """
-  ✨ Generated from Field `Product`.`productPropertiess_on_product` of type `[ProductProperties!]!`
+  ✨ Generated from Field `Product`.`productProperties_on_product` of type `[ProductProperty!]!`
   """
-  productPropertiess_on_product: ProductProperties_ListFilter
+  productProperties_on_product: ProductProperty_ListFilter
 }
 """
 ✨ Generated first-row input type for table 'Product'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -266,128 +266,144 @@ input Product_Order {
   price_max: OrderDirection
 }
 """
-✨ Generated data input type for table 'ProductProperties'. It includes all necessary fields for creating or upserting rows into table.
+✨ Generated data input type for table 'ProductProperty'. It includes all necessary fields for creating or upserting rows into table.
 """
-input ProductProperties_Data {
+input ProductProperty_Data {
   """
-  ✨ Generated from Field `ProductProperties`.`id` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`id` of type `UUID!`
   """
   id: UUID
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ProductProperties`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ProductProperty`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`productId` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`productId` of type `UUID!`
   """
   productId: UUID
   """
-  ✨ `_expr` server value variant of `productId` (✨ Generated from Field `ProductProperties`.`productId` of type `UUID!`)
+  ✨ `_expr` server value variant of `productId` (✨ Generated from Field `ProductProperty`.`productId` of type `UUID!`)
   """
   productId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`product` of type `Product!`
+  ✨ Generated from Field `ProductProperty`.`product` of type `Product!`
   """
   product: Product_Key @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`attributes` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`attributes` of type `Any`
   """
   attributes: Any
   """
-  ✨ `_expr` server value variant of `attributes` (✨ Generated from Field `ProductProperties`.`attributes` of type `Any`)
+  ✨ `_expr` server value variant of `attributes` (✨ Generated from Field `ProductProperty`.`attributes` of type `Any`)
   """
   attributes_expr: Any_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler` of type `Any`
   """
   dataHandler: Any
   """
-  ✨ `_expr` server value variant of `dataHandler` (✨ Generated from Field `ProductProperties`.`dataHandler` of type `Any`)
+  ✨ `_expr` server value variant of `dataHandler` (✨ Generated from Field `ProductProperty`.`dataHandler` of type `Any`)
   """
   dataHandler_expr: Any_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`handler` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`handler` of type `String!`
   """
   handler: String
   """
-  ✨ `_expr` server value variant of `handler` (✨ Generated from Field `ProductProperties`.`handler` of type `String!`)
+  ✨ `_expr` server value variant of `handler` (✨ Generated from Field `ProductProperty`.`handler` of type `String!`)
   """
   handler_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductProperties`.`propertyName` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`order` of type `Int!`
+  """
+  order: Int
+  """
+  ✨ `_expr` server value variant of `order` (✨ Generated from Field `ProductProperty`.`order` of type `Int!`)
+  """
+  order_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `order` (✨ Generated from Field `ProductProperty`.`order` of type `Int!`)
+  """
+  order_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ProductProperty`.`propertyName` of type `String!`
   """
   propertyName: String
   """
-  ✨ `_expr` server value variant of `propertyName` (✨ Generated from Field `ProductProperties`.`propertyName` of type `String!`)
+  ✨ `_expr` server value variant of `propertyName` (✨ Generated from Field `ProductProperty`.`propertyName` of type `String!`)
   """
   propertyName_expr: String_Expr @fdc_forbiddenInVariables
 }
 """
-✨ Generated filter input type for table 'ProductProperties'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+✨ Generated filter input type for table 'ProductProperty'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
 """
-input ProductProperties_Filter {
+input ProductProperty_Filter {
   """
   Apply multiple filter conditions using `AND` logic.
   """
-  _and: [ProductProperties_Filter!]
+  _and: [ProductProperty_Filter!]
   """
   Negate the result of the provided filter condition.
   """
-  _not: ProductProperties_Filter
+  _not: ProductProperty_Filter
   """
   Apply multiple filter conditions using `OR` logic.
   """
-  _or: [ProductProperties_Filter!]
+  _or: [ProductProperty_Filter!]
   """
-  ✨ Generated from Field `ProductProperties`.`id` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`id` of type `UUID!`
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`productId` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`productId` of type `UUID!`
   """
   productId: UUID_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`product` of type `Product!`
+  ✨ Generated from Field `ProductProperty`.`product` of type `Product!`
   """
   product: Product_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`attributes` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`attributes` of type `Any`
   """
   attributes: Any_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler` of type `Any`
   """
   dataHandler: Any_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`handler` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`handler` of type `String!`
   """
   handler: String_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`propertyName` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`order` of type `Int!`
+  """
+  order: Int_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`propertyName` of type `String!`
   """
   propertyName: String_Filter
 }
 """
-✨ Generated first-row input type for table 'ProductProperties'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+✨ Generated first-row input type for table 'ProductProperty'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
 """
-input ProductProperties_FirstRow {
+input ProductProperty_FirstRow {
   """
   Order the result by the specified fields.
   """
-  orderBy: [ProductProperties_Order!]
+  orderBy: [ProductProperty_Order!]
   """
   Filters rows based on the specified conditions.
   """
-  where: ProductProperties_Filter
+  where: ProductProperty_Filter
 }
 """
-✨ Generated having input type for table 'ProductProperties'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+✨ Generated having input type for table 'ProductProperty'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
 """
-input ProductProperties_Having {
+input ProductProperty_Having {
   """
   Apply multiple Having conditions using `AND` logic.
   """
-  _and: [ProductProperties_Having!]
+  _and: [ProductProperty_Having!]
   """
   Whether to apply DISTINCT to the aggregate function.
   """
@@ -395,73 +411,93 @@ input ProductProperties_Having {
   """
   Negate the result of the provided Having condition.
   """
-  _not: ProductProperties_Having
+  _not: ProductProperty_Having
   """
   Apply multiple Having conditions using `OR` logic.
   """
-  _or: [ProductProperties_Having!]
+  _or: [ProductProperty_Having!]
   """
-  ✨ Generated from Field `ProductProperties`.`_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`_count` of type `Int!`
   """
   _count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`attributes_count` of type `Int!`
   """
   attributes_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_count` of type `Int!`
   """
   dataHandler_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`handler_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`handler_count` of type `Int!`
   """
   handler_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`id_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`id_count` of type `Int!`
   """
   id_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`productId_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`order_count` of type `Int!`
+  """
+  order_count: Int_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`productId_count` of type `Int!`
   """
   productId_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`propertyName_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`propertyName_count` of type `Int!`
   """
   propertyName_count: Int_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_min` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`order_sum` of type `Int`
+  """
+  order_sum: Int_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`order_avg` of type `Float`
+  """
+  order_avg: Float_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`attributes_min` of type `Any`
   """
   attributes_min: Any_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_min` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_min` of type `Any`
   """
   dataHandler_min: Any_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_max` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`order_min` of type `Int`
+  """
+  order_min: Int_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`attributes_max` of type `Any`
   """
   attributes_max: Any_Filter
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_max` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_max` of type `Any`
   """
   dataHandler_max: Any_Filter
+  """
+  ✨ Generated from Field `ProductProperty`.`order_max` of type `Int`
+  """
+  order_max: Int_Filter
 }
 """
-✨ Generated key input type for table 'ProductProperties'. It represents the primary key fields used to uniquely identify a row in the table.
+✨ Generated key input type for table 'ProductProperty'. It represents the primary key fields used to uniquely identify a row in the table.
 """
-input ProductProperties_Key {
+input ProductProperty_Key {
   """
-  ✨ Generated from Field `ProductProperties`.`id` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`id` of type `UUID!`
   """
   id: UUID
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ProductProperties`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `ProductProperty`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
 }
 """
-✨ Generated list filter input type for table 'ProductProperties'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+✨ Generated list filter input type for table 'ProductProperty'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
 """
-input ProductProperties_ListFilter {
+input ProductProperty_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
@@ -469,82 +505,106 @@ input ProductProperties_ListFilter {
   """
   Condition of the related objects to filter for.
   """
-  exist: ProductProperties_Filter
+  exist: ProductProperty_Filter
 }
 """
-✨ Generated order input type for table 'ProductProperties'. This input defines the sorting order of rows in query results based on one or more fields.
+✨ Generated order input type for table 'ProductProperty'. This input defines the sorting order of rows in query results based on one or more fields.
 """
-input ProductProperties_Order {
+input ProductProperty_Order {
   """
-  ✨ Generated from Field `ProductProperties`.`id` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`id` of type `UUID!`
   """
   id: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`productId` of type `UUID!`
+  ✨ Generated from Field `ProductProperty`.`productId` of type `UUID!`
   """
   productId: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`product` of type `Product!`
+  ✨ Generated from Field `ProductProperty`.`product` of type `Product!`
   """
   product: Product_Order
   """
-  ✨ Generated from Field `ProductProperties`.`attributes` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`attributes` of type `Any`
   """
   attributes: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler` of type `Any`
   """
   dataHandler: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`handler` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`handler` of type `String!`
   """
   handler: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`propertyName` of type `String!`
+  ✨ Generated from Field `ProductProperty`.`order` of type `Int!`
+  """
+  order: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`propertyName` of type `String!`
   """
   propertyName: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`_count` of type `Int!`
   """
   _count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`attributes_count` of type `Int!`
   """
   attributes_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_count` of type `Int!`
   """
   dataHandler_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`handler_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`handler_count` of type `Int!`
   """
   handler_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`id_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`id_count` of type `Int!`
   """
   id_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`productId_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`order_count` of type `Int!`
+  """
+  order_count: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`productId_count` of type `Int!`
   """
   productId_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`propertyName_count` of type `Int!`
+  ✨ Generated from Field `ProductProperty`.`propertyName_count` of type `Int!`
   """
   propertyName_count: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_min` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`order_sum` of type `Int`
+  """
+  order_sum: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`order_avg` of type `Float`
+  """
+  order_avg: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`attributes_min` of type `Any`
   """
   attributes_min: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_min` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_min` of type `Any`
   """
   dataHandler_min: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`attributes_max` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`order_min` of type `Int`
+  """
+  order_min: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`attributes_max` of type `Any`
   """
   attributes_max: OrderDirection
   """
-  ✨ Generated from Field `ProductProperties`.`dataHandler_max` of type `Any`
+  ✨ Generated from Field `ProductProperty`.`dataHandler_max` of type `Any`
   """
   dataHandler_max: OrderDirection
+  """
+  ✨ Generated from Field `ProductProperty`.`order_max` of type `Int`
+  """
+  order_max: OrderDirection
 }

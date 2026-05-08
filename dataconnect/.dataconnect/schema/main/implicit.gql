@@ -1,6 +1,6 @@
-extend type ProductProperties {
+extend type ProductProperty {
   """
-  ✨ Implicit foreign key field based on `ProductProperties`.`product`. It must match the value of `Product`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `ProductProperty`.`product`. It must match the value of `Product`.`id`. See `@ref` for how to customize it.
   """
-  productId: UUID! @fdc_generated(from: "ProductProperties.product", purpose: IMPLICIT_REF_FIELD)
+  productId: UUID! @fdc_generated(from: "ProductProperty.product", purpose: IMPLICIT_REF_FIELD)
 }

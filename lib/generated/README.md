@@ -61,6 +61,55 @@ ref.execute();
 ref.subscribe(...);
 ```
 
+
+### GetProductPropertiesQuery
+#### Required Arguments
+```dart
+String productId = ...;
+CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+  productId: productId,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<GetProductPropertiesQueryData, GetProductPropertiesQueryVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+  productId: productId,
+);
+GetProductPropertiesQueryData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String productId = ...;
+
+final ref = CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+  productId: productId,
+).ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
 ## Mutations
 
 ### AddProduct
@@ -120,16 +169,18 @@ ref.execute();
 ```
 
 
-### AddProductPropertiesToProduct
+### AddProductProperty
 #### Required Arguments
 ```dart
 String productId = ...;
+int order = ...;
 AnyValue attributes = ...;
 AnyValue dataHandler = ...;
 String handler = ...;
 String propertyName = ...;
-CrabpayConnectorConnector.instance.addProductPropertiesToProduct(
+CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
+  order: order,
   attributes: attributes,
   dataHandler: dataHandler,
   handler: handler,
@@ -140,7 +191,7 @@ CrabpayConnectorConnector.instance.addProductPropertiesToProduct(
 
 
 #### Return Type
-`execute()` returns a `OperationResult<AddProductPropertiesToProductData, AddProductPropertiesToProductVariables>`
+`execute()` returns a `OperationResult<AddProductPropertyData, AddProductPropertyVariables>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -150,14 +201,15 @@ class OperationResult<Data, Variables> {
   FirebaseDataConnect dataConnect;
 }
 
-final result = await CrabpayConnectorConnector.instance.addProductPropertiesToProduct(
+final result = await CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
+  order: order,
   attributes: attributes,
   dataHandler: dataHandler,
   handler: handler,
   propertyName: propertyName,
 );
-AddProductPropertiesToProductData data = result.data;
+AddProductPropertyData data = result.data;
 final ref = result.ref;
 ```
 
@@ -166,13 +218,15 @@ Each builder returns an `execute` function, which is a helper function that crea
 An example of how to use the `Ref` object is shown below:
 ```dart
 String productId = ...;
+int order = ...;
 AnyValue attributes = ...;
 AnyValue dataHandler = ...;
 String handler = ...;
 String propertyName = ...;
 
-final ref = CrabpayConnectorConnector.instance.addProductPropertiesToProduct(
+final ref = CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
+  order: order,
   attributes: attributes,
   dataHandler: dataHandler,
   handler: handler,

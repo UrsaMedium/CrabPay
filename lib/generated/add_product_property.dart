@@ -1,30 +1,31 @@
 part of 'crabpay_connector.dart';
 
-class AddProductPropertiesToProductVariablesBuilder {
+class AddProductPropertyVariablesBuilder {
   String productId;
+  int order;
   AnyValue attributes;
   AnyValue dataHandler;
   String handler;
   String propertyName;
 
   final FirebaseDataConnect _dataConnect;
-  AddProductPropertiesToProductVariablesBuilder(this._dataConnect, {required  this.productId,required  this.attributes,required  this.dataHandler,required  this.handler,required  this.propertyName,});
-  Deserializer<AddProductPropertiesToProductData> dataDeserializer = (dynamic json)  => AddProductPropertiesToProductData.fromJson(jsonDecode(json));
-  Serializer<AddProductPropertiesToProductVariables> varsSerializer = (AddProductPropertiesToProductVariables vars) => jsonEncode(vars.toJson());
-  Future<OperationResult<AddProductPropertiesToProductData, AddProductPropertiesToProductVariables>> execute() {
+  AddProductPropertyVariablesBuilder(this._dataConnect, {required  this.productId,required  this.order,required  this.attributes,required  this.dataHandler,required  this.handler,required  this.propertyName,});
+  Deserializer<AddProductPropertyData> dataDeserializer = (dynamic json)  => AddProductPropertyData.fromJson(jsonDecode(json));
+  Serializer<AddProductPropertyVariables> varsSerializer = (AddProductPropertyVariables vars) => jsonEncode(vars.toJson());
+  Future<OperationResult<AddProductPropertyData, AddProductPropertyVariables>> execute() {
     return ref().execute();
   }
 
-  MutationRef<AddProductPropertiesToProductData, AddProductPropertiesToProductVariables> ref() {
-    AddProductPropertiesToProductVariables vars= AddProductPropertiesToProductVariables(productId: productId,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
-    return _dataConnect.mutation("AddProductPropertiesToProduct", dataDeserializer, varsSerializer, vars);
+  MutationRef<AddProductPropertyData, AddProductPropertyVariables> ref() {
+    AddProductPropertyVariables vars= AddProductPropertyVariables(productId: productId,order: order,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
+    return _dataConnect.mutation("AddProductProperty", dataDeserializer, varsSerializer, vars);
   }
 }
 
 @immutable
-class AddProductPropertiesToProductProductPropertiesInsert {
+class AddProductPropertyProductPropertyInsert {
   final String id;
-  AddProductPropertiesToProductProductPropertiesInsert.fromJson(dynamic json):
+  AddProductPropertyProductPropertyInsert.fromJson(dynamic json):
   
   id = nativeFromJson<String>(json['id']);
   @override
@@ -36,7 +37,7 @@ class AddProductPropertiesToProductProductPropertiesInsert {
       return false;
     }
 
-    final AddProductPropertiesToProductProductPropertiesInsert otherTyped = other as AddProductPropertiesToProductProductPropertiesInsert;
+    final AddProductPropertyProductPropertyInsert otherTyped = other as AddProductPropertyProductPropertyInsert;
     return id == otherTyped.id;
     
   }
@@ -50,17 +51,17 @@ class AddProductPropertiesToProductProductPropertiesInsert {
     return json;
   }
 
-  AddProductPropertiesToProductProductPropertiesInsert({
+  AddProductPropertyProductPropertyInsert({
     required this.id,
   });
 }
 
 @immutable
-class AddProductPropertiesToProductData {
-  final AddProductPropertiesToProductProductPropertiesInsert productProperties_insert;
-  AddProductPropertiesToProductData.fromJson(dynamic json):
+class AddProductPropertyData {
+  final AddProductPropertyProductPropertyInsert productProperty_insert;
+  AddProductPropertyData.fromJson(dynamic json):
   
-  productProperties_insert = AddProductPropertiesToProductProductPropertiesInsert.fromJson(json['productProperties_insert']);
+  productProperty_insert = AddProductPropertyProductPropertyInsert.fromJson(json['productProperty_insert']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -70,36 +71,38 @@ class AddProductPropertiesToProductData {
       return false;
     }
 
-    final AddProductPropertiesToProductData otherTyped = other as AddProductPropertiesToProductData;
-    return productProperties_insert == otherTyped.productProperties_insert;
+    final AddProductPropertyData otherTyped = other as AddProductPropertyData;
+    return productProperty_insert == otherTyped.productProperty_insert;
     
   }
   @override
-  int get hashCode => productProperties_insert.hashCode;
+  int get hashCode => productProperty_insert.hashCode;
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['productProperties_insert'] = productProperties_insert.toJson();
+    json['productProperty_insert'] = productProperty_insert.toJson();
     return json;
   }
 
-  AddProductPropertiesToProductData({
-    required this.productProperties_insert,
+  AddProductPropertyData({
+    required this.productProperty_insert,
   });
 }
 
 @immutable
-class AddProductPropertiesToProductVariables {
+class AddProductPropertyVariables {
   final String productId;
+  final int order;
   final AnyValue attributes;
   final AnyValue dataHandler;
   final String handler;
   final String propertyName;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
-  AddProductPropertiesToProductVariables.fromJson(Map<String, dynamic> json):
+  AddProductPropertyVariables.fromJson(Map<String, dynamic> json):
   
   productId = nativeFromJson<String>(json['productId']),
+  order = nativeFromJson<int>(json['order']),
   attributes = AnyValue.fromJson(json['attributes']),
   dataHandler = AnyValue.fromJson(json['dataHandler']),
   handler = nativeFromJson<String>(json['handler']),
@@ -113,8 +116,9 @@ class AddProductPropertiesToProductVariables {
       return false;
     }
 
-    final AddProductPropertiesToProductVariables otherTyped = other as AddProductPropertiesToProductVariables;
+    final AddProductPropertyVariables otherTyped = other as AddProductPropertyVariables;
     return productId == otherTyped.productId && 
+    order == otherTyped.order && 
     attributes == otherTyped.attributes && 
     dataHandler == otherTyped.dataHandler && 
     handler == otherTyped.handler && 
@@ -122,12 +126,13 @@ class AddProductPropertiesToProductVariables {
     
   }
   @override
-  int get hashCode => Object.hashAll([productId.hashCode, attributes.hashCode, dataHandler.hashCode, handler.hashCode, propertyName.hashCode]);
+  int get hashCode => Object.hashAll([productId.hashCode, order.hashCode, attributes.hashCode, dataHandler.hashCode, handler.hashCode, propertyName.hashCode]);
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['productId'] = nativeToJson<String>(productId);
+    json['order'] = nativeToJson<int>(order);
     json['attributes'] = attributes.toJson();
     json['dataHandler'] = dataHandler.toJson();
     json['handler'] = nativeToJson<String>(handler);
@@ -135,8 +140,9 @@ class AddProductPropertiesToProductVariables {
     return json;
   }
 
-  AddProductPropertiesToProductVariables({
+  AddProductPropertyVariables({
     required this.productId,
+    required this.order,
     required this.attributes,
     required this.dataHandler,
     required this.handler,

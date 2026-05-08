@@ -5,9 +5,11 @@ import 'dart:convert';
 
 part 'add_product.dart';
 
-part 'add_product_properties_to_product.dart';
+part 'add_product_property.dart';
 
 part 'get_all_products_query.dart';
+
+part 'get_product_properties_query.dart';
 
 
 
@@ -23,13 +25,18 @@ class CrabpayConnectorConnector {
   }
   
   
-  AddProductPropertiesToProductVariablesBuilder addProductPropertiesToProduct ({required String productId, required dynamic attributes, required dynamic dataHandler, required String handler, required String propertyName, }) {
-    return AddProductPropertiesToProductVariablesBuilder(dataConnect, productId: productId,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
+  AddProductPropertyVariablesBuilder addProductProperty ({required String productId, required int order, required dynamic attributes, required dynamic dataHandler, required String handler, required String propertyName, }) {
+    return AddProductPropertyVariablesBuilder(dataConnect, productId: productId,order: order,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
   }
   
   
   GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
     return GetAllProductsQueryVariablesBuilder(dataConnect, );
+  }
+  
+  
+  GetProductPropertiesQueryVariablesBuilder getProductPropertiesQuery ({required String productId, }) {
+    return GetProductPropertiesQueryVariablesBuilder(dataConnect, productId: productId,);
   }
   
 

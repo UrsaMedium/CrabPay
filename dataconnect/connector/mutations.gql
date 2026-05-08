@@ -14,16 +14,18 @@ mutation AddProduct(
   )
 }
 
-mutation AddProductPropertiesToProduct(
+mutation AddProductProperty(
   $productId: UUID!
+  $order: Int!
   $attributes: Any!
   $dataHandler: Any!
   $handler: String!
   $propertyName: String!
 ) @auth(level: PUBLIC) {
-  productProperties_insert(
+  productProperty_insert(
     data: {
       productId: $productId
+      order: $order
       attributes: $attributes
       dataHandler: $dataHandler
       handler: $handler

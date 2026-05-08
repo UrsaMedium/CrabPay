@@ -11,7 +11,6 @@ class StorePageView extends StatelessWidget {
         Text('Store Row One'),
         Text('Store Row Two'),
         Text('Store Row Three'),
-        // TextButton(onPressed: (){context.go('/view')}), child: child)
       ],
     );
   }

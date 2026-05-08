@@ -19,9 +19,9 @@ extend type Query {
     first: Product_FirstRow
   ): Product @fdc_generated(from: "Product", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `ProductProperties` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `ProductProperty` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  productProperties(
+  productProperty(
     """
     The unique ID of the object.
     """
@@ -30,13 +30,13 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: ProductProperties_Key
+    key: ProductProperty_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProductProperties_FirstRow
-  ): ProductProperties @fdc_generated(from: "ProductProperties", purpose: QUERY_SINGLE)
+    first: ProductProperty_FirstRow
+  ): ProductProperty @fdc_generated(from: "ProductProperty", purpose: QUERY_SINGLE)
   """
   ✨ List `Product` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
@@ -72,18 +72,18 @@ extend type Query {
     having: Product_Having
   ): [Product!]! @fdc_generated(from: "Product", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `ProductProperties` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `ProductProperty` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  productPropertiess(
+  productProperties(
     """
     Filter condition to narrow down the query results.
     """
-    where: ProductProperties_Filter
+    where: ProductProperty_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [ProductProperties_Order!]
+    orderBy: [ProductProperty_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -103,6 +103,6 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: ProductProperties_Having
-  ): [ProductProperties!]! @fdc_generated(from: "ProductProperties", purpose: QUERY_MULTIPLE)
+    having: ProductProperty_Having
+  ): [ProductProperty!]! @fdc_generated(from: "ProductProperty", purpose: QUERY_MULTIPLE)
 }

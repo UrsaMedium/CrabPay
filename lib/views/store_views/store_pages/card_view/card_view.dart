@@ -1,3 +1,4 @@
+import 'package:crabpay/core/product_data/product_properties/properties_data_inner_circle.dart';
 import 'package:crabpay/core/product_data/products/product_controller.dart';
 import 'package:crabpay/core/product_data/products/product_model.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
@@ -32,8 +33,13 @@ class CardView extends StatelessWidget {
             Image.asset(product.image),
             Text(product.name),
             Expanded(child: Container()),
+            Text('id ${propertiesByProduct(productId)[0].id}'),
+            Text('productId ${propertiesByProduct(productId)[0].productId}'),
+            Text('propertyName ${propertiesByProduct(productId)[0].propertyName}'),
+            Text('handler ${propertiesByProduct(productId)[0].handler}'),
+            Text('order ${propertiesByProduct(productId)[0].order}'),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) => BuyBottomSheet(),

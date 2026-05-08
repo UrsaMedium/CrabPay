@@ -1,4 +1,3 @@
-import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatelessWidget {
@@ -12,55 +11,8 @@ class BuyBottomSheet extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: Container(
-                alignment: AlignmentGeometry.center,
-                child: Text('data'),
-              ),
-            ),
-            SliverToBoxAdapter(child: TextField()),
-            SliverToBoxAdapter(child: TextField()),
-            SliverToBoxAdapter(
               child: Column(
                 children: [
-                  RadioMenuButton(
-                    value: 'value',
-                    groupValue: 'groupValue',
-                    onChanged: (_) {},
-                    child: Text('data'),
-                  ),
-                  RadioMenuButton(
-                    value: 'value',
-                    groupValue: 'groupValue',
-                    onChanged: (_) {},
-                    child: Text('data'),
-                  ),
-                  RadioMenuButton(
-                    value: 'value',
-                    groupValue: 'groupValue',
-                    onChanged: (_) {},
-                    child: Text('data'),
-                  ),
-                  theAppWidgetBuilder(context, 'Product Name', 'Text', {
-                    'text': 'test line',
-                  }, null),
-                  theAppWidgetBuilder(
-                    context,
-                    'Product Name',
-                    'DropdownMenu',
-                    null,
-                    {'ko': 'ko', 'so': 'so'},
-                  ),
-                  theAppWidgetBuilder(
-                    context,
-                    'Product Name',
-                    'TextField',
-                    {},
-                    null,
-                  ),
-                  theAppWidgetBuilder(context, 'Product Name', 'radio', null, {
-                    'ko': 'ko',
-                    'so': 'so',
-                  }),
                 ],
               ),
             ),

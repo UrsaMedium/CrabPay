@@ -1,9 +1,21 @@
 query GetAllProductsQuery @auth(level: PUBLIC) {
-    products {
-        id
-        name
-        description
-        price
-        imageUrl
-    }
+  products {
+    id
+    name
+    description
+    price
+    imageUrl
+  }
+}
+
+query GetProductPropertiesQuery($productId: UUID!) @auth(level: PUBLIC) {
+  productProperties(where: { productId: { eq: $productId } }) {
+    productId
+    id
+    order
+    propertyName
+    handler
+    attributes
+    dataHandler
+  }
 }
