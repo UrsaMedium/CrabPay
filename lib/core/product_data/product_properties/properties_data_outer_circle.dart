@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 
@@ -15,29 +17,33 @@ Future<void> productPropertiesFetcher(String productId) async {
   }
 }
 
-Map<String, dynamic> atr = {
-  "text": "User ID",
-  "alignment": "topLeft",
-  "color": null,
-  "fontSize": null,
-  "fontWeight": null,
-};
-
-final wraetr = AnyValue(atr);
-
-Map<String, dynamic>? data = {};
-final wrdata = AnyValue(data);
-
-Future<void> addProperties() async {
+Future<void> addProperties(
+  String productId,
+  int order,
+  String handler,
+  String propertyName,
+  String attributesAsString,
+  String dataHandlerAsString,
+) async {
+  AnyValue? attributes = AnyValue({}.cast<String, dynamic>());
+  AnyValue? dataHandler = AnyValue({}.cast<String, dynamic>());
+  if (attributesAsString != 'null') {
+    Map<String, dynamic> attributesAsMap = jsonDecode(attributesAsString);
+    attributes = AnyValue(attributesAsMap.cast<String, dynamic>());
+  }
+  if (dataHandlerAsString != 'null') {
+    Map<String, dynamic> dataHandlerAsMap = jsonDecode(dataHandlerAsString);
+    dataHandler = AnyValue(dataHandlerAsMap.cast<String, dynamic>());
+  }
   try {
-    final propertiesInserter = await CrabpayConnectorConnector.instance
+    await CrabpayConnectorConnector.instance
         .addProductProperty(
-          productId: "5bbcb82ecc15438ab758586309c0afc5",
-          order: 0,
-          handler: 'Text',
-          propertyName: 'userIdText',
-          attributes: wraetr,
-          dataHandler: wrdata,
+          productId: productId,
+          order: order,
+          handler: handler,
+          propertyName: propertyName,
+          attributes: attributes,
+          dataHandler: dataHandler,
         )
         .execute();
   } catch (e) {

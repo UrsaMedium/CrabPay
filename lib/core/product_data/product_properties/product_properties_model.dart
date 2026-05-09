@@ -17,6 +17,11 @@ class AppProductPropertiers {
     this.dataHandler,
   });
 
-  factory AppProductPropertiers.intial() =>
-      AppProductPropertiers(id: '', productId: '', order: 0, propertyName: '', handler: '');
+  factory AppProductPropertiers.intial() => AppProductPropertiers(
+    id: '',
+    productId: '',
+    order: 0,
+    propertyName: '',
+    handler: '',
+  );
 }

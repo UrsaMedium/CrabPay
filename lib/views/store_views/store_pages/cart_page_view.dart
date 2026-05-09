@@ -9,7 +9,7 @@ class CartPageView extends StatelessWidget {
       children: [
         const Text('Ask Row One'),
         const Text('Ask Row Two'),
-      
+        
       ],
     );
   }
