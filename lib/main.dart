@@ -4,6 +4,7 @@ import 'package:crabpay/core/authentication/auth_outer_circle/firebase_outer_int
 import 'package:crabpay/core/product_data/products/data_binding_circle.dart';
 import 'package:crabpay/core/product_data/products/data_outer_circle.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/admin_views/add_properties_views.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
@@ -39,6 +40,31 @@ final GoRouter _router = GoRouter(
         child: const HomeView(),
       ),
       routes: <RouteBase>[
+        GoRoute(
+          path: 'add_text_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              AddTextProperty(),
+        ),
+        GoRoute(
+          path: 'add_input_field_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              AddInputFieldProperty(),
+        ),
+        GoRoute(
+          path: 'add_radio_list_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              AddRadioListProperty(),
+        ),
+        GoRoute(
+          path: 'add_dropdown_list_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              AddDropdownListProperty(),
+        ),
+        GoRoute(
+          path: 'add_divider_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              AddDividerProperty(),
+        ),
         GoRoute(
           path: '${CardView.routeName}/:productId',
           name: CardView.routeName,

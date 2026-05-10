@@ -1,5 +1,3 @@
-// text, inputfields, radiolist, dropdown list, divider
-
 import 'package:crabpay/core/product_data/product_properties/properties_data_outer_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +15,13 @@ class _AddTextPropertyState extends State<AddTextProperty> {
   TextEditingController order = TextEditingController();
   TextEditingController propertyName = TextEditingController();
   TextEditingController handler = TextEditingController();
-  TextEditingController attributesAsString = TextEditingController();
-  TextEditingController dataHandlerAsString = TextEditingController();
+  TextEditingController textDisplayed = TextEditingController();
+  TextEditingController alighment = TextEditingController();
+  TextEditingController color = TextEditingController();
+  TextEditingController fontSize = TextEditingController();
+  TextEditingController fontWeight = TextEditingController();
+  String attributes = 'null';
+  String dataHandler = 'null';
 
   @override
   Widget build(BuildContext context) {
@@ -55,29 +58,47 @@ class _AddTextPropertyState extends State<AddTextProperty> {
               decoration: InputDecoration(labelText: 'handler'),
             ),
             TextField(
-              controller: attributesAsString,
-              decoration: InputDecoration(labelText: 'attributes'),
+              controller: textDisplayed,
+              decoration: InputDecoration(labelText: 'text displayed'),
             ),
             TextField(
-              controller: dataHandlerAsString,
-              decoration: InputDecoration(labelText: 'dataHandler'),
+              controller: alighment,
+              decoration: InputDecoration(labelText: 'alignment'),
             ),
+            TextField(
+              controller: color,
+              decoration: InputDecoration(labelText: 'color'),
+            ),
+            TextField(
+              controller: fontSize,
+              decoration: InputDecoration(labelText: 'fontSize'),
+            ),
+            TextField(
+              controller: fontWeight,
+              decoration: InputDecoration(labelText: 'fontWeight'),
+            ),
+
             ElevatedButton(
               onPressed: () {
                 if (productId.text != '' &&
                     int.tryParse(order.text) != null &&
                     handler.text != '' &&
                     propertyName.text != '' &&
-                    attributesAsString.text != '' &&
-                    dataHandlerAsString.text != '') {
+                    textDisplayed.text != '' &&
+                    alighment.text != '' &&
+                    color.text != '' &&
+                    fontSize.text != '' &&
+                    fontWeight.text != '') {
                   // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
+                  attributes =
+                      '{"text": ${textDisplayed.text}, "alignment": ${alighment.text}, "color": ${color.text}, "fontSize": ${fontSize.text}, "fontWeight": ${fontWeight.text}}';
                   addProperties(
                     productId.text,
                     int.tryParse(order.text)!,
                     handler.text,
                     propertyName.text,
-                    attributesAsString.text,
-                    dataHandlerAsString.text,
+                    attributes,
+                    dataHandler,
                   );
                 } else {
                   print('wrong input');
@@ -101,9 +122,73 @@ class AddInputFieldProperty extends StatefulWidget {
 }
 
 class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
+  TextEditingController productId = TextEditingController();
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  TextEditingController handler = TextEditingController();
+  String attributes = 'null';
+  String dataHandler = 'null';
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: productId,
+              decoration: InputDecoration(labelText: 'productId'),
+            ),
+            TextField(
+              controller: order,
+              decoration: InputDecoration(labelText: 'order'),
+            ),
+            TextField(
+              controller: propertyName,
+              decoration: InputDecoration(labelText: 'propertyName'),
+            ),
+            TextField(
+              controller: handler,
+              decoration: InputDecoration(labelText: 'handler'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                if (productId.text != '' &&
+                    int.tryParse(order.text) != null &&
+                    handler.text != '' &&
+                    propertyName.text != '') {
+                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
+                  addProperties(
+                    productId.text,
+                    int.tryParse(order.text)!,
+                    handler.text,
+                    propertyName.text,
+                    attributes,
+                    dataHandler,
+                  );
+                } else {
+                  print('wrong input');
+                }
+              },
+              child: Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -116,9 +201,73 @@ class AddRadioListProperty extends StatefulWidget {
 }
 
 class _AddRadioListPropertyState extends State<AddRadioListProperty> {
+  TextEditingController productId = TextEditingController();
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  TextEditingController handler = TextEditingController();
+  String attributes = 'null';
+  String dataHandler = 'null';
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: productId,
+              decoration: InputDecoration(labelText: 'productId'),
+            ),
+            TextField(
+              controller: order,
+              decoration: InputDecoration(labelText: 'order'),
+            ),
+            TextField(
+              controller: propertyName,
+              decoration: InputDecoration(labelText: 'propertyName'),
+            ),
+            TextField(
+              controller: handler,
+              decoration: InputDecoration(labelText: 'handler'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                if (productId.text != '' &&
+                    int.tryParse(order.text) != null &&
+                    handler.text != '' &&
+                    propertyName.text != '') {
+                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
+                  addProperties(
+                    productId.text,
+                    int.tryParse(order.text)!,
+                    handler.text,
+                    propertyName.text,
+                    attributes,
+                    dataHandler,
+                  );
+                } else {
+                  print('wrong input');
+                }
+              },
+              child: Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -132,9 +281,73 @@ class AddDropdownListProperty extends StatefulWidget {
 }
 
 class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
+  TextEditingController productId = TextEditingController();
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  TextEditingController handler = TextEditingController();
+  String attributes = 'null';
+  String dataHandler = 'null';
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: productId,
+              decoration: InputDecoration(labelText: 'productId'),
+            ),
+            TextField(
+              controller: order,
+              decoration: InputDecoration(labelText: 'order'),
+            ),
+            TextField(
+              controller: propertyName,
+              decoration: InputDecoration(labelText: 'propertyName'),
+            ),
+            TextField(
+              controller: handler,
+              decoration: InputDecoration(labelText: 'handler'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                if (productId.text != '' &&
+                    int.tryParse(order.text) != null &&
+                    handler.text != '' &&
+                    propertyName.text != '') {
+                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
+                  addProperties(
+                    productId.text,
+                    int.tryParse(order.text)!,
+                    handler.text,
+                    propertyName.text,
+                    attributes,
+                    dataHandler,
+                  );
+                } else {
+                  print('wrong input');
+                }
+              },
+              child: Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -147,8 +360,72 @@ class AddDividerProperty extends StatefulWidget {
 }
 
 class _AddDividerPropertyState extends State<AddDividerProperty> {
+  TextEditingController productId = TextEditingController();
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  TextEditingController handler = TextEditingController();
+  String attributes = 'null';
+  String dataHandler = 'null';
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: productId,
+              decoration: InputDecoration(labelText: 'productId'),
+            ),
+            TextField(
+              controller: order,
+              decoration: InputDecoration(labelText: 'order'),
+            ),
+            TextField(
+              controller: propertyName,
+              decoration: InputDecoration(labelText: 'propertyName'),
+            ),
+            TextField(
+              controller: handler,
+              decoration: InputDecoration(labelText: 'handler'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                if (productId.text != '' &&
+                    int.tryParse(order.text) != null &&
+                    handler.text != '' &&
+                    propertyName.text != '') {
+                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
+                  addProperties(
+                    productId.text,
+                    int.tryParse(order.text)!,
+                    handler.text,
+                    propertyName.text,
+                    attributes,
+                    dataHandler,
+                  );
+                } else {
+                  print('wrong input');
+                }
+              },
+              child: Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

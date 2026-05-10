@@ -1,4 +1,3 @@
-import 'package:crabpay/core/product_data/product_properties/properties_data_binfing_circle.dart';
 import 'package:crabpay/core/product_data/product_properties/properties_data_outer_circle.dart';
 import 'package:flutter/material.dart';
 
