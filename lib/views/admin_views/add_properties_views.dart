@@ -1,5 +1,6 @@
 import 'package:crabpay/core/product_data/product_properties/properties_data_outer_circle.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 //TEXT
@@ -101,7 +102,7 @@ class _AddTextPropertyState extends State<AddTextProperty> {
                     dataHandler,
                   );
                 } else {
-                  print('wrong input');
+                  Fluttertoast.showToast(msg: 'wrong input');
                 }
               },
               child: Text('Send'),
@@ -127,7 +128,7 @@ class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
   TextEditingController propertyName = TextEditingController();
   TextEditingController handler = TextEditingController();
   String attributes = 'null';
-  String dataHandler = 'null';
+  TextEditingController dataHandler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +164,10 @@ class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
               controller: handler,
               decoration: InputDecoration(labelText: 'handler'),
             ),
-
+            TextField(
+              controller: dataHandler,
+              decoration: InputDecoration(labelText: 'dataHandler'),
+            ),
             ElevatedButton(
               onPressed: () {
                 if (productId.text != '' &&
@@ -177,10 +181,10 @@ class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
                     handler.text,
                     propertyName.text,
                     attributes,
-                    dataHandler,
+                    dataHandler.text,
                   );
                 } else {
-                  print('wrong input');
+                  Fluttertoast.showToast(msg: 'wrong input');
                 }
               },
               child: Text('Send'),
@@ -206,7 +210,7 @@ class _AddRadioListPropertyState extends State<AddRadioListProperty> {
   TextEditingController propertyName = TextEditingController();
   TextEditingController handler = TextEditingController();
   String attributes = 'null';
-  String dataHandler = 'null';
+  TextEditingController dataHandler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -242,6 +246,10 @@ class _AddRadioListPropertyState extends State<AddRadioListProperty> {
               controller: handler,
               decoration: InputDecoration(labelText: 'handler'),
             ),
+            TextField(
+              controller: dataHandler,
+              decoration: InputDecoration(labelText: 'dataHandler'),
+            ),
 
             ElevatedButton(
               onPressed: () {
@@ -256,10 +264,10 @@ class _AddRadioListPropertyState extends State<AddRadioListProperty> {
                     handler.text,
                     propertyName.text,
                     attributes,
-                    dataHandler,
+                    dataHandler.text,
                   );
                 } else {
-                  print('wrong input');
+                  Fluttertoast.showToast(msg: 'wrong input');
                 }
               },
               child: Text('Send'),
@@ -286,7 +294,7 @@ class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
   TextEditingController propertyName = TextEditingController();
   TextEditingController handler = TextEditingController();
   String attributes = 'null';
-  String dataHandler = 'null';
+  TextEditingController dataHandler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -322,6 +330,10 @@ class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
               controller: handler,
               decoration: InputDecoration(labelText: 'handler'),
             ),
+            TextField(
+              controller: dataHandler,
+              decoration: InputDecoration(labelText: 'dataHandler'),
+            ),
 
             ElevatedButton(
               onPressed: () {
@@ -336,10 +348,10 @@ class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
                     handler.text,
                     propertyName.text,
                     attributes,
-                    dataHandler,
+                    dataHandler.text,
                   );
                 } else {
-                  print('wrong input');
+                  Fluttertoast.showToast(msg: 'wrong input');
                 }
               },
               child: Text('Send'),
@@ -418,7 +430,7 @@ class _AddDividerPropertyState extends State<AddDividerProperty> {
                     dataHandler,
                   );
                 } else {
-                  print('wrong input');
+                  Fluttertoast.showToast(msg: 'wrong input');
                 }
               },
               child: Text('Send'),
