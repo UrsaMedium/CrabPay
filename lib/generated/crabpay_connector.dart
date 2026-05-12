@@ -7,6 +7,8 @@ part 'add_product.dart';
 
 part 'add_product_property.dart';
 
+part 'delete_product_property.dart';
+
 part 'get_all_products_query.dart';
 
 part 'get_product_properties_query.dart';
@@ -27,6 +29,11 @@ class CrabpayConnectorConnector {
   
   AddProductPropertyVariablesBuilder addProductProperty ({required String productId, required int order, required dynamic attributes, required dynamic dataHandler, required String handler, required String propertyName, }) {
     return AddProductPropertyVariablesBuilder(dataConnect, productId: productId,order: order,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
+  }
+  
+  
+  DeleteProductPropertyVariablesBuilder deleteProductProperty ({required String id, }) {
+    return DeleteProductPropertyVariablesBuilder(dataConnect, id: id,);
   }
   
   

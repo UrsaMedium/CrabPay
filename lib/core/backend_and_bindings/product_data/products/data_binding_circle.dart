@@ -1,5 +1,5 @@
-import 'package:crabpay/core/product_data/products/data_outer_circle.dart';
-import 'package:crabpay/core/product_data/products/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_data/products/data_outer_circle.dart';
+import 'package:crabpay/core/backend_and_bindings/product_data/products/product_model.dart';
 
 final List<AppProduct> appProducts = [];
 

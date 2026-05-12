@@ -1,4 +1,4 @@
-class AppProductPropertiers {
+class AppProductProperty {
   final String id;
   final String productId;
   final int order;
@@ -7,7 +7,7 @@ class AppProductPropertiers {
   final Map<String, String?>? attributes;
   final Map<String, String>? dataHandler;
 
-  AppProductPropertiers({
+  AppProductProperty({
     required this.id,
     required this.productId,
     required this.order,
@@ -17,7 +17,7 @@ class AppProductPropertiers {
     this.dataHandler,
   });
 
-  factory AppProductPropertiers.intial() => AppProductPropertiers(
+  factory AppProductProperty.intial() => AppProductProperty(
     id: '',
     productId: '',
     order: 0,

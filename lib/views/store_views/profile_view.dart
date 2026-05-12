@@ -1,7 +1,7 @@
-import 'package:crabpay/core/authentication/auth_binding_circle/auth_binding_service.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_binding_service.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,6 +1,6 @@
-import 'package:crabpay/core/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_exceptions.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_inner_interface.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_exceptions.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:crabpay/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'

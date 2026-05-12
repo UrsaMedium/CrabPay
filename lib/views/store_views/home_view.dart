@@ -1,5 +1,5 @@
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
 import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_state.dart';

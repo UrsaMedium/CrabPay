@@ -33,3 +33,7 @@ mutation AddProductProperty(
     }
   )
 }
+
+mutation DeleteProductProperty($id: UUID!) @auth(level: PUBLIC) {
+  productProperty_delete(key: { id: $id })
+}
