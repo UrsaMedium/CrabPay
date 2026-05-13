@@ -22,14 +22,14 @@ class GetAllProductsQueryProducts {
   final String name;
   final String description;
   final double price;
-  final String? imageUrl;
+  final String imageUrl;
   GetAllProductsQueryProducts.fromJson(dynamic json):
   
   id = nativeFromJson<String>(json['id']),
   name = nativeFromJson<String>(json['name']),
   description = nativeFromJson<String>(json['description']),
   price = nativeFromJson<double>(json['price']),
-  imageUrl = json['imageUrl'] == null ? null : nativeFromJson<String>(json['imageUrl']);
+  imageUrl = nativeFromJson<String>(json['imageUrl']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -57,9 +57,7 @@ class GetAllProductsQueryProducts {
     json['name'] = nativeToJson<String>(name);
     json['description'] = nativeToJson<String>(description);
     json['price'] = nativeToJson<double>(price);
-    if (imageUrl != null) {
-      json['imageUrl'] = nativeToJson<String?>(imageUrl);
-    }
+    json['imageUrl'] = nativeToJson<String>(imageUrl);
     return json;
   }
 
@@ -68,7 +66,7 @@ class GetAllProductsQueryProducts {
     required this.name,
     required this.description,
     required this.price,
-    this.imageUrl,
+    required this.imageUrl,
   });
 }
 

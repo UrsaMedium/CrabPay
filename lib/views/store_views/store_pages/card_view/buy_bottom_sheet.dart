@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_data/product_properties/properties_data_outer_circle_service.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_outer_circle_service.dart';
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatefulWidget {

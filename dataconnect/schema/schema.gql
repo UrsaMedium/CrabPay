@@ -3,7 +3,7 @@ type Product @table(key: "id") {
   name: String!
   description: String!
   price: Float!
-  imageUrl: String
+  imageUrl: String!
 }
 
 type ProductProperty @table(key: "id") {

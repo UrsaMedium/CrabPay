@@ -31,11 +31,11 @@ input Product_Data {
   """
   description_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Product`.`imageUrl` of type `String`
+  ✨ Generated from Field `Product`.`imageUrl` of type `String!`
   """
   imageUrl: String
   """
-  ✨ `_expr` server value variant of `imageUrl` (✨ Generated from Field `Product`.`imageUrl` of type `String`)
+  ✨ `_expr` server value variant of `imageUrl` (✨ Generated from Field `Product`.`imageUrl` of type `String!`)
   """
   imageUrl_expr: String_Expr @fdc_forbiddenInVariables
   """
@@ -84,7 +84,7 @@ input Product_Filter {
   """
   description: String_Filter
   """
-  ✨ Generated from Field `Product`.`imageUrl` of type `String`
+  ✨ Generated from Field `Product`.`imageUrl` of type `String!`
   """
   imageUrl: String_Filter
   """
@@ -213,7 +213,7 @@ input Product_Order {
   """
   description: OrderDirection
   """
-  ✨ Generated from Field `Product`.`imageUrl` of type `String`
+  ✨ Generated from Field `Product`.`imageUrl` of type `String!`
   """
   imageUrl: OrderDirection
   """

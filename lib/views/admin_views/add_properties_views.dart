@@ -1,4 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_data/product_properties/properties_data_outer_circle_service.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_inner_circle_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,10 @@ class _AddTextPropertyState extends State<AddTextProperty> {
   TextEditingController color = TextEditingController();
   TextEditingController fontSize = TextEditingController();
   TextEditingController fontWeight = TextEditingController();
-  String attributes = 'null';
-  String dataHandler = 'null';
+  // String attributes = 'null';
+  // String dataHandler = 'null';
+  Map<String, String?>? attributes;
+  Map<String, String>? dataHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -91,16 +94,25 @@ class _AddTextPropertyState extends State<AddTextProperty> {
                     fontSize.text != '' &&
                     fontWeight.text != '') {
                   // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  attributes =
-                      '{"text": ${textDisplayed.text}, "alignment": ${alighment.text}, "color": ${color.text}, "fontSize": ${fontSize.text}, "fontWeight": ${fontWeight.text}}';
-                  addProperties(
-                    productId.text,
-                    int.tryParse(order.text)!,
-                    handler.text,
-                    propertyName.text,
-                    attributes,
-                    dataHandler,
+                  attributes = {
+                    'text': textDisplayed.text,
+                    'alignment': alighment.text,
+                    'color': color.text,
+                    'fontSize': fontSize.text,
+                    'fontWeight': fontWeight.text,
+                  };
+                  // '{"text": ${textDisplayed.text}, "alignment": ${alighment.text}, "color": ${color.text}, "fontSize": ${fontSize.text}, "fontWeight": ${fontWeight.text}}';
+
+                  AppProductProperty toTheOuterSpace = AppProductProperty(
+                    id: 'toTheOuterSpace',
+                    productId: productId.text,
+                    order: int.tryParse(order.text)!,
+                    propertyName: propertyName.text,
+                    handler: handler.text,
+                    attributes: attributes,
+                    dataHandler: dataHandler,
                   );
+AppProductPropertyHandler.addProductProperty(toTheOuterSpace);
                 } else {
                   Fluttertoast.showToast(msg: 'wrong input');
                 }
