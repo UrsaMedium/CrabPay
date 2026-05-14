@@ -1,4 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_exceptions.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
@@ -67,120 +66,75 @@ class OuterProductAndPropertiesHandler
 
   @override
   Future<void> fetchAllPAPData() async {
-    PAPDataHandler papDataHandler = PAPDataHandler();
     try {
       final productFetrcher = await CrabpayConnectorConnector.instance
           .getAllProductsQuery()
           .execute();
-      final fetchedAppProducts = papDataHandler.productDataConsolidation(
+      final fetchedAppProducts = _productDataConsolidation(
         productFetrcher.data.products,
       );
 
-      final propertyFetcher = await CrabpayConnectorConnector.instance
-          .getProductPropertiesQuery(productId: productId);
+      Map<String, List<AppProductProperty>> allFetchedAppProductProperties = {};
+      for (var each in fetchedAppProducts) {
+        final propertyFetcher = await CrabpayConnectorConnector.instance
+            .getProductPropertiesQuery(productId: each.id)
+            .execute();
+        final fetchedPtoperties = _propertiesDataConsolidation(
+          propertyFetcher.data.productProperties,
+        );
+        allFetchedAppProductProperties[each.id] = fetchedPtoperties;
+      }
+
+      PAPDataHandler papDataHandler = PAPDataHandler();
+      papDataHandler.dataStuffing(
+        fetchedAppProducts,
+        allFetchedAppProductProperties,
+      );
       Fluttertoast.showToast(msg: 'Suck sus');
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
   }
+
+  List<AppProduct> _productDataConsolidation(
+    List<GetAllProductsQueryProducts> fetchedAppProducts,
+  ) {
+    List<AppProduct> result = [];
+    for (var each in fetchedAppProducts) {
+      result.add(
+        AppProduct(
+          id: each.id,
+          name: each.name,
+          image: each.imageUrl,
+          description: each.description,
+          price: each.price,
+        ),
+      );
+    }
+    return result;
+  }
+
+  List<AppProductProperty> _propertiesDataConsolidation(
+    List<GetProductPropertiesQueryProductProperties> productProperties,
+  ) {
+    List<AppProductProperty> result = [];
+    Map<String, String?>? tempAttrinutesMap;
+    Map<String, String>? tempDataHandlerMap;
+    for (var element in productProperties) {
+      tempAttrinutesMap = element.attributes as Map<String, String?>?;
+      tempDataHandlerMap = element.dataHandler as Map<String, String>?;
+      result.add(
+        AppProductProperty(
+          id: element.id,
+          productId: element.productId,
+          order: element.order,
+          propertyName: element.propertyName,
+          handler: element.handler,
+          attributes: tempAttrinutesMap,
+          dataHandler: tempDataHandlerMap,
+        ),
+      );
+    }
+    return result;
+  }
 }
-
-
-// class FirebaseDataConnectProductPropertyHandler
-//     implements AppProductPropertyHandler {
-//   List<AppProductProperty> _propertiesDataConsolidation(
-//     List<GetProductPropertiesQueryProductProperties>
-//     fetchedAppProductProperties,
-//   ) {
-//     List<AppProductProperty> result = [];
-//     Map<String, String?>? tempAttrinutesMap;
-//     Map<String, String>? tempDataHandlerMap;
-//     for (var element in fetchedAppProductProperties) {
-//       tempAttrinutesMap = element.attributes as Map<String, String?>?;
-//       tempDataHandlerMap = element.dataHandler as Map<String, String>?;
-//       result.add(
-//         AppProductProperty(
-//           id: element.id,
-//           productId: element.productId,
-//           order: element.order,
-//           propertyName: element.propertyName,
-//           handler: element.handler,
-//           attributes: tempAttrinutesMap,
-//           dataHandler: tempDataHandlerMap,
-//         ),
-//       );
-//     }
-//     return result;
-//   }
-
-
-
-//   @override
-//   Future<List<AppProductProperty>> productPropertiesOfProduct(
-//     String productId,
-//   ) async {
-//     try {
-//       final fetcher = await CrabpayConnectorConnector.instance
-//           .getProductPropertiesQuery(productId: productId)
-//           .execute();
-//       return _propertiesDataConsolidation(fetcher.data.productProperties);
-//     } catch (e) {
-//       Fluttertoast.showToast(msg: 'Failed to fetch $e');
-//       rethrow;
-//     }
-//   }
-// }
-
-
-
-
-
-// List<GetAllProductsQueryProducts> fetchedAppProducts = [];
-
-// Future<void> productDataOuterCircleFetcher() async {
-//   try {
-//     final fetrcher = await CrabpayConnectorConnector.instance
-//         .getAllProductsQuery()
-//         .execute();
-//     fetchedAppProducts = fetrcher.data.products;
-//     Fluttertoast.showToast(msg: 'Suck sus');
-//   } catch (e) {
-//     Fluttertoast.showToast(msg: 'Failed to fetch $e');
-//   }
-// }
-
-// late OperationResult<AddProductData, AddProductVariables> productInserter;
-// Future<void> addProductWithProperties() async {
-//   try {
-//     await CrabpayConnectorConnector.instance
-//         .addProduct(
-//           description: 'description',
-//           imageUrl: 'lib/assets/images/gas-gas-gas.jpg',
-//           name: 'Gas',
-//           price: 123,
-//         )
-//         .execute();
-
-//     Fluttertoast.showToast(msg: 'Suck sus');
-//   } catch (e) {
-//     Fluttertoast.showToast(msg: 'Failed to fetch $e');
-//   }
-// }
-
-
-
-// final List<AppProduct> appProducts = [];
-
-// void dataConsolidation() {
-//   for (var element in fetchedAppProducts) {
-//     appProducts.add(
-//       AppProduct(
-//         id: element.id,
-//         name: element.name,
-//         image: element.imageUrl!,
-//         description: element.description,
-//         price: element.price,
-//       ),
-//     );
-//   }
-// }

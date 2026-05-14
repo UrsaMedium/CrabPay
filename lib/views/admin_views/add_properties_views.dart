@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_inner_circle_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -112,7 +111,7 @@ class _AddTextPropertyState extends State<AddTextProperty> {
                     attributes: attributes,
                     dataHandler: dataHandler,
                   );
-AppProductPropertyHandler.addProductProperty(toTheOuterSpace);
+                  AppProductPropertyHandler.addProductProperty(toTheOuterSpace);
                 } else {
                   Fluttertoast.showToast(msg: 'wrong input');
                 }

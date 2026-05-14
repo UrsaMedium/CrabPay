@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/products/data_binding_circle.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_controller.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +13,7 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
+  List<AppProduct> appProducts = PAPDataHandler().products();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,4 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/cart_items.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
@@ -153,8 +152,8 @@ Widget theAppWidgetBuilder(
       return TextField(
         controller: textFieldController,
         onChanged: (value) {
-          appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
-              .toString();
+          // appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
+          //     .toString();
         },
       );
     case 'RadioList': // pass map of option name : option

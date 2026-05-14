@@ -1,48 +1,50 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/products/data_binding_circle.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
-import 'package:crabpay/generated/crabpay_connector.dart';
 
-class AppProductController {
-  AppProduct findById(String? id) {
-    return appProducts.firstWhere((product) => product.id == id);
-  }
+// class AppProductController {
+//   AppProduct findById(String? id) {
+//     return appProducts.firstWhere((product) => product.id == id);
+//   }
 
-  List<AppProduct> get products => appProducts;
-}
+//   List<AppProduct> get products => appProducts;
+// }
 
 class PAPDataHandler {
-  PAPDataHandler._();
+  PAPDataHandler._() {
+    _productList = [];
+    _propertiesMap = {};
+  }
   static final PAPDataHandler _instance = PAPDataHandler._();
   factory PAPDataHandler() {
     return _instance;
   }
 
-  List<AppProduct>? _productList;
-  Map<String, List<AppProduct>>? _productMap;
-  Map<String, List<AppProductProperty>>? _propertiesMap;
+  late List<AppProduct> _productList;
+  late Map<String, List<AppProductProperty>> _propertiesMap;
 
-  void papEraseData() {
+  void _papEraseData() {
     _productList = [];
-    _productMap = {};
     _propertiesMap = {};
   }
 
-  List<AppProduct> productDataConsolidation(
-    List<GetAllProductsQueryProducts> fetchedAppProducts,
+  void dataStuffing(
+    List<AppProduct> products,
+    Map<String, List<AppProductProperty>> properties,
   ) {
-    List<AppProduct> temp = [];
-    for (var each in fetchedAppProducts) {
-      temp.add(
-        AppProduct(
-          id: each.id,
-          name: each.name,
-          image: each.imageUrl,
-          description: each.description,
-          price: each.price,
-        ),
-      );
-    }
-    return temp;
+    _papEraseData();
+    _productList = products;
+    _propertiesMap = properties;
+  }
+
+  List<AppProduct> products() {
+    return _productList;
+  }
+
+  List<AppProductProperty>? productProperties(String id) {
+    return _propertiesMap[id];
+  }
+
+  AppProduct findById(String id) {
+    return _productList.firstWhere((product) => product.id == id);
   }
 }

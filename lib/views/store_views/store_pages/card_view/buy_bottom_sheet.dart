@@ -1,4 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_outer_circle_service.dart';
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatefulWidget {
@@ -60,14 +59,14 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                     attributesAsString.text != '' &&
                     dataHandlerAsString.text != '') {
                   // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  addProperties(
-                    productId.text,
-                    int.tryParse(order.text)!,
-                    handler.text,
-                    propertyName.text,
-                    attributesAsString.text,
-                    dataHandlerAsString.text,
-                  );
+                  // addProperties(
+                  //   productId.text,
+                  //   int.tryParse(order.text)!,
+                  //   handler.text,
+                  //   propertyName.text,
+                  //   attributesAsString.text,
+                  //   dataHandlerAsString.text,
+                  // );
                 } else {
                   print('wrong input');
                 }

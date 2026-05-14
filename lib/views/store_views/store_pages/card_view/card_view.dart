@@ -1,5 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_binding_circle_service.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_properties/properties_data_outer_circle_service.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_controller.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
@@ -11,15 +9,10 @@ class CardView extends StatelessWidget {
   final String productId;
   const CardView({super.key, required this.productId});
 
-  Future<void> launchFetcher() async {
-    await productPropertiesFetcher(productId);
-    propertiesDataConsolidation();
-  }
-
   @override
   Widget build(BuildContext context) {
-    AppProductController productController = AppProductController();
-    AppProduct product = productController.findById(productId);
+    PAPDataHandler papDataHandler = PAPDataHandler();
+    AppProduct product = papDataHandler.findById(productId);
 
     return Hero(
       tag: 'card-hero-${product.id}',
@@ -41,7 +34,7 @@ class CardView extends StatelessWidget {
             Expanded(child: Container()),
             ElevatedButton(
               onPressed: () async {
-                launchFetcher();
+                // launchFetcher();
               },
               child: Text("Fetch"),
             ),
@@ -51,7 +44,6 @@ class CardView extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (BuildContext context) {
-                    
                     return BuyBottomSheet();
                   },
                 );

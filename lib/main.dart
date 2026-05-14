@@ -1,8 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/products/data_binding_circle.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/products/data_outer_circle.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_properties_views.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
@@ -21,8 +19,6 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await productDataOuterCircleFetcher();
-  dataConsolidation();
   runApp(
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
