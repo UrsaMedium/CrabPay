@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_controller.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_controller.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -90,6 +92,7 @@ class OuterProductAndPropertiesHandler
         fetchedAppProducts,
         allFetchedAppProductProperties,
       );
+
       Fluttertoast.showToast(msg: 'Suck sus');
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
@@ -120,9 +123,17 @@ class OuterProductAndPropertiesHandler
     List<AppProductProperty> result = [];
     Map<String, String?>? tempAttrinutesMap;
     Map<String, String>? tempDataHandlerMap;
+
     for (var element in productProperties) {
-      tempAttrinutesMap = element.attributes as Map<String, String?>?;
-      tempDataHandlerMap = element.dataHandler as Map<String, String>?;
+      var temp = element.attributes?.toJson();
+      tempAttrinutesMap = temp != {} ? Map<String, String?>.from(temp) : null;
+
+      temp = element.dataHandler?.toJson();
+      var test = jsonEncode(temp);
+      tempDataHandlerMap = test != '{"dataHandler":null}'
+          ? Map<String, String>.from(temp)
+          : null;
+
       result.add(
         AppProductProperty(
           id: element.id,

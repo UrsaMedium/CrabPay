@@ -1,8 +1,10 @@
+import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_properties_views.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
@@ -19,6 +21,8 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  InnerProductAndPropertiesHandler handler = OuterProductAndPropertiesHandler();
+  await handler.fetchAllPAPData();
   runApp(
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
@@ -36,31 +40,7 @@ final GoRouter _router = GoRouter(
         child: const HomeView(),
       ),
       routes: <RouteBase>[
-        GoRoute(
-          path: 'add_text_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              AddTextProperty(),
-        ),
-        GoRoute(
-          path: 'add_input_field_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              AddInputFieldProperty(),
-        ),
-        GoRoute(
-          path: 'add_radio_list_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              AddRadioListProperty(),
-        ),
-        GoRoute(
-          path: 'add_dropdown_list_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              AddDropdownListProperty(),
-        ),
-        GoRoute(
-          path: 'add_divider_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              AddDividerProperty(),
-        ),
+        ...adminPowerRoutes(),
         GoRoute(
           path: '${CardView.routeName}/:productId',
           name: CardView.routeName,

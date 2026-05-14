@@ -1,4 +1,8 @@
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_controller.dart'
+    show PAPDataHandler;
 import 'package:flutter/material.dart';
+
+PAPDataHandler papDataHandler = PAPDataHandler();
 
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;

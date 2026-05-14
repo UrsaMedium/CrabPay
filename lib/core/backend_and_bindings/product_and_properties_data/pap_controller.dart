@@ -13,6 +13,7 @@ class PAPDataHandler {
   PAPDataHandler._() {
     _productList = [];
     _propertiesMap = {};
+    _productIdList = [];
   }
   static final PAPDataHandler _instance = PAPDataHandler._();
   factory PAPDataHandler() {
@@ -20,6 +21,7 @@ class PAPDataHandler {
   }
 
   late List<AppProduct> _productList;
+  late List<String> _productIdList;
   late Map<String, List<AppProductProperty>> _propertiesMap;
 
   void _papEraseData() {
@@ -34,6 +36,14 @@ class PAPDataHandler {
     _papEraseData();
     _productList = products;
     _propertiesMap = properties;
+
+    for (var each in _productList) {
+      _productIdList.add(each.id);
+    }
+  }
+
+  List<String> productIdList() {
+    return _productIdList;
   }
 
   List<AppProduct> products() {

@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/product_controller.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_controller.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +34,11 @@ class CardView extends StatelessWidget {
             Expanded(child: Container()),
             ElevatedButton(
               onPressed: () async {
-                // launchFetcher();
-              },
-              child: Text("Fetch"),
-            ),
-            ElevatedButton(
-              onPressed: () async {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
                   builder: (BuildContext context) {
-                    return BuyBottomSheet();
+                    return BuyBottomSheet(productId: product.id);
                   },
                 );
               },

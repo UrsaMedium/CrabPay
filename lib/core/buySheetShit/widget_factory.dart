@@ -124,7 +124,7 @@ Widget theAppWidgetBuilder(
   BuildContext context,
   String whatItemProperty,
   String whatItemHandler,
-  Map<String, String>? handlerProperties,
+  Map<String, String?>? handlerProperties,
   Map<String, String>? whatData,
 ) {
   switch (whatItemHandler) {
