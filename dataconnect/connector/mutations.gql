@@ -17,8 +17,8 @@ mutation AddProduct(
 mutation AddProductProperty(
   $productId: UUID!
   $order: Int!
-  $attributes: Any!
-  $dataHandler: Any!
+  $attributes: Any
+  $dataHandler: Any
   $handler: String!
   $propertyName: String!
 ) @auth(level: PUBLIC) {

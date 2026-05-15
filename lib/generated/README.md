@@ -174,21 +174,43 @@ ref.execute();
 ```dart
 String productId = ...;
 int order = ...;
-AnyValue attributes = ...;
-AnyValue dataHandler = ...;
 String handler = ...;
 String propertyName = ...;
 CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
   order: order,
-  attributes: attributes,
-  dataHandler: dataHandler,
   handler: handler,
   propertyName: propertyName,
 ).execute();
 ```
 
+#### Optional Arguments
+We return a builder for each query. For AddProductProperty, we created `AddProductPropertyBuilder`. For queries and mutations with optional parameters, we return a builder class.
+The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
+```dart
+class AddProductPropertyVariablesBuilder {
+  ...
+   AddProductPropertyVariablesBuilder attributes(AnyValue? t) {
+   _attributes.value = t;
+   return this;
+  }
+  AddProductPropertyVariablesBuilder dataHandler(AnyValue? t) {
+   _dataHandler.value = t;
+   return this;
+  }
 
+  ...
+}
+CrabpayConnectorConnector.instance.addProductProperty(
+  productId: productId,
+  order: order,
+  handler: handler,
+  propertyName: propertyName,
+)
+.attributes(attributes)
+.dataHandler(dataHandler)
+.execute();
+```
 
 #### Return Type
 `execute()` returns a `OperationResult<AddProductPropertyData, AddProductPropertyVariables>`
@@ -204,8 +226,6 @@ class OperationResult<Data, Variables> {
 final result = await CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
   order: order,
-  attributes: attributes,
-  dataHandler: dataHandler,
   handler: handler,
   propertyName: propertyName,
 );
@@ -219,16 +239,12 @@ An example of how to use the `Ref` object is shown below:
 ```dart
 String productId = ...;
 int order = ...;
-AnyValue attributes = ...;
-AnyValue dataHandler = ...;
 String handler = ...;
 String propertyName = ...;
 
 final ref = CrabpayConnectorConnector.instance.addProductProperty(
   productId: productId,
   order: order,
-  attributes: attributes,
-  dataHandler: dataHandler,
   handler: handler,
   propertyName: propertyName,
 ).ref();

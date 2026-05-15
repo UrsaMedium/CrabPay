@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
@@ -42,12 +40,13 @@ class OuterProductAndPropertiesHandler
           .addProductProperty(
             productId: property.productId,
             order: property.order,
-            attributes: attributes,
-            dataHandler: dataHandler,
             handler: property.handler,
             propertyName: property.propertyName,
           )
+          .attributes(attributes)
+          .dataHandler(dataHandler)
           .execute();
+      fetchAllPAPData();
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
@@ -61,9 +60,14 @@ class OuterProductAndPropertiesHandler
 
   @override
   Future<void> deleteProductProperty(AppProductProperty property) async {
-    await CrabpayConnectorConnector.instance
-        .deleteProductProperty(id: property.id)
-        .execute();
+    try {
+      await CrabpayConnectorConnector.instance
+          .deleteProductProperty(id: property.id)
+          .execute();
+      fetchAllPAPData();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
@@ -126,14 +130,22 @@ class OuterProductAndPropertiesHandler
 
     for (var element in productProperties) {
       var temp = element.attributes?.toJson();
-      tempAttrinutesMap = temp != {} ? Map<String, String?>.from(temp) : null;
+      if (temp.toString() == '{attributes: null}' ||
+          temp.toString() == '' ||
+          temp.toString() == 'null') {
+        tempAttrinutesMap = null;
+      } else {
+        tempAttrinutesMap = temp != {} ? Map<String, String?>.from(temp) : null;
+      }
 
       temp = element.dataHandler?.toJson();
-      var test = jsonEncode(temp);
-      tempDataHandlerMap = test != '{"dataHandler":null}'
-          ? Map<String, String>.from(temp)
-          : null;
-
+      if (temp.toString() == '{dataHandler: null}' ||
+          temp.toString() == '' ||
+          temp.toString() == 'null') {
+        tempDataHandlerMap = null;
+      } else {
+        tempDataHandlerMap = Map<String, String>.from(temp);
+      }
       result.add(
         AppProductProperty(
           id: element.id,

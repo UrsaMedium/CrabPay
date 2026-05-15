@@ -14,6 +14,8 @@ class PAPDataHandler {
     _productList = [];
     _propertiesMap = {};
     _productIdList = [];
+    _propertiesIdList = [];
+    _propertiesList = [];
   }
   static final PAPDataHandler _instance = PAPDataHandler._();
   factory PAPDataHandler() {
@@ -23,10 +25,15 @@ class PAPDataHandler {
   late List<AppProduct> _productList;
   late List<String> _productIdList;
   late Map<String, List<AppProductProperty>> _propertiesMap;
+  late List<AppProductProperty> _propertiesList;
+  late List<String> _propertiesIdList;
 
   void _papEraseData() {
     _productList = [];
     _propertiesMap = {};
+    _productIdList = [];
+    _propertiesIdList = [];
+    _propertiesList = [];
   }
 
   void dataStuffing(
@@ -37,9 +44,18 @@ class PAPDataHandler {
     _productList = products;
     _propertiesMap = properties;
 
-    for (var each in _productList) {
-      _productIdList.add(each.id);
+    for (var eachProduct in _productList) {
+      _productIdList.add(eachProduct.id);
+      if (_propertiesMap[eachProduct.id] != null) {
+        for (var eachProperty in _propertiesMap[eachProduct.id]!) {
+          _propertiesIdList.add(eachProperty.id);
+        }
+      }
     }
+  }
+
+  List<String> propertiesIdList() {
+    return _propertiesIdList;
   }
 
   List<String> productIdList() {
@@ -54,7 +70,11 @@ class PAPDataHandler {
     return _propertiesMap[id];
   }
 
-  AppProduct findById(String id) {
+  AppProduct productById(String id) {
     return _productList.firstWhere((product) => product.id == id);
+  }
+
+  AppProductProperty propertyById(String id) {
+    return _propertiesList.firstWhere((property) => property.id == id);
   }
 }

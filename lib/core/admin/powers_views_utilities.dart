@@ -127,8 +127,12 @@ Map<String, Map<String, dynamic>> adminPowersMap = {
     'widget': AddDropdownListProperty(),
   },
   'Add Divider property': {
-    'route': '/dd_divider_view',
+    'route': '/add_divider_view',
     'widget': AddDividerProperty(),
+  },
+  'Delete property': {
+    'route': '/delete_property_view',
+    'widget': DeletePropertyView(),
   },
 };
 

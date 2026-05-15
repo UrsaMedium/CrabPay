@@ -1,8 +1,71 @@
 import 'package:crabpay/core/admin/powers_views_utilities.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+class DeletePropertyView extends StatefulWidget {
+  const DeletePropertyView({super.key});
+
+  @override
+  State<DeletePropertyView> createState() => _DeletePropertyViewState();
+}
+
+class _DeletePropertyViewState extends State<DeletePropertyView> {
+  String propertyId = '';
+  TextEditingController _selectedProductId = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    final propertiesIdList = papDataHandler.propertiesIdList();
+    List<DropdownMenuEntry<String>> propertiesIdForDropDownMenu = [];
+    for (var each in propertiesIdList) {
+      propertiesIdForDropDownMenu.add(
+        DropdownMenuEntry(value: each, label: each),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            DropdownMenu(
+              onSelected: (value) => setState(() {
+                propertyId = value!;
+              }),
+              controller: _selectedProductId,
+              dropdownMenuEntries: propertiesIdForDropDownMenu,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.read<PapBloc>().add(
+                  PapEventDeleteProductProperty(
+                    productProperty: papDataHandler.propertyById(propertyId),
+                  ),
+                );
+                context.pop();
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 //TEXT
 class AddTextProperty extends StatefulWidget {
@@ -18,8 +81,8 @@ class _AddTextPropertyState extends State<AddTextProperty> {
   TextEditingController textDisplayed = TextEditingController();
   String productId = '';
   final TextEditingController _selectedProductId = TextEditingController();
-  String handler = '';
-  final TextEditingController _selectedHandler = TextEditingController();
+  // String handler = '';
+  // final TextEditingController _selectedHandler = TextEditingController();
   String alighment = '';
   final TextEditingController _selectedAlighment = TextEditingController();
   String color = '';
@@ -73,13 +136,13 @@ class _AddTextPropertyState extends State<AddTextProperty> {
               decoration: InputDecoration(labelText: 'propertyName'),
             ),
             //handler
-            DropdownMenu<String>(
-              onSelected: (value) => setState(() {
-                handler = value!;
-              }),
-              controller: _selectedHandler,
-              dropdownMenuEntries: widgetHandlersForDropdownMenu(),
-            ),
+            // DropdownMenu<String>(
+            //   onSelected: (value) => setState(() {
+            //     handler = value!;
+            //   }),
+            //   controller: _selectedHandler,
+            //   dropdownMenuEntries: widgetHandlersForDropdownMenu(),
+            // ),
             //text to display
             TextField(
               controller: textDisplayed,
@@ -107,7 +170,7 @@ class _AddTextPropertyState extends State<AddTextProperty> {
                 fontSize = value!;
               }),
               controller: _selectedfontSize,
-              dropdownMenuEntries: colorsForDropdownMenu(),
+              dropdownMenuEntries: fontSizesForDropdownMenu(),
             ),
             //font weight
             DropdownMenu<String>(
@@ -118,43 +181,34 @@ class _AddTextPropertyState extends State<AddTextProperty> {
               dropdownMenuEntries: fontWeightsForDropdownMenu(),
             ),
 
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (productId.text != '' &&
-            //         int.tryParse(order.text) != null &&
-            //         handler.text != '' &&
-            //         propertyName.text != '' &&
-            //         textDisplayed.text != '' &&
-            //         alighment.text != '' &&
-            //         color.text != '' &&
-            //         fontSize.text != '' &&
-            //         fontWeight.text != '') {
-            //       // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-            //       attributes = {
-            //         'text': textDisplayed.text,
-            //         'alignment': alighment.text,
-            //         'color': color.text,
-            //         'fontSize': fontSize.text,
-            //         'fontWeight': fontWeight.text,
-            //       };
-            //       // '{"text": ${textDisplayed.text}, "alignment": ${alighment.text}, "color": ${color.text}, "fontSize": ${fontSize.text}, "fontWeight": ${fontWeight.text}}';
-
-            //       AppProductProperty toTheOuterSpace = AppProductProperty(
-            //         id: 'toTheOuterSpace',
-            //         productId: productId.text,
-            //         order: int.tryParse(order.text)!,
-            //         propertyName: propertyName.text,
-            //         handler: handler.text,
-            //         attributes: attributes,
-            //         dataHandler: dataHandler,
-            //       );
-            //       // AppProductPropertyHandler.addProductProperty(toTheOuterSpace);
-            //     } else {
-            //       Fluttertoast.showToast(msg: 'wrong input');
-            //     }
-            //   },
-            //   child: Text('Send'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                if (order.text != '' &&
+                    propertyName.text != '' &&
+                    textDisplayed.text != '' &&
+                    productId != '') {
+                  Map<String, String?>? attributes = {
+                    'alignment': alighment,
+                    'text': textDisplayed.text,
+                    'color': color,
+                    'fontSize': fontSize,
+                    'fontWeight': fontSize,
+                  };
+                  AppProductProperty dataInput = AppProductProperty(
+                    id: '',
+                    productId: productId,
+                    order: int.parse(order.text),
+                    propertyName: propertyName.text,
+                    handler: 'Text',
+                    attributes: attributes,
+                  );
+                  context.read<PapBloc>().add(
+                    PapEventAddProductProperty(productProperty: dataInput),
+                  );
+                }
+              },
+              child: Text('Push'),
+            ),
           ],
         ),
       ),
@@ -216,27 +270,7 @@ class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
               controller: dataHandler,
               decoration: InputDecoration(labelText: 'dataHandler'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (productId.text != '' &&
-                    int.tryParse(order.text) != null &&
-                    handler.text != '' &&
-                    propertyName.text != '') {
-                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  // addProperties(
-                  //   productId.text,
-                  //   int.tryParse(order.text)!,
-                  //   handler.text,
-                  //   propertyName.text,
-                  //   attributes,
-                  //   dataHandler.text,
-                  // );
-                } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
-                }
-              },
-              child: Text('Send'),
-            ),
+            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),
@@ -299,27 +333,7 @@ class _AddRadioListPropertyState extends State<AddRadioListProperty> {
               decoration: InputDecoration(labelText: 'dataHandler'),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                if (productId.text != '' &&
-                    int.tryParse(order.text) != null &&
-                    handler.text != '' &&
-                    propertyName.text != '') {
-                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  // addProperties(
-                  //   productId.text,
-                  //   int.tryParse(order.text)!,
-                  //   handler.text,
-                  //   propertyName.text,
-                  //   attributes,
-                  //   dataHandler.text,
-                  // );
-                } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
-                }
-              },
-              child: Text('Send'),
-            ),
+            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),
@@ -383,27 +397,7 @@ class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
               decoration: InputDecoration(labelText: 'dataHandler'),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                if (productId.text != '' &&
-                    int.tryParse(order.text) != null &&
-                    handler.text != '' &&
-                    propertyName.text != '') {
-                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  // addProperties(
-                  //   productId.text,
-                  //   int.tryParse(order.text)!,
-                  //   handler.text,
-                  //   propertyName.text,
-                  //   attributes,
-                  //   dataHandler.text,
-                  // );
-                } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
-                }
-              },
-              child: Text('Send'),
-            ),
+            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),
@@ -462,27 +456,7 @@ class _AddDividerPropertyState extends State<AddDividerProperty> {
               decoration: InputDecoration(labelText: 'handler'),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                if (productId.text != '' &&
-                    int.tryParse(order.text) != null &&
-                    handler.text != '' &&
-                    propertyName.text != '') {
-                  // {"text": "User ID", "alignment": "topLeft", "color": null, "fontSize": null, "fontWeight": null}
-                  // addProperties(
-                  //   productId.text,
-                  //   int.tryParse(order.text)!,
-                  //   handler.text,
-                  //   propertyName.text,
-                  //   attributes,
-                  //   dataHandler,
-                  // );
-                } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
-                }
-              },
-              child: Text('Send'),
-            ),
+            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),

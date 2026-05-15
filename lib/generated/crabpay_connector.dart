@@ -27,8 +27,8 @@ class CrabpayConnectorConnector {
   }
   
   
-  AddProductPropertyVariablesBuilder addProductProperty ({required String productId, required int order, required dynamic attributes, required dynamic dataHandler, required String handler, required String propertyName, }) {
-    return AddProductPropertyVariablesBuilder(dataConnect, productId: productId,order: order,attributes: attributes,dataHandler: dataHandler,handler: handler,propertyName: propertyName,);
+  AddProductPropertyVariablesBuilder addProductProperty ({required String productId, required int order, required String handler, required String propertyName, }) {
+    return AddProductPropertyVariablesBuilder(dataConnect, productId: productId,order: order,handler: handler,propertyName: propertyName,);
   }
   
   

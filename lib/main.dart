@@ -2,7 +2,8 @@ import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
@@ -21,12 +22,13 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  InnerProductAndPropertiesHandler handler = OuterProductAndPropertiesHandler();
-  await handler.fetchAllPAPData();
   runApp(
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
-      child: const CrabPayApp(),
+      child: BlocProvider(
+        create: (context) => PapBloc(OuterProductAndPropertiesHandler()),
+        child: const CrabPayApp(),
+      ),
     ),
   );
 }
@@ -87,6 +89,7 @@ class CrabPayApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
+    context.read<PapBloc>().add(PapEventFetchAllPAPData());
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         ColorScheme lightScheme;
@@ -111,7 +114,6 @@ class CrabPayApp extends StatelessWidget {
             brightness: Brightness.dark,
           );
         }
-
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'CrabPay Demo',
