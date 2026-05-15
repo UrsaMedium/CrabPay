@@ -1,7 +1,7 @@
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
-AlignmentGeometry widgetPropertyAlignment(String alignment) {
+AlignmentGeometry widgetPropertyAlignment(String? alignment) {
   switch (alignment) {
     case 'topLeft':
       return Alignment.topLeft;
@@ -26,7 +26,7 @@ AlignmentGeometry widgetPropertyAlignment(String alignment) {
   }
 }
 
-Color widgetPropertyColor(BuildContext context, String color) {
+Color widgetPropertyColor(BuildContext context, String? color) {
   switch (color) {
     case 'surface':
       return context.appColorScheme.surface;
@@ -122,28 +122,32 @@ class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
 
 Widget theAppWidgetBuilder(
   BuildContext context,
-  String whatItemProperty,
-  String whatItemHandler,
-  Map<String, String?>? handlerProperties,
-  Map<String, String>? whatData,
+  String propertyName,
+  String handler,
+  Map<String, String?>? attributes,
+  Map<String, String>? dataHandler,
 ) {
-  switch (whatItemHandler) {
+  Map<String, String> attr = {};
+  if (attributes != null) {
+    for (var each in attributes.keys) {
+      if (attributes[each] == '') {
+        attr[each] = 'null';
+      } else {
+        attr[each] = attributes[each]!;
+      }
+    }
+  }
+
+  switch (handler) {
     case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
       return Container(
-        alignment: widgetPropertyAlignment(
-          handlerProperties?['alignment'] ?? 'center',
-        ),
+        alignment: widgetPropertyAlignment(attr['alignment']),
         child: Text(
-          handlerProperties?['text'] ?? 'no data/',
+          attr['text']!,
           style: TextStyle(
-            color: widgetPropertyColor(
-              context,
-              handlerProperties?['color'] ?? '',
-            ),
-            fontSize: double.tryParse(handlerProperties?['fontSize'] ?? '14'),
-            fontWeight: FontWeight(
-              int.tryParse(handlerProperties?['fontWeight'] ?? '400')!,
-            ),
+            color: widgetPropertyColor(context, attr['color']),
+            fontSize: double.tryParse(attr['fontSize']!) ?? 14,
+            fontWeight: FontWeight(int.tryParse(attr['fontWeight']!) ?? 400),
           ),
         ),
       );
@@ -157,10 +161,10 @@ Widget theAppWidgetBuilder(
         },
       );
     case 'RadioList': // pass map of option name : option
-      return WhatWidgetRadio(radios: whatData ?? {'error': 'error'});
+      return WhatWidgetRadio(radios: dataHandler ?? {'error': 'error'});
     case 'DropdownList': // pass map of option name : option
-      return WhatWidgetDropdownMenu(entries: whatData ?? {'error': 'error'});
-    case 'divider':
+      return WhatWidgetDropdownMenu(entries: dataHandler ?? {'error': 'error'});
+    case 'Divider':
       return Divider();
     default:
       return Text('ERROR');

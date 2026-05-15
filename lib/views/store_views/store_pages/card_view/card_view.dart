@@ -36,8 +36,14 @@ class CardView extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
+
                   builder: (BuildContext context) {
-                    return BuyBottomSheet(productId: product.id);
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.8,
+                      ),
+                      child: BuyBottomSheet(productId: product.id),
+                    );
                   },
                 );
               },

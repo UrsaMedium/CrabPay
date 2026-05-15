@@ -1,6 +1,16 @@
+import 'package:crabpay/core/utilities.dart' show papDataHandler;
 import 'package:crabpay/views/admin_views/admin_powers_views.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+List<DropdownMenuEntry<String>> productIdListForDropDownMenu() {
+  final productIdList = papDataHandler.productIdList();
+  List<DropdownMenuEntry<String>> result = [];
+  for (var each in productIdList) {
+    result.add(DropdownMenuEntry(value: each, label: each));
+  }
+  return result;
+}
 
 List<String> fontWeights = [
   'thin', // w100
@@ -118,13 +128,9 @@ Map<String, Map<String, dynamic>> adminPowersMap = {
     'route': '/add_input_field_view',
     'widget': AddInputFieldProperty(),
   },
-  'Add RadioList property': {
-    'route': '/add_radio_list_view',
-    'widget': AddRadioListProperty(),
-  },
-  'Add DropdownList property': {
-    'route': '/add_dropdown_list_view',
-    'widget': AddDropdownListProperty(),
+  'Add Dropdown or Radi property': {
+    'route': '/add_dropdown_or_radio_view',
+    'widget': AddDropdownOrRadioProperty(),
   },
   'Add Divider property': {
     'route': '/add_divider_view',

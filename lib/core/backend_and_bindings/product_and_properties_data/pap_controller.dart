@@ -49,6 +49,7 @@ class PAPDataHandler {
       if (_propertiesMap[eachProduct.id] != null) {
         for (var eachProperty in _propertiesMap[eachProduct.id]!) {
           _propertiesIdList.add(eachProperty.id);
+          _propertiesList.add(eachProperty);
         }
       }
     }

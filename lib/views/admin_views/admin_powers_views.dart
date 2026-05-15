@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pa
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +17,7 @@ class DeletePropertyView extends StatefulWidget {
 
 class _DeletePropertyViewState extends State<DeletePropertyView> {
   String propertyId = '';
-  TextEditingController _selectedProductId = TextEditingController();
+  final TextEditingController _selectedProductId = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final propertiesIdList = papDataHandler.propertiesIdList();
@@ -56,7 +57,9 @@ class _DeletePropertyViewState extends State<DeletePropertyView> {
                     productProperty: papDataHandler.propertyById(propertyId),
                   ),
                 );
-                context.pop();
+                if (GoRouter.of(context).canPop()) {
+                  context.pop();
+                }
               },
               child: Text('Delete'),
             ),
@@ -76,13 +79,16 @@ class AddTextProperty extends StatefulWidget {
 }
 
 class _AddTextPropertyState extends State<AddTextProperty> {
-  TextEditingController order = TextEditingController();
-  TextEditingController propertyName = TextEditingController();
-  TextEditingController textDisplayed = TextEditingController();
   String productId = '';
   final TextEditingController _selectedProductId = TextEditingController();
-  // String handler = '';
-  // final TextEditingController _selectedHandler = TextEditingController();
+  List<DropdownMenuEntry<String>> productIdForDropDownMenu =
+      productIdListForDropDownMenu();
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  Map<String, String?>? attributes;
+  Map<String, String>? dataHandler;
+  //the rest
+  TextEditingController textDisplayed = TextEditingController();
   String alighment = '';
   final TextEditingController _selectedAlighment = TextEditingController();
   String color = '';
@@ -91,16 +97,9 @@ class _AddTextPropertyState extends State<AddTextProperty> {
   final TextEditingController _selectedfontSize = TextEditingController();
   String fontWeight = '';
   final TextEditingController _selectedfontWeight = TextEditingController();
-  Map<String, String?>? attributes;
-  Map<String, String>? dataHandler;
 
   @override
   Widget build(BuildContext context) {
-    final productIdList = papDataHandler.productIdList();
-    List<DropdownMenuEntry<String>> productIdForDropDownMenu = [];
-    for (var each in productIdList) {
-      productIdForDropDownMenu.add(DropdownMenuEntry(value: each, label: each));
-    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -135,15 +134,7 @@ class _AddTextPropertyState extends State<AddTextProperty> {
               controller: propertyName,
               decoration: InputDecoration(labelText: 'propertyName'),
             ),
-            //handler
-            // DropdownMenu<String>(
-            //   onSelected: (value) => setState(() {
-            //     handler = value!;
-            //   }),
-            //   controller: _selectedHandler,
-            //   dropdownMenuEntries: widgetHandlersForDropdownMenu(),
-            // ),
-            //text to display
+            //text displayed
             TextField(
               controller: textDisplayed,
               decoration: InputDecoration(labelText: 'text displayed'),
@@ -205,6 +196,9 @@ class _AddTextPropertyState extends State<AddTextProperty> {
                   context.read<PapBloc>().add(
                     PapEventAddProductProperty(productProperty: dataInput),
                   );
+                  if (GoRouter.of(context).canPop()) {
+                    context.pop();
+                  }
                 }
               },
               child: Text('Push'),
@@ -216,7 +210,121 @@ class _AddTextPropertyState extends State<AddTextProperty> {
   }
 }
 
-//INPUTFIELD
+//DROPDOWNLIST OR RADIOLIST
+class AddDropdownOrRadioProperty extends StatefulWidget {
+  const AddDropdownOrRadioProperty({super.key});
+
+  @override
+  State<AddDropdownOrRadioProperty> createState() =>
+      _AddDropdownOrRadioPropertyState();
+}
+
+class _AddDropdownOrRadioPropertyState
+    extends State<AddDropdownOrRadioProperty> {
+  TextEditingController order = TextEditingController();
+  TextEditingController propertyName = TextEditingController();
+  String productId = '';
+  final TextEditingController _selectedProductId = TextEditingController();
+  List<DropdownMenuEntry<String>> productIdForDropDownMenu =
+      productIdListForDropDownMenu();
+  Map<String, String?>? attributes;
+  Map<String, String>? dataHandler;
+  //the rest
+  TextEditingController dataHandlerText = TextEditingController();
+  final TextEditingController _selectedHandler = TextEditingController();
+  String handler = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            //productId
+            DropdownMenu<String>(
+              onSelected: (value) => setState(() {
+                productId = value!;
+              }),
+              controller: _selectedProductId,
+              dropdownMenuEntries: productIdForDropDownMenu,
+            ),
+            //handler
+            DropdownMenu<String>(
+              onSelected: (value) => setState(() {
+                handler = value!;
+              }),
+              controller: _selectedHandler,
+              dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                DropdownMenuEntry(value: 'RadioList', label: 'RadioList'),
+                DropdownMenuEntry(value: 'DropdownList', label: 'DropdownList'),
+              ],
+            ),
+            //order
+            TextField(
+              controller: order,
+              decoration: InputDecoration(labelText: 'order'),
+            ),
+            //property name
+            TextField(
+              controller: propertyName,
+              decoration: InputDecoration(labelText: 'propertyName'),
+            ),
+            //datahandler
+            TextField(
+              controller: dataHandlerText,
+              decoration: InputDecoration(labelText: 'dataHandler'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (order.text != '' &&
+                    propertyName.text != '' &&
+                    productId != '') {
+                  List<String> data = dataHandlerText.text
+                      .split(',')
+                      .map((e) => e.trim())
+                      .toList();
+                  dataHandler = {};
+                  for (var each in data) {
+                    dataHandler![each] = each;
+                  }
+                  AppProductProperty dataInput = AppProductProperty(
+                    id: '',
+                    productId: productId,
+                    order: int.parse(order.text),
+                    propertyName: propertyName.text,
+                    handler: handler,
+                    dataHandler: dataHandler,
+                  );
+                  context.read<PapBloc>().add(
+                    PapEventAddProductProperty(productProperty: dataInput),
+                  );
+                  if (GoRouter.of(context).canPop()) {
+                    context.pop();
+                  }
+                }
+              },
+              child: Text('Push'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//inputfield
 class AddInputFieldProperty extends StatefulWidget {
   const AddInputFieldProperty({super.key});
 
@@ -225,12 +333,16 @@ class AddInputFieldProperty extends StatefulWidget {
 }
 
 class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
-  TextEditingController productId = TextEditingController();
   TextEditingController order = TextEditingController();
   TextEditingController propertyName = TextEditingController();
-  TextEditingController handler = TextEditingController();
-  String attributes = 'null';
-  TextEditingController dataHandler = TextEditingController();
+  String productId = '';
+  final TextEditingController _selectedProductId = TextEditingController();
+  List<DropdownMenuEntry<String>> productIdForDropDownMenu =
+      productIdListForDropDownMenu();
+  Map<String, String?>? attributes;
+  Map<String, String>? dataHandler;
+  //the rest
+  TextEditingController textFieldData = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -250,154 +362,54 @@ class _AddInputFieldPropertyState extends State<AddInputFieldProperty> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: productId,
-              decoration: InputDecoration(labelText: 'productId'),
+            //productId
+            DropdownMenu<String>(
+              onSelected: (value) => setState(() {
+                productId = value!;
+              }),
+              controller: _selectedProductId,
+              dropdownMenuEntries: productIdForDropDownMenu,
             ),
+            //order
             TextField(
               controller: order,
               decoration: InputDecoration(labelText: 'order'),
             ),
+            //property name
             TextField(
               controller: propertyName,
               decoration: InputDecoration(labelText: 'propertyName'),
             ),
             TextField(
-              controller: handler,
-              decoration: InputDecoration(labelText: 'handler'),
-            ),
-            TextField(
-              controller: dataHandler,
-              decoration: InputDecoration(labelText: 'dataHandler'),
-            ),
-            ElevatedButton(onPressed: () {}, child: Text('Push')),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-//RADIOLIST
-class AddRadioListProperty extends StatefulWidget {
-  const AddRadioListProperty({super.key});
-
-  @override
-  State<AddRadioListProperty> createState() => _AddRadioListPropertyState();
-}
-
-class _AddRadioListPropertyState extends State<AddRadioListProperty> {
-  TextEditingController productId = TextEditingController();
-  TextEditingController order = TextEditingController();
-  TextEditingController propertyName = TextEditingController();
-  TextEditingController handler = TextEditingController();
-  String attributes = 'null';
-  TextEditingController dataHandler = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (GoRouter.of(context).canPop()) {
-              context.pop();
-            }
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: productId,
-              decoration: InputDecoration(labelText: 'productId'),
-            ),
-            TextField(
-              controller: order,
-              decoration: InputDecoration(labelText: 'order'),
-            ),
-            TextField(
-              controller: propertyName,
-              decoration: InputDecoration(labelText: 'propertyName'),
-            ),
-            TextField(
-              controller: handler,
-              decoration: InputDecoration(labelText: 'handler'),
-            ),
-            TextField(
-              controller: dataHandler,
-              decoration: InputDecoration(labelText: 'dataHandler'),
+              controller: textFieldData,
+              decoration: InputDecoration(
+                labelText: 'Name the textFieldInputData',
+              ),
             ),
 
-            ElevatedButton(onPressed: () {}, child: Text('Push')),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-//DROPDOWNLIST
-class AddDropdownListProperty extends StatefulWidget {
-  const AddDropdownListProperty({super.key});
-
-  @override
-  State<AddDropdownListProperty> createState() =>
-      _AddDropdownListPropertyState();
-}
-
-class _AddDropdownListPropertyState extends State<AddDropdownListProperty> {
-  TextEditingController productId = TextEditingController();
-  TextEditingController order = TextEditingController();
-  TextEditingController propertyName = TextEditingController();
-  TextEditingController handler = TextEditingController();
-  String attributes = 'null';
-  TextEditingController dataHandler = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (GoRouter.of(context).canPop()) {
-              context.pop();
-            }
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: productId,
-              decoration: InputDecoration(labelText: 'productId'),
+            ElevatedButton(
+              onPressed: () {
+                if (order.text != '' &&
+                    propertyName.text != '' &&
+                    productId != '') {
+                  AppProductProperty dataInput = AppProductProperty(
+                    id: '',
+                    productId: productId,
+                    order: int.parse(order.text),
+                    propertyName: propertyName.text,
+                    handler: 'InputField',
+                    dataHandler: {'textFieldInputData': textFieldData.text},
+                  );
+                  context.read<PapBloc>().add(
+                    PapEventAddProductProperty(productProperty: dataInput),
+                  );
+                  if (GoRouter.of(context).canPop()) {
+                    context.pop();
+                  }
+                }
+              },
+              child: Text('Push'),
             ),
-            TextField(
-              controller: order,
-              decoration: InputDecoration(labelText: 'order'),
-            ),
-            TextField(
-              controller: propertyName,
-              decoration: InputDecoration(labelText: 'propertyName'),
-            ),
-            TextField(
-              controller: handler,
-              decoration: InputDecoration(labelText: 'handler'),
-            ),
-            TextField(
-              controller: dataHandler,
-              decoration: InputDecoration(labelText: 'dataHandler'),
-            ),
-
-            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),
@@ -414,12 +426,15 @@ class AddDividerProperty extends StatefulWidget {
 }
 
 class _AddDividerPropertyState extends State<AddDividerProperty> {
-  TextEditingController productId = TextEditingController();
   TextEditingController order = TextEditingController();
   TextEditingController propertyName = TextEditingController();
-  TextEditingController handler = TextEditingController();
-  String attributes = 'null';
-  String dataHandler = 'null';
+  String productId = '';
+  final TextEditingController _selectedProductId = TextEditingController();
+  List<DropdownMenuEntry<String>> productIdForDropDownMenu =
+      productIdListForDropDownMenu();
+  Map<String, String?>? attributes;
+  Map<String, String>? dataHandler;
+  //the rest
 
   @override
   Widget build(BuildContext context) {
@@ -439,24 +454,46 @@ class _AddDividerPropertyState extends State<AddDividerProperty> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: productId,
-              decoration: InputDecoration(labelText: 'productId'),
+            //productId
+            DropdownMenu<String>(
+              onSelected: (value) => setState(() {
+                productId = value!;
+              }),
+              controller: _selectedProductId,
+              dropdownMenuEntries: productIdForDropDownMenu,
             ),
+            //order
             TextField(
               controller: order,
               decoration: InputDecoration(labelText: 'order'),
             ),
+            //property name
             TextField(
               controller: propertyName,
               decoration: InputDecoration(labelText: 'propertyName'),
             ),
-            TextField(
-              controller: handler,
-              decoration: InputDecoration(labelText: 'handler'),
+            ElevatedButton(
+              onPressed: () {
+                if (order.text != '' &&
+                    propertyName.text != '' &&
+                    productId != '') {
+                  AppProductProperty dataInput = AppProductProperty(
+                    id: '',
+                    productId: productId,
+                    order: int.parse(order.text),
+                    propertyName: propertyName.text,
+                    handler: 'Divider',
+                  );
+                  context.read<PapBloc>().add(
+                    PapEventAddProductProperty(productProperty: dataInput),
+                  );
+                  if (GoRouter.of(context).canPop()) {
+                    context.pop();
+                  }
+                }
+              },
+              child: Text('Push'),
             ),
-
-            ElevatedButton(onPressed: () {}, child: Text('Push')),
           ],
         ),
       ),
