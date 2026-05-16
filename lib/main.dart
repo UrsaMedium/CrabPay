@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pa
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';

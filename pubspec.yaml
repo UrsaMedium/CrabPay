@@ -43,6 +43,7 @@ dependencies:
   go_router: ^17.2.0
   firebase_data_connect: ^0.3.0
   fluttertoast: ^9.0.0
+  flutter_markdown_latex: ^0.3.4
 
 dev_dependencies:
   flutter_test:

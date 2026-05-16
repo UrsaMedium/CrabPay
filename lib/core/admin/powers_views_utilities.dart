@@ -1,4 +1,5 @@
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
+import 'package:crabpay/views/admin_views/add_complete_product_view.dart';
 import 'package:crabpay/views/admin_views/admin_powers_views.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -139,6 +140,10 @@ Map<String, Map<String, dynamic>> adminPowersMap = {
   'Delete property': {
     'route': '/delete_property_view',
     'widget': DeletePropertyView(),
+  },
+  'Add complete product': {
+    'route': '/add_complete_product_view',
+    'widget': AddCompleteProductView(),
   },
 };
 
