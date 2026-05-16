@@ -1,6 +1,7 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
-import 'package:crabpay/core/utilities.dart' show papDataHandler;
+import 'package:crabpay/core/utilities.dart'
+    show ContextExtensions, papDataHandler;
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatefulWidget {
@@ -39,12 +40,36 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: propertySlivers(properties),
-        ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal:  8.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.6,
+              ),
+              child: CustomScrollView(
+                shrinkWrap: true,
+                slivers: propertySlivers(properties),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 12),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.appColorScheme.primary,
+                foregroundColor: context.appColorScheme.onPrimary,
+                minimumSize: Size(double.infinity, 50),
+              ),
+              child: Text(
+                'Add To Cart',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

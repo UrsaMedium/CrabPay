@@ -37,14 +37,19 @@ Color widgetPropertyColor(BuildContext context, String? color) {
 
 class WhatWidgetRadio extends StatefulWidget {
   final Map<String, String> radios;
-  const WhatWidgetRadio({super.key, required this.radios});
+  final String propertyName;
+  const WhatWidgetRadio({
+    super.key,
+    required this.radios,
+    required this.propertyName,
+  });
 
   @override
   State<WhatWidgetRadio> createState() => _WhatWidgetRadioState();
 }
 
 class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
-  late String? _groupValue;
+  late String? _groupValue = '';
 
   void radioReacts(String? value) {
     setState(() {
@@ -70,19 +75,60 @@ class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
 
   @override
   Widget build(BuildContext context) {
-    return RadioGroup<String>(
-      groupValue: _groupValue,
-      onChanged: (value) {
-        radioReacts(value);
-      },
-      child: Column(children: choices()),
+    return Card(
+      elevation: 3,
+      clipBehavior: Clip.antiAlias,
+      color: context.appColorScheme.surfaceContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+
+        // side: BorderSide(color: context.appColorScheme.primary)
+      ),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 16.0,
+                left: 24,
+                right: 24,
+                bottom: 0,
+              ),
+              child: Card(
+                elevation: 2,
+                color: context.appColorScheme.surfaceContainerHigh,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(widget.propertyName, style: TextStyle(fontSize: 16),),
+                ),
+              ),
+            ),
+          ),
+          RadioGroup<String>(
+            groupValue: _groupValue,
+            onChanged: (value) {
+              radioReacts(value);
+            },
+            child: Column(children: choices()),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class WhatWidgetDropdownMenu extends StatefulWidget {
   final Map<String, String> entries;
-  const WhatWidgetDropdownMenu({super.key, required this.entries});
+  final String propertyName;
+  const WhatWidgetDropdownMenu({
+    super.key,
+    required this.entries,
+    required this.propertyName,
+  });
 
   @override
   State<WhatWidgetDropdownMenu> createState() => _WhatWidgetDropdownMenuState();
@@ -104,12 +150,58 @@ class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
-      onSelected: (value) => setState(() {
-        selected = value!;
-      }),
-      controller: _selectedItem,
-      dropdownMenuEntries: listOfEntries(),
+    return Card(
+      elevation: 3,
+      clipBehavior: Clip.antiAlias,
+      color: context.appColorScheme.surfaceContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+
+        // side: BorderSide(color: context.appColorScheme.primary)
+      ),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 0.0,
+                left: 32,
+                right: 24,
+                bottom: 0,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.propertyName,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: DropdownMenu<String>(
+              expandedInsets: EdgeInsets.zero,
+              inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(
+                    color: context.appColorScheme.primary,
+                    width: 1,
+                  ),
+                ),
+              ),
+              onSelected: (value) => setState(() {
+                selected = value!;
+              }),
+              controller: _selectedItem,
+              dropdownMenuEntries: listOfEntries(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -140,32 +232,83 @@ Widget theAppWidgetBuilder(
 
   switch (handler) {
     case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
-      return Container(
-        alignment: widgetPropertyAlignment(attr['alignment']),
-        child: Text(
-          attr['text']!,
-          style: TextStyle(
-            color: widgetPropertyColor(context, attr['color']),
-            fontSize: double.tryParse(attr['fontSize']!) ?? 14,
-            fontWeight: FontWeight(int.tryParse(attr['fontWeight']!) ?? 400),
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0, left: 16),
+        child: Container(
+          alignment: widgetPropertyAlignment(attr['alignment']),
+          child: Text(
+            attr['text']!,
+            style: TextStyle(
+              color: widgetPropertyColor(context, attr['color']),
+              fontSize: double.tryParse(attr['fontSize']!) ?? 14,
+              fontWeight: FontWeight(int.tryParse(attr['fontWeight']!) ?? 400),
+            ),
           ),
         ),
       );
     case 'InputField': // pass the name of entered data
       TextEditingController textFieldController = TextEditingController();
-      return TextField(
-        controller: textFieldController,
-        onChanged: (value) {
-          // appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
-          //     .toString();
-        },
+      return Card(
+        elevation: 3,
+        clipBehavior: Clip.antiAlias,
+        color: context.appColorScheme.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+
+          // side: BorderSide(color: context.appColorScheme.primary)
+        ),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 0.0,
+                  left: 32,
+                  right: 24,
+                  bottom: 0,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(propertyName, style: TextStyle(fontSize: 16)),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: TextField(
+                decoration: InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                controller: textFieldController,
+                onChanged: (value) {
+                  // appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
+                  //     .toString();
+                },
+              ),
+            ),
+          ],
+        ),
       );
     case 'RadioList': // pass map of option name : option
-      return WhatWidgetRadio(radios: dataHandler ?? {'error': 'error'});
+      return WhatWidgetRadio(
+        radios: dataHandler ?? {'error': 'error'},
+        propertyName: propertyName,
+      );
     case 'DropdownList': // pass map of option name : option
-      return WhatWidgetDropdownMenu(entries: dataHandler ?? {'error': 'error'});
+      return WhatWidgetDropdownMenu(
+        entries: dataHandler ?? {'error': 'error'},
+        propertyName: propertyName,
+      );
     case 'Divider':
-      return Divider();
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Divider(),
+      );
     default:
       return Text('ERROR');
   }

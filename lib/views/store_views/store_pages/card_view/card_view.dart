@@ -34,15 +34,12 @@ class CardView extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 showModalBottomSheet(
+                  showDragHandle: true,
                   context: context,
                   isScrollControlled: true,
-
                   builder: (BuildContext context) {
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.8,
-                      ),
-                      child: BuyBottomSheet(productId: product.id),
+                    return Wrap(
+                      children: [BuyBottomSheet(productId: product.id)],
                     );
                   },
                 );

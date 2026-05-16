@@ -4,7 +4,6 @@ import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pa
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
