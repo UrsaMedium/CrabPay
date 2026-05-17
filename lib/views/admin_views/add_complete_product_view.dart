@@ -1,7 +1,8 @@
-import 'package:crabpay/core/utilities.dart' show ContextExtensions;
+import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/dialogs/generic_dialog_text_input.dart'
+    show showOnInputDialog;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -14,6 +15,17 @@ class AddCompleteProductView extends StatefulWidget {
 }
 
 class _AddCompleteProductViewState extends State<AddCompleteProductView> {
+  String _description = '';
+  String? _imageUrl;
+  String? _productName;
+  TextEditingController _descriptionController = TextEditingController();
+  void refreshOndescription(String value) {
+    setState(() {
+      _description = value;
+      // _descriptionController = TextEditingController(text: value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,24 +40,68 @@ class _AddCompleteProductViewState extends State<AddCompleteProductView> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.asset('lib/assets/images/gas-gas-gas.jpg'),
-            TextButton(onPressed: () {}, child: Text('data')),
-            Padding(padding: const EdgeInsets.all(8.0), child: TextField()),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MarkdownBody(
-                selectable: true,
-                data: _text,
-                builders: {'latex': LatexElementBuilder()},
-                extensionSet: md.ExtensionSet(
-                  [LatexBlockSyntax()],
-                  [LatexInlineSyntax()],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () async {
+                  _imageUrl = await showOnInputDialog(context, 'Image URL');
+                },
+                child: Stack(
+                  alignment: .center,
+                  children: [
+                    Image.asset(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      _imageUrl ?? 'lib/assets/images/gas-gas-gas.jpg',
+                      color: context.appColorScheme.error.withAlpha(50),
+                      colorBlendMode: BlendMode.dstIn,
+                    ),
+                    Text('$_imageUrl'),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextButton(
+                  onPressed: () async {
+                    _productName = await showOnInputDialog(
+                      context,
+                      'Product Name',
+                    );
+                    setState(() {});
+                  },
+                  child: Text('Product Name: $_productName',style: TextStyle(backgroundColor: context.appColorScheme.onPrimary),),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 64.0,
+                  vertical: 16,
+                ),
+                child: TextField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  onSubmitted: (value) {
+                    refreshOndescription(value);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: MarkdownBody(
+                  selectable: true,
+                  data: _description,
+                  builders: {'latex': LatexElementBuilder()},
+                  extensionSet: md.ExtensionSet(
+                    [LatexBlockSyntax()],
+                    [LatexInlineSyntax()],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -57,30 +113,31 @@ class _AddCompleteProductViewState extends State<AddCompleteProductView> {
 ❗Specify correct servers, you can check known servers here - https://delivery.crabpay.org/faq/oncehuman-region-servers
 
 ❗Any return due to your fault - the fund are returned partially (~20% loss). In case of returns due to our fault the funds are returned fully""";
-  
-//       r"""This is inline latex: $f(x) = \sum_{i=0}^{n} \frac{a_i}{1+x}$
 
-// This is block level latex:
+  //       r"""This is inline latex: $f(x) = \sum_{i=0}^{n} \frac{a_i}{1+x}$
 
-// $$
-// c = \pm\sqrt{a^2 + b^2}
-// $$
+  // This is block level latex:
 
-// This is inline latex with displayMode: $$f(x) = \sum_{i=0}^{n} \frac{a_i}{1+x}$$
+  // $$
+  // c = \pm\sqrt{a^2 + b^2}
+  // $$
 
-// The relationship between the height and the side length of an equilateral triangle is:
+  // This is inline latex with displayMode: $$f(x) = \sum_{i=0}^{n} \frac{a_i}{1+x}$$
 
-// \[ \text{Height} = \frac{\sqrt{3}}{2} \times \text{Side Length} \]
+  // The relationship between the height and the side length of an equilateral triangle is:
 
-// \[ \text{X} = \frac{1}{2} \times \text{Y} \times \text{Z} = \frac{1}{2} \times 9 \times \frac{\sqrt{3}}{2} \times 9 = \frac{81\sqrt{3}}{4} \]
+  // \[ \text{Height} = \frac{\sqrt{3}}{2} \times \text{Side Length} \]
 
-// The basic form of the Taylor series is:
+  // \[ \text{X} = \frac{1}{2} \times \text{Y} \times \text{Z} = \frac{1}{2} \times 9 \times \frac{\sqrt{3}}{2} \times 9 = \frac{81\sqrt{3}}{4} \]
 
-// \[f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f'''(a)}{3!}(x-a)^3 + \cdots\]
+  // The basic form of the Taylor series is:
 
-// where \(f(x)\) is the function to be expanded, \(a\) is the expansion point, \(f'(a)\), \(f''(a)\), \(f'''(a)\), etc., are the first, second, third, and so on derivatives of the function at point \(a\), and \(n!\) denotes the factorial of \(n\).
+  // \[f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f'''(a)}{3!}(x-a)^3 + \cdots\]
 
-// In particular, when \(a=0\), this expansion is called the Maclaurin series.""";
+  // where \(f(x)\) is the function to be expanded, \(a\) is the expansion point, \(f'(a)\), \(f''(a)\), \(f'''(a)\), etc., are the first, second, third, and so on derivatives of the function at point \(a\), and \(n!\) denotes the factorial of \(n\).
+
+  // In particular, when \(a=0\), this expansion is called the Maclaurin series.""";
+
   final List<String> _fieldsList = ['1', '2', '1', '2', '1', '2'];
 
   // List<Widget> _fields(BuildContext context) {
