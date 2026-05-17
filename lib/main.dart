@@ -6,7 +6,8 @@ import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pa
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_fields_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_product_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
@@ -60,6 +61,17 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
+          path: 'add_complete_product_product_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              const AddCompleteProductProductView(),
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'add_complete_product_fields_view',
+              builder: (context, state) => AddCompleteProductFieldsView(),
+            ),
+          ],
+        ),
+        GoRoute(
           path: 'login_view',
           builder: (BuildContext context, GoRouterState state) =>
               const LoginView(),
@@ -90,7 +102,7 @@ class CrabPayApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
-    context.read<PapBloc>().add(PapEventFetchAllPAPData());
+    // context.read<PapBloc>().add(PapEventFetchAllPAPData());
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         ColorScheme lightScheme;

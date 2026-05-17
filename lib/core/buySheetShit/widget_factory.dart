@@ -103,7 +103,10 @@ class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(widget.propertyName, style: TextStyle(fontSize: 16),),
+                  child: Text(
+                    widget.propertyName,
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -269,7 +272,7 @@ Widget theAppWidgetBuilder(
                   bottom: 0,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 8),
                   child: Text(propertyName, style: TextStyle(fontSize: 16)),
                 ),
               ),

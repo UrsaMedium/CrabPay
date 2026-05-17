@@ -1,5 +1,9 @@
 import 'package:crabpay/core/admin/powers_views_utilities.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AskPageView extends StatelessWidget {
   const AskPageView({super.key});
@@ -8,6 +12,16 @@ class AskPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        ElevatedButton(
+          onPressed: () {
+            context.read<PapBloc>().add(PapEventFetchAllPAPData());
+          },
+          child: Text('fetch data'),
+        ),
+        ElevatedButton(
+          onPressed: () => context.go('/add_complete_product_product_view'),
+          child: Text('Add complete product'),
+        ),
         const Text('Ask Row One'),
         const Text('Ask Row Two'),
         Column(children: adminPowersButtons(context)),
