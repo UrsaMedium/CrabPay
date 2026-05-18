@@ -14,6 +14,7 @@ class AddCompleteProductFieldsView extends StatefulWidget {
 class _AddCompleteProductFieldsViewState
     extends State<AddCompleteProductFieldsView> {
   final List<Widget> _fieldsList = [];
+  final Map<String, String> _dataFromFields = {};
 
   void _updateFieldsList(Widget newField) {
     setState(() {
@@ -21,8 +22,10 @@ class _AddCompleteProductFieldsViewState
     });
   }
 
-  Widget _fields(BuildContext context, Widget field) {
-    return field;
+  void _dataBridg(String caller, String passedData) {
+    setState(() {
+      _dataFromFields[caller] = passedData;
+    });
   }
 
   @override
@@ -55,7 +58,7 @@ class _AddCompleteProductFieldsViewState
                     SliverList.builder(
                       itemCount: _fieldsList.length,
                       itemBuilder: (context, index) {
-                        return _fields(context, _fieldsList[index]);
+                        return _fieldsList[index];
                       },
                     ),
                     SliverToBoxAdapter(
@@ -77,6 +80,7 @@ class _AddCompleteProductFieldsViewState
                                   isScrollControlled: true,
                                   builder: (BuildContext context) {
                                     return AddFieldBottomSheet(
+                                      dataBridge: _dataBridg,
                                       onNewFieldAdding: _updateFieldsList,
                                     );
                                   },
@@ -117,7 +121,9 @@ class _AddCompleteProductFieldsViewState
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(_dataFromFields);
+                      },
                       child: Text('Next'),
                     ),
                   ),
@@ -133,7 +139,12 @@ class _AddCompleteProductFieldsViewState
 
 class AddFieldBottomSheet extends StatefulWidget {
   final Function(Widget) onNewFieldAdding;
-  const AddFieldBottomSheet({super.key, required this.onNewFieldAdding});
+  final Function(String, String) dataBridge;
+  const AddFieldBottomSheet({
+    super.key,
+    required this.onNewFieldAdding,
+    required this.dataBridge,
+  });
 
   @override
   State<AddFieldBottomSheet> createState() => _AddFieldBottomSheetState();
@@ -148,6 +159,13 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
     DropdownMenuItem(value: 'RadioList', child: Text('RadioList')),
     DropdownMenuItem(value: 'DropdownList', child: Text('DropdownList')),
   ];
+  final List<Widget> _optionsFields = [];
+  void _onOptionFieldAdd() {
+    setState(() {
+      _optionsFields.add(OptionField());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -156,7 +174,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: 240,
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
           // MediaQuery.of(context).size.height * 0.3,
         ),
         child: Column(
@@ -170,6 +188,11 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
               child: TextField(
                 controller: propertyNameController,
                 onChanged: (value) => propertyName = value.trim(),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                ),
               ),
             ),
             DropdownButton(
@@ -181,8 +204,46 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                 });
               },
               elevation: 5,
-              // hint: DropdownMenuItem(child: Text('$handler')),
+              hint: DropdownMenuItem(
+                child: Text(
+                  'handler',
+                  style: TextStyle(
+                    color: context.appColorScheme.outlineVariant,
+                  ),
+                ),
+              ),
             ),
+            if (handler == 'DropdownList' || handler == 'RadioList')
+              ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: 220),
+                child: CustomScrollView(
+                  shrinkWrap: true,
+                  slivers: [
+                    SliverList.builder(
+                      itemCount: _optionsFields.length,
+                      itemBuilder: (context, index) => _optionsFields[index],
+                    ),
+                    SliverToBoxAdapter(
+                      child: Wrap(
+                        alignment: .center,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              _onOptionFieldAdd();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: context.appColorScheme.onPrimary,
+                              foregroundColor: context.appColorScheme.primary,
+                            ),
+                            label: Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Spacer(),
             Padding(
               padding: const EdgeInsets.only(
                 left: 16,
@@ -194,6 +255,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                 onPressed: () {
                   widget.onNewFieldAdding(
                     theAppWidgetBuilder(
+                      widget.dataBridge,
                       context,
                       propertyName!,
                       handler!,
@@ -209,7 +271,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                   minimumSize: Size(double.infinity, 50),
                 ),
                 child: Text(
-                  'Add Field',
+                  'Add The Field',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -217,6 +279,30 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class OptionField extends StatefulWidget {
+  const OptionField({super.key});
+
+  @override
+  State<OptionField> createState() => _OptionFieldState();
+}
+
+class _OptionFieldState extends State<OptionField> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -35,20 +35,20 @@ Color widgetPropertyColor(BuildContext context, String? color) {
   }
 }
 
-class WhatWidgetRadio extends StatefulWidget {
-  final Map<String, String> radios;
+class RadioConstructor extends StatefulWidget {
+  final List<String> expectedData;
   final String propertyName;
-  const WhatWidgetRadio({
+  const RadioConstructor({
     super.key,
-    required this.radios,
+    required this.expectedData,
     required this.propertyName,
   });
 
   @override
-  State<WhatWidgetRadio> createState() => _WhatWidgetRadioState();
+  State<RadioConstructor> createState() => _RadioConstructorState();
 }
 
-class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
+class _RadioConstructorState extends State<RadioConstructor> {
   late String? _groupValue = '';
 
   void radioReacts(String? value) {
@@ -59,13 +59,13 @@ class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
 
   List<Widget> choices() {
     List<Widget> resultList = [];
-    for (final each in widget.radios.keys) {
+    for (final each in widget.expectedData) {
       resultList.add(
         InkWell(
-          onTap: () => radioReacts(widget.radios[each]),
+          onTap: () => radioReacts(each),
           child: ListTile(
-            title: Text(widget.radios[each]!),
-            leading: Radio<String>(value: widget.radios[each]!),
+            title: Text(each),
+            leading: Radio<String>(value: each),
           ),
         ),
       );
@@ -124,29 +124,28 @@ class _WhatWidgetRadioState extends State<WhatWidgetRadio> {
   }
 }
 
-class WhatWidgetDropdownMenu extends StatefulWidget {
-  final Map<String, String> entries;
+class DropdownMenuConstructor extends StatefulWidget {
+  final List<String> expectedData;
   final String propertyName;
-  const WhatWidgetDropdownMenu({
+  const DropdownMenuConstructor({
     super.key,
-    required this.entries,
+    required this.expectedData,
     required this.propertyName,
   });
 
   @override
-  State<WhatWidgetDropdownMenu> createState() => _WhatWidgetDropdownMenuState();
+  State<DropdownMenuConstructor> createState() =>
+      _DropdownMenuConstructorState();
 }
 
-class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
+class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
   final TextEditingController _selectedItem = TextEditingController();
   String selected = '';
 
   List<DropdownMenuEntry<String>> listOfEntries() {
     List<DropdownMenuEntry<String>> resultList = [];
-    for (final each in widget.entries.keys) {
-      resultList.add(
-        DropdownMenuEntry(value: each, label: widget.entries[each]!),
-      );
+    for (final each in widget.expectedData) {
+      resultList.add(DropdownMenuEntry(value: each, label: each));
     }
     return resultList;
   }
@@ -209,18 +208,84 @@ class _WhatWidgetDropdownMenuState extends State<WhatWidgetDropdownMenu> {
   }
 }
 
-// Returns custom widget based on the recived data:
-// - whatItemProperty - requared String - what property of an item, that should be displayd in the item sheet
-// - whatItemHandler - requared String - what widget is ment to handel the property data
-// - handlerProperties - Map<String, String>? - properties that shapes the handler widget
-// - whatData - Map<String, String>? - the data that is ment to be handeled by a widget and retruned
+class InputFieldConstructor extends StatefulWidget {
+  final Function(String, String) dataBridge;
+  final BuildContext context;
+  final String fieldName;
+  final List<String> expectedData;
+  const InputFieldConstructor({
+    super.key,
+    required this.context,
+    required this.fieldName,
+    required this.expectedData,
+    required this.dataBridge,
+  });
+
+  @override
+  State<InputFieldConstructor> createState() => _InputFieldConstructorState();
+}
+
+class _InputFieldConstructorState extends State<InputFieldConstructor> {
+  final TextEditingController _textFieldController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    // Map<String, String> dataHandler = widget.dataHandler;
+    return Card(
+      elevation: 3,
+      clipBehavior: Clip.antiAlias,
+      color: context.appColorScheme.surfaceContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+
+        // side: BorderSide(color: context.appColorScheme.primary)
+      ),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 0.0,
+                left: 32,
+                right: 24,
+                bottom: 0,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              controller: _textFieldController,
+              onChanged: (value) {
+                widget.dataBridge(widget.fieldName, _textFieldController.text);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 Widget theAppWidgetBuilder(
+  Function(String, String) dataBridge,
   BuildContext context,
-  String propertyName,
+  String fieldName,
   String handler,
   Map<String, String?>? attributes,
-  Map<String, String>? dataHandler,
+  List<String>? expectedData,
 ) {
   Map<String, String> attr = {};
   if (attributes != null) {
@@ -250,62 +315,21 @@ Widget theAppWidgetBuilder(
         ),
       );
     case 'InputField': // pass the name of entered data
-      TextEditingController textFieldController = TextEditingController();
-      return Card(
-        elevation: 3,
-        clipBehavior: Clip.antiAlias,
-        color: context.appColorScheme.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-
-          // side: BorderSide(color: context.appColorScheme.primary)
-        ),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 0.0,
-                  left: 32,
-                  right: 24,
-                  bottom: 0,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(propertyName, style: TextStyle(fontSize: 16)),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                controller: textFieldController,
-                onChanged: (value) {
-                  // appCartItems[handlerProperties?['text'] ?? ''] = textFieldController
-                  //     .toString();
-                },
-              ),
-            ),
-          ],
-        ),
+      return InputFieldConstructor(
+        dataBridge: dataBridge,
+        context: context,
+        fieldName: fieldName,
+        expectedData: expectedData ?? ['user custom input'],
       );
     case 'RadioList': // pass map of option name : option
-      return WhatWidgetRadio(
-        radios: dataHandler ?? {'error': 'error'},
-        propertyName: propertyName,
+      return RadioConstructor(
+        expectedData: expectedData ?? ['user custom input'],
+        propertyName: fieldName,
       );
     case 'DropdownList': // pass map of option name : option
-      return WhatWidgetDropdownMenu(
-        entries: dataHandler ?? {'error': 'error'},
-        propertyName: propertyName,
+      return DropdownMenuConstructor(
+        expectedData: expectedData ?? ['user custom input'],
+        propertyName: fieldName,
       );
     case 'Divider':
       return Padding(

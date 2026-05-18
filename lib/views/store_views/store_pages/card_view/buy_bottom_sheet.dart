@@ -19,13 +19,13 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     for (var each in properties) {
       result.add(
         SliverToBoxAdapter(
-          child: theAppWidgetBuilder(
-            context,
-            each.propertyName,
-            each.handler,
-            each.attributes,
-            each.dataHandler,
-          ),
+          // child: theAppWidgetBuilder(
+          //   context,
+          //   each.propertyName,
+          //   each.handler,
+          //   each.attributes,
+          //   each.dataHandler,
+          // ),
         ),
       );
     }
