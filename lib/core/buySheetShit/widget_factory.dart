@@ -36,12 +36,14 @@ Color widgetPropertyColor(BuildContext context, String? color) {
 }
 
 class RadioConstructor extends StatefulWidget {
+  final Function(String, String) collectedDataBridge;
   final List<String> expectedData;
-  final String propertyName;
+  final String feildName;
   const RadioConstructor({
     super.key,
     required this.expectedData,
-    required this.propertyName,
+    required this.feildName,
+    required this.collectedDataBridge,
   });
 
   @override
@@ -54,6 +56,7 @@ class _RadioConstructorState extends State<RadioConstructor> {
   void radioReacts(String? value) {
     setState(() {
       _groupValue = value;
+      widget.collectedDataBridge(widget.feildName, value!);
     });
   }
 
@@ -103,10 +106,7 @@ class _RadioConstructorState extends State<RadioConstructor> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    widget.propertyName,
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  child: Text(widget.feildName, style: TextStyle(fontSize: 16)),
                 ),
               ),
             ),
@@ -125,12 +125,14 @@ class _RadioConstructorState extends State<RadioConstructor> {
 }
 
 class DropdownMenuConstructor extends StatefulWidget {
+  final Function(String, String) collectedDataBridge;
   final List<String> expectedData;
-  final String propertyName;
+  final String fieldName;
   const DropdownMenuConstructor({
     super.key,
     required this.expectedData,
-    required this.propertyName,
+    required this.fieldName,
+    required this.collectedDataBridge,
   });
 
   @override
@@ -174,10 +176,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.propertyName,
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
               ),
             ),
           ),
@@ -197,6 +196,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
               ),
               onSelected: (value) => setState(() {
                 selected = value!;
+                widget.collectedDataBridge(widget.fieldName, value);
               }),
               controller: _selectedItem,
               dropdownMenuEntries: listOfEntries(),
@@ -209,7 +209,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
 }
 
 class InputFieldConstructor extends StatefulWidget {
-  final Function(String, String) dataBridge;
+  final Function(String, String) collectedDataBridge;
   final BuildContext context;
   final String fieldName;
   final List<String> expectedData;
@@ -218,7 +218,7 @@ class InputFieldConstructor extends StatefulWidget {
     required this.context,
     required this.fieldName,
     required this.expectedData,
-    required this.dataBridge,
+    required this.collectedDataBridge,
   });
 
   @override
@@ -230,16 +230,11 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
 
   @override
   Widget build(BuildContext context) {
-    // Map<String, String> dataHandler = widget.dataHandler;
     return Card(
       elevation: 3,
       clipBehavior: Clip.antiAlias,
       color: context.appColorScheme.surfaceContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-
-        // side: BorderSide(color: context.appColorScheme.primary)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: Column(
         children: [
           Container(
@@ -269,7 +264,10 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
               ),
               controller: _textFieldController,
               onChanged: (value) {
-                widget.dataBridge(widget.fieldName, _textFieldController.text);
+                widget.collectedDataBridge(
+                  widget.fieldName,
+                  _textFieldController.text,
+                );
               },
             ),
           ),
@@ -280,7 +278,7 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
 }
 
 Widget theAppWidgetBuilder(
-  Function(String, String) dataBridge,
+  Function(String, String) collectedDataBridge,
   BuildContext context,
   String fieldName,
   String handler,
@@ -316,20 +314,22 @@ Widget theAppWidgetBuilder(
       );
     case 'InputField': // pass the name of entered data
       return InputFieldConstructor(
-        dataBridge: dataBridge,
+        collectedDataBridge: collectedDataBridge,
         context: context,
         fieldName: fieldName,
         expectedData: expectedData ?? ['user custom input'],
       );
     case 'RadioList': // pass map of option name : option
       return RadioConstructor(
-        expectedData: expectedData ?? ['user custom input'],
-        propertyName: fieldName,
+        collectedDataBridge: collectedDataBridge,
+        expectedData: expectedData ?? ['error'],
+        feildName: fieldName,
       );
     case 'DropdownList': // pass map of option name : option
       return DropdownMenuConstructor(
-        expectedData: expectedData ?? ['user custom input'],
-        propertyName: fieldName,
+        collectedDataBridge: collectedDataBridge,
+        expectedData: expectedData ?? ['error'],
+        fieldName: fieldName,
       );
     case 'Divider':
       return Padding(

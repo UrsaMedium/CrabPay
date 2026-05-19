@@ -1,17 +1,17 @@
 extend type Product {
   """
-  ✨ List `ProductProperty` objects in a one-to-many relationship (where `ProductProperty`.`product` is this object).
+  ✨ List `ProductField` objects in a one-to-many relationship (where `ProductField`.`product` is this object).
   """
-  productProperties_on_product(
+  productFields_on_product(
     """
     Filter condition to narrow down the query results.
     """
-    where: ProductProperty_Filter
+    where: ProductField_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [ProductProperty_Order!]
+    orderBy: [ProductField_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -31,8 +31,8 @@ extend type Product {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: ProductProperty_Having
-  ): [ProductProperty!]! @fdc_generated(from: "ProductProperty.product", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+    having: ProductField_Having
+  ): [ProductField!]! @fdc_generated(from: "ProductField.product", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -117,122 +117,105 @@ extend type Product {
   """
   _id: ID! @fdc_generated(from: "Product.id", purpose: ENTITY_ID)
 }
-extend type ProductProperty {
+extend type ProductField {
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
-  _metadata: _Metadata @fdc_generated(from: "ProductProperty", purpose: METADATA_FIELD)
+  _metadata: _Metadata @fdc_generated(from: "ProductField", purpose: METADATA_FIELD)
   """
-  ✨ Count the number of rows in the `ProductProperty` table.
+  ✨ Count the number of rows in the `ProductField` table.
   """
-  _count: Int! @fdc_generated(from: "ProductProperty.", purpose: QUERY_COUNT)
+  _count: Int! @fdc_generated(from: "ProductField.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `attributes` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `attributes` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   attributes_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.attributes", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.attributes", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `dataHandler` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `fieldName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  dataHandler_count(
+  fieldName_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.dataHandler", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.fieldName", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `handler` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `handler` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   handler_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.handler", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.handler", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.id", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `order` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `order` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   order_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.order", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.order", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProductField` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   productId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.productId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProductField.productId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductProperty` table where the `propertyName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  propertyName_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty.propertyName", purpose: QUERY_COUNT)
-  """
-  ✨ Sum the `order` field in the `ProductProperty` table.
+  ✨ Sum the `order` field in the `ProductField` table.
   """
   order_sum(
     """
     Set to true to sum the distinct values.
     """
     distinct: Boolean = false
-  ): Int @fdc_generated(from: "ProductProperty.order", purpose: QUERY_SUM)
+  ): Int @fdc_generated(from: "ProductField.order", purpose: QUERY_SUM)
   """
-  ✨ Average the `order` field in the `ProductProperty` table.
+  ✨ Average the `order` field in the `ProductField` table.
   """
   order_avg(
     """
     Set to true to average the distinct values.
     """
     distinct: Boolean = false
-  ): Float @fdc_generated(from: "ProductProperty.order", purpose: QUERY_AVG)
+  ): Float @fdc_generated(from: "ProductField.order", purpose: QUERY_AVG)
   """
-  ✨ Minimum of the `attributes` field in the `ProductProperty` table.
+  ✨ Minimum of the `attributes` field in the `ProductField` table.
   """
-  attributes_min: Any @fdc_generated(from: "ProductProperty.attributes", purpose: QUERY_MIN)
+  attributes_min: Any @fdc_generated(from: "ProductField.attributes", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `dataHandler` field in the `ProductProperty` table.
+  ✨ Minimum of the `order` field in the `ProductField` table.
   """
-  dataHandler_min: Any @fdc_generated(from: "ProductProperty.dataHandler", purpose: QUERY_MIN)
+  order_min: Int @fdc_generated(from: "ProductField.order", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `order` field in the `ProductProperty` table.
+  ✨ Maximum of the `attributes` field in the `ProductField` table.
   """
-  order_min: Int @fdc_generated(from: "ProductProperty.order", purpose: QUERY_MIN)
+  attributes_max: Any @fdc_generated(from: "ProductField.attributes", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `attributes` field in the `ProductProperty` table.
+  ✨ Maximum of the `order` field in the `ProductField` table.
   """
-  attributes_max: Any @fdc_generated(from: "ProductProperty.attributes", purpose: QUERY_MAX)
-  """
-  ✨ Maximum of the `dataHandler` field in the `ProductProperty` table.
-  """
-  dataHandler_max: Any @fdc_generated(from: "ProductProperty.dataHandler", purpose: QUERY_MAX)
-  """
-  ✨ Maximum of the `order` field in the `ProductProperty` table.
-  """
-  order_max: Int @fdc_generated(from: "ProductProperty.order", purpose: QUERY_MAX)
+  order_max: Int @fdc_generated(from: "ProductField.order", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "ProductProperty.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "ProductField.id", purpose: ENTITY_ID)
 }

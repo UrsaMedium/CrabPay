@@ -9,14 +9,14 @@ extend type Mutation {
     data: Product_Data!
   ): Product_KeyOutput! @fdc_generated(from: "Product", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `ProductProperty` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `ProductField` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  productProperty_insert(
+  productField_insert(
     """
     Data object to insert into the table.
     """
-    data: ProductProperty_Data!
-  ): ProductProperty_KeyOutput! @fdc_generated(from: "ProductProperty", purpose: INSERT_SINGLE)
+    data: ProductField_Data!
+  ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: INSERT_SINGLE)
   """
   ✨ Insert `Product` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -27,14 +27,14 @@ extend type Mutation {
     data: [Product_Data!]!
   ): [Product_KeyOutput!]! @fdc_generated(from: "Product", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `ProductProperty` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `ProductField` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  productProperty_insertMany(
+  productField_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [ProductProperty_Data!]!
-  ): [ProductProperty_KeyOutput!]! @fdc_generated(from: "ProductProperty", purpose: INSERT_MULTIPLE)
+    data: [ProductField_Data!]!
+  ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert or update a single `Product` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
@@ -45,14 +45,14 @@ extend type Mutation {
     data: Product_Data!
   ): Product_KeyOutput! @fdc_generated(from: "Product", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `ProductProperty` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProductProperty`.
+  ✨ Insert or update a single `ProductField` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProductField`.
   """
-  productProperty_upsert(
+  productField_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: ProductProperty_Data!
-  ): ProductProperty_KeyOutput! @fdc_generated(from: "ProductProperty", purpose: UPSERT_SINGLE)
+    data: ProductField_Data!
+  ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update `Product` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
@@ -63,14 +63,14 @@ extend type Mutation {
     data: [Product_Data!]!
   ): [Product_KeyOutput!]! @fdc_generated(from: "Product", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `ProductProperty` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProductProperty`.
+  ✨ Insert or update `ProductField` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProductField`.
   """
-  productProperty_upsertMany(
+  productField_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [ProductProperty_Data!]!
-  ): [ProductProperty_KeyOutput!]! @fdc_generated(from: "ProductProperty", purpose: UPSERT_MULTIPLE)
+    data: [ProductField_Data!]!
+  ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: UPSERT_MULTIPLE)
   """
   ✨ Update a single `Product` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Product` or `null` if not found.
   """
@@ -96,9 +96,9 @@ extend type Mutation {
     data: Product_Data!
   ): Product_KeyOutput @fdc_generated(from: "Product", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `ProductProperty` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProductProperty` or `null` if not found.
+  ✨ Update a single `ProductField` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProductField` or `null` if not found.
   """
-  productProperty_update(
+  productField_update(
     """
     The unique ID of the object.
     """
@@ -107,18 +107,18 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ProductProperty_Key
+    key: ProductField_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProductProperty_FirstRow
+    first: ProductField_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: ProductProperty_Data!
-  ): ProductProperty_KeyOutput @fdc_generated(from: "ProductProperty", purpose: UPDATE_SINGLE)
+    data: ProductField_Data!
+  ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: UPDATE_SINGLE)
   """
   ✨ Update `Product` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -139,13 +139,13 @@ extend type Mutation {
     data: Product_Data!
   ): Int! @fdc_generated(from: "Product", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `ProductProperty` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `ProductField` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  productProperty_updateMany(
+  productField_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: ProductProperty_Filter
+    where: ProductField_Filter
 
     """
     Set to true to update all rows.
@@ -155,8 +155,8 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: ProductProperty_Data!
-  ): Int! @fdc_generated(from: "ProductProperty", purpose: UPDATE_MULTIPLE)
+    data: ProductField_Data!
+  ): Int! @fdc_generated(from: "ProductField", purpose: UPDATE_MULTIPLE)
   """
   ✨ Delete a single `Product` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -177,9 +177,9 @@ extend type Mutation {
     first: Product_FirstRow
   ): Product_KeyOutput @fdc_generated(from: "Product", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `ProductProperty` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `ProductField` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  productProperty_delete(
+  productField_delete(
     """
     The unique ID of the object.
     """
@@ -188,13 +188,13 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ProductProperty_Key
+    key: ProductField_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProductProperty_FirstRow
-  ): ProductProperty_KeyOutput @fdc_generated(from: "ProductProperty", purpose: DELETE_SINGLE)
+    first: ProductField_FirstRow
+  ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: DELETE_SINGLE)
   """
   ✨ Delete `Product` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
@@ -210,17 +210,17 @@ extend type Mutation {
     all: Boolean = false
   ): Int! @fdc_generated(from: "Product", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `ProductProperty` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `ProductField` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  productProperty_deleteMany(
+  productField_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: ProductProperty_Filter
+    where: ProductField_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "ProductProperty", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "ProductField", purpose: DELETE_MULTIPLE)
 }

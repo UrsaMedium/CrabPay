@@ -6,12 +6,12 @@ type Product @table(key: "id") {
   imageUrl: String!
 }
 
-type ProductProperty @table(key: "id") {
+type ProductField @table(key: "id") {
   id: UUID! @default(expr: "uuidV4()")
   product: Product!
   order: Int!
-  propertyName: String!
+  fieldName: String!
   handler: String!
   attributes: Any
-  dataHandler: Any
+  expectedData: [String!]
 }

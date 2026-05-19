@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart'
     show ContextExtensions, papDataHandler;
@@ -13,7 +13,7 @@ class BuyBottomSheet extends StatefulWidget {
 }
 
 class _BuyBottomSheetState extends State<BuyBottomSheet> {
-  List<Widget> propertySlivers(List<AppProductProperty> properties) {
+  List<Widget> propertySlivers(List<AppProductField> properties) {
     properties.sort((a, b) => a.order.compareTo(b.order));
     List<Widget> result = [];
     for (var each in properties) {
@@ -34,8 +34,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<AppProductProperty> properties =
-        papDataHandler.productProperties(widget.productId) ?? [];
+    List<AppProductField> properties =
+        papDataHandler.productFields(widget.productId) ?? [];
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,

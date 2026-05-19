@@ -14,26 +14,26 @@ mutation AddProduct(
   )
 }
 
-mutation AddProductProperty(
+mutation AddProductField(
   $productId: UUID!
   $order: Int!
   $attributes: Any
-  $dataHandler: Any
+  $expectedData: [String!]
   $handler: String!
-  $propertyName: String!
+  $fieldName: String!
 ) @auth(level: PUBLIC) {
-  productProperty_insert(
+  productField_insert(
     data: {
       productId: $productId
       order: $order
       attributes: $attributes
-      dataHandler: $dataHandler
+      expectedData: $expectedData
       handler: $handler
-      propertyName: $propertyName
+      fieldName: $fieldName
     }
   )
 }
 
-mutation DeleteProductProperty($id: UUID!) @auth(level: PUBLIC) {
-  productProperty_delete(key: { id: $id })
+mutation DeleteProductField($id: UUID!) @auth(level: PUBLIC) {
+  productField_delete(key: { id: $id })
 }

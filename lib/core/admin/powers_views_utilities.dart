@@ -1,5 +1,5 @@
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
-import 'package:crabpay/views/admin_views/add_complete_product_fields_view.dart';
+import 'package:crabpay/views/admin_views/add_fields_views/add_complete_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_product_view.dart';
 import 'package:crabpay/views/admin_views/admin_powers_views.dart';
 import 'package:flutter/material.dart';
@@ -125,23 +125,23 @@ List<DropdownMenuEntry<String>> widgetHandlersForDropdownMenu() {
 
 Map<String, Map<String, dynamic>> adminPowersMap = {
   'Add product': {'route': '/add-product-view', 'widget': ''},
-  'Add Text property': {'route': '/add_text_view', 'widget': AddTextProperty()},
-  'Add InputField property': {
-    'route': '/add_input_field_view',
-    'widget': AddInputFieldProperty(),
-  },
-  'Add Dropdown or Radi property': {
-    'route': '/add_dropdown_or_radio_view',
-    'widget': AddDropdownOrRadioProperty(),
-  },
-  'Add Divider property': {
-    'route': '/add_divider_view',
-    'widget': AddDividerProperty(),
-  },
-  'Delete property': {
-    'route': '/delete_property_view',
-    'widget': DeletePropertyView(),
-  },
+  // 'Add Text property': {'route': '/add_text_view', 'widget': AddTextProperty()},
+  // 'Add InputField property': {
+  //   'route': '/add_input_field_view',
+  //   'widget': AddInputFieldProperty(),
+  // },
+  // 'Add Dropdown or Radi property': {
+  //   'route': '/add_dropdown_or_radio_view',
+  //   'widget': AddDropdownOrRadioProperty(),
+  // },
+  // 'Add Divider property': {
+  //   'route': '/add_divider_view',
+  //   'widget': AddDividerProperty(),
+  // },
+  // 'Delete property': {
+  //   'route': '/delete_property_view',
+  //   'widget': DeletePropertyView(),
+  // },
 };
 
 List<Widget> adminPowersButtons(BuildContext context) {

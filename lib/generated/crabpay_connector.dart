@@ -5,13 +5,13 @@ import 'dart:convert';
 
 part 'add_product.dart';
 
-part 'add_product_property.dart';
+part 'add_product_field.dart';
 
-part 'delete_product_property.dart';
+part 'delete_product_field.dart';
 
 part 'get_all_products_query.dart';
 
-part 'get_product_properties_query.dart';
+part 'get_product_fields_query.dart';
 
 
 
@@ -27,13 +27,13 @@ class CrabpayConnectorConnector {
   }
   
   
-  AddProductPropertyVariablesBuilder addProductProperty ({required String productId, required int order, required String handler, required String propertyName, }) {
-    return AddProductPropertyVariablesBuilder(dataConnect, productId: productId,order: order,handler: handler,propertyName: propertyName,);
+  AddProductFieldVariablesBuilder addProductField ({required String productId, required int order, required String handler, required String fieldName, }) {
+    return AddProductFieldVariablesBuilder(dataConnect, productId: productId,order: order,handler: handler,fieldName: fieldName,);
   }
   
   
-  DeleteProductPropertyVariablesBuilder deleteProductProperty ({required String id, }) {
-    return DeleteProductPropertyVariablesBuilder(dataConnect, id: id,);
+  DeleteProductFieldVariablesBuilder deleteProductField ({required String id, }) {
+    return DeleteProductFieldVariablesBuilder(dataConnect, id: id,);
   }
   
   
@@ -42,8 +42,8 @@ class CrabpayConnectorConnector {
   }
   
   
-  GetProductPropertiesQueryVariablesBuilder getProductPropertiesQuery ({required String productId, }) {
-    return GetProductPropertiesQueryVariablesBuilder(dataConnect, productId: productId,);
+  GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
+    return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
   }
   
 

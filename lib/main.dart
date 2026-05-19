@@ -2,11 +2,11 @@ import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/pap_bloc/pap_event.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_event.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_outer_circle/outer_paf_handler.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_fields_view.dart';
+import 'package:crabpay/views/admin_views/add_fields_views/add_complete_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_product_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
@@ -28,7 +28,7 @@ Future<void> main() async {
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
       child: BlocProvider(
-        create: (context) => PapBloc(OuterProductAndPropertiesHandler()),
+        create: (context) => PafBloc(OuterProductAndFieldsHandler()),
         child: const CrabPayApp(),
       ),
     ),

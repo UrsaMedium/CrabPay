@@ -62,11 +62,11 @@ ref.subscribe(...);
 ```
 
 
-### GetProductPropertiesQuery
+### GetProductFieldsQuery
 #### Required Arguments
 ```dart
 String productId = ...;
-CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+CrabpayConnectorConnector.instance.getProductFieldsQuery(
   productId: productId,
 ).execute();
 ```
@@ -74,7 +74,7 @@ CrabpayConnectorConnector.instance.getProductPropertiesQuery(
 
 
 #### Return Type
-`execute()` returns a `QueryResult<GetProductPropertiesQueryData, GetProductPropertiesQueryVariables>`
+`execute()` returns a `QueryResult<GetProductFieldsQueryData, GetProductFieldsQueryVariables>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -89,10 +89,10 @@ class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
   QueryResult(super.dataConnect, super.data, super.ref);
 }
 
-final result = await CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+final result = await CrabpayConnectorConnector.instance.getProductFieldsQuery(
   productId: productId,
 );
-GetProductPropertiesQueryData data = result.data;
+GetProductFieldsQueryData data = result.data;
 final ref = result.ref;
 ```
 
@@ -102,7 +102,7 @@ An example of how to use the `Ref` object is shown below:
 ```dart
 String productId = ...;
 
-final ref = CrabpayConnectorConnector.instance.getProductPropertiesQuery(
+final ref = CrabpayConnectorConnector.instance.getProductFieldsQuery(
   productId: productId,
 ).ref();
 ref.execute();
@@ -169,51 +169,51 @@ ref.execute();
 ```
 
 
-### AddProductProperty
+### AddProductField
 #### Required Arguments
 ```dart
 String productId = ...;
 int order = ...;
 String handler = ...;
-String propertyName = ...;
-CrabpayConnectorConnector.instance.addProductProperty(
+String fieldName = ...;
+CrabpayConnectorConnector.instance.addProductField(
   productId: productId,
   order: order,
   handler: handler,
-  propertyName: propertyName,
+  fieldName: fieldName,
 ).execute();
 ```
 
 #### Optional Arguments
-We return a builder for each query. For AddProductProperty, we created `AddProductPropertyBuilder`. For queries and mutations with optional parameters, we return a builder class.
+We return a builder for each query. For AddProductField, we created `AddProductFieldBuilder`. For queries and mutations with optional parameters, we return a builder class.
 The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
 ```dart
-class AddProductPropertyVariablesBuilder {
+class AddProductFieldVariablesBuilder {
   ...
-   AddProductPropertyVariablesBuilder attributes(AnyValue? t) {
+   AddProductFieldVariablesBuilder attributes(AnyValue? t) {
    _attributes.value = t;
    return this;
   }
-  AddProductPropertyVariablesBuilder dataHandler(AnyValue? t) {
-   _dataHandler.value = t;
+  AddProductFieldVariablesBuilder expectedData(List<String>? t) {
+   _expectedData.value = t;
    return this;
   }
 
   ...
 }
-CrabpayConnectorConnector.instance.addProductProperty(
+CrabpayConnectorConnector.instance.addProductField(
   productId: productId,
   order: order,
   handler: handler,
-  propertyName: propertyName,
+  fieldName: fieldName,
 )
 .attributes(attributes)
-.dataHandler(dataHandler)
+.expectedData(expectedData)
 .execute();
 ```
 
 #### Return Type
-`execute()` returns a `OperationResult<AddProductPropertyData, AddProductPropertyVariables>`
+`execute()` returns a `OperationResult<AddProductFieldData, AddProductFieldVariables>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -223,13 +223,13 @@ class OperationResult<Data, Variables> {
   FirebaseDataConnect dataConnect;
 }
 
-final result = await CrabpayConnectorConnector.instance.addProductProperty(
+final result = await CrabpayConnectorConnector.instance.addProductField(
   productId: productId,
   order: order,
   handler: handler,
-  propertyName: propertyName,
+  fieldName: fieldName,
 );
-AddProductPropertyData data = result.data;
+AddProductFieldData data = result.data;
 final ref = result.ref;
 ```
 
@@ -240,23 +240,23 @@ An example of how to use the `Ref` object is shown below:
 String productId = ...;
 int order = ...;
 String handler = ...;
-String propertyName = ...;
+String fieldName = ...;
 
-final ref = CrabpayConnectorConnector.instance.addProductProperty(
+final ref = CrabpayConnectorConnector.instance.addProductField(
   productId: productId,
   order: order,
   handler: handler,
-  propertyName: propertyName,
+  fieldName: fieldName,
 ).ref();
 ref.execute();
 ```
 
 
-### DeleteProductProperty
+### DeleteProductField
 #### Required Arguments
 ```dart
 String id = ...;
-CrabpayConnectorConnector.instance.deleteProductProperty(
+CrabpayConnectorConnector.instance.deleteProductField(
   id: id,
 ).execute();
 ```
@@ -264,7 +264,7 @@ CrabpayConnectorConnector.instance.deleteProductProperty(
 
 
 #### Return Type
-`execute()` returns a `OperationResult<DeleteProductPropertyData, DeleteProductPropertyVariables>`
+`execute()` returns a `OperationResult<DeleteProductFieldData, DeleteProductFieldVariables>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -274,10 +274,10 @@ class OperationResult<Data, Variables> {
   FirebaseDataConnect dataConnect;
 }
 
-final result = await CrabpayConnectorConnector.instance.deleteProductProperty(
+final result = await CrabpayConnectorConnector.instance.deleteProductField(
   id: id,
 );
-DeleteProductPropertyData data = result.data;
+DeleteProductFieldData data = result.data;
 final ref = result.ref;
 ```
 
@@ -287,7 +287,7 @@ An example of how to use the `Ref` object is shown below:
 ```dart
 String id = ...;
 
-final ref = CrabpayConnectorConnector.instance.deleteProductProperty(
+final ref = CrabpayConnectorConnector.instance.deleteProductField(
   id: id,
 ).ref();
 ref.execute();

@@ -1,13 +1,12 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_properties_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_controller.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/inner_paf_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class OuterProductAndPropertiesHandler
-    implements InnerProductAndPropertiesHandler {
+class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
   @override
   Future<void> addProduct(AppProduct product) async {
     try {
@@ -19,34 +18,34 @@ class OuterProductAndPropertiesHandler
             price: product.price,
           )
           .execute();
-      fetchAllPAPData();
+      fetchAllPAFData();
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
   }
 
   @override
-  Future<void> addProductProperty(AppProductProperty property) async {
+  Future<void> addProductField(AppProductField field) async {
     try {
       AnyValue? attributes;
-      if (property.attributes != null) {
-        attributes = AnyValue(property.attributes!.cast<String, dynamic>());
+      if (field.attributes != null) {
+        attributes = AnyValue(field.attributes!.cast<String, dynamic>());
       }
-      AnyValue? dataHandler;
-      if (property.dataHandler != null) {
-        dataHandler = AnyValue(property.dataHandler!.cast<String, dynamic>());
+      List<String>? expectedData;
+      if (field.expectedData != null) {
+        expectedData = field.expectedData;
       }
       await CrabpayConnectorConnector.instance
-          .addProductProperty(
-            productId: property.productId,
-            order: property.order,
-            handler: property.handler,
-            propertyName: property.propertyName,
+          .addProductField(
+            productId: field.productId,
+            order: field.order,
+            handler: field.handler,
+            fieldName: field.fieldName,
           )
           .attributes(attributes)
-          .dataHandler(dataHandler)
+          .expectedData(expectedData)
           .execute();
-      fetchAllPAPData();
+      fetchAllPAFData();
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
@@ -59,19 +58,19 @@ class OuterProductAndPropertiesHandler
   }
 
   @override
-  Future<void> deleteProductProperty(AppProductProperty property) async {
+  Future<void> deleteProductField(AppProductField field) async {
     try {
       await CrabpayConnectorConnector.instance
-          .deleteProductProperty(id: property.id)
+          .deleteProductField(id: field.id)
           .execute();
-      fetchAllPAPData();
+      fetchAllPAFData();
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> fetchAllPAPData() async {
+  Future<void> fetchAllPAFData() async {
     try {
       final productFetrcher = await CrabpayConnectorConnector.instance
           .getAllProductsQuery()
@@ -80,21 +79,21 @@ class OuterProductAndPropertiesHandler
         productFetrcher.data.products,
       );
 
-      Map<String, List<AppProductProperty>> allFetchedAppProductProperties = {};
+      Map<String, List<AppProductField>> allFetchedAppProductFields = {};
       for (var each in fetchedAppProducts) {
-        final propertyFetcher = await CrabpayConnectorConnector.instance
-            .getProductPropertiesQuery(productId: each.id)
+        final fieldFetcher = await CrabpayConnectorConnector.instance
+            .getProductFieldsQuery(productId: each.id)
             .execute();
-        final fetchedPtoperties = _propertiesDataConsolidation(
-          propertyFetcher.data.productProperties,
+        final fetchedPtoperties = _fieldsDataConsolidation(
+          fieldFetcher.data.productFields,
         );
-        allFetchedAppProductProperties[each.id] = fetchedPtoperties;
+        allFetchedAppProductFields[each.id] = fetchedPtoperties;
       }
 
-      PAPDataHandler papDataHandler = PAPDataHandler();
+      PAFDataHandler papDataHandler = PAFDataHandler();
       papDataHandler.dataStuffing(
         fetchedAppProducts,
-        allFetchedAppProductProperties,
+        allFetchedAppProductFields,
       );
 
       Fluttertoast.showToast(msg: 'Suck sus');
@@ -121,14 +120,13 @@ class OuterProductAndPropertiesHandler
     return result;
   }
 
-  List<AppProductProperty> _propertiesDataConsolidation(
-    List<GetProductPropertiesQueryProductProperties> productProperties,
+  List<AppProductField> _fieldsDataConsolidation(
+    List<GetProductFieldsQueryProductFields> productFields,
   ) {
-    List<AppProductProperty> result = [];
+    List<AppProductField> result = [];
     Map<String, String?>? tempAttrinutesMap;
-    Map<String, String>? tempDataHandlerMap;
 
-    for (var element in productProperties) {
+    for (var element in productFields) {
       var temp = element.attributes?.toJson();
       if (temp.toString() == '{attributes: null}' ||
           temp.toString() == '' ||
@@ -137,24 +135,15 @@ class OuterProductAndPropertiesHandler
       } else {
         tempAttrinutesMap = temp != {} ? Map<String, String?>.from(temp) : null;
       }
-
-      temp = element.dataHandler?.toJson();
-      if (temp.toString() == '{dataHandler: null}' ||
-          temp.toString() == '' ||
-          temp.toString() == 'null') {
-        tempDataHandlerMap = null;
-      } else {
-        tempDataHandlerMap = Map<String, String>.from(temp);
-      }
       result.add(
-        AppProductProperty(
+        AppProductField(
           id: element.id,
           productId: element.productId,
           order: element.order,
-          propertyName: element.propertyName,
+          fieldName: element.fieldName,
           handler: element.handler,
           attributes: tempAttrinutesMap,
-          dataHandler: tempDataHandlerMap,
+          expectedData: element.expectedData,
         ),
       );
     }

@@ -1,12 +1,12 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_controller.dart'
-    show PAPDataHandler;
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/inner_pap_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_outer_circle/outer_pap_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart'
+    show PAFDataHandler;
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/inner_paf_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_outer_circle/outer_paf_handler.dart';
 import 'package:flutter/material.dart';
 
-PAPDataHandler papDataHandler = PAPDataHandler();
-InnerProductAndPropertiesHandler papServerHandler =
-    OuterProductAndPropertiesHandler();
+PAFDataHandler papDataHandler = PAFDataHandler();
+InnerProductAndFieldsHandler papServerHandler =
+    OuterProductAndFieldsHandler();
 
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;

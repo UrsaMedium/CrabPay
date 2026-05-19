@@ -1,27 +1,27 @@
-class AppProductProperty {
+class AppProductField {
   final String id;
   final String productId;
   final int order;
-  final String propertyName;
+  final String fieldName;
   final String handler;
   final Map<String, String?>? attributes;
-  final Map<String, String>? dataHandler;
+  final List<String>? expectedData;
 
-  AppProductProperty({
+  AppProductField({
     required this.id,
     required this.productId,
     required this.order,
-    required this.propertyName,
+    required this.fieldName,
     required this.handler,
     this.attributes,
-    this.dataHandler,
+    this.expectedData,
   });
 
-  factory AppProductProperty.intial() => AppProductProperty(
+  factory AppProductField.intial() => AppProductField(
     id: '',
     productId: '',
     order: 0,
-    propertyName: '',
+    fieldName: '',
     handler: '',
   );
 }

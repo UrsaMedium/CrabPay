@@ -2,10 +2,10 @@
 
 ```dart
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
-CrabpayConnectorConnector.instance.AddProductProperty(addProductPropertyVariables).execute();
-CrabpayConnectorConnector.instance.DeleteProductProperty(deleteProductPropertyVariables).execute();
+CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
+CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariables).execute();
 CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
-CrabpayConnectorConnector.instance.GetProductPropertiesQuery(getProductPropertiesQueryVariables).execute();
+CrabpayConnectorConnector.instance.GetProductFieldsQuery(getProductFieldsQueryVariables).execute();
 
 ```
 
@@ -18,7 +18,7 @@ Optional fields can be discovered based on classes that have `Optional` object t
 This is an example of a mutation with an optional field:
 
 ```dart
-await CrabpayConnectorConnector.instance.AddProductProperty({ ... })
+await CrabpayConnectorConnector.instance.AddProductField({ ... })
 .attributes(...)
 .execute();
 ```

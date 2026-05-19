@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_properties_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
