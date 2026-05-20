@@ -277,14 +277,14 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
   }
 }
 
-Widget theAppWidgetBuilder(
-  Function(String, String) collectedDataBridge,
-  BuildContext context,
-  String fieldName,
-  String handler,
+Widget theAppWidgetBuilder({
+  required Function(String, String) collectedDataBridge,
+  required BuildContext context,
+  required String fieldName,
+  required String handler,
   Map<String, String?>? attributes,
   List<String>? expectedData,
-) {
+}) {
   Map<String, String> attr = {};
   if (attributes != null) {
     for (var each in attributes.keys) {

@@ -13,19 +13,28 @@ class BuyBottomSheet extends StatefulWidget {
 }
 
 class _BuyBottomSheetState extends State<BuyBottomSheet> {
-  List<Widget> propertySlivers(List<AppProductField> properties) {
+  Map<String, String> retrievedData = {};
+
+  void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
+    setState(() {
+      retrievedData[fieldName] = dataReceived;
+    });
+  }
+
+  List<Widget> _propertySlivers(List<AppProductField> properties) {
     properties.sort((a, b) => a.order.compareTo(b.order));
     List<Widget> result = [];
     for (var each in properties) {
       result.add(
         SliverToBoxAdapter(
-          // child: theAppWidgetBuilder(
-          //   context,
-          //   each.propertyName,
-          //   each.handler,
-          //   each.attributes,
-          //   each.dataHandler,
-          // ),
+          child: theAppWidgetBuilder(
+            collectedDataBridge: _onBottomSheetDataRetrieved,
+            context: context,
+            fieldName: each.fieldName,
+            handler: each.handler,
+            attributes: each.attributes,
+            expectedData: each.expectedData,
+          ),
         ),
       );
     }
@@ -43,19 +52,24 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal:  8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.6,
               ),
               child: CustomScrollView(
                 shrinkWrap: true,
-                slivers: propertySlivers(properties),
+                slivers: _propertySlivers(properties),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 12),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 32,
+              top: 12,
+            ),
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(

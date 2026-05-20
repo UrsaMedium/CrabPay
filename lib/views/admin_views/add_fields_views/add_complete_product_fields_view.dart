@@ -53,6 +53,24 @@ class _AddCompleteProductFieldsViewState
     });
   }
 
+  List<AppProductField> _collectFields() {
+    List<AppProductField> result = [];
+    for (int i = 0; i < _fieldsList.length; i++) {
+      result.add(
+        AppProductField(
+          id: '$i',
+          productId: 'productId',
+          order: i * 10,
+          fieldName: _fieldsList[i].fieldName,
+          handler: _fieldsList[i].handler,
+          attributes: _fieldsList[i].attributes,
+          expectedData: _fieldsList[i].expectedData,
+        ),
+      );
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +166,9 @@ class _AddCompleteProductFieldsViewState
                     child: ElevatedButton(
                       onPressed: () {
                         print(_dataFromFieldsToTest);
+                        context.go(
+                          '/add_complete_product_product_view/add_complete_product_fields_view/data_price_maping_view',
+                        );
                       },
                       child: Text('Next'),
                     ),
@@ -179,12 +200,12 @@ class AField extends StatelessWidget {
       // key: ValueKey(field.fieldName),
       children: [
         theAppWidgetBuilder(
-          dataBridge,
-          context,
-          field.fieldName,
-          field.handler,
-          null,
-          field.expectedData,
+          collectedDataBridge: dataBridge,
+          context: context,
+          fieldName: field.fieldName,
+          handler: field.handler,
+          attributes: null,
+          expectedData: field.expectedData,
         ),
         Padding(
           padding: const EdgeInsets.all(2.0),

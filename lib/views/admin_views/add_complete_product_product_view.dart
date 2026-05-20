@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/dialogs/generic_dialog_text_input.dart'
     show showOnInputDialog;
@@ -22,11 +23,21 @@ class _AddCompleteProductProductViewState
   String? _productNameUI;
   String? _productNameAdmin;
   final TextEditingController _descriptionController = TextEditingController();
-  void refreshOnDescription(String value) {
+  void _refreshOnDescription(String value) {
     setState(() {
       _description = value;
       // _descriptionController = TextEditingController(text: value);
     });
+  }
+
+  AppProduct _collectProduct() {
+    return AppProduct(
+      id: 'id',
+      name: _productNameUI!,
+      image: _imageUrl!,
+      description: _description!,
+      price: 0,
+    );
   }
 
   @override
@@ -110,7 +121,7 @@ class _AddCompleteProductProductViewState
                   controller: _descriptionController,
                   decoration: InputDecoration(border: OutlineInputBorder()),
                   onSubmitted: (value) {
-                    refreshOnDescription(value);
+                    _refreshOnDescription(value);
                   },
                 ),
               ),
