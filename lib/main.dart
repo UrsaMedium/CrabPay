@@ -7,7 +7,7 @@ import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_ou
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_fields_views/add_complete_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_product_view.dart';
-import 'package:crabpay/views/admin_views/add_fields_views/data_price_maping_view.dart';
+import 'package:crabpay/views/admin_views/data_price_maping_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';

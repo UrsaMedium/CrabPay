@@ -58,6 +58,10 @@ input Product_Data {
   ✨ `_update` server value variant of `price` (✨ Generated from Field `Product`.`price` of type `Float!`)
   """
   price_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Product`.`productFields_on_product` of type `[ProductField!]!`
+  """
+  productFields_on_product: [ProductField_Data!]
 }
 """
 ✨ Generated filter input type for table 'Product'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.

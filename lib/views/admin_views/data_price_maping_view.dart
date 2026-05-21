@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,21 +11,75 @@ class DataPriceMapingView extends StatefulWidget {
 }
 
 class _DataPriceMapingViewState extends State<DataPriceMapingView> {
+  List<Widget> _fieldsWithOptions = [];
+  final List<AppProductField> _mockList = [
+    AppProductField(
+      id: 'id',
+      productId: 'productId',
+      order: 0,
+      fieldName: 'User Id',
+      handler: 'InputField',
+      attributes: null,
+      expectedData: ['User custom input'],
+    ),
+    AppProductField(
+      id: 'id',
+      productId: 'productId',
+      order: 0,
+      fieldName: 'Region',
+      handler: 'DropdownMenu',
+      attributes: null,
+      expectedData: [
+        'North America',
+        'South Aerica',
+        'Asia',
+        'Japan',
+        'South Korea',
+      ],
+    ),
+    AppProductField(
+      id: 'id',
+      productId: 'productId',
+      order: 0,
+      fieldName: 'Server Id',
+      handler: 'InputField',
+      attributes: null,
+      expectedData: ['User custom input'],
+    ),
 
-  List<Widget> peepala(AppProductField oo) {
+    AppProductField(
+      id: 'id',
+      productId: 'productId',
+      order: 0,
+      fieldName: 'Nominals',
+      handler: 'Radio',
+      attributes: null,
+      expectedData: [
+        '12 dimonds',
+        '222 dimonds',
+        '323 dimonds',
+        '61312 dimonds',
+      ],
+    ),
+  ];
+  final Map<AppProductField, bool> _priceDimentionFields = {};
+  List<Widget> _buildOptions(AppProductField aField) {
     List<Widget> result = [];
-    for (var item in oo.expectedData!) {
+    for (var option in aField.expectedData!) {
       result.add(
-        Padding(padding: const EdgeInsets.all(8.0), child: Text(item)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+          child: Text(option),
+        ),
       );
     }
     return result;
   }
 
-  void babala() {
-    bool value = false;
-    for (var item in _fields) {
-      _listOfFieldsWithExpectedData.add(
+  List<Widget> _buildFieldsWithOptions(List<AppProductField> fields) {
+    List<Widget> result = [];
+    for (var field in fields) {
+      result.add(
         Column(
           children: [
             Padding(
@@ -32,32 +87,52 @@ class _DataPriceMapingViewState extends State<DataPriceMapingView> {
               child: Row(
                 children: [
                   Checkbox(
-                    value: value,
+                    fillColor: WidgetStateColor.resolveWith((state) {
+                      if (state.contains(WidgetState.selected)) {
+                        return context.appColorScheme.primary;
+                      } else {
+                        return context.appColorScheme.outline;
+                      }
+                    }),
+                    tristate: false,
+                    value: _priceDimentionFields[field],
                     onChanged: (value) {
                       setState(() {
-                        _checked[item.fieldName] = value!;
+                        _priceDimentionFields[field] = value!;
                       });
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(item.fieldName),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(field.fieldName),
+                    ),
                   ),
-                  Column(children: peepala(item)),
+                  Expanded(child: Column(children: _buildOptions(field))),
                 ],
               ),
             ),
-            Divider(thickness: 2),
+            Divider(thickness: 3),
           ],
         ),
       );
     }
+    return result;
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      for (var value in _mockList) {
+        _priceDimentionFields[value] = false;
+      }
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    boobala();
-    babala();
+    _fieldsWithOptions = _buildFieldsWithOptions(_mockList);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -77,9 +152,8 @@ class _DataPriceMapingViewState extends State<DataPriceMapingView> {
               shrinkWrap: true,
               slivers: [
                 SliverList.builder(
-                  itemCount: _fields.length,
-                  itemBuilder: (context, index) =>
-                      _listOfFieldsWithExpectedData[index],
+                  itemCount: _fieldsWithOptions.length,
+                  itemBuilder: (context, index) => _fieldsWithOptions[index],
                 ),
               ],
             ),
