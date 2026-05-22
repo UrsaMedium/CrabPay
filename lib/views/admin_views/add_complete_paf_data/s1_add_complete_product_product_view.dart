@@ -1,8 +1,12 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
 import 'package:crabpay/views/dialogs/generic_dialog_text_input.dart'
     show showOnInputDialog;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
@@ -30,14 +34,18 @@ class _AddCompleteProductProductViewState
     });
   }
 
-  AppProduct _collectProduct() {
-    return AppProduct(
-      id: 'id',
-      name: _productNameUI!,
-      image: _imageUrl!,
-      description: _description!,
-      price: 0,
-    );
+  AppProduct? _collectProduct() {
+    if (_productNameUI != null && _imageUrl != null && _description != null) {
+      return AppProduct(
+        id: 'id',
+        name: _productNameUI!,
+        image: _imageUrl!,
+        description: _description!,
+        price: 0,
+      );
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -61,6 +69,7 @@ class _AddCompleteProductProductViewState
               InkWell(
                 onTap: () async {
                   _imageUrl = await showOnInputDialog(context, 'Image URL');
+                  if (_imageUrl == '') _imageUrl = null;
                 },
                 child: Stack(
                   alignment: .center,
@@ -84,7 +93,11 @@ class _AddCompleteProductProductViewState
                       context,
                       'Product Name',
                     );
-                    setState(() {});
+                    if (_productNameUI == '') {
+                      _productNameUI = null;
+                    } else {
+                      setState(() {});
+                    }
                   },
                   child: Text(
                     'Product Name: $_productNameUI',
@@ -121,6 +134,9 @@ class _AddCompleteProductProductViewState
                   controller: _descriptionController,
                   decoration: InputDecoration(border: OutlineInputBorder()),
                   onSubmitted: (value) {
+                    if (value.trim() == '') {
+                      _description = null;
+                    }
                     _refreshOnDescription(value);
                   },
                 ),
@@ -150,11 +166,42 @@ class _AddCompleteProductProductViewState
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.go(
-                        '/add_complete_product_product_view/add_complete_product_fields_view',
-                      );
+                      AppProduct? collectedAppProduct = _collectProduct();
+                      if (collectedAppProduct != null) {
+                        context.read<AdminBloc>().add(
+                          AdminEventAdminSubmitsProduct(
+                            appProduct: collectedAppProduct,
+                          ),
+                        );
+                        print(collectedAppProduct.name);
+                        context.go(
+                          '/add_complete_product_product_view/add_product_fields_view',
+                        );
+                      } else {
+                        Fluttertoast.showToast(msg: 'Not enough data');
+                      }
                     },
                     child: Text('Next'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      AppProduct? collectedAppProduct = AppProduct(
+                        id: 'id',
+                        name: 'Mock Product',
+                        image: 'lib/assets/images/gas-gas-gas.jpg',
+                        description: 'Mock description',
+                        price: 99,
+                      );
+                      context.read<AdminBloc>().add(
+                        AdminEventAdminSubmitsProduct(
+                          appProduct: collectedAppProduct,
+                        ),
+                      );
+                      context.go(
+                        '/add_complete_product_product_view/add_product_fields_view',
+                      );
+                    },
+                    child: Text('Mock Data'),
                   ),
                 ],
               ),

@@ -1,6 +1,6 @@
 import 'package:crabpay/core/utilities.dart' show papDataHandler;
-import 'package:crabpay/views/admin_views/add_fields_views/add_complete_product_fields_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_product_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/s2_add_fields_views/s2_add_product_fields_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/s1_add_complete_product_product_view.dart';
 import 'package:crabpay/views/admin_views/admin_powers_views.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

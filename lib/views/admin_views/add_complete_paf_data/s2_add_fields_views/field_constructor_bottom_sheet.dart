@@ -163,8 +163,9 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                           order: 0,
                           fieldName: fieldName!,
                           handler: handler!,
-                          expectedData: expetedDataBoundToAField.values
-                              .toList(),
+                          expectedData: handler! == 'InputField'
+                              ? ['User custom input']
+                              : expetedDataBoundToAField.values.toList(),
                         ),
                       );
                       context.pop();

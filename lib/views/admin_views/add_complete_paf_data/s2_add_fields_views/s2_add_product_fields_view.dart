@@ -1,21 +1,34 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_fields_views/field_constructor_bottom_sheet.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/s2_add_fields_views/field_constructor_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-class AddCompleteProductFieldsView extends StatefulWidget {
-  const AddCompleteProductFieldsView({super.key});
-
+class AddProductFieldsView extends StatefulWidget {
+  const AddProductFieldsView({super.key});
   @override
-  State<AddCompleteProductFieldsView> createState() =>
-      _AddCompleteProductFieldsViewState();
+  State<AddProductFieldsView> createState() => _AddProductFieldsViewState();
 }
 
-class _AddCompleteProductFieldsViewState
-    extends State<AddCompleteProductFieldsView> {
+class _AddProductFieldsViewState extends State<AddProductFieldsView> {
+  late final AppProduct? _appProduct;
+  @override
+  void initState() {
+    _appProduct = context.read<AdminBloc>().state.appProduct;
+    if (_appProduct == null) {
+      Fluttertoast.showToast(msg: 'ERROR no AppProduct');
+      context.pop();
+    } else {
+      super.initState();
+    }
+  }
+
   final List<AppProductField> _fieldsList = [];
   final Map<AppProductField, Widget> _fieldWidgetsMap = {};
   final Map<String, String> _dataFromFieldsToTest = {};
@@ -53,20 +66,24 @@ class _AddCompleteProductFieldsViewState
     });
   }
 
-  List<AppProductField> _collectFields() {
+  List<AppProductField>? _collectFields() {
     List<AppProductField> result = [];
     for (int i = 0; i < _fieldsList.length; i++) {
-      result.add(
-        AppProductField(
-          id: '$i',
-          productId: 'productId',
-          order: i * 10,
-          fieldName: _fieldsList[i].fieldName,
-          handler: _fieldsList[i].handler,
-          attributes: _fieldsList[i].attributes,
-          expectedData: _fieldsList[i].expectedData,
-        ),
-      );
+      if (_fieldsList[i].fieldName != '' && _fieldsList[i].handler != '') {
+        result.add(
+          AppProductField(
+            id: '$i',
+            productId: _appProduct!.name,
+            order: i * 10,
+            fieldName: _fieldsList[i].fieldName,
+            handler: _fieldsList[i].handler,
+            attributes: _fieldsList[i].attributes,
+            expectedData: _fieldsList[i].expectedData,
+          ),
+        );
+      } else {
+        return null;
+      }
     }
     return result;
   }
@@ -166,11 +183,65 @@ class _AddCompleteProductFieldsViewState
                     child: ElevatedButton(
                       onPressed: () {
                         print(_dataFromFieldsToTest);
-                        context.go(
-                          '/add_complete_product_product_view/add_complete_product_fields_view/data_price_maping_view',
-                        );
+                        List<AppProductField>? collectFields = _collectFields();
+                        if (collectFields != null) {
+                          context.read<AdminBloc>().add(
+                            AdminEventAdminSubmitsFields(
+                              appProductFields: collectFields,
+                            ),
+                          );
+                          context.go(
+                            '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view',
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Every field must has a name and a handler',
+                          );
+                        }
                       },
                       child: Text('Next'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        List<AppProductField>? collectFields = [
+                          AppProductField(
+                            id: 'id1',
+                            productId: 'Mock product',
+                            order: 10,
+                            fieldName: 'Mock field 1',
+                            handler: 'InputField',
+                            expectedData: ['User Custom Input'],
+                          ),
+                          AppProductField(
+                            id: 'id2',
+                            productId: 'Mock product',
+                            order: 20,
+                            fieldName: 'Mock field 2',
+                            handler: 'DropdownList',
+                            expectedData: ['drop1', 'drop2', 'drop3'],
+                          ),
+                          AppProductField(
+                            id: 'id3',
+                            productId: 'Mock product',
+                            order: 30,
+                            fieldName: 'Mock field 3',
+                            handler: 'RadioList',
+                            expectedData: ['radio1', 'radio2', 'radio3'],
+                          ),
+                        ];
+                        context.read<AdminBloc>().add(
+                          AdminEventAdminSubmitsFields(
+                            appProductFields: collectFields,
+                          ),
+                        );
+                        context.go(
+                          '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view',
+                        );
+                      },
+                      child: Text('Mock Data'),
                     ),
                   ),
                 ],

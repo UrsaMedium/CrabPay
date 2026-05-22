@@ -1,0 +1,235 @@
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
+
+class PriceDimentionsMapingView extends StatefulWidget {
+  const PriceDimentionsMapingView({super.key});
+
+  @override
+  State<PriceDimentionsMapingView> createState() =>
+      _PriceDimentionsMapingViewState();
+}
+
+class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
+  late final List<AppProductField>? _appPoductFields;
+  late List<Widget> _fieldsWithOptions = [];
+  Map<AppProductField, bool> _priceDomainDimentionFields = {};
+  AppProductField? _priceRangeField;
+  bool _isRangeChosen = false;
+
+  @override
+  void didChangeDependencies() {
+    _appPoductFields = context.read<AdminBloc>().state.appProductFields;
+    if (_appPoductFields != null) {
+      for (var field in _appPoductFields) {
+        _priceDomainDimentionFields[field] = false;
+      }
+    }
+    if (_appPoductFields == null) {
+      Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
+      context.pop();
+    }
+    super.didChangeDependencies();
+  }
+
+  List<Widget> _buildOptions(AppProductField aField) {
+    List<Widget> result = [];
+    for (var option in aField.expectedData!) {
+      result.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+          child: Text(option),
+        ),
+      );
+    }
+    return result;
+  }
+
+  List<Widget> _buildFieldsWithOptions(List<AppProductField> fields) {
+    List<Widget> result = [];
+    bool localBoolly = false;
+    for (var field in fields) {
+      localBoolly = (field.fieldName == _priceRangeField?.fieldName);
+      result.add(
+        AbsorbPointer(
+          absorbing: localBoolly,
+          child: Opacity(
+            opacity: localBoolly ? 0.5 : 1,
+            child: Card(
+              elevation: 3,
+              clipBehavior: .antiAlias,
+              color: context.appColorScheme.surfaceContainer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(30),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      fillColor: WidgetStateColor.resolveWith((state) {
+                        if (state.contains(WidgetState.selected)) {
+                          return context.appColorScheme.primary;
+                        } else {
+                          return context.appColorScheme.outline;
+                        }
+                      }),
+                      tristate: false,
+                      value: _priceDomainDimentionFields[field],
+                      onChanged: (value) {
+                        setState(() {
+                          _priceDomainDimentionFields[field] = value ?? false;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(field.fieldName),
+                      ),
+                    ),
+                    Expanded(child: Column(children: _buildOptions(field))),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return result;
+  }
+
+  List<Widget> _fieldsToBeChosenAsRange() {
+    List<Widget> result = [
+      ActionChip.elevated(
+        elevation: 5,
+        backgroundColor: context.appColorScheme.surfaceContainerLowest,
+        shadowColor: context.appColorScheme.primary,
+        onPressed: () {
+          setState(() {
+            _priceDomainDimentionFields.forEach(
+              (key, value) => _priceDomainDimentionFields[key] = false,
+            );
+            _isRangeChosen = false;
+            _priceRangeField = null;
+          });
+        },
+        label: Text('Reset'),
+      ),
+    ];
+    for (var field in _appPoductFields!) {
+      result.add(
+        Wrap(
+          children: [
+            ActionChip.elevated(
+              backgroundColor: (field.fieldName == _priceRangeField?.fieldName)
+                  ? context.appColorScheme.primary
+                  : context.appColorScheme.surfaceContainer,
+              onPressed: _isRangeChosen
+                  ? null
+                  : () {
+                      setState(() {
+                        _isRangeChosen = true;
+                        _priceRangeField = field;
+                      });
+                    },
+              label: Text(field.fieldName),
+            ),
+          ],
+        ),
+      );
+    }
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _fieldsWithOptions = _buildFieldsWithOptions(_appPoductFields!);
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 2,
+                alignment: .start,
+                children: _fieldsToBeChosenAsRange(),
+              ),
+            ),
+            AbsorbPointer(
+              absorbing: !_isRangeChosen,
+              child: Opacity(
+                opacity: !_isRangeChosen ? 0.5 : 1,
+                child: CustomScrollView(
+                  shrinkWrap: true,
+                  slivers: [
+                    SliverList.builder(
+                      itemCount: _fieldsWithOptions.length,
+                      itemBuilder: (context, index) =>
+                          _fieldsWithOptions[index],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: .end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (GoRouter.of(context).canPop()) {
+                          context.pop();
+                        }
+                      },
+                      child: Text('Back'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.read<AdminBloc>().add(
+                          AdminEventAdminSubmitsPriceDimentions(
+                            priceDimentions: _priceDomainDimentionFields,
+                          ),
+                        );
+                        print(_priceDomainDimentionFields);
+                        context.go(
+                          '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view/price_space_fill_view',
+                        );
+                      },
+                      child: Text('Next'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
