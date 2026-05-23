@@ -18,7 +18,7 @@ class PriceDimentionsMapingView extends StatefulWidget {
 class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
   late final List<AppProductField>? _appPoductFields;
   late List<Widget> _fieldsWithOptions = [];
-  Map<AppProductField, bool> _priceDomainDimentionFields = {};
+  final Map<AppProductField, bool> _priceDomainDimentionFields = {};
   AppProductField? _priceRangeField;
   bool _isRangeChosen = false;
 
@@ -54,7 +54,9 @@ class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
     List<Widget> result = [];
     bool localBoolly = false;
     for (var field in fields) {
-      localBoolly = (field.fieldName == _priceRangeField?.fieldName);
+      localBoolly =
+          (field.fieldName == _priceRangeField?.fieldName ||
+          field.expectedData == null);
       result.add(
         AbsorbPointer(
           absorbing: localBoolly,
@@ -107,20 +109,39 @@ class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
 
   List<Widget> _fieldsToBeChosenAsRange() {
     List<Widget> result = [
-      ActionChip.elevated(
-        elevation: 5,
-        backgroundColor: context.appColorScheme.surfaceContainerLowest,
-        shadowColor: context.appColorScheme.primary,
-        onPressed: () {
-          setState(() {
-            _priceDomainDimentionFields.forEach(
-              (key, value) => _priceDomainDimentionFields[key] = false,
-            );
-            _isRangeChosen = false;
-            _priceRangeField = null;
-          });
-        },
-        label: Text('Reset'),
+      AnimatedContainer(
+        duration: Durations.long1,
+        curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          // color: _isRangeChosen ? context.appColorScheme.surfaceContainerLowest : null,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: _isRangeChosen
+                  ? context.appColorScheme.primary.withValues(alpha: 0.4)
+                  : Colors.transparent,
+              blurRadius: _isRangeChosen ? 8 : 0,
+              offset: _isRangeChosen ? const Offset(0, 4) : Offset.zero,
+            ),
+          ],
+        ),
+        child: ActionChip.elevated(
+          elevation: 5,
+          backgroundColor: context.appColorScheme.surfaceContainerLowest,
+          shadowColor: Colors.transparent,
+          onPressed: !_isRangeChosen
+              ? null
+              : () {
+                  setState(() {
+                    _priceDomainDimentionFields.forEach(
+                      (key, value) => _priceDomainDimentionFields[key] = false,
+                    );
+                    _isRangeChosen = false;
+                    _priceRangeField = null;
+                  });
+                },
+          label: Text('Reset'),
+        ),
       ),
     ];
     for (var field in _appPoductFields!) {
@@ -128,10 +149,10 @@ class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
         Wrap(
           children: [
             ActionChip.elevated(
-              backgroundColor: (field.fieldName == _priceRangeField?.fieldName)
-                  ? context.appColorScheme.primary
-                  : context.appColorScheme.surfaceContainer,
-              onPressed: _isRangeChosen
+              disabledColor: (field.fieldName == _priceRangeField?.fieldName)
+                  ? context.appColorScheme.primaryContainer
+                  : null,
+              onPressed: (_isRangeChosen || field.expectedData == null)
                   ? null
                   : () {
                       setState(() {
@@ -216,7 +237,13 @@ class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
                             priceDimentions: _priceDomainDimentionFields,
                           ),
                         );
-                        print(_priceDomainDimentionFields);
+                        print(
+                          'The range field is ${_priceRangeField?.fieldName}',
+                        );
+                        _priceDomainDimentionFields.forEach(
+                          (key, value) => print('${key.fieldName} is $value'),
+                        );
+                        // print(_priceDomainDimentionFields);
                         context.go(
                           '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view/price_space_fill_view',
                         );
