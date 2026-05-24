@@ -7,20 +7,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-class PriceDimentionsMapingView extends StatefulWidget {
-  const PriceDimentionsMapingView({super.key});
+class PriceSpaceMapingView extends StatefulWidget {
+  const PriceSpaceMapingView({super.key});
 
   @override
-  State<PriceDimentionsMapingView> createState() =>
-      _PriceDimentionsMapingViewState();
+  State<PriceSpaceMapingView> createState() => _PriceSpaceMapingViewState();
 }
 
-class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
+class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
   late final List<AppProductField>? _appPoductFields;
   late List<Widget> _fieldsWithOptions = [];
   final Map<AppProductField, bool> _priceDomainDimentionFields = {};
   AppProductField? _priceRangeField;
   bool _isRangeChosen = false;
+  final Map<AppProductField, String> _priceSpace = {};
 
   @override
   void didChangeDependencies() {
@@ -232,21 +232,23 @@ class _PriceDimentionsMapingViewState extends State<PriceDimentionsMapingView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        context.read<AdminBloc>().add(
-                          AdminEventAdminSubmitsPriceDimentions(
-                            priceDimentions: _priceDomainDimentionFields,
-                          ),
-                        );
-                        print(
-                          'The range field is ${_priceRangeField?.fieldName}',
-                        );
-                        _priceDomainDimentionFields.forEach(
-                          (key, value) => print('${key.fieldName} is $value'),
-                        );
-                        // print(_priceDomainDimentionFields);
-                        context.go(
-                          '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view/price_space_fill_view',
-                        );
+                        if (_priceRangeField != null) {
+                          _priceSpace[_priceRangeField!] = 'range';
+                          _priceDomainDimentionFields.remove(_priceRangeField);
+                          for (var field in _priceDomainDimentionFields.keys) {
+                            if (_priceDomainDimentionFields[field]!) {
+                              _priceSpace[field] = 'domain';
+                            }
+                          }
+                          context.read<AdminBloc>().add(
+                            AdminEventAdminSubmitsPriceSpace(
+                              priceSpace: _priceSpace,
+                            ),
+                          );
+                          context.go(
+                            '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view/price_space_fill_view',
+                          );
+                        }
                       },
                       child: Text('Next'),
                     ),

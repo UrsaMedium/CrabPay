@@ -238,7 +238,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                           ),
                         );
                         context.go(
-                          '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view',
+                          '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view',
                         );
                       },
                       child: Text('Mock Data'),

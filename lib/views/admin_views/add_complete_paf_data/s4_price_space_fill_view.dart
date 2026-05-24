@@ -2,6 +2,7 @@ import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_in
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class PriceSpaceFillView extends StatefulWidget {
@@ -12,13 +13,42 @@ class PriceSpaceFillView extends StatefulWidget {
 }
 
 class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
-  late final Map<AppProductField, bool>? _priceDimentions;
-  final List<String> _currencies = ['RUB', 'USD'];
+  late final Map<AppProductField, String>? _priceSpace;
+  final List<String> _currencies = ['rub', 'usd'];
+  AppProductField? _priceRange;
 
   @override
   void didChangeDependencies() {
-    _priceDimentions = context.read<AdminBloc>().state.priceDimentions;
+    _priceSpace = context.read<AdminBloc>().state.priceSpace;
+    if (_priceSpace == null) {
+      Fluttertoast.showToast(msg: 'No price space is created');
+      context.pop();
+    }
+    _priceSpace!.forEach((key, value) => print('${key.expectedData} = $value'));
+    for (var field in _priceSpace!.keys) {
+      if (_priceSpace[field] == 'range') {
+        _priceRange = field;
+      }
+    }
+    if (_priceRange == null) {
+      Fluttertoast.showToast(msg: 'How come there is no range');
+      context.pop();
+    }
+    if (_priceRange!.expectedData == null) {
+      Fluttertoast.showToast(
+        msg: 'What? There is no return data fo the chosen field',
+      );
+      context.pop();
+    }
     super.didChangeDependencies();
+  }
+
+  List<Widget> _priceRangeListWidgetGenerator() {
+    List<Widget> result = [];
+    for (var aPriceImage in _priceRange!.expectedData!) {
+      result.add(Row(children: [Text(aPriceImage)]));
+    }
+    return result;
   }
 
   @override
@@ -37,12 +67,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomScrollView(
-              shrinkWrap: true,
-              slivers: [
-                // SliverList.builder(itemBuilder: itemBuilder)
-              ],
-            ),
+            ExpansionTile(title: Text('data')),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -62,11 +87,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {
-                        // context.go(
-                        //   '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view/price_space_fill_view',
-                        // );
-                      },
+                      onPressed: () {},
                       child: Text('Next'),
                     ),
                   ),

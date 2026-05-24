@@ -21,11 +21,11 @@ class AdminEventAdminSubmitsFields extends AdminEvent {
   const AdminEventAdminSubmitsFields({required this.appProductFields});
 }
 
-class AdminEventAdminSubmitsPriceDimentions extends AdminEvent {
-  final Map<AppProductField, bool>? priceDimentions;
-  const AdminEventAdminSubmitsPriceDimentions({required this.priceDimentions});
+class AdminEventAdminSubmitsPriceSpace extends AdminEvent {
+  final Map<AppProductField, String>? priceSpace;
+  const AdminEventAdminSubmitsPriceSpace({required this.priceSpace});
 }
 
-class AdminEventAdminSubmitsPriceSpace extends AdminEvent {
-  const AdminEventAdminSubmitsPriceSpace();
+class AdminEventAdminSubmitsPriceSpaceWeights extends AdminEvent {
+  const AdminEventAdminSubmitsPriceSpaceWeights();
 }

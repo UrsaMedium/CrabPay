@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart' show immutable;
 abstract class AdminState {
   final AppProduct? appProduct;
   final List<AppProductField>? appProductFields;
-  final Map<AppProductField, bool>? priceDimentions;
+  final Map<AppProductField, String>? priceSpace;
   const AdminState({
-    this.priceDimentions,
+    this.priceSpace,
     this.appProduct,
     this.appProductFields,
   });
@@ -27,5 +27,5 @@ class AdminStateSubmitedFields extends AdminState {
 }
 
 class AdminStateSubmitedDimentions extends AdminState {
-  const AdminStateSubmitedDimentions({required super.priceDimentions});
+  const AdminStateSubmitedDimentions({required super.priceSpace});
 }

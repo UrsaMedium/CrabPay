@@ -14,9 +14,9 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       emit(AdminStateSubmitedFields(appProductFields: event.appProductFields));
     });
 
-    on<AdminEventAdminSubmitsPriceDimentions>((event, emit) {
+    on<AdminEventAdminSubmitsPriceSpace>((event, emit) {
       emit(
-        AdminStateSubmitedDimentions(priceDimentions: event.priceDimentions),
+        AdminStateSubmitedDimentions(priceSpace: event.priceSpace),
       );
     });
     
