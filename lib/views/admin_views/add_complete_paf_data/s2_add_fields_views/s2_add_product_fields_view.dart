@@ -17,22 +17,29 @@ class AddProductFieldsView extends StatefulWidget {
 }
 
 class _AddProductFieldsViewState extends State<AddProductFieldsView> {
-  late final AppProduct? _appProduct;
+  AppProduct? _appProduct;
+
+  List<AppProductField> _fieldsList = [];
+  Map<AppProductField, Widget> _fieldWidgetsMap = {};
+  Map<String, String> _dataFromFieldsToTest = {};
+  List<String> _fieldNames = [];
+
   @override
-  void initState() {
+  void didChangeDependencies() {
+    var checker = _appProduct;
     _appProduct = context.read<AdminBloc>().state.appProduct;
     if (_appProduct == null) {
       Fluttertoast.showToast(msg: 'ERROR no AppProduct');
       context.pop();
-    } else {
-      super.initState();
     }
+    if (checker != _appProduct) {
+      _fieldNames = [];
+      _dataFromFieldsToTest = {};
+      _fieldWidgetsMap = {};
+      _fieldsList = [];
+    }
+    super.didChangeDependencies();
   }
-
-  final List<AppProductField> _fieldsList = [];
-  final Map<AppProductField, Widget> _fieldWidgetsMap = {};
-  final Map<String, String> _dataFromFieldsToTest = {};
-  final List<String> _fieldNames = [];
 
   void _updateFieldsList(AppProductField field) {
     if (!_fieldsList.any((element) => element.fieldName == field.fieldName)) {

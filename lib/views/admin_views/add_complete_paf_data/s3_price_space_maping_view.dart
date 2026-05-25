@@ -15,8 +15,8 @@ class PriceSpaceMapingView extends StatefulWidget {
 }
 
 class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
-  late final List<AppProductField>? _appPoductFields;
-  late List<Widget> _fieldsWithOptions = [];
+  List<AppProductField>? _appPoductFields;
+  List<Widget> _fieldsWithOptions = [];
   final Map<AppProductField, bool> _priceDomainDimentionFields = {};
   AppProductField? _priceRangeField;
   bool _isRangeChosen = false;
@@ -24,16 +24,15 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
 
   @override
   void didChangeDependencies() {
-    _appPoductFields = context.read<AdminBloc>().state.appProductFields;
-    if (_appPoductFields != null) {
-      for (var field in _appPoductFields) {
-        _priceDomainDimentionFields[field] = false;
+      _appPoductFields = context.read<AdminBloc>().state.appProductFields;
+      if (_appPoductFields != null) {
+        for (var field in _appPoductFields!) {
+          _priceDomainDimentionFields[field] = false;
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
+        context.pop();
       }
-    }
-    if (_appPoductFields == null) {
-      Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
-      context.pop();
-    }
     super.didChangeDependencies();
   }
 
@@ -82,10 +81,10 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                         }
                       }),
                       tristate: false,
-                      value: _priceDomainDimentionFields[field],
+                      value: _priceDomainDimentionFields[field] ?? false,
                       onChanged: (value) {
                         setState(() {
-                          _priceDomainDimentionFields[field] = value ?? false;
+                          _priceDomainDimentionFields[field] = value!;
                         });
                       },
                     ),
