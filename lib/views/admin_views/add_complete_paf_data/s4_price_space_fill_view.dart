@@ -67,33 +67,28 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
         }
       }
     }
-    _domainMatrix = _domainSlice(null);
-    _domainMatrix.forEach((element) => print(element));
-
+    for (var dimention in _priceDomainDimentions.keys) {
+      for (var value in _priceDomainDimentions[dimention]!) {
+        print('$dimention , $value');
+      }
+    }
     super.didChangeDependencies();
   }
 
-  List<Map<String, String>> _domainSlice(List<Map<String, String>>? result) {
-    result ??= [
-      {'': ''},
-    ];
-    print(result);
-    Map<String, String> slice = result.last;
-    String dimention = _priceDomainDimentions.keys.firstWhere(
-      (newDimention) => !slice.keys.any(
-        (existingDimention) => existingDimention == newDimention,
-      ),
-      orElse: () => 'no more dimentions {312}{123}',
-    );
-    if (dimention != 'no more dimentions {312}{123}') {
-      for (var value in _priceDomainDimentions[dimention]!) {
-        slice[dimention] = value;
-        result.add(slice);
-        result.add(_domainSlice(result).last);
-      }
-      return _domainSlice(result);
+  void _leafWalker({Map<String, String>? leafNPath}) {
+    if (leafNPath == null) {
+      leafNPath = {};
+      _domainMatrix = [];
     }
-    return result;
+    if (leafNPath.keys.any(
+      (element) => element == 'bikini bottom21312340979801043',
+    )) {
+      leafNPath.remove('bikini bottom21312340979801043');
+      _domainMatrix.add(leafNPath);
+      _leafWalker(leafNPath: leafNPath);
+    } else {
+      
+    }
   }
 
   List<Widget> _priceRangeListWidgetGenerator() {
