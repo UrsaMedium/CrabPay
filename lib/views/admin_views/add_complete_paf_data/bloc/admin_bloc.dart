@@ -7,18 +7,18 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
     on<AdminEventAdminEnters>((event, emit) {});
 
     on<AdminEventAdminSubmitsProduct>((event, emit) {
+      emit(AdminStateSubmitedProduct(appProduct: null));
       emit(AdminStateSubmitedProduct(appProduct: event.appProduct));
     });
 
     on<AdminEventAdminSubmitsFields>((event, emit) {
+      emit(AdminStateSubmitedFields(appProductFields: null));
       emit(AdminStateSubmitedFields(appProductFields: event.appProductFields));
     });
 
     on<AdminEventAdminSubmitsPriceSpace>((event, emit) {
-      emit(
-        AdminStateSubmitedDimentions(priceSpace: event.priceSpace),
-      );
+      emit(AdminStateSubmitedDimentions(priceSpace: null));
+      emit(AdminStateSubmitedDimentions(priceSpace: event.priceSpace));
     });
-    
   }
 }

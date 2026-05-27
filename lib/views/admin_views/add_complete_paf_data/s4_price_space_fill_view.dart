@@ -21,8 +21,14 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
     'currency': ['rub', 'usd'],
   };
   //for every rangeValue
-  Map<String, List<Map<String, String>>> _spaceMatrix = {};
+  final Map<Map<String, String>, AppProductField> _spaceMatrix = {};
   List<Map<String, String>> _domainMatrix = [];
+
+  @override
+  void initState() {
+    _priceSpace = null;
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -67,27 +73,37 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
         }
       }
     }
-    for (var dimention in _priceDomainDimentions.keys) {
-      for (var value in _priceDomainDimentions[dimention]!) {
-        print('$dimention , $value');
-      }
+    try {
+      _leafWalker();
+    } catch (_) {
+      print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    }
+    for (var priceFunction in _domainMatrix) {
+      _spaceMatrix[priceFunction] = _priceRangeDimention!;
     }
     super.didChangeDependencies();
   }
 
   void _leafWalker({Map<String, String>? leafNPath}) {
+    // print(leafNPath);
     if (leafNPath == null) {
       leafNPath = {};
       _domainMatrix = [];
-    }
-    if (leafNPath.keys.any(
-      (element) => element == 'bikini bottom21312340979801043',
-    )) {
-      leafNPath.remove('bikini bottom21312340979801043');
-      _domainMatrix.add(leafNPath);
       _leafWalker(leafNPath: leafNPath);
     } else {
-      
+      String dimention = _priceDomainDimentions.keys.firstWhere(
+        (ofDomains) => !leafNPath!.keys.any((element) => element == ofDomains),
+        orElse: () => 'null',
+      );
+      if (dimention != 'null') {
+        for (var value in _priceDomainDimentions[dimention]!) {
+          leafNPath[dimention] = value;
+          final newPath = Map<String, String>.from(leafNPath);
+          _leafWalker(leafNPath: newPath);
+        }
+      } else {
+        _domainMatrix.add(leafNPath);
+      }
     }
   }
 

@@ -15,25 +15,32 @@ class PriceSpaceMapingView extends StatefulWidget {
 }
 
 class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
-  List<AppProductField>? _appPoductFields;
+  late final List<AppProductField>? _appPoductFields;
   List<Widget> _fieldsWithOptions = [];
   final Map<AppProductField, bool> _priceDomainDimentionFields = {};
   AppProductField? _priceRangeField;
   bool _isRangeChosen = false;
-  final Map<AppProductField, String> _priceSpace = {};
 
   @override
   void didChangeDependencies() {
-      _appPoductFields = context.read<AdminBloc>().state.appProductFields;
-      if (_appPoductFields != null) {
-        for (var field in _appPoductFields!) {
-          _priceDomainDimentionFields[field] = false;
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
-        context.pop();
+    _appPoductFields = context.read<AdminBloc>().state.appProductFields;
+    if (_appPoductFields != null) {
+      for (var field in _appPoductFields) {
+        _priceDomainDimentionFields[field] = false;
       }
+    } else {
+      Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
+      context.pop();
+    }
     super.didChangeDependencies();
+  }
+
+  void reset() {
+    setState(() {
+      _priceDomainDimentionFields.clear();
+      _isRangeChosen = false;
+      _priceRangeField = null;
+    });
   }
 
   List<Widget> _buildOptions(AppProductField aField) {
@@ -128,17 +135,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
           elevation: 5,
           backgroundColor: context.appColorScheme.surfaceContainerLowest,
           shadowColor: Colors.transparent,
-          onPressed: !_isRangeChosen
-              ? null
-              : () {
-                  setState(() {
-                    _priceDomainDimentionFields.forEach(
-                      (key, value) => _priceDomainDimentionFields[key] = false,
-                    );
-                    _isRangeChosen = false;
-                    _priceRangeField = null;
-                  });
-                },
+          onPressed: !_isRangeChosen ? null : () => reset(),
           label: Text('Reset'),
         ),
       ),
@@ -231,17 +228,18 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
+                        Map<AppProductField, String> priceSpcaeToSend = {};
                         if (_priceRangeField != null) {
-                          _priceSpace[_priceRangeField!] = 'range';
+                          priceSpcaeToSend[_priceRangeField!] = 'range';
                           _priceDomainDimentionFields.remove(_priceRangeField);
                           for (var field in _priceDomainDimentionFields.keys) {
                             if (_priceDomainDimentionFields[field]!) {
-                              _priceSpace[field] = 'domain';
+                              priceSpcaeToSend[field] = 'domain';
                             }
                           }
                           context.read<AdminBloc>().add(
                             AdminEventAdminSubmitsPriceSpace(
-                              priceSpace: _priceSpace,
+                              priceSpace: priceSpcaeToSend,
                             ),
                           );
                           context.go(
