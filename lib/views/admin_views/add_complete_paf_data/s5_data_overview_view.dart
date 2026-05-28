@@ -1,8 +1,10 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class DataOverviewView extends StatelessWidget {
@@ -19,6 +21,7 @@ class DataOverviewView extends StatelessWidget {
         .read<AdminBloc>()
         .state
         .priceFunction;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,7 +33,349 @@ class DataOverviewView extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: Column(children: [Text(priceFunction.toString())]),
+      body:
+          !(appProductFields != null &&
+              appProduct != null &&
+              priceFunction != null)
+          ? Text('no data')
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _productOverview(context, appProduct),
+                    _fieldsOverview(context, appProductFields),
+                    _priceFunctionOverview(context, priceFunction),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 32.0,
+                        right: 32.0,
+                        top: 8,
+                        bottom: 32,
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: context.appColorScheme.primary,
+                          foregroundColor: context.appColorScheme.onPrimary,
+                          minimumSize: Size(double.infinity, 50),
+                        ),
+                        onPressed: () {
+                          Fluttertoast.showToast(msg: 'BOO');
+                        },
+                        child: Text('Send Data'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
+}
+
+Widget _priceFunctionOverview(
+  BuildContext context,
+  Map<List<String>, double> priceFunction,
+) {
+  List<Widget> solutions = [];
+  for (var function in priceFunction.keys) {
+    solutions.add(
+      Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
+        ),
+        color: context.appColorScheme.onPrimaryFixedVariant,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
+          child: Column(
+            children: [
+              Card(
+                elevation: 7,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 2,
+                  ),
+                  child: Column(
+                    children: [Text('Variables\' Names:'), Text('$function')],
+                  ),
+                ),
+              ),
+              Column(
+                spacing: 8,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: .spaceAround,
+                        children: [
+                          Text('Solution: '),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 180),
+                            child: Text('${priceFunction[function]}'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(30),
+      ),
+      color: context.appColorScheme.onPrimaryFixed,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
+        child: Column(
+          children: [
+            Card(
+              elevation: 7,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 2,
+                ),
+                child: Text('Price Resolutions'),
+              ),
+            ),
+            ...solutions,
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _fieldsOverview(
+  BuildContext context,
+  List<AppProductField> appProductFields,
+) {
+  List<Widget> fields = [];
+  for (var field in appProductFields) {
+    fields.add(
+      Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
+        ),
+        color: context.appColorScheme.onPrimaryFixedVariant,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
+          child: Column(
+            children: [
+              Card(
+                elevation: 7,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 2,
+                  ),
+                  child: Text('Field Name: ${field.fieldName}'),
+                ),
+              ),
+              Column(
+                spacing: 8,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text('Handler'),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 180),
+                            child: Text(field.handler),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text('Attributes'),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 180),
+                            child: Text("${field.attributes}"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text('Expected Data'),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 180),
+                            child: Text("${field.expectedData}"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text('Order'),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 180),
+                            child: Text("${field.order}"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(30),
+      ),
+      color: context.appColorScheme.onPrimaryFixed,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
+        child: Column(
+          children: [
+            Card(
+              elevation: 7,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 2,
+                ),
+                child: Text('Product Data'),
+              ),
+            ),
+            ...fields,
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _productOverview(BuildContext context, AppProduct appProduct) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(30),
+      ),
+      color: context.appColorScheme.onPrimaryFixedVariant,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
+        child: Column(
+          children: [
+            Card(
+              elevation: 7,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 2,
+                ),
+                child: Text('Product Data'),
+              ),
+            ),
+            Column(
+              spacing: 8,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text('Name'),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 180),
+                          child: Text(appProduct.name),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text('Image Url'),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 180),
+                          child: Text(appProduct.image),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text('Description'),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 180),
+                          child: Text(appProduct.description),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text('Cost if set'),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 180),
+                          child: Text(
+                            appProduct.price == 0
+                                ? 'not set'
+                                : appProduct.price.toString(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

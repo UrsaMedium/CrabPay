@@ -1,4 +1,3 @@
-import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_event.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +21,6 @@ class AskPageView extends StatelessWidget {
           onPressed: () => context.go('/add_complete_product_product_view'),
           child: Text('Add complete product'),
         ),
-        const Text('Ask Row One'),
-        const Text('Ask Row Two'),
-        Column(children: adminPowersButtons(context)),
       ],
     );
   }
