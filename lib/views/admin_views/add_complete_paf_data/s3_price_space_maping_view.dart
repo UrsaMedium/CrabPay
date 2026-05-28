@@ -17,27 +17,27 @@ class PriceSpaceMapingView extends StatefulWidget {
 class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
   late final List<AppProductField>? _appPoductFields;
   List<Widget> _fieldsWithOptions = [];
-  final Map<AppProductField, bool> _priceDomainDimentionFields = {};
+  final Map<AppProductField, bool> _priceDomainDimensionFields = {};
   AppProductField? _priceRangeField;
   bool _isRangeChosen = false;
 
   @override
-  void didChangeDependencies() {
+  void initState() {
     _appPoductFields = context.read<AdminBloc>().state.appProductFields;
     if (_appPoductFields != null) {
       for (var field in _appPoductFields) {
-        _priceDomainDimentionFields[field] = false;
+        _priceDomainDimensionFields[field] = false;
       }
     } else {
       Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
       context.pop();
     }
-    super.didChangeDependencies();
+    super.initState();
   }
 
   void reset() {
     setState(() {
-      _priceDomainDimentionFields.clear();
+      _priceDomainDimensionFields.clear();
       _isRangeChosen = false;
       _priceRangeField = null;
     });
@@ -88,10 +88,10 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                         }
                       }),
                       tristate: false,
-                      value: _priceDomainDimentionFields[field] ?? false,
+                      value: _priceDomainDimensionFields[field] ?? false,
                       onChanged: (value) {
                         setState(() {
-                          _priceDomainDimentionFields[field] = value!;
+                          _priceDomainDimensionFields[field] = value!;
                         });
                       },
                     ),
@@ -231,15 +231,15 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                         Map<AppProductField, String> priceSpcaeToSend = {};
                         if (_priceRangeField != null) {
                           priceSpcaeToSend[_priceRangeField!] = 'range';
-                          _priceDomainDimentionFields.remove(_priceRangeField);
-                          for (var field in _priceDomainDimentionFields.keys) {
-                            if (_priceDomainDimentionFields[field]!) {
+                          _priceDomainDimensionFields.remove(_priceRangeField);
+                          for (var field in _priceDomainDimensionFields.keys) {
+                            if (_priceDomainDimensionFields[field]!) {
                               priceSpcaeToSend[field] = 'domain';
                             }
                           }
                           context.read<AdminBloc>().add(
-                            AdminEventAdminSubmitsPriceSpace(
-                              priceSpace: priceSpcaeToSend,
+                            AdminEventSubmitsPriceDimensions(
+                              priceDimensions: priceSpcaeToSend,
                             ),
                           );
                           context.go(

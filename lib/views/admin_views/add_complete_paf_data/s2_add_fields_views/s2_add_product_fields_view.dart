@@ -25,13 +25,13 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   final List<String> _fieldNames = [];
 
   @override
-  void didChangeDependencies() {
+  void initState() {
     _appProduct = context.read<AdminBloc>().state.appProduct;
     if (_appProduct == null) {
       Fluttertoast.showToast(msg: 'ERROR no AppProduct');
       context.pop();
     }
-    super.didChangeDependencies();
+    super.initState();
   }
 
   void _updateFieldsList(AppProductField field) {
@@ -182,16 +182,15 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        print(_dataFromFieldsToTest);
                         List<AppProductField>? collectFields = _collectFields();
                         if (collectFields != null) {
                           context.read<AdminBloc>().add(
-                            AdminEventAdminSubmitsFields(
+                            AdminEventSubmitsFields(
                               appProductFields: collectFields,
                             ),
                           );
                           context.go(
-                            '/add_complete_product_product_view/add_product_fields_view/price_dimentions_maping_view',
+                            '/add_complete_product_product_view/add_product_fields_view/price_dimensions_maping_view',
                           );
                         } else {
                           Fluttertoast.showToast(
@@ -233,7 +232,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                           ),
                         ];
                         context.read<AdminBloc>().add(
-                          AdminEventAdminSubmitsFields(
+                          AdminEventSubmitsFields(
                             appProductFields: collectFields,
                           ),
                         );

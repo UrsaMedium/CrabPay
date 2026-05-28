@@ -1,6 +1,9 @@
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
-import 'package:flutter/foundation.dart' show immutable;
+import 'package:crabpay/views/admin_views/add_complete_paf_data/s4_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:flutter/foundation.dart'
+    show dashedTextConfiguration, immutable;
+import 'package:flutter/material.dart';
 
 @immutable
 abstract class AdminEvent {
@@ -11,21 +14,31 @@ class AdminEventAdminEnters extends AdminEvent {
   const AdminEventAdminEnters();
 }
 
-class AdminEventAdminSubmitsProduct extends AdminEvent {
+class AdminEventSubmitsProduct extends AdminEvent {
   final AppProduct appProduct;
-  const AdminEventAdminSubmitsProduct({required this.appProduct});
+  const AdminEventSubmitsProduct({required this.appProduct});
 }
 
-class AdminEventAdminSubmitsFields extends AdminEvent {
+class AdminEventSubmitsFields extends AdminEvent {
   final List<AppProductField> appProductFields;
-  const AdminEventAdminSubmitsFields({required this.appProductFields});
+  const AdminEventSubmitsFields({required this.appProductFields});
 }
 
-class AdminEventAdminSubmitsPriceSpace extends AdminEvent {
-  final Map<AppProductField, String>? priceSpace;
-  const AdminEventAdminSubmitsPriceSpace({required this.priceSpace});
+class AdminEventSubmitsPriceDimensions extends AdminEvent {
+  final Map<AppProductField, String>? priceDimensions;
+  const AdminEventSubmitsPriceDimensions({required this.priceDimensions});
 }
 
-class AdminEventAdminSubmitsPriceSpaceWeights extends AdminEvent {
-  const AdminEventAdminSubmitsPriceSpaceWeights();
+class AdminEventEntersSpaceFillingView extends AdminEvent {
+  final BuildContext context;
+  const AdminEventEntersSpaceFillingView({required this.context});
+}
+
+class AdminEventSpaceFillingDataIsPrepared extends AdminEvent {
+  const AdminEventSpaceFillingDataIsPrepared();
+}
+
+class AdminEventSubmitsPriceFunction extends AdminEvent {
+  final Map<List<String>, double> priceFunction;
+  const AdminEventSubmitsPriceFunction({required this.priceFunction});
 }

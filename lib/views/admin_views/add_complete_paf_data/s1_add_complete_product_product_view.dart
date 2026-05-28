@@ -169,11 +169,10 @@ class _AddCompleteProductProductViewState
                       AppProduct? collectedAppProduct = _collectProduct();
                       if (collectedAppProduct != null) {
                         context.read<AdminBloc>().add(
-                          AdminEventAdminSubmitsProduct(
+                          AdminEventSubmitsProduct(
                             appProduct: collectedAppProduct,
                           ),
                         );
-                        print(collectedAppProduct.name);
                         context.go(
                           '/add_complete_product_product_view/add_product_fields_view',
                         );
@@ -193,7 +192,7 @@ class _AddCompleteProductProductViewState
                         price: 99,
                       );
                       context.read<AdminBloc>().add(
-                        AdminEventAdminSubmitsProduct(
+                        AdminEventSubmitsProduct(
                           appProduct: collectedAppProduct,
                         ),
                       );
