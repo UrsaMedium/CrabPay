@@ -1,16 +1,15 @@
-import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_outer_circle/outer_paf_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_outer_circle/outer_database_handler.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s2_add_fields_views/s2_add_product_fields_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s1_add_complete_product_product_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s3_price_space_maping_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s4_price_space_filling/s4_price_space_fill_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s5_data_overview_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_maping_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_price_space_filling/s4_price_space_fill_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s5_data_overview_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
@@ -31,7 +30,7 @@ Future<void> main() async {
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
       child: BlocProvider(
-        create: (context) => PafBloc(OuterProductAndFieldsHandler()),
+        create: (context) => DatabaseBloc(OuterDatabaseHandler()),
         child: const CrabPayApp(),
       ),
     ),
@@ -47,7 +46,7 @@ final GoRouter _router = GoRouter(
         child: const HomeView(),
       ),
       routes: <RouteBase>[
-        ...adminPowerRoutes(),
+        // ...adminPowerRoutes(),
         GoRoute(
           path: '${CardView.routeName}/:productId',
           name: CardView.routeName,

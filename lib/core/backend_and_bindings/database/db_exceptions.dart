@@ -1,4 +1,4 @@
-class FailedToFetchAllPAFData implements Exception {}
+class FailedToFetchAllProductAndFieldsData implements Exception {}
 
 class FailedToAddProduct implements Exception {}
 

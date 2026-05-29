@@ -1,10 +1,10 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/price_function_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 
-abstract class InnerProductAndFieldsHandler {
-  Future<void> fetchAllPAFData();
+abstract class InnerDatabaseHandler {
+  Future<void> fetchAllProductsAndFieldsData();
   //product
   // Future<void> fetchProduct(String id);
   Future<void> addProduct(AppProduct product);

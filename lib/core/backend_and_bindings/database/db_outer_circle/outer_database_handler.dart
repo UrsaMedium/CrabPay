@@ -1,14 +1,14 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/inner_paf_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/price_function_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_controller.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
+class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> addProduct(AppProduct product) async {
     try {
@@ -19,7 +19,7 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
             name: product.name,
           )
           .execute();
-      fetchAllPAFData();
+      fetchAllProductsAndFieldsData();
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
@@ -46,7 +46,7 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
           .attributes(attributes)
           .expectedData(expectedData)
           .execute();
-      fetchAllPAFData();
+      fetchAllProductsAndFieldsData();
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch $e');
     }
@@ -64,14 +64,14 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
       await CrabpayConnectorConnector.instance
           .deleteProductField(id: field.id)
           .execute();
-      fetchAllPAFData();
+      fetchAllProductsAndFieldsData();
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> fetchAllPAFData() async {
+  Future<void> fetchAllProductsAndFieldsData() async {
     try {
       final productFetrcher = await CrabpayConnectorConnector.instance
           .getAllProductsQuery()
@@ -91,7 +91,7 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
         allFetchedAppProductFields[each.id] = fetchedPtoperties;
       }
 
-      PAFDataHandler papDataHandler = PAFDataHandler();
+      DatabaseDataHandler papDataHandler = DatabaseDataHandler();
       papDataHandler.dataStuffing(
         fetchedAppProducts,
         allFetchedAppProductFields,

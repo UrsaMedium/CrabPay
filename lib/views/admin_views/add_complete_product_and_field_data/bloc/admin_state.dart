@@ -1,6 +1,6 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s4_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_price_space_filling/data_and_widgets_preperation.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 enum AdminStates {

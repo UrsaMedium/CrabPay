@@ -1,24 +1,16 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 
-// class AppProductController {
-//   AppProduct findById(String? id) {
-//     return appProducts.firstWhere((product) => product.id == id);
-//   }
-
-//   List<AppProduct> get products => appProducts;
-// }
-
-class PAFDataHandler {
-  PAFDataHandler._() {
+class DatabaseDataHandler {
+  DatabaseDataHandler._() {
     _productList = [];
     _fieldsMap = {};
     _productIdList = [];
     _fieldsIdList = [];
     _fieldsList = [];
   }
-  static final PAFDataHandler _instance = PAFDataHandler._();
-  factory PAFDataHandler() {
+  static final DatabaseDataHandler _instance = DatabaseDataHandler._();
+  factory DatabaseDataHandler() {
     return _instance;
   }
 
@@ -28,7 +20,7 @@ class PAFDataHandler {
   late List<AppProductField> _fieldsList;
   late List<String> _fieldsIdList;
 
-  void _papEraseData() {
+  void _dbEraseData() {
     _productList = [];
     _fieldsMap = {};
     _productIdList = [];
@@ -40,7 +32,7 @@ class PAFDataHandler {
     List<AppProduct> products,
     Map<String, List<AppProductField>> fields,
   ) {
-    _papEraseData();
+    _dbEraseData();
     _productList = products;
     _fieldsMap = fields;
 

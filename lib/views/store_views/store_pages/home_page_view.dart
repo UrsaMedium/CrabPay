@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_controller.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +13,7 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  List<AppProduct> appProducts = PAFDataHandler().products();
+  List<AppProduct> appProducts = DatabaseDataHandler().products();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

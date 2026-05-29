@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_state.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s4_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_price_space_filling/data_and_widgets_preperation.dart';
 
 class AdminBloc extends Bloc<AdminEvent, AdminState> {
   AdminBloc() : super(const AdminState()) {

@@ -1,10 +1,10 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
-import 'package:crabpay/views/admin_views/add_complete_paf_data/s2_add_fields_views/field_constructor_bottom_sheet.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/field_constructor_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +13,7 @@ class AskPageView extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {
-            context.read<PafBloc>().add(PafEventFetchAllPAPData());
+            context.read<DatabaseBloc>().add(DatabaseEventFetchAllProductAndFieldsData());
           },
           child: Text('fetch data'),
         ),
