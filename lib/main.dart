@@ -2,7 +2,7 @@ import 'package:crabpay/core/admin/powers_views_utilities.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_outer_circle/outer_paf_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';

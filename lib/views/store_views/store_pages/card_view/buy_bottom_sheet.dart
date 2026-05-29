@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart'
     show ContextExtensions, papDataHandler;

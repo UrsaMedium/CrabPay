@@ -5,13 +5,27 @@ import 'dart:convert';
 
 part 'add_product.dart';
 
+part 'delete_product.dart';
+
 part 'add_product_field.dart';
 
 part 'delete_product_field.dart';
 
+part 'add_price_function.dart';
+
+part 'delete_price_function.dart';
+
+part 'add_currencies.dart';
+
+part 'delete_currencies.dart';
+
 part 'get_all_products_query.dart';
 
 part 'get_product_fields_query.dart';
+
+part 'get_price_function_query.dart';
+
+part 'get_all_currencies_query.dart';
 
 
 
@@ -22,8 +36,13 @@ part 'get_product_fields_query.dart';
 class CrabpayConnectorConnector {
   
   
-  AddProductVariablesBuilder addProduct ({required String description, required String imageUrl, required String name, required double price, }) {
-    return AddProductVariablesBuilder(dataConnect, description: description,imageUrl: imageUrl,name: name,price: price,);
+  AddProductVariablesBuilder addProduct ({required String description, required String imageUrl, required String name, }) {
+    return AddProductVariablesBuilder(dataConnect, description: description,imageUrl: imageUrl,name: name,);
+  }
+  
+  
+  DeleteProductVariablesBuilder deleteProduct ({required String id, }) {
+    return DeleteProductVariablesBuilder(dataConnect, id: id,);
   }
   
   
@@ -37,6 +56,26 @@ class CrabpayConnectorConnector {
   }
   
   
+  AddPriceFunctionVariablesBuilder addPriceFunction ({required String productId, required String name, required String type, required dynamic formulas, required String currency, }) {
+    return AddPriceFunctionVariablesBuilder(dataConnect, productId: productId,name: name,type: type,formulas: formulas,currency: currency,);
+  }
+  
+  
+  DeletePriceFunctionVariablesBuilder deletePriceFunction ({required String id, }) {
+    return DeletePriceFunctionVariablesBuilder(dataConnect, id: id,);
+  }
+  
+  
+  AddCurrenciesVariablesBuilder addCurrencies ({required String name, required String mainCurrency, required double rub, required double usd, }) {
+    return AddCurrenciesVariablesBuilder(dataConnect, name: name,mainCurrency: mainCurrency,rub: rub,usd: usd,);
+  }
+  
+  
+  DeleteCurrenciesVariablesBuilder deleteCurrencies ({required String id, }) {
+    return DeleteCurrenciesVariablesBuilder(dataConnect, id: id,);
+  }
+  
+  
   GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
     return GetAllProductsQueryVariablesBuilder(dataConnect, );
   }
@@ -44,6 +83,16 @@ class CrabpayConnectorConnector {
   
   GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
     return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
+  }
+  
+  
+  GetPriceFunctionQueryVariablesBuilder getPriceFunctionQuery ({required String productId, }) {
+    return GetPriceFunctionQueryVariablesBuilder(dataConnect, productId: productId,);
+  }
+  
+  
+  GetAllCurrenciesQueryVariablesBuilder getAllCurrenciesQuery () {
+    return GetAllCurrenciesQueryVariablesBuilder(dataConnect, );
   }
   
 

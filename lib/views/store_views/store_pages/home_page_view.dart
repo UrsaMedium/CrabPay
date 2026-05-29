@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +88,7 @@ class _HomePageViewState extends State<HomePageView> {
                           backgroundColor: context.appColorScheme.primary,
                           foregroundColor: context.appColorScheme.onPrimary,
                         ),
-                        child: Text(currentProduct.price.toString()),
+                        child: Text('ook'),
                       ),
                     ),
                   ],

@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';
@@ -41,7 +41,6 @@ class _AddCompleteProductProductViewState
         name: _productNameUI!,
         image: _imageUrl!,
         description: _description!,
-        price: 0,
       );
     } else {
       return null;
@@ -189,7 +188,6 @@ class _AddCompleteProductProductViewState
                         name: 'Mock Product',
                         image: 'lib/assets/images/gas-gas-gas.jpg',
                         description: 'Mock description',
-                        price: 99,
                       );
                       context.read<AdminBloc>().add(
                         AdminEventSubmitsProduct(

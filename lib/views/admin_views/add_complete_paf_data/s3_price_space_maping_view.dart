@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_event.dart';

@@ -1,3 +1,9 @@
+extend type PriceFunction {
+  """
+  ✨ Implicit foreign key field based on `PriceFunction`.`product`. It must match the value of `Product`.`id`. See `@ref` for how to customize it.
+  """
+  productId: UUID! @fdc_generated(from: "PriceFunction.product", purpose: IMPLICIT_REF_FIELD)
+}
 extend type ProductField {
   """
   ✨ Implicit foreign key field based on `ProductField`.`product`. It must match the value of `Product`.`id`. See `@ref` for how to customize it.

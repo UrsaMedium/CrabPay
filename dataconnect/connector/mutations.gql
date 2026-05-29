@@ -1,17 +1,12 @@
-mutation AddProduct(
-  $description: String!
-  $imageUrl: String!
-  $name: String!
-  $price: Float!
-) @auth(level: PUBLIC) {
+mutation AddProduct($description: String!, $imageUrl: String!, $name: String!)
+@auth(level: PUBLIC) {
   product_insert(
-    data: {
-      description: $description
-      imageUrl: $imageUrl
-      name: $name
-      price: $price
-    }
+    data: { description: $description, imageUrl: $imageUrl, name: $name }
   )
+}
+
+mutation DeleteProduct($id: UUID!) @auth(level: PUBLIC) {
+  product_delete(key: { id: $id })
 }
 
 mutation AddProductField(
@@ -36,4 +31,41 @@ mutation AddProductField(
 
 mutation DeleteProductField($id: UUID!) @auth(level: PUBLIC) {
   productField_delete(key: { id: $id })
+}
+
+mutation AddPriceFunction(
+  $productId: UUID!
+  $name: String!
+  $type: String!
+  $formulas: Any!
+  $currency: String!
+) @auth(level: PUBLIC) {
+  priceFunction_insert(
+    data: {
+      productId: $productId
+      name: $name
+      type: $type
+      formulas: $formulas
+      currency: $currency
+    }
+  )
+}
+
+mutation DeletePriceFunction($id: UUID!) @auth(level: PUBLIC) {
+  priceFunction_delete(key: { id: $id })
+}
+
+mutation AddCurrencies(
+  $name: String!
+  $mainCurrency: String!
+  $rub: Float!
+  $usd: Float!
+) @auth(level: PUBLIC) {
+  currencies_insert(
+    data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
+  )
+}
+
+mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
+  currencies_delete(key: { id: $id })
 }

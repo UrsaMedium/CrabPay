@@ -1,4 +1,225 @@
+extend type Currencies {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Currencies", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Currencies` table.
+  """
+  _count: Int! @fdc_generated(from: "Currencies.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Currencies` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Currencies.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Currencies` table where the `mainCurrency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  mainCurrency_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Currencies.mainCurrency", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Currencies` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Currencies.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Currencies` table where the `rub` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  rub_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Currencies.rub", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Currencies` table where the `usd` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  usd_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Currencies.usd", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `rub` field in the `Currencies` table.
+  """
+  rub_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Currencies.rub", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `usd` field in the `Currencies` table.
+  """
+  usd_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Currencies.usd", purpose: QUERY_SUM)
+  """
+  ✨ Average the `rub` field in the `Currencies` table.
+  """
+  rub_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Currencies.rub", purpose: QUERY_AVG)
+  """
+  ✨ Average the `usd` field in the `Currencies` table.
+  """
+  usd_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Currencies.usd", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `rub` field in the `Currencies` table.
+  """
+  rub_min: Float @fdc_generated(from: "Currencies.rub", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `usd` field in the `Currencies` table.
+  """
+  usd_min: Float @fdc_generated(from: "Currencies.usd", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `rub` field in the `Currencies` table.
+  """
+  rub_max: Float @fdc_generated(from: "Currencies.rub", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `usd` field in the `Currencies` table.
+  """
+  usd_max: Float @fdc_generated(from: "Currencies.usd", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Currencies.id", purpose: ENTITY_ID)
+}
+extend type PriceFunction {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "PriceFunction", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table.
+  """
+  _count: Int! @fdc_generated(from: "PriceFunction.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `currency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  currency_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.currency", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `formulas` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  formulas_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  productId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.productId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PriceFunction` table where the `type` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  type_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PriceFunction.type", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `formulas` field in the `PriceFunction` table.
+  """
+  formulas_min: Any @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `formulas` field in the `PriceFunction` table.
+  """
+  formulas_max: Any @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "PriceFunction.id", purpose: ENTITY_ID)
+}
 extend type Product {
+  """
+  ✨ List `PriceFunction` objects in a one-to-many relationship (where `PriceFunction`.`product` is this object).
+  """
+  priceFunctions_on_product(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: PriceFunction_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [PriceFunction_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: PriceFunction_Having
+  ): [PriceFunction!]! @fdc_generated(from: "PriceFunction.product", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `ProductField` objects in a one-to-many relationship (where `ProductField`.`product` is this object).
   """
@@ -77,41 +298,6 @@ extend type Product {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Product.name", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `Product` table where the `price` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  price_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Product.price", purpose: QUERY_COUNT)
-  """
-  ✨ Sum the `price` field in the `Product` table.
-  """
-  price_sum(
-    """
-    Set to true to sum the distinct values.
-    """
-    distinct: Boolean = false
-  ): Float @fdc_generated(from: "Product.price", purpose: QUERY_SUM)
-  """
-  ✨ Average the `price` field in the `Product` table.
-  """
-  price_avg(
-    """
-    Set to true to average the distinct values.
-    """
-    distinct: Boolean = false
-  ): Float @fdc_generated(from: "Product.price", purpose: QUERY_AVG)
-  """
-  ✨ Minimum of the `price` field in the `Product` table.
-  """
-  price_min: Float @fdc_generated(from: "Product.price", purpose: QUERY_MIN)
-  """
-  ✨ Maximum of the `price` field in the `Product` table.
-  """
-  price_max: Float @fdc_generated(from: "Product.price", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/inner_paf_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_event.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_state.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/inner_paf_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_event.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_state.dart';
 
 class PafBloc extends Bloc<PafEvent, PafState> {
   PafBloc(InnerProductAndFieldsHandler papHandler)

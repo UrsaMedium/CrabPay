@@ -4,10 +4,9 @@ class AddProductVariablesBuilder {
   String description;
   String imageUrl;
   String name;
-  double price;
 
   final FirebaseDataConnect _dataConnect;
-  AddProductVariablesBuilder(this._dataConnect, {required  this.description,required  this.imageUrl,required  this.name,required  this.price,});
+  AddProductVariablesBuilder(this._dataConnect, {required  this.description,required  this.imageUrl,required  this.name,});
   Deserializer<AddProductData> dataDeserializer = (dynamic json)  => AddProductData.fromJson(jsonDecode(json));
   Serializer<AddProductVariables> varsSerializer = (AddProductVariables vars) => jsonEncode(vars.toJson());
   Future<OperationResult<AddProductData, AddProductVariables>> execute() {
@@ -15,7 +14,7 @@ class AddProductVariablesBuilder {
   }
 
   MutationRef<AddProductData, AddProductVariables> ref() {
-    AddProductVariables vars= AddProductVariables(description: description,imageUrl: imageUrl,name: name,price: price,);
+    AddProductVariables vars= AddProductVariables(description: description,imageUrl: imageUrl,name: name,);
     return _dataConnect.mutation("AddProduct", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -93,14 +92,12 @@ class AddProductVariables {
   final String description;
   final String imageUrl;
   final String name;
-  final double price;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   AddProductVariables.fromJson(Map<String, dynamic> json):
   
   description = nativeFromJson<String>(json['description']),
   imageUrl = nativeFromJson<String>(json['imageUrl']),
-  name = nativeFromJson<String>(json['name']),
-  price = nativeFromJson<double>(json['price']);
+  name = nativeFromJson<String>(json['name']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -113,12 +110,11 @@ class AddProductVariables {
     final AddProductVariables otherTyped = other as AddProductVariables;
     return description == otherTyped.description && 
     imageUrl == otherTyped.imageUrl && 
-    name == otherTyped.name && 
-    price == otherTyped.price;
+    name == otherTyped.name;
     
   }
   @override
-  int get hashCode => Object.hashAll([description.hashCode, imageUrl.hashCode, name.hashCode, price.hashCode]);
+  int get hashCode => Object.hashAll([description.hashCode, imageUrl.hashCode, name.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -126,7 +122,6 @@ class AddProductVariables {
     json['description'] = nativeToJson<String>(description);
     json['imageUrl'] = nativeToJson<String>(imageUrl);
     json['name'] = nativeToJson<String>(name);
-    json['price'] = nativeToJson<double>(price);
     return json;
   }
 
@@ -134,7 +129,6 @@ class AddProductVariables {
     required this.description,
     required this.imageUrl,
     required this.name,
-    required this.price,
   });
 }
 

@@ -110,6 +110,96 @@ ref.execute();
 ref.subscribe(...);
 ```
 
+
+### GetPriceFunctionQuery
+#### Required Arguments
+```dart
+String productId = ...;
+CrabpayConnectorConnector.instance.getPriceFunctionQuery(
+  productId: productId,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<GetPriceFunctionQueryData, GetPriceFunctionQueryVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await CrabpayConnectorConnector.instance.getPriceFunctionQuery(
+  productId: productId,
+);
+GetPriceFunctionQueryData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String productId = ...;
+
+final ref = CrabpayConnectorConnector.instance.getPriceFunctionQuery(
+  productId: productId,
+).ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
+
+### GetAllCurrenciesQuery
+#### Required Arguments
+```dart
+// No required arguments
+CrabpayConnectorConnector.instance.getAllCurrenciesQuery().execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<GetAllCurrenciesQueryData, void>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await CrabpayConnectorConnector.instance.getAllCurrenciesQuery();
+GetAllCurrenciesQueryData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+final ref = CrabpayConnectorConnector.instance.getAllCurrenciesQuery().ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
 ## Mutations
 
 ### AddProduct
@@ -118,12 +208,10 @@ ref.subscribe(...);
 String description = ...;
 String imageUrl = ...;
 String name = ...;
-double price = ...;
 CrabpayConnectorConnector.instance.addProduct(
   description: description,
   imageUrl: imageUrl,
   name: name,
-  price: price,
 ).execute();
 ```
 
@@ -144,7 +232,6 @@ final result = await CrabpayConnectorConnector.instance.addProduct(
   description: description,
   imageUrl: imageUrl,
   name: name,
-  price: price,
 );
 AddProductData data = result.data;
 final ref = result.ref;
@@ -157,13 +244,53 @@ An example of how to use the `Ref` object is shown below:
 String description = ...;
 String imageUrl = ...;
 String name = ...;
-double price = ...;
 
 final ref = CrabpayConnectorConnector.instance.addProduct(
   description: description,
   imageUrl: imageUrl,
   name: name,
-  price: price,
+).ref();
+ref.execute();
+```
+
+
+### DeleteProduct
+#### Required Arguments
+```dart
+String id = ...;
+CrabpayConnectorConnector.instance.deleteProduct(
+  id: id,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<DeleteProductData, DeleteProductVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.deleteProduct(
+  id: id,
+);
+DeleteProductData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String id = ...;
+
+final ref = CrabpayConnectorConnector.instance.deleteProduct(
+  id: id,
 ).ref();
 ref.execute();
 ```
@@ -288,6 +415,209 @@ An example of how to use the `Ref` object is shown below:
 String id = ...;
 
 final ref = CrabpayConnectorConnector.instance.deleteProductField(
+  id: id,
+).ref();
+ref.execute();
+```
+
+
+### AddPriceFunction
+#### Required Arguments
+```dart
+String productId = ...;
+String name = ...;
+String type = ...;
+AnyValue formulas = ...;
+String currency = ...;
+CrabpayConnectorConnector.instance.addPriceFunction(
+  productId: productId,
+  name: name,
+  type: type,
+  formulas: formulas,
+  currency: currency,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<AddPriceFunctionData, AddPriceFunctionVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.addPriceFunction(
+  productId: productId,
+  name: name,
+  type: type,
+  formulas: formulas,
+  currency: currency,
+);
+AddPriceFunctionData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String productId = ...;
+String name = ...;
+String type = ...;
+AnyValue formulas = ...;
+String currency = ...;
+
+final ref = CrabpayConnectorConnector.instance.addPriceFunction(
+  productId: productId,
+  name: name,
+  type: type,
+  formulas: formulas,
+  currency: currency,
+).ref();
+ref.execute();
+```
+
+
+### DeletePriceFunction
+#### Required Arguments
+```dart
+String id = ...;
+CrabpayConnectorConnector.instance.deletePriceFunction(
+  id: id,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<DeletePriceFunctionData, DeletePriceFunctionVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.deletePriceFunction(
+  id: id,
+);
+DeletePriceFunctionData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String id = ...;
+
+final ref = CrabpayConnectorConnector.instance.deletePriceFunction(
+  id: id,
+).ref();
+ref.execute();
+```
+
+
+### AddCurrencies
+#### Required Arguments
+```dart
+String name = ...;
+String mainCurrency = ...;
+double rub = ...;
+double usd = ...;
+CrabpayConnectorConnector.instance.addCurrencies(
+  name: name,
+  mainCurrency: mainCurrency,
+  rub: rub,
+  usd: usd,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<AddCurrenciesData, AddCurrenciesVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.addCurrencies(
+  name: name,
+  mainCurrency: mainCurrency,
+  rub: rub,
+  usd: usd,
+);
+AddCurrenciesData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String name = ...;
+String mainCurrency = ...;
+double rub = ...;
+double usd = ...;
+
+final ref = CrabpayConnectorConnector.instance.addCurrencies(
+  name: name,
+  mainCurrency: mainCurrency,
+  rub: rub,
+  usd: usd,
+).ref();
+ref.execute();
+```
+
+
+### DeleteCurrencies
+#### Required Arguments
+```dart
+String id = ...;
+CrabpayConnectorConnector.instance.deleteCurrencies(
+  id: id,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<DeleteCurrenciesData, DeleteCurrenciesVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.deleteCurrencies(
+  id: id,
+);
+DeleteCurrenciesData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String id = ...;
+
+final ref = CrabpayConnectorConnector.instance.deleteCurrencies(
   id: id,
 ).ref();
 ref.execute();

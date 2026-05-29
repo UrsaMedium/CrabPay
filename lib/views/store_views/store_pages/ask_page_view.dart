@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/paf_bloc/paf_event.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/paf_bloc/paf_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

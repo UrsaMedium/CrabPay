@@ -1,6 +1,8 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/inner_paf_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/currencies_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/inner_paf_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/price_function_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_controller.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
@@ -15,7 +17,6 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
             description: product.description,
             imageUrl: product.image,
             name: product.name,
-            price: product.price,
           )
           .execute();
       fetchAllPAFData();
@@ -113,7 +114,6 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
           name: each.name,
           image: each.imageUrl,
           description: each.description,
-          price: each.price,
         ),
       );
     }
@@ -148,5 +148,53 @@ class OuterProductAndFieldsHandler implements InnerProductAndFieldsHandler {
       );
     }
     return result;
+  }
+
+  @override
+  Future<void> addCurrencies(Currencies currencies) {
+    // TODO: implement addCurrencies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addPriceFunction(PriceFunction priceFunction) {
+    // TODO: implement addPriceFunction
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteCurrencies(Currencies currencies) {
+    // TODO: implement deleteCurrencies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deletePriceFunction(PriceFunction priceFunction) {
+    // TODO: implement deletePriceFunction
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> fetchAllCurencies() {
+    // TODO: implement fetchAllCurencies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> fetchPriceFunctions(String productId) {
+    // TODO: implement fetchPriceFunctions
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> fetchProductField(String id) {
+    // TODO: implement fetchProductField
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> fetchProductFields(String productId) {
+    // TODO: implement fetchProductFields
+    throw UnimplementedError();
   }
 }

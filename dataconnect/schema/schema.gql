@@ -2,7 +2,6 @@ type Product @table(key: "id") {
   id: UUID! @default(expr: "uuidV4()")
   name: String!
   description: String!
-  price: Float!
   imageUrl: String!
 }
 
@@ -14,4 +13,21 @@ type ProductField @table(key: "id") {
   handler: String!
   attributes: Any
   expectedData: [String!]
+}
+
+type PriceFunction @table(key: "id") {
+  id: UUID! @default(expr: "uuidV4()")
+  product: Product!
+  name: String!
+  type: String!
+  formulas: Any!
+  currency: String!
+}
+
+type Currencies @table(key: "id") {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  mainCurrency: String!
+  rub: Float!
+  usd: Float!
 }

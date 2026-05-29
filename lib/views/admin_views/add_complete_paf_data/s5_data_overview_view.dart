@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/pap_inner_circle/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/product_and_fields_data/paf_inner_circle/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_paf_data/bloc/admin_bloc.dart';
 import 'package:flutter/material.dart';
@@ -347,25 +347,6 @@ Widget _productOverview(BuildContext context, AppProduct appProduct) {
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 180),
                           child: Text(appProduct.description),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: .spaceBetween,
-                      children: [
-                        Text('Cost if set'),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 180),
-                          child: Text(
-                            appProduct.price == 0
-                                ? 'not set'
-                                : appProduct.price.toString(),
-                          ),
                         ),
                       ],
                     ),

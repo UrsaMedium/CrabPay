@@ -2,8 +2,13 @@
 
 ```dart
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
+CrabpayConnectorConnector.instance.DeleteProduct(deleteProductVariables).execute();
 CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariables).execute();
+CrabpayConnectorConnector.instance.AddPriceFunction(addPriceFunctionVariables).execute();
+CrabpayConnectorConnector.instance.DeletePriceFunction(deletePriceFunctionVariables).execute();
+CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
+CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
 CrabpayConnectorConnector.instance.GetProductFieldsQuery(getProductFieldsQueryVariables).execute();
 
