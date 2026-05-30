@@ -8,10 +8,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     : super(const DatabaseStateDataNotFetched()) {
     //
     // fetch all Poducts and theirs Fields
-    on<DatabaseEventFetchAllProductAndFieldsData>((event, emit) async {
+    on<DatabaseEventFetchAllProducts>((event, emit) async {
       // showLoading(event.context);
       try {
-        await databaseHandler.fetchAllProductsAndFieldsData();
+        await databaseHandler.fetchAllProducts(event.context);
         emit(DatabaseStateDataFetched());
       } catch (e) {
         emit(DatabaseStateDataNotFetched()); //TODO
@@ -41,7 +41,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // fetch Product Fields
     on<DatabaseEventFetchProductFields>((event, emit) async {
       try {
-        await databaseHandler.fetchProductFields(event.productId);
+        await databaseHandler.fetchProductFields(
+          event.productId,
+          event.context,
+        );
       } catch (_) {
         //TODO
       }
@@ -50,7 +53,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // fetch Product Field
     on<DatabaseEventFetchProductField>((event, emit) async {
       try {
-        await databaseHandler.fetchProductField(event.productId);
+        await databaseHandler.fetchProductField(
+          event.productFieldId,
+          event.context,
+        );
       } catch (_) {
         //TODO
       }
@@ -78,7 +84,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // fetch Price Function
     on<DatabaseEventFetchPriceFunctions>((event, emit) async {
       try {
-        await databaseHandler.fetchPriceFunctions(event.productId);
+        await databaseHandler.fetchPriceFunctions(
+          event.productId,
+          event.context,
+        );
       } catch (_) {
         //TODO
       }
@@ -103,7 +112,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {
       try {
-        await databaseHandler.fetchAllCurencies();
+        await databaseHandler.fetchAllCurencies(event.context);
       } catch (_) {
         //TODO
       }

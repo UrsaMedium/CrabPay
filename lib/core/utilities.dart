@@ -1,12 +1,8 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_controller.dart'
     show DatabaseDataHandler;
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_outer_circle/outer_database_handler.dart';
 import 'package:flutter/material.dart';
 
-DatabaseDataHandler papDataHandler = DatabaseDataHandler();
-InnerDatabaseHandler papServerHandler =
-    OuterDatabaseHandler();
+DatabaseDataHandler dbCache = DatabaseDataHandler();
 
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;

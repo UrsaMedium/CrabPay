@@ -17,10 +17,10 @@ class AddProductFieldsView extends StatefulWidget {
 }
 
 class _AddProductFieldsViewState extends State<AddProductFieldsView> {
-  AppProduct? _appProduct;
+  Product? _appProduct;
 
-  final List<AppProductField> _fieldsList = [];
-  final Map<AppProductField, Widget> _fieldWidgetsMap = {};
+  final List<ProductField> _fieldsList = [];
+  final Map<ProductField, Widget> _fieldWidgetsMap = {};
   final Map<String, String> _dataFromFieldsToTest = {};
   final List<String> _fieldNames = [];
 
@@ -34,7 +34,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
     super.initState();
   }
 
-  void _updateFieldsList(AppProductField field) {
+  void _updateFieldsList(ProductField field) {
     if (!_fieldsList.any((element) => element.fieldName == field.fieldName)) {
       setState(() {
         _fieldsList.add(field);
@@ -52,7 +52,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
     }
   }
 
-  void _deleteField(AppProductField fieldToDelte) {
+  void _deleteField(ProductField fieldToDelte) {
     setState(() {
       _fieldsList.remove(fieldToDelte);
       _fieldNames.remove(fieldToDelte.fieldName);
@@ -66,12 +66,12 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
     });
   }
 
-  List<AppProductField>? _collectFields() {
-    List<AppProductField> result = [];
+  List<ProductField>? _collectFields() {
+    List<ProductField> result = [];
     for (int i = 0; i < _fieldsList.length; i++) {
       if (_fieldsList[i].fieldName != '' && _fieldsList[i].handler != '') {
         result.add(
-          AppProductField(
+          ProductField(
             id: '$i',
             productId: _appProduct!.name,
             order: i * 10,
@@ -182,7 +182,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        List<AppProductField>? collectFields = _collectFields();
+                        List<ProductField>? collectFields = _collectFields();
                         if (collectFields != null) {
                           context.read<AdminBloc>().add(
                             AdminEventSubmitsFields(
@@ -205,8 +205,8 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        List<AppProductField>? collectFields = [
-                          AppProductField(
+                        List<ProductField>? collectFields = [
+                          ProductField(
                             id: 'id1',
                             productId: 'Mock product',
                             order: 10,
@@ -214,7 +214,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                             handler: 'InputField',
                             expectedData: ['User Custom Input'],
                           ),
-                          AppProductField(
+                          ProductField(
                             id: 'id2',
                             productId: 'Mock product',
                             order: 20,
@@ -222,7 +222,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                             handler: 'DropdownList',
                             expectedData: ['drop1', 'drop2', 'drop3'],
                           ),
-                          AppProductField(
+                          ProductField(
                             id: 'id3',
                             productId: 'Mock product',
                             order: 30,
@@ -255,8 +255,8 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
 
 class AField extends StatelessWidget {
   final Function(String, String) dataBridge;
-  final Function(AppProductField) deleteMe;
-  final AppProductField field;
+  final Function(ProductField) deleteMe;
+  final ProductField field;
   const AField({
     super.key,
     required this.field,

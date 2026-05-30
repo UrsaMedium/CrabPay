@@ -10,8 +10,8 @@ import 'package:go_router/go_router.dart';
 
 class DataAndWidgetsPreperation {
   final BuildContext context;
-  Map<AppProductField, String>? _priceSpace;
-  AppProductField? _priceRangeDimension;
+  Map<ProductField, String>? _priceSpace;
+  ProductField? _priceRangeDimension;
   final Map<String, List<String>> _priceDomainDimensions = {
     'currency': ['rub', 'usd'],
   };

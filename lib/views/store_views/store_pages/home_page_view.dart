@@ -13,7 +13,7 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  List<AppProduct> appProducts = DatabaseDataHandler().products();
+  List<Product> appProducts = DatabaseDataHandler().products();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class _HomePageViewState extends State<HomePageView> {
   Widget _appHomeCard(
     BuildContext context,
     double ratio,
-    AppProduct currentProduct,
+    Product currentProduct,
   ) {
     return Hero(
       tag: 'card-hero-${currentProduct.id}',

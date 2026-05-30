@@ -34,9 +34,9 @@ class _AddCompleteProductProductViewState
     });
   }
 
-  AppProduct? _collectProduct() {
+  Product? _collectProduct() {
     if (_productNameUI != null && _imageUrl != null && _description != null) {
-      return AppProduct(
+      return Product(
         id: 'id',
         name: _productNameUI!,
         image: _imageUrl!,
@@ -165,7 +165,7 @@ class _AddCompleteProductProductViewState
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      AppProduct? collectedAppProduct = _collectProduct();
+                      Product? collectedAppProduct = _collectProduct();
                       if (collectedAppProduct != null) {
                         context.read<AdminBloc>().add(
                           AdminEventSubmitsProduct(
@@ -183,7 +183,7 @@ class _AddCompleteProductProductViewState
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      AppProduct? collectedAppProduct = AppProduct(
+                      Product? collectedAppProduct = Product(
                         id: 'id',
                         name: 'Mock Product',
                         image: 'lib/assets/images/gas-gas-gas.jpg',

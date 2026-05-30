@@ -15,10 +15,10 @@ class PriceSpaceMapingView extends StatefulWidget {
 }
 
 class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
-  late final List<AppProductField>? _appPoductFields;
+  late final List<ProductField>? _appPoductFields;
   List<Widget> _fieldsWithOptions = [];
-  final Map<AppProductField, bool> _priceDomainDimensionFields = {};
-  AppProductField? _priceRangeField;
+  final Map<ProductField, bool> _priceDomainDimensionFields = {};
+  ProductField? _priceRangeField;
   bool _isRangeChosen = false;
 
   @override
@@ -43,7 +43,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
     });
   }
 
-  List<Widget> _buildOptions(AppProductField aField) {
+  List<Widget> _buildOptions(ProductField aField) {
     List<Widget> result = [];
     for (var option in aField.expectedData!) {
       result.add(
@@ -56,7 +56,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
     return result;
   }
 
-  List<Widget> _buildFieldsWithOptions(List<AppProductField> fields) {
+  List<Widget> _buildFieldsWithOptions(List<ProductField> fields) {
     List<Widget> result = [];
     bool localBoolly = false;
     for (var field in fields) {
@@ -228,7 +228,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Map<AppProductField, String> priceSpcaeToSend = {};
+                        Map<ProductField, String> priceSpcaeToSend = {};
                         if (_priceRangeField != null) {
                           priceSpcaeToSend[_priceRangeField!] = 'range';
                           _priceDomainDimensionFields.remove(_priceRangeField);

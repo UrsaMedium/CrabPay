@@ -1,7 +1,7 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart'
-    show ContextExtensions, papDataHandler;
+    show ContextExtensions, dbCache;
 import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatefulWidget {
@@ -21,7 +21,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     });
   }
 
-  List<Widget> _propertySlivers(List<AppProductField> properties) {
+  List<Widget> _propertySlivers(List<ProductField> properties) {
     properties.sort((a, b) => a.order.compareTo(b.order));
     List<Widget> result = [];
     for (var each in properties) {
@@ -43,8 +43,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<AppProductField> properties =
-        papDataHandler.productFields(widget.productId) ?? [];
+    List<ProductField> properties =
+        dbCache.productFields(widget.productId) ?? [];
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,

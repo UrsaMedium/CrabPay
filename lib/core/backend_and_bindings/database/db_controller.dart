@@ -14,10 +14,10 @@ class DatabaseDataHandler {
     return _instance;
   }
 
-  late List<AppProduct> _productList;
+  late List<Product> _productList;
   late List<String> _productIdList;
-  late Map<String, List<AppProductField>> _fieldsMap;
-  late List<AppProductField> _fieldsList;
+  late Map<String, List<ProductField>> _fieldsMap;
+  late List<ProductField> _fieldsList;
   late List<String> _fieldsIdList;
 
   void _dbEraseData() {
@@ -29,8 +29,8 @@ class DatabaseDataHandler {
   }
 
   void dataStuffing(
-    List<AppProduct> products,
-    Map<String, List<AppProductField>> fields,
+    List<Product> products,
+    Map<String, List<ProductField>> fields,
   ) {
     _dbEraseData();
     _productList = products;
@@ -55,19 +55,19 @@ class DatabaseDataHandler {
     return _productIdList;
   }
 
-  List<AppProduct> products() {
+  List<Product> products() {
     return _productList;
   }
 
-  List<AppProductField>? productFields(String id) {
+  List<ProductField>? productFields(String id) {
     return _fieldsMap[id];
   }
 
-  AppProduct productById(String id) {
+  Product productById(String id) {
     return _productList.firstWhere((product) => product.id == id);
   }
 
-  AppProductField fieldById(String id) {
+  ProductField fieldById(String id) {
     return _fieldsList.firstWhere((fields) => fields.id == id);
   }
 }

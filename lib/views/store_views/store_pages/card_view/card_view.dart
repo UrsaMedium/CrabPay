@@ -1,5 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/utilities.dart' show papDataHandler;
+import 'package:crabpay/core/utilities.dart' show dbCache;
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +11,7 @@ class CardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProduct product = papDataHandler.productById(productId);
+    Product product = dbCache.productById(productId);
 
     return Hero(
       tag: 'card-hero-${product.id}',

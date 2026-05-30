@@ -14,9 +14,9 @@ enum AdminStates {
 
 @immutable
 class AdminState {
-  final AppProduct? appProduct;
-  final List<AppProductField>? appProductFields;
-  final Map<AppProductField, String>? priceDimensions;
+  final Product? appProduct;
+  final List<ProductField>? appProductFields;
+  final Map<ProductField, String>? priceDimensions;
   final Map<List<String>, double>? priceFunction;
   final DataAndWidgetsPreperation? dataAndWidgetsPreperation;
   final AdminStates states;
@@ -31,9 +31,9 @@ class AdminState {
   });
 
   AdminState copyWith({
-    AppProduct? appProduct,
-    List<AppProductField>? appProductFields,
-    Map<AppProductField, String>? priceDimensions,
+    Product? appProduct,
+    List<ProductField>? appProductFields,
+    Map<ProductField, String>? priceDimensions,
     Map<List<String>, double>? priceFunction,
     DataAndWidgetsPreperation? dataAndWidgetsPreperation,
     AdminStates? states,

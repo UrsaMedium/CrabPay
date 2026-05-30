@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class AddFieldBottomSheet extends StatefulWidget {
-  final Function(AppProductField) onNewFieldAdding;
+  final Function(ProductField) onNewFieldAdding;
   final List<String> alreadyExistingFields;
   const AddFieldBottomSheet({
     super.key,
@@ -157,7 +157,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                       (element) => element == fieldName,
                     )) {
                       widget.onNewFieldAdding(
-                        AppProductField(
+                        ProductField(
                           id: 'id',
                           productId: 'productId',
                           order: 0,

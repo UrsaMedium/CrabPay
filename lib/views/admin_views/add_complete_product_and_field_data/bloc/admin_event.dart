@@ -12,17 +12,17 @@ class AdminEventAdminEnters extends AdminEvent {
 }
 
 class AdminEventSubmitsProduct extends AdminEvent {
-  final AppProduct appProduct;
+  final Product appProduct;
   const AdminEventSubmitsProduct({required this.appProduct});
 }
 
 class AdminEventSubmitsFields extends AdminEvent {
-  final List<AppProductField> appProductFields;
+  final List<ProductField> appProductFields;
   const AdminEventSubmitsFields({required this.appProductFields});
 }
 
 class AdminEventSubmitsPriceDimensions extends AdminEvent {
-  final Map<AppProductField, String>? priceDimensions;
+  final Map<ProductField, String>? priceDimensions;
   const AdminEventSubmitsPriceDimensions({required this.priceDimensions});
 }
 

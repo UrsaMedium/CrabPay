@@ -1,4 +1,4 @@
-class AppProductField {
+class ProductField {
   final String id;
   final String productId;
   final int order;
@@ -7,7 +7,7 @@ class AppProductField {
   final Map<String, String?>? attributes;
   final List<String>? expectedData;
 
-  AppProductField({
+  ProductField({
     required this.id,
     required this.productId,
     required this.order,
@@ -17,7 +17,7 @@ class AppProductField {
     this.expectedData,
   });
 
-  factory AppProductField.intial() => AppProductField(
+  factory ProductField.intial() => ProductField(
     id: '',
     productId: '',
     order: 0,

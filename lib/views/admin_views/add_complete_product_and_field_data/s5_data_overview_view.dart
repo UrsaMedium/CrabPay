@@ -12,8 +12,8 @@ class DataOverviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppProduct? appProduct = context.read<AdminBloc>().state.appProduct;
-    final List<AppProductField>? appProductFields = context
+    final Product? appProduct = context.read<AdminBloc>().state.appProduct;
+    final List<ProductField>? appProductFields = context
         .read<AdminBloc>()
         .state
         .appProductFields;
@@ -158,7 +158,7 @@ Widget _priceFunctionOverview(
 
 Widget _fieldsOverview(
   BuildContext context,
-  List<AppProductField> appProductFields,
+  List<ProductField> appProductFields,
 ) {
   List<Widget> fields = [];
   for (var field in appProductFields) {
@@ -282,7 +282,7 @@ Widget _fieldsOverview(
   );
 }
 
-Widget _productOverview(BuildContext context, AppProduct appProduct) {
+Widget _productOverview(BuildContext context, Product appProduct) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Card(

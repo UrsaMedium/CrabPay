@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:flutter/material.dart' show immutable;
+import 'package:flutter/widgets.dart';
 
 @immutable
 abstract class DatabaseEvent {
@@ -10,51 +10,83 @@ abstract class DatabaseEvent {
 }
 
 // fetch all Poducts and theirs Fields
-class DatabaseEventFetchAllProductAndFieldsData implements DatabaseEvent {}
+class DatabaseEventFetchAllProducts implements DatabaseEvent {
+  final BuildContext context;
+  DatabaseEventFetchAllProducts({required this.context});
+}
+
+class DatabaseEventFetchAllProductsDONE implements DatabaseEvent {
+  final List<Product> products;
+  DatabaseEventFetchAllProductsDONE({required this.products});
+}
 
 // Product events
 // add Product
 class DatabaseEventAddProduct implements DatabaseEvent {
-  final AppProduct product;
+  final Product product;
   DatabaseEventAddProduct({required this.product});
 }
 
 // delete Product
 class DatabaseEventDeleteProduct implements DatabaseEvent {
-  final AppProduct product;
+  final Product product;
   DatabaseEventDeleteProduct({required this.product});
 }
 
 // Fields events
 // fetch Product Fields
 class DatabaseEventFetchProductFields implements DatabaseEvent {
+  final BuildContext context;
   final String productId;
-  DatabaseEventFetchProductFields({required this.productId});
+  DatabaseEventFetchProductFields({
+    required this.productId,
+    required this.context,
+  });
+}
+
+class DatabaseEventFetchProductFieldsDONE implements DatabaseEvent {
+  DatabaseEventFetchProductFieldsDONE();
 }
 
 // fetch Product Field
 class DatabaseEventFetchProductField implements DatabaseEvent {
-  final String productId;
-  DatabaseEventFetchProductField({required this.productId});
+  final BuildContext context;
+  final String productFieldId;
+  DatabaseEventFetchProductField({
+    required this.productFieldId,
+    required this.context,
+  });
+}
+
+class DatabaseEventFetchProductFieldDONE implements DatabaseEvent {
+  DatabaseEventFetchProductFieldDONE();
 }
 
 // add Product Field
 class DatabaseEventAddProductField implements DatabaseEvent {
-  final AppProductField productField;
+  final ProductField productField;
   DatabaseEventAddProductField({required this.productField});
 }
 
 // delete Product Field
 class DatabaseEventDeleteProductField implements DatabaseEvent {
-  final AppProductField productField;
+  final ProductField productField;
   DatabaseEventDeleteProductField({required this.productField});
 }
 
 // Price Function events
 // fetch Price Function
 class DatabaseEventFetchPriceFunctions implements DatabaseEvent {
+  final BuildContext context;
   final String productId;
-  DatabaseEventFetchPriceFunctions({required this.productId});
+  DatabaseEventFetchPriceFunctions({
+    required this.productId,
+    required this.context,
+  });
+}
+
+class DatabaseEventFetchPriceFunctionsDONE implements DatabaseEvent {
+  DatabaseEventFetchPriceFunctionsDONE();
 }
 
 // add Price Function
@@ -72,7 +104,12 @@ class DatabaseEventDeletePriceFunction implements DatabaseEvent {
 // Currencies events
 // fetch All Currencies
 class DatabaseEventFetchAllCurrencies implements DatabaseEvent {
-  DatabaseEventFetchAllCurrencies();
+  final BuildContext context;
+  DatabaseEventFetchAllCurrencies({required this.context});
+}
+
+class DatabaseEventFetchAllCurrenciesDONE implements DatabaseEvent {
+  DatabaseEventFetchAllCurrenciesDONE();
 }
 
 // add Currencies

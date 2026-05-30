@@ -3,14 +3,40 @@ import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_controller.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class OuterDatabaseHandler implements InnerDatabaseHandler {
+  // Product
+  // fetch all products
   @override
-  Future<void> addProduct(AppProduct product) async {
+  Future<void> fetchAllProducts(BuildContext context) async {
+    try {
+      final productFetrcher = await CrabpayConnectorConnector.instance
+          .getAllProductsQuery()
+          .execute();
+      List<Product> fetchedProducts = [];
+      for (var product in productFetrcher.data.products) {
+        fetchedProducts.add(
+          Product(
+            id: product.id,
+            name: product.name,
+            image: product.imageUrl,
+            description: product.description,
+          ),
+        );
+      }
+      Fluttertoast.showToast(msg: 'Suck sus');
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to fetch: $e');
+    }
+  }
+
+  // add Product
+  @override
+  Future<void> addProduct(Product product) async {
     try {
       await CrabpayConnectorConnector.instance
           .addProduct(
@@ -19,14 +45,70 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             name: product.name,
           )
           .execute();
-      fetchAllProductsAndFieldsData();
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to fetch $e');
+      Fluttertoast.showToast(msg: 'Failed to add the product: $e');
     }
   }
 
+  // delete Product
   @override
-  Future<void> addProductField(AppProductField field) async {
+  Future<void> deleteProduct(Product product) async {
+    try {
+      CrabpayConnectorConnector.instance.deleteProduct(id: product.id);
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to delete the product: $e');
+    }
+  }
+
+  // Fields
+  // fetch a field
+  @override
+  Future<void> fetchProductField(String id, BuildContext context) async {
+    // TODO: implement fetchProductFields
+    throw UnimplementedError();
+  }
+
+  // fetch product fields
+  @override
+  Future<void> fetchProductFields(
+    String productId,
+    BuildContext context,
+  ) async {
+    try {
+      final fetchedFields = await CrabpayConnectorConnector.instance
+          .getProductFieldsQuery(productId: productId)
+          .execute();
+      List<ProductField> processedFetchedFields = [];
+      for (var each in fetchedFields.data.productFields) {
+        final attributes = each.attributes?.toJson() == {}
+            ? null
+            : Map<String, String?>.from(each.attributes?.toJson());
+        final expectedData = each.expectedData == []
+            ? null
+            : each.expectedData?.toList();
+        print(
+          '    ${each.id}, $productId,  ${each.order},  ${each.fieldName},  ${each.handler}, $attributes, $expectedData',
+        );
+        processedFetchedFields.add(
+          ProductField(
+            id: each.id,
+            productId: productId,
+            order: each.order,
+            fieldName: each.fieldName,
+            handler: each.handler,
+            attributes: attributes,
+            expectedData: expectedData,
+          ),
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to fetch fields: $e');
+    }
+  }
+
+  // add Product Field
+  @override
+  Future<void> addProductField(ProductField field) async {
     try {
       AnyValue? attributes;
       if (field.attributes != null) {
@@ -46,155 +128,138 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .attributes(attributes)
           .expectedData(expectedData)
           .execute();
-      fetchAllProductsAndFieldsData();
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to fetch $e');
+      Fluttertoast.showToast(msg: 'Failed to add the field: $e');
     }
   }
 
+  // delete a Field
   @override
-  Future<void> deleteProduct(AppProduct product) {
-    // TODO: implement deleteProduct
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteProductField(AppProductField field) async {
+  Future<void> deleteProductField(ProductField field) async {
     try {
       await CrabpayConnectorConnector.instance
           .deleteProductField(id: field.id)
           .execute();
-      fetchAllProductsAndFieldsData();
     } catch (e) {
-      rethrow;
+      Fluttertoast.showToast(msg: 'Failed to delete the field: $e');
     }
   }
 
+  // Currencies
+  // fetch all currencies
   @override
-  Future<void> fetchAllProductsAndFieldsData() async {
+  Future<void> fetchAllCurencies(BuildContext context) async {
+    List<Currencies> processedFetchedAllCurrencies = [];
     try {
-      final productFetrcher = await CrabpayConnectorConnector.instance
-          .getAllProductsQuery()
+      final fetchedAllCurrencies = await CrabpayConnectorConnector.instance
+          .getAllCurrenciesQuery()
           .execute();
-      final fetchedAppProducts = _productDataConsolidation(
-        productFetrcher.data.products,
-      );
-
-      Map<String, List<AppProductField>> allFetchedAppProductFields = {};
-      for (var each in fetchedAppProducts) {
-        final fieldFetcher = await CrabpayConnectorConnector.instance
-            .getProductFieldsQuery(productId: each.id)
-            .execute();
-        final fetchedPtoperties = _fieldsDataConsolidation(
-          fieldFetcher.data.productFields,
+      for (var currencies in fetchedAllCurrencies.data.currenciess) {
+        processedFetchedAllCurrencies.add(
+          Currencies(
+            id: currencies.id,
+            mainCurrency: currencies.mainCurrency,
+            name: currencies.name,
+            rub: currencies.rub,
+            usd: currencies.usd,
+          ),
         );
-        allFetchedAppProductFields[each.id] = fetchedPtoperties;
       }
-
-      DatabaseDataHandler papDataHandler = DatabaseDataHandler();
-      papDataHandler.dataStuffing(
-        fetchedAppProducts,
-        allFetchedAppProductFields,
-      );
-
-      Fluttertoast.showToast(msg: 'Suck sus');
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to fetch $e');
+      Fluttertoast.showToast(msg: 'Failed to fetch all currencies: $e');
     }
   }
 
-  List<AppProduct> _productDataConsolidation(
-    List<GetAllProductsQueryProducts> fetchedAppProducts,
-  ) {
-    List<AppProduct> result = [];
-    for (var each in fetchedAppProducts) {
-      result.add(
-        AppProduct(
-          id: each.id,
-          name: each.name,
-          image: each.imageUrl,
-          description: each.description,
-        ),
-      );
+  // add currencies
+  @override
+  Future<void> addCurrencies(Currencies currencies) async {
+    try {
+      await CrabpayConnectorConnector.instance
+          .addCurrencies(
+            name: currencies.name,
+            mainCurrency: currencies.mainCurrency,
+            rub: currencies.rub,
+            usd: currencies.usd,
+          )
+          .execute();
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to add the currencies: $e');
     }
-    return result;
   }
 
-  List<AppProductField> _fieldsDataConsolidation(
-    List<GetProductFieldsQueryProductFields> productFields,
-  ) {
-    List<AppProductField> result = [];
-    Map<String, String?>? tempAttrinutesMap;
+  // delete a curencies table
+  @override
+  Future<void> deleteCurrencies(Currencies currencies) async {
+    try {
+      await CrabpayConnectorConnector.instance
+          .deleteCurrencies(id: currencies.id)
+          .execute();
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to delete the currencies: $e');
+    }
+  }
 
-    for (var element in productFields) {
-      var temp = element.attributes?.toJson();
-      if (temp.toString() == '{attributes: null}' ||
-          temp.toString() == '' ||
-          temp.toString() == 'null') {
-        tempAttrinutesMap = null;
-      } else {
-        tempAttrinutesMap = temp != {} ? Map<String, String?>.from(temp) : null;
+  // Price Function
+  // fetch product price functions
+  @override
+  Future<void> fetchPriceFunctions(
+    String productId,
+    BuildContext context,
+  ) async {
+    List<PriceFunction> processedFetchedProductPriceFunctions = [];
+    try {
+      final fetchedProductPriceFunctions = await CrabpayConnectorConnector
+          .instance
+          .getPriceFunctionQuery(productId: productId)
+          .execute();
+      for (var priceFunctions
+          in fetchedProductPriceFunctions.data.priceFunctions) {
+        final formulas = Map<List<String>, double>.from(
+          priceFunctions.formulas.toJson(),
+        );
+        processedFetchedProductPriceFunctions.add(
+          PriceFunction(
+            id: priceFunctions.id,
+            productId: productId,
+            name: priceFunctions.name,
+            type: priceFunctions.type,
+            fomulas: formulas,
+            currency: priceFunctions.currency,
+          ),
+        );
       }
-      result.add(
-        AppProductField(
-          id: element.id,
-          productId: element.productId,
-          order: element.order,
-          fieldName: element.fieldName,
-          handler: element.handler,
-          attributes: tempAttrinutesMap,
-          expectedData: element.expectedData,
-        ),
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Failed to fetch product price functions: $e',
       );
     }
-    return result;
   }
 
   @override
-  Future<void> addCurrencies(Currencies currencies) {
-    // TODO: implement addCurrencies
-    throw UnimplementedError();
+  Future<void> addPriceFunction(PriceFunction priceFunction) async {
+    try {
+      await CrabpayConnectorConnector.instance
+          .addPriceFunction(
+            productId: priceFunction.productId,
+            name: priceFunction.name,
+            type: priceFunction.type,
+            formulas: priceFunction.fomulas,
+            currency: priceFunction.currency,
+          )
+          .execute();
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to add the price function $e');
+    }
   }
 
   @override
-  Future<void> addPriceFunction(PriceFunction priceFunction) {
-    // TODO: implement addPriceFunction
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteCurrencies(Currencies currencies) {
-    // TODO: implement deleteCurrencies
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deletePriceFunction(PriceFunction priceFunction) {
-    // TODO: implement deletePriceFunction
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> fetchAllCurencies() {
-    // TODO: implement fetchAllCurencies
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> fetchPriceFunctions(String productId) {
-    // TODO: implement fetchPriceFunctions
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> fetchProductField(String id) {
-    // TODO: implement fetchProductField
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> fetchProductFields(String productId) {
-    // TODO: implement fetchProductFields
-    throw UnimplementedError();
+  Future<void> deletePriceFunction(PriceFunction priceFunction) async {
+    try {
+      await CrabpayConnectorConnector.instance
+          .deletePriceFunction(id: priceFunction.id)
+          .execute();
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Failed to delete the price function: $e');
+    }
   }
 }
