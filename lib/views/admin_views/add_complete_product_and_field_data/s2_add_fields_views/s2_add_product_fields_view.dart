@@ -73,7 +73,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
         result.add(
           ProductField(
             id: '$i',
-            productId: _appProduct!.name,
+            productId: _appProduct!.id,
             order: i * 10,
             fieldName: _fieldsList[i].fieldName,
             handler: _fieldsList[i].handler,
@@ -208,7 +208,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                         List<ProductField>? collectFields = [
                           ProductField(
                             id: 'id1',
-                            productId: 'Mock product',
+                            productId: '5bbcb82ecc15438ab758586309c0afc5',
                             order: 10,
                             fieldName: 'Mock field 1',
                             handler: 'InputField',
@@ -216,7 +216,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                           ),
                           ProductField(
                             id: 'id2',
-                            productId: 'Mock product',
+                            productId: '5bbcb82ecc15438ab758586309c0afc5',
                             order: 20,
                             fieldName: 'Mock field 2',
                             handler: 'DropdownList',
@@ -224,7 +224,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                           ),
                           ProductField(
                             id: 'id3',
-                            productId: 'Mock product',
+                            productId: '5bbcb82ecc15438ab758586309c0afc5',
                             order: 30,
                             fieldName: 'Mock field 3',
                             handler: 'RadioList',

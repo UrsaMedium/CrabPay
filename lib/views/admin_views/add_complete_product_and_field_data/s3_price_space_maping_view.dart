@@ -1,4 +1,7 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
@@ -36,6 +39,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
       Fluttertoast.showToast(msg: 'ERROR no AppProduct or AppProductFields');
       context.pop();
     }
+    context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
     super.initState();
   }
 
@@ -208,7 +212,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                     ),
                   ),
                 ),
-                onSelected: (value) => _functionType = value!,
+                onSelected: (value) => _functionType = value,
                 controller: _functionTypeController,
                 dropdownMenuEntries: <DropdownMenuEntry<String>>[
                   DropdownMenuEntry(
@@ -221,28 +225,38 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
-              child: DropdownMenu<String>(
-                expandedInsets: EdgeInsets.zero,
-                inputDecorationTheme: InputDecorationTheme(
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(
-                      color: context.appColorScheme.primary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                onSelected: (value) => _currency = value!,
-                controller: _currencyController,
-                dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                  DropdownMenuEntry(
-                    value: 'constant',
-                    label: 'Constant function',
-                  ),
-                  DropdownMenuEntry(value: 'linear', label: 'Linear function'),
-                  DropdownMenuEntry(value: 'both', label: 'Both functions'),
-                ],
+              child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                builder: (context, state) {
+                  if (state.states == DatabaseStates.currenciesFetched) {
+                    final List<DropdownMenuEntry<String>> currencies = [];
+                    for (var currencyTable in state.currencies!) {
+                      currencies.add(
+                        DropdownMenuEntry(
+                          value: currencyTable.name,
+                          label: 'From ${currencyTable.name}',
+                        ),
+                      );
+                    }
+                    return DropdownMenu<String>(
+                      expandedInsets: EdgeInsets.zero,
+                      inputDecorationTheme: InputDecorationTheme(
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: context.appColorScheme.primary,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      onSelected: (value) => _currency = value,
+                      controller: _currencyController,
+                      dropdownMenuEntries: currencies,
+                    );
+                  } else {
+                    return Text('Please wait: fetching the currencies');
+                  }
+                },
               ),
             ),
             Padding(
@@ -321,7 +335,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                                   )) {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'Linear function MUST have User Custom Input field as the range',
+                                      'Linear function MUST have \'User Custom Input\' field as the range',
                                 );
                                 gateKeeper = false;
                               }
@@ -335,7 +349,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                                   )) {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'Constant function CANNOT have User Custom Input field as the range',
+                                      'Constant function CANNOT have \'User Custom Input\' field as the range',
                                 );
                                 gateKeeper = false;
                               }

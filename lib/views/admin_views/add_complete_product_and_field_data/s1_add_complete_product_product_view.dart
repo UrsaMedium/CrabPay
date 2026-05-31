@@ -165,8 +165,8 @@ class _AddCompleteProductProductViewState
                   ElevatedButton(
                     onPressed: () {
                       Product? collectedAppProduct = Product(
-                        id: 'id',
-                        name: 'Mock Product',
+                        id: '0',
+                        name: 'Mock Name2',
                         image: 'lib/assets/images/gas-gas-gas.jpg',
                         description: 'Mock description',
                       );

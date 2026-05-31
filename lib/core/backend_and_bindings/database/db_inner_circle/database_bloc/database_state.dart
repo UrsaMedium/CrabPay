@@ -6,14 +6,17 @@ import 'package:flutter/material.dart' show immutable;
 
 enum DatabaseStates {
   initial,
-  productFetched,
-  productNotFetched,
+  productsFetched,
+  productsNotFetched,
   productFieldsFetched,
   productFieldsNotFetched,
   priceFunctionsFetched,
   priceFunctionsNotFetched,
   currenciesFetched,
-  currenciesNotFetched
+  currenciesNotFetched,
+  //
+  productAdded,
+  productNotAdded,
 }
 
 @immutable
@@ -23,6 +26,8 @@ class DatabaseState {
   final List<ProductField>? productFields;
   final List<PriceFunction>? priceFunctions;
   final DatabaseStates states;
+  //
+  final Product? recentlyAddedProduct;
 
   const DatabaseState({
     this.products,
@@ -30,6 +35,8 @@ class DatabaseState {
     this.productFields,
     this.priceFunctions,
     this.states = DatabaseStates.initial,
+    //
+    this.recentlyAddedProduct,
   });
 
   DatabaseState copyWith({
@@ -38,6 +45,8 @@ class DatabaseState {
     List<ProductField>? productFields,
     List<PriceFunction>? priceFunctions,
     DatabaseStates? states,
+    //
+    Product? recentlyAddedProduct,
   }) {
     return DatabaseState(
       products: products ?? this.products,
@@ -45,6 +54,8 @@ class DatabaseState {
       productFields: productFields,
       priceFunctions: priceFunctions,
       states: states ?? this.states,
+      //
+      recentlyAddedProduct: recentlyAddedProduct,
     );
   }
 }

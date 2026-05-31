@@ -16,12 +16,13 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         emit(
           state.copyWith(
             products: products,
-            states: DatabaseStates.productFetched,
+            states: DatabaseStates.productsFetched,
           ),
         );
       } catch (e) {
         Fluttertoast.showToast(msg: 'Faild to fetch products $e');
-        emit(state.copyWith(states: DatabaseStates.productNotFetched));
+        print('Faild to fetch products $e');
+        emit(state.copyWith(states: DatabaseStates.productsNotFetched));
       }
     });
 
@@ -30,8 +31,21 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     on<DatabaseEventAddProduct>((event, emit) async {
       try {
         await databaseHandler.addProduct(event.product);
+        emit(
+          state.copyWith(
+            recentlyAddedProduct: event.product,
+            states: DatabaseStates.productAdded,
+          ),
+        );
       } catch (e) {
-        Fluttertoast.showToast(msg: 'Faild to add product $e');
+        emit(
+          state.copyWith(
+            recentlyAddedProduct: null,
+            states: DatabaseStates.productNotAdded,
+          ),
+        );
+        // print('Failed to add product $e');
+        Fluttertoast.showToast(msg: 'Failed to add product $e');
       }
     });
 
@@ -40,7 +54,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteProduct(event.product);
       } catch (e) {
-        Fluttertoast.showToast(msg: 'Faild to delete product $e');
+        print('Failed to delete product $e');
+        Fluttertoast.showToast(msg: 'Failed to delete product $e');
       }
     });
 
@@ -58,6 +73,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
+        print('Failed to fetch product fields $e');
         Fluttertoast.showToast(msg: 'Failed to fetch product fields $e');
         emit(state.copyWith(states: DatabaseStates.productFieldsNotFetched));
       }
@@ -73,6 +89,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addProductField(event.productField);
       } catch (e) {
+        print('Faild to add field $e');
         Fluttertoast.showToast(msg: 'Faild to add field $e');
       }
     });
@@ -82,6 +99,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteProductField(event.productField);
       } catch (e) {
+        print('Faild to delete field $e');
         Fluttertoast.showToast(msg: 'Faild to delete field $e');
       }
     });
@@ -100,6 +118,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
+        print('Failed to fetch price functions $e');
         Fluttertoast.showToast(msg: 'Failed to fetch price functions $e');
         emit(state.copyWith(states: DatabaseStates.priceFunctionsNotFetched));
       }
@@ -109,6 +128,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addPriceFunction(event.priceFunction);
       } catch (e) {
+        print('Faild to add price function $e');
         Fluttertoast.showToast(msg: 'Faild to add price function $e');
       }
     });
@@ -117,6 +137,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deletePriceFunction(event.priceFunction);
       } catch (e) {
+        print('Faild to delete price function $e');
         Fluttertoast.showToast(msg: 'Faild to delete price function $e');
       }
     });
@@ -132,6 +153,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
+        print('Failed to fetch currencies $e');
         Fluttertoast.showToast(msg: 'Failed to fetch currencies $e');
         emit(state.copyWith(states: DatabaseStates.currenciesNotFetched));
       }
@@ -141,6 +163,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addCurrencies(event.currencies);
       } catch (e) {
+        print('Faild to add currencies $e');
         Fluttertoast.showToast(msg: 'Faild to add currencies $e');
       }
     });
@@ -149,6 +172,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteCurrencies(event.currencies);
       } catch (e) {
+        print('Faild to delete currencies $e');
         Fluttertoast.showToast(msg: 'Faild to delete currencies $e');
       }
     });

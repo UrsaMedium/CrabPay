@@ -30,6 +30,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       Fluttertoast.showToast(msg: 'Suck sus');
       return fetchedProducts;
     } catch (e) {
+      print('Failed to fetch: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch: $e');
       return null;
     }
@@ -47,6 +48,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           )
           .execute();
     } catch (e) {
+      print('Failed to add the product: $e');
       Fluttertoast.showToast(msg: 'Failed to add the product: $e');
     }
   }
@@ -57,6 +59,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     try {
       CrabpayConnectorConnector.instance.deleteProduct(id: product.id);
     } catch (e) {
+      print('Failed to delete the product: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the product: $e');
     }
   }
@@ -101,6 +104,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       }
       return processedFetchedFields;
     } catch (e) {
+      print('Failed to fetch fields: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch fields: $e');
       return null;
     }
@@ -129,6 +133,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .expectedData(expectedData)
           .execute();
     } catch (e) {
+      print('Failed to add the field: $e');
       Fluttertoast.showToast(msg: 'Failed to add the field: $e');
     }
   }
@@ -141,6 +146,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .deleteProductField(id: field.id)
           .execute();
     } catch (e) {
+      print('Failed to delete the field: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the field: $e');
     }
   }
@@ -167,6 +173,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       }
       return processedFetchedAllCurrencies;
     } catch (e) {
+      print('Failed to fetch all currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch all currencies: $e');
       return null;
     }
@@ -185,6 +192,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           )
           .execute();
     } catch (e) {
+      print('Failed to add the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to add the currencies: $e');
     }
   }
@@ -197,6 +205,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .deleteCurrencies(id: currencies.id)
           .execute();
     } catch (e) {
+      print('Failed to delete the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the currencies: $e');
     }
   }
@@ -229,6 +238,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       }
       return processedFetchedProductPriceFunctions;
     } catch (e) {
+      print('Failed to fetch product price functions: $e');
       Fluttertoast.showToast(
         msg: 'Failed to fetch product price functions: $e',
       );
@@ -239,16 +249,25 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> addPriceFunction(PriceFunction priceFunction) async {
     try {
+      final temp = priceFunction.fomulas.map((key, value) {
+        final keysString = key.join(', ');
+        return MapEntry(keysString, value);
+      });
+      final fomulas = AnyValue(temp);
+
       await CrabpayConnectorConnector.instance
           .addPriceFunction(
             productId: priceFunction.productId,
             name: priceFunction.name,
             type: priceFunction.type,
-            formulas: priceFunction.fomulas,
+            formulas: fomulas,
             currency: priceFunction.currency,
           )
           .execute();
     } catch (e) {
+      print(
+        'Failed to add the price function: $e --------------------------------------------------------------------------',
+      );
       Fluttertoast.showToast(msg: 'Failed to add the price function $e');
     }
   }
@@ -260,6 +279,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .deletePriceFunction(id: priceFunction.id)
           .execute();
     } catch (e) {
+      print('Failed to delete the price function: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the price function: $e');
     }
   }

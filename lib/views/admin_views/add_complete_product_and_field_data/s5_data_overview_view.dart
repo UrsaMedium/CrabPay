@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +27,8 @@ class DataOverviewView extends StatelessWidget {
         .read<AdminBloc>()
         .state
         .priceFunction;
-
+    final typeic = context.read<AdminBloc>().state.functionType!;
+    final currency = context.read<AdminBloc>().state.currency!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -60,7 +67,9 @@ class DataOverviewView extends StatelessWidget {
                           minimumSize: Size(double.infinity, 50),
                         ),
                         onPressed: () {
-                          Fluttertoast.showToast(msg: 'BOO');
+                          context.read<DatabaseBloc>().add(
+                            DatabaseEventAddProduct(product: appProduct),
+                          );
                         },
                         child: Text('Send Data'),
                       ),

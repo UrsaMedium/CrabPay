@@ -12,7 +12,7 @@ class Product {
   });
 
   factory Product.intial() => Product(
-    id: '0',
+    id: 'null',
     name: 'name',
     image: 'lib/assets/images/gas-gas-gas.jpg',
     description: 'description',
