@@ -13,9 +13,7 @@ class AskPageView extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {
-            context.read<DatabaseBloc>().add(
-              DatabaseEventFetchAllProducts(context: context),
-            );
+            context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
           },
           child: Text('fetch data'),
         ),

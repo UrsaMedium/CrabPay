@@ -4,7 +4,6 @@ import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_outer_circle/outer_database_handler.dart';
-import 'package:flutter/widgets.dart';
 
 class BindingDatabaseHandler implements InnerDatabaseHandler {
   final InnerDatabaseHandler dbHandler;
@@ -14,8 +13,7 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
       BindingDatabaseHandler(dbHandler: (OuterDatabaseHandler()));
 
   @override
-  Future<void> fetchAllProducts(BuildContext context) =>
-      dbHandler.fetchAllProducts(context);
+  Future<List<Product>?> fetchAllProducts() => dbHandler.fetchAllProducts();
 
   // Product
   @override
@@ -27,12 +25,11 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
 
   // Fields
   @override
-  Future<void> fetchProductFields(String productId, BuildContext context) =>
-      dbHandler.fetchProductFields(productId, context);
+  Future<List<ProductField>?> fetchProductFields(String productId) =>
+      dbHandler.fetchProductFields(productId);
 
   @override
-  Future<void> fetchProductField(String id, BuildContext context) =>
-      dbHandler.fetchProductField(id, context);
+  Future<void> fetchProductField(String id) => dbHandler.fetchProductField(id);
 
   @override
   Future<void> addProductField(ProductField field) =>
@@ -44,8 +41,8 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
 
   // Price Function
   @override
-  Future<void> fetchPriceFunctions(String productId, BuildContext context) =>
-      dbHandler.fetchPriceFunctions(productId, context);
+  Future<List<PriceFunction>?> fetchPriceFunctions(String productId) =>
+      dbHandler.fetchPriceFunctions(productId);
 
   @override
   Future<void> addPriceFunction(PriceFunction priceFunction) =>
@@ -57,8 +54,8 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
 
   // Currencies
   @override
-  Future<void> fetchAllCurencies(BuildContext context) =>
-      dbHandler.fetchAllCurencies(context);
+  Future<List<Currencies>?> fetchAllCurencies() =>
+      dbHandler.fetchAllCurencies();
 
   @override
   Future<void> addCurrencies(Currencies currencies) =>

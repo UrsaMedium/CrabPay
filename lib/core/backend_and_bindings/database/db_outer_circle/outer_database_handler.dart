@@ -5,14 +5,13 @@ import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class OuterDatabaseHandler implements InnerDatabaseHandler {
   // Product
   // fetch all products
   @override
-  Future<void> fetchAllProducts(BuildContext context) async {
+  Future<List<Product>?> fetchAllProducts() async {
     try {
       final productFetrcher = await CrabpayConnectorConnector.instance
           .getAllProductsQuery()
@@ -29,8 +28,10 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
         );
       }
       Fluttertoast.showToast(msg: 'Suck sus');
+      return fetchedProducts;
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch: $e');
+      return null;
     }
   }
 
@@ -63,17 +64,14 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // Fields
   // fetch a field
   @override
-  Future<void> fetchProductField(String id, BuildContext context) async {
+  Future<void> fetchProductField(String id) async {
     // TODO: implement fetchProductFields
     throw UnimplementedError();
   }
 
   // fetch product fields
   @override
-  Future<void> fetchProductFields(
-    String productId,
-    BuildContext context,
-  ) async {
+  Future<List<ProductField>?> fetchProductFields(String productId) async {
     try {
       final fetchedFields = await CrabpayConnectorConnector.instance
           .getProductFieldsQuery(productId: productId)
@@ -86,9 +84,9 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
         final expectedData = each.expectedData == []
             ? null
             : each.expectedData?.toList();
-        print(
-          '    ${each.id}, $productId,  ${each.order},  ${each.fieldName},  ${each.handler}, $attributes, $expectedData',
-        );
+        // print(
+        //   '    ${each.id}, $productId,  ${each.order},  ${each.fieldName},  ${each.handler}, $attributes, $expectedData',
+        // );
         processedFetchedFields.add(
           ProductField(
             id: each.id,
@@ -101,8 +99,10 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           ),
         );
       }
+      return processedFetchedFields;
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch fields: $e');
+      return null;
     }
   }
 
@@ -148,7 +148,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // Currencies
   // fetch all currencies
   @override
-  Future<void> fetchAllCurencies(BuildContext context) async {
+  Future<List<Currencies>?> fetchAllCurencies() async {
     List<Currencies> processedFetchedAllCurrencies = [];
     try {
       final fetchedAllCurrencies = await CrabpayConnectorConnector.instance
@@ -165,8 +165,10 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           ),
         );
       }
+      return processedFetchedAllCurrencies;
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to fetch all currencies: $e');
+      return null;
     }
   }
 
@@ -202,10 +204,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // Price Function
   // fetch product price functions
   @override
-  Future<void> fetchPriceFunctions(
-    String productId,
-    BuildContext context,
-  ) async {
+  Future<List<PriceFunction>?> fetchPriceFunctions(String productId) async {
     List<PriceFunction> processedFetchedProductPriceFunctions = [];
     try {
       final fetchedProductPriceFunctions = await CrabpayConnectorConnector
@@ -228,10 +227,12 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           ),
         );
       }
+      return processedFetchedProductPriceFunctions;
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'Failed to fetch product price functions: $e',
       );
+      return null;
     }
   }
 

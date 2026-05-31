@@ -22,8 +22,14 @@ class AdminEventSubmitsFields extends AdminEvent {
 }
 
 class AdminEventSubmitsPriceDimensions extends AdminEvent {
+  final String? functionType;
+  final String? currency;
   final Map<ProductField, String>? priceDimensions;
-  const AdminEventSubmitsPriceDimensions({required this.priceDimensions});
+  const AdminEventSubmitsPriceDimensions({
+    required this.priceDimensions,
+    required this.functionType,
+    required this.currency,
+  });
 }
 
 class AdminEventEntersSpaceFillingView extends AdminEvent {

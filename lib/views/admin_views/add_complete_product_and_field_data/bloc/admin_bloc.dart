@@ -29,6 +29,8 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       emit(
         state.copyWith(
           priceDimensions: event.priceDimensions,
+          functionType: event.functionType,
+          currency: event.currency,
           states: AdminStates.adminSubmitedPriceDimensions,
         ),
       );

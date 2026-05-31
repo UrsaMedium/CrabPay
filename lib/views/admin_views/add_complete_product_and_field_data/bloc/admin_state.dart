@@ -9,7 +9,7 @@ enum AdminStates {
   adminSubmitedAppProductFields,
   adminSubmitedPriceDimensions,
   adminSubmitedPriceFunctions,
-  dataForSpaceFillingIsReady
+  dataForSpaceFillingIsReady,
 }
 
 @immutable
@@ -17,12 +17,16 @@ class AdminState {
   final Product? appProduct;
   final List<ProductField>? appProductFields;
   final Map<ProductField, String>? priceDimensions;
+  final String? functionType;
+  final String? currency;
   final Map<List<String>, double>? priceFunction;
   final DataAndWidgetsPreperation? dataAndWidgetsPreperation;
   final AdminStates states;
 
   const AdminState({
     this.priceDimensions,
+    this.functionType,
+    this.currency,
     this.appProduct,
     this.appProductFields,
     this.priceFunction,
@@ -34,6 +38,8 @@ class AdminState {
     Product? appProduct,
     List<ProductField>? appProductFields,
     Map<ProductField, String>? priceDimensions,
+    String? functionType,
+    String? currency,
     Map<List<String>, double>? priceFunction,
     DataAndWidgetsPreperation? dataAndWidgetsPreperation,
     AdminStates? states,
@@ -42,6 +48,8 @@ class AdminState {
       appProduct: appProduct ?? this.appProduct,
       appProductFields: appProductFields ?? this.appProductFields,
       priceDimensions: priceDimensions ?? this.priceDimensions,
+      functionType: functionType ?? this.functionType,
+      currency: currency ?? this.currency,
       priceFunction: priceFunction ?? this.priceFunction,
       dataAndWidgetsPreperation:
           dataAndWidgetsPreperation ?? this.dataAndWidgetsPreperation,

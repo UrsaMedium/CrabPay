@@ -10,15 +10,7 @@ abstract class DatabaseEvent {
 }
 
 // fetch all Poducts and theirs Fields
-class DatabaseEventFetchAllProducts implements DatabaseEvent {
-  final BuildContext context;
-  DatabaseEventFetchAllProducts({required this.context});
-}
-
-class DatabaseEventFetchAllProductsDONE implements DatabaseEvent {
-  final List<Product> products;
-  DatabaseEventFetchAllProductsDONE({required this.products});
-}
+class DatabaseEventFetchAllProducts implements DatabaseEvent {}
 
 // Product events
 // add Product
@@ -36,30 +28,14 @@ class DatabaseEventDeleteProduct implements DatabaseEvent {
 // Fields events
 // fetch Product Fields
 class DatabaseEventFetchProductFields implements DatabaseEvent {
-  final BuildContext context;
   final String productId;
-  DatabaseEventFetchProductFields({
-    required this.productId,
-    required this.context,
-  });
-}
-
-class DatabaseEventFetchProductFieldsDONE implements DatabaseEvent {
-  DatabaseEventFetchProductFieldsDONE();
+  DatabaseEventFetchProductFields({required this.productId});
 }
 
 // fetch Product Field
 class DatabaseEventFetchProductField implements DatabaseEvent {
-  final BuildContext context;
   final String productFieldId;
-  DatabaseEventFetchProductField({
-    required this.productFieldId,
-    required this.context,
-  });
-}
-
-class DatabaseEventFetchProductFieldDONE implements DatabaseEvent {
-  DatabaseEventFetchProductFieldDONE();
+  DatabaseEventFetchProductField({required this.productFieldId});
 }
 
 // add Product Field
@@ -77,16 +53,8 @@ class DatabaseEventDeleteProductField implements DatabaseEvent {
 // Price Function events
 // fetch Price Function
 class DatabaseEventFetchPriceFunctions implements DatabaseEvent {
-  final BuildContext context;
   final String productId;
-  DatabaseEventFetchPriceFunctions({
-    required this.productId,
-    required this.context,
-  });
-}
-
-class DatabaseEventFetchPriceFunctionsDONE implements DatabaseEvent {
-  DatabaseEventFetchPriceFunctionsDONE();
+  DatabaseEventFetchPriceFunctions({required this.productId});
 }
 
 // add Price Function
@@ -103,14 +71,7 @@ class DatabaseEventDeletePriceFunction implements DatabaseEvent {
 
 // Currencies events
 // fetch All Currencies
-class DatabaseEventFetchAllCurrencies implements DatabaseEvent {
-  final BuildContext context;
-  DatabaseEventFetchAllCurrencies({required this.context});
-}
-
-class DatabaseEventFetchAllCurrenciesDONE implements DatabaseEvent {
-  DatabaseEventFetchAllCurrenciesDONE();
-}
+class DatabaseEventFetchAllCurrencies implements DatabaseEvent {}
 
 // add Currencies
 class DatabaseEventAddCurrencies implements DatabaseEvent {

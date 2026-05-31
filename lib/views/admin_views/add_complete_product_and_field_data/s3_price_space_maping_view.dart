@@ -15,6 +15,10 @@ class PriceSpaceMapingView extends StatefulWidget {
 }
 
 class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
+  String? _functionType;
+  final TextEditingController _functionTypeController = TextEditingController();
+  String? _currency;
+  final TextEditingController _currencyController = TextEditingController();
   late final List<ProductField>? _appPoductFields;
   List<Widget> _fieldsWithOptions = [];
   final Map<ProductField, bool> _priceDomainDimensionFields = {};
@@ -33,6 +37,13 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
       context.pop();
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _functionTypeController.dispose();
+    _currencyController.dispose();
+    super.dispose();
   }
 
   void reset() {
@@ -184,6 +195,57 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
           mainAxisAlignment: .center,
           children: [
             Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+              child: DropdownMenu<String>(
+                expandedInsets: EdgeInsets.zero,
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      color: context.appColorScheme.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                onSelected: (value) => _functionType = value!,
+                controller: _functionTypeController,
+                dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                  DropdownMenuEntry(
+                    value: 'constant',
+                    label: 'Constant function',
+                  ),
+                  DropdownMenuEntry(value: 'linear', label: 'Linear function'),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+              child: DropdownMenu<String>(
+                expandedInsets: EdgeInsets.zero,
+                inputDecorationTheme: InputDecorationTheme(
+                  filled: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      color: context.appColorScheme.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                onSelected: (value) => _currency = value!,
+                controller: _currencyController,
+                dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                  DropdownMenuEntry(
+                    value: 'constant',
+                    label: 'Constant function',
+                  ),
+                  DropdownMenuEntry(value: 'linear', label: 'Linear function'),
+                  DropdownMenuEntry(value: 'both', label: 'Both functions'),
+                ],
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
               child: Wrap(
                 spacing: 8,
@@ -228,10 +290,64 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Map<ProductField, String> priceSpcaeToSend = {};
-                        if (_priceRangeField != null) {
+                        bool gateKeeper = true;
+                        if (_functionType == null) {
+                          Fluttertoast.showToast(
+                            msg:
+                                'Please, choose a type of the product function',
+                          );
+                          gateKeeper = false;
+                        } else {
+                          if (_currency == null) {
+                            Fluttertoast.showToast(
+                              msg:
+                                  'Please, choose what currency will be applied to the product',
+                            );
+                            gateKeeper = false;
+                          } else {
+                            if (_priceRangeField == null) {
+                              Fluttertoast.showToast(
+                                msg: 'Please, choose a range field',
+                              );
+                              gateKeeper = false;
+                            } else {
+                              if (_functionType == 'linear' &&
+                                  _appPoductFields.any(
+                                    (element) =>
+                                        element.fieldName ==
+                                            _priceRangeField!.fieldName &&
+                                        element.expectedData!.first !=
+                                            'User Custom Input',
+                                  )) {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      'Linear function MUST have User Custom Input field as the range',
+                                );
+                                gateKeeper = false;
+                              }
+                              if (_functionType == 'constant' &&
+                                  _appPoductFields.any(
+                                    (element) =>
+                                        element.fieldName ==
+                                            _priceRangeField!.fieldName &&
+                                        element.expectedData!.first ==
+                                            'User Custom Input',
+                                  )) {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      'Constant function CANNOT have User Custom Input field as the range',
+                                );
+                                gateKeeper = false;
+                              }
+                            }
+                          }
+                        }
+
+                        if (gateKeeper) {
+                          Map<ProductField, String> priceSpcaeToSend = {};
                           priceSpcaeToSend[_priceRangeField!] = 'range';
                           _priceDomainDimensionFields.remove(_priceRangeField);
+
                           for (var field in _priceDomainDimensionFields.keys) {
                             if (_priceDomainDimensionFields[field]!) {
                               priceSpcaeToSend[field] = 'domain';
@@ -240,8 +356,11 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                           context.read<AdminBloc>().add(
                             AdminEventSubmitsPriceDimensions(
                               priceDimensions: priceSpcaeToSend,
+                              functionType: _functionType,
+                              currency: _currency,
                             ),
                           );
+                          // dispose();
                           context.go(
                             '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view/price_space_fill_view',
                           );

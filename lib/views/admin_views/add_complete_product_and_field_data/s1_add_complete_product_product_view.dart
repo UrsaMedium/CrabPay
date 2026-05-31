@@ -25,7 +25,6 @@ class _AddCompleteProductProductViewState
   String? _description;
   String? _imageUrl;
   String? _productNameUI;
-  String? _productNameAdmin;
   final TextEditingController _descriptionController = TextEditingController();
   void _refreshOnDescription(String value) {
     setState(() {
@@ -100,24 +99,6 @@ class _AddCompleteProductProductViewState
                   },
                   child: Text(
                     'Product Name: $_productNameUI',
-                    style: TextStyle(
-                      backgroundColor: context.appColorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: TextButton(
-                  onPressed: () async {
-                    _productNameAdmin = await showOnInputDialog(
-                      context,
-                      'Admin Product Name',
-                    );
-                    setState(() {});
-                  },
-                  child: Text(
-                    'Admin Product Name: $_productNameAdmin',
                     style: TextStyle(
                       backgroundColor: context.appColorScheme.onPrimary,
                     ),
