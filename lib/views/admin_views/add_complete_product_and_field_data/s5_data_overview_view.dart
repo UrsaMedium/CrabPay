@@ -1,16 +1,10 @@
-import 'dart:io';
-
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class DataOverviewView extends StatelessWidget {
@@ -27,8 +21,6 @@ class DataOverviewView extends StatelessWidget {
         .read<AdminBloc>()
         .state
         .priceFunction;
-    final typeic = context.read<AdminBloc>().state.functionType!;
-    final currency = context.read<AdminBloc>().state.currency!;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -67,8 +59,8 @@ class DataOverviewView extends StatelessWidget {
                           minimumSize: Size(double.infinity, 50),
                         ),
                         onPressed: () {
-                          context.read<DatabaseBloc>().add(
-                            DatabaseEventAddProduct(product: appProduct),
+                          context.read<AdminBloc>().add(
+                            AdminEventPushesData(context: context),
                           );
                         },
                         child: Text('Send Data'),

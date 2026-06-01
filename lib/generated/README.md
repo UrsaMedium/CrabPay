@@ -215,7 +215,28 @@ CrabpayConnectorConnector.instance.addProduct(
 ).execute();
 ```
 
+#### Optional Arguments
+We return a builder for each query. For AddProduct, we created `AddProductBuilder`. For queries and mutations with optional parameters, we return a builder class.
+The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
+```dart
+class AddProductVariablesBuilder {
+  ...
+ 
+  AddProductVariablesBuilder id(String? t) {
+   _id.value = t;
+   return this;
+  }
 
+  ...
+}
+CrabpayConnectorConnector.instance.addProduct(
+  description: description,
+  imageUrl: imageUrl,
+  name: name,
+)
+.id(id)
+.execute();
+```
 
 #### Return Type
 `execute()` returns a `OperationResult<AddProductData, AddProductVariables>`
@@ -619,6 +640,83 @@ String id = ...;
 
 final ref = CrabpayConnectorConnector.instance.deleteCurrencies(
   id: id,
+).ref();
+ref.execute();
+```
+
+
+### AddProductBatch
+#### Required Arguments
+```dart
+String productId = ...;
+String description = ...;
+String imageUrl = ...;
+String productName = ...;
+String functionName = ...;
+String type = ...;
+AnyValue formulas = ...;
+String currency = ...;
+CrabpayConnectorConnector.instance.addProductBatch(
+  productId: productId,
+  description: description,
+  imageUrl: imageUrl,
+  productName: productName,
+  functionName: functionName,
+  type: type,
+  formulas: formulas,
+  currency: currency,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<AddProductBatchData, AddProductBatchVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.addProductBatch(
+  productId: productId,
+  description: description,
+  imageUrl: imageUrl,
+  productName: productName,
+  functionName: functionName,
+  type: type,
+  formulas: formulas,
+  currency: currency,
+);
+AddProductBatchData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String productId = ...;
+String description = ...;
+String imageUrl = ...;
+String productName = ...;
+String functionName = ...;
+String type = ...;
+AnyValue formulas = ...;
+String currency = ...;
+
+final ref = CrabpayConnectorConnector.instance.addProductBatch(
+  productId: productId,
+  description: description,
+  imageUrl: imageUrl,
+  productName: productName,
+  functionName: functionName,
+  type: type,
+  formulas: formulas,
+  currency: currency,
 ).ref();
 ref.execute();
 ```

@@ -45,3 +45,8 @@ class AdminEventSubmitsPriceFunction extends AdminEvent {
   final Map<List<String>, double> priceFunction;
   const AdminEventSubmitsPriceFunction({required this.priceFunction});
 }
+
+class AdminEventPushesData extends AdminEvent {
+  final BuildContext context;
+  const AdminEventPushesData({required this.context});
+}

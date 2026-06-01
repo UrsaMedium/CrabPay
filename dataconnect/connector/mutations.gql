@@ -1,7 +1,16 @@
-mutation AddProduct($description: String!, $imageUrl: String!, $name: String!)
-@auth(level: PUBLIC) {
+mutation AddProduct(
+  $id: UUID
+  $description: String!
+  $imageUrl: String!
+  $name: String!
+) @auth(level: PUBLIC) {
   product_insert(
-    data: { description: $description, imageUrl: $imageUrl, name: $name }
+    data: {
+      id: $id
+      description: $description
+      imageUrl: $imageUrl
+      name: $name 
+    }
   )
 }
 
@@ -68,4 +77,34 @@ mutation AddCurrencies(
 
 mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
   currencies_delete(key: { id: $id })
+}
+
+mutation AddProductBatch(
+  $productId: UUID!
+  $description: String!
+  $imageUrl: String!
+  $productName: String!
+  $functionName: String!
+  $type: String!
+  $formulas: Any!
+  $currency: String!
+) @auth(level: PUBLIC) {
+  product_insert(
+    data: {
+      id: $productId
+      name: $productName
+      description: $description
+      imageUrl: $imageUrl
+    }
+  )
+
+  priceFunction_insert(
+    data: {
+      productId: $productId
+      name: $functionName
+      type: $type
+      formulas: $formulas
+      currency: $currency
+    }
+  )
 }

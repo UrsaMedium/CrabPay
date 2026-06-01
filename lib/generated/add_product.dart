@@ -1,11 +1,17 @@
 part of 'crabpay_connector.dart';
 
 class AddProductVariablesBuilder {
+  Optional<String> _id = Optional.optional(nativeFromJson, nativeToJson);
   String description;
   String imageUrl;
   String name;
 
   final FirebaseDataConnect _dataConnect;
+  AddProductVariablesBuilder id(String? t) {
+   _id.value = t;
+   return this;
+  }
+
   AddProductVariablesBuilder(this._dataConnect, {required  this.description,required  this.imageUrl,required  this.name,});
   Deserializer<AddProductData> dataDeserializer = (dynamic json)  => AddProductData.fromJson(jsonDecode(json));
   Serializer<AddProductVariables> varsSerializer = (AddProductVariables vars) => jsonEncode(vars.toJson());
@@ -14,7 +20,7 @@ class AddProductVariablesBuilder {
   }
 
   MutationRef<AddProductData, AddProductVariables> ref() {
-    AddProductVariables vars= AddProductVariables(description: description,imageUrl: imageUrl,name: name,);
+    AddProductVariables vars= AddProductVariables(id: _id,description: description,imageUrl: imageUrl,name: name,);
     return _dataConnect.mutation("AddProduct", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -89,6 +95,7 @@ class AddProductData {
 
 @immutable
 class AddProductVariables {
+  late final Optional<String>id;
   final String description;
   final String imageUrl;
   final String name;
@@ -97,7 +104,16 @@ class AddProductVariables {
   
   description = nativeFromJson<String>(json['description']),
   imageUrl = nativeFromJson<String>(json['imageUrl']),
-  name = nativeFromJson<String>(json['name']);
+  name = nativeFromJson<String>(json['name']) {
+  
+  
+    id = Optional.optional(nativeFromJson, nativeToJson);
+    id.value = json['id'] == null ? null : nativeFromJson<String>(json['id']);
+  
+  
+  
+  
+  }
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -108,17 +124,21 @@ class AddProductVariables {
     }
 
     final AddProductVariables otherTyped = other as AddProductVariables;
-    return description == otherTyped.description && 
+    return id == otherTyped.id && 
+    description == otherTyped.description && 
     imageUrl == otherTyped.imageUrl && 
     name == otherTyped.name;
     
   }
   @override
-  int get hashCode => Object.hashAll([description.hashCode, imageUrl.hashCode, name.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, description.hashCode, imageUrl.hashCode, name.hashCode]);
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
+    if(id.state == OptionalState.set) {
+      json['id'] = id.toJson();
+    }
     json['description'] = nativeToJson<String>(description);
     json['imageUrl'] = nativeToJson<String>(imageUrl);
     json['name'] = nativeToJson<String>(name);
@@ -126,6 +146,7 @@ class AddProductVariables {
   }
 
   AddProductVariables({
+    required this.id,
     required this.description,
     required this.imageUrl,
     required this.name,

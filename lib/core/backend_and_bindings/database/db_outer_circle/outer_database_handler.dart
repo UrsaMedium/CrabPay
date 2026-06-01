@@ -46,6 +46,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             imageUrl: product.image,
             name: product.name,
           )
+          .id(product.id == '' ? null : product.id)
           .execute();
     } catch (e) {
       print('Failed to add the product: $e');

@@ -19,6 +19,8 @@ part 'add_currencies.dart';
 
 part 'delete_currencies.dart';
 
+part 'add_product_batch.dart';
+
 part 'get_all_products_query.dart';
 
 part 'get_product_fields_query.dart';
@@ -73,6 +75,11 @@ class CrabpayConnectorConnector {
   
   DeleteCurrenciesVariablesBuilder deleteCurrencies ({required String id, }) {
     return DeleteCurrenciesVariablesBuilder(dataConnect, id: id,);
+  }
+  
+  
+  AddProductBatchVariablesBuilder addProductBatch ({required String productId, required String description, required String imageUrl, required String productName, required String functionName, required String type, required dynamic formulas, required String currency, }) {
+    return AddProductBatchVariablesBuilder(dataConnect, productId: productId,description: description,imageUrl: imageUrl,productName: productName,functionName: functionName,type: type,formulas: formulas,currency: currency,);
   }
   
   

@@ -166,7 +166,7 @@ class _AddCompleteProductProductViewState
                     onPressed: () {
                       Product? collectedAppProduct = Product(
                         id: '0',
-                        name: 'Mock Name2',
+                        name: 'Mock Name4',
                         image: 'lib/assets/images/gas-gas-gas.jpg',
                         description: 'Mock description',
                       );
