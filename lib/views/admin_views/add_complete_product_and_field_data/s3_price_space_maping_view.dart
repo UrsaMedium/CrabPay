@@ -198,6 +198,47 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
         child: Column(
           mainAxisAlignment: .center,
           children: [
+            //currencies  dropdown menu
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+              child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                builder: (context, state) {
+                  bool enableCurreniesDropdownMenu = false;
+                  final List<DropdownMenuEntry<String>> currencies = [];
+                  if (state.states == DatabaseStates.currenciesFetched) {
+                    enableCurreniesDropdownMenu = true;
+                    for (var currencyTable in state.currencies!) {
+                      currencies.add(
+                        DropdownMenuEntry(
+                          value: currencyTable.name,
+                          label: 'From ${currencyTable.name}',
+                        ),
+                      );
+                    }
+                  } else {
+                    enableCurreniesDropdownMenu = false;
+                  }
+                  return DropdownMenu<String>(
+                    enabled: enableCurreniesDropdownMenu,
+                    expandedInsets: EdgeInsets.zero,
+                    inputDecorationTheme: InputDecorationTheme(
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide(
+                          color: context.appColorScheme.primary,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    onSelected: (value) => _currency = value,
+                    controller: _currencyController,
+                    dropdownMenuEntries: currencies,
+                  );
+                },
+              ),
+            ),
+            // function type dropdown menu
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
               child: DropdownMenu<String>(
@@ -223,42 +264,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
-              child: BlocBuilder<DatabaseBloc, DatabaseState>(
-                builder: (context, state) {
-                  if (state.states == DatabaseStates.currenciesFetched) {
-                    final List<DropdownMenuEntry<String>> currencies = [];
-                    for (var currencyTable in state.currencies!) {
-                      currencies.add(
-                        DropdownMenuEntry(
-                          value: currencyTable.name,
-                          label: 'From ${currencyTable.name}',
-                        ),
-                      );
-                    }
-                    return DropdownMenu<String>(
-                      expandedInsets: EdgeInsets.zero,
-                      inputDecorationTheme: InputDecorationTheme(
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(
-                            color: context.appColorScheme.primary,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      onSelected: (value) => _currency = value,
-                      controller: _currencyController,
-                      dropdownMenuEntries: currencies,
-                    );
-                  } else {
-                    return Text('Please wait: fetching the currencies');
-                  }
-                },
-              ),
-            ),
+            // range picking field
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
               child: Wrap(
@@ -268,6 +274,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                 children: _fieldsToBeChosenAsRange(),
               ),
             ),
+            // domain picking fields
             AbsorbPointer(
               absorbing: !_isRangeChosen,
               child: Opacity(
@@ -325,9 +332,8 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                               );
                               gateKeeper = false;
                             } else {
-                              if ((_functionType == 'linear' &&
-                                  _priceRangeField!.expectedData!.first !=
-                                      'User custom input')) {
+                              if (_functionType == 'linear' &&
+                                  _priceRangeField!.fieldName != 'InputField') {
                                 Fluttertoast.showToast(
                                   msg:
                                       'Linear function MUST have \'User Custom Input\' field as the range',
@@ -335,8 +341,7 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                                 gateKeeper = false;
                               }
                               if (_functionType == 'constant' &&
-                                  _priceRangeField!.expectedData!.first ==
-                                      'User custom input') {
+                                  _priceRangeField!.fieldName == 'InputField') {
                                 Fluttertoast.showToast(
                                   msg:
                                       'Constant function CANNOT have \'User Custom Input\' field as the range',

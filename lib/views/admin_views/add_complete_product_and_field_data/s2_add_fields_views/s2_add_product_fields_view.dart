@@ -212,7 +212,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                             order: 10,
                             fieldName: 'Mock field 1',
                             handler: 'InputField',
-                            expectedData: ['User Custom Input'],
+                            expectedData: ['User custom input'],
                           ),
                           ProductField(
                             id: 'id2',

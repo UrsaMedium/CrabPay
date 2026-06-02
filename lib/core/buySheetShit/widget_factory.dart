@@ -317,7 +317,7 @@ Widget theAppWidgetBuilder({
         collectedDataBridge: collectedDataBridge,
         context: context,
         fieldName: fieldName,
-        expectedData: expectedData ?? ['user custom input'],
+        expectedData: expectedData ?? ['User data'],
       );
     case 'RadioList': // pass map of option name : option
       return RadioConstructor(

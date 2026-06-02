@@ -12,9 +12,7 @@ class DataAndWidgetsPreperation {
   final BuildContext context;
   Map<ProductField, String>? _priceSpace;
   ProductField? _priceRangeDimension;
-  final Map<String, List<String>> _priceDomainDimensions = {
-    'currency': ['rub', 'usd'],
-  };
+  final Map<String, List<String>> _priceDomainDimensions = {};
   //for every rangeValue
   final Map<List<String>, double> priceMatrixInput = {};
   final List<Map<String, String>> _domainMatrix = [];
