@@ -87,7 +87,7 @@ mutation AddProductBatch(
   $functionName: String!
   $type: String!
   $formulas: Any!
-  $currency: String!
+  $currency: String! 
 ) @auth(level: PUBLIC) {
   product_insert(
     data: {

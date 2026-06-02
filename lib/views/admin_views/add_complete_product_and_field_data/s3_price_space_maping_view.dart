@@ -325,14 +325,9 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                               );
                               gateKeeper = false;
                             } else {
-                              if (_functionType == 'linear' &&
-                                  _appPoductFields.any(
-                                    (element) =>
-                                        element.fieldName ==
-                                            _priceRangeField!.fieldName &&
-                                        element.expectedData!.first !=
-                                            'User Custom Input',
-                                  )) {
+                              if ((_functionType == 'linear' &&
+                                  _priceRangeField!.expectedData!.first !=
+                                      'User custom input')) {
                                 Fluttertoast.showToast(
                                   msg:
                                       'Linear function MUST have \'User Custom Input\' field as the range',
@@ -340,13 +335,8 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                                 gateKeeper = false;
                               }
                               if (_functionType == 'constant' &&
-                                  _appPoductFields.any(
-                                    (element) =>
-                                        element.fieldName ==
-                                            _priceRangeField!.fieldName &&
-                                        element.expectedData!.first ==
-                                            'User Custom Input',
-                                  )) {
+                                  _priceRangeField!.expectedData!.first ==
+                                      'User custom input') {
                                 Fluttertoast.showToast(
                                   msg:
                                       'Constant function CANNOT have \'User Custom Input\' field as the range',

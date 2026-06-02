@@ -82,7 +82,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .execute();
       List<ProductField> processedFetchedFields = [];
       for (var each in fetchedFields.data.productFields) {
-        final attributes = each.attributes?.toJson() == {}
+        final attributes = each.attributes?.toJson() == null
             ? null
             : Map<String, String?>.from(each.attributes?.toJson());
         final expectedData = each.expectedData == []
@@ -107,7 +107,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to fetch fields: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch fields: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -136,6 +136,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to add the field: $e');
       Fluttertoast.showToast(msg: 'Failed to add the field: $e');
+      rethrow;
     }
   }
 
@@ -149,6 +150,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to delete the field: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the field: $e');
+      rethrow;
     }
   }
 
@@ -176,7 +178,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to fetch all currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch all currencies: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -195,6 +197,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to add the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to add the currencies: $e');
+      rethrow;
     }
   }
 
@@ -208,6 +211,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to delete the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the currencies: $e');
+      rethrow;
     }
   }
 
@@ -243,7 +247,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       Fluttertoast.showToast(
         msg: 'Failed to fetch product price functions: $e',
       );
-      return null;
+      rethrow;
     }
   }
 
@@ -270,6 +274,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
         'Failed to add the price function: $e --------------------------------------------------------------------------',
       );
       Fluttertoast.showToast(msg: 'Failed to add the price function $e');
+      rethrow;
     }
   }
 
@@ -282,6 +287,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to delete the price function: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the price function: $e');
+      rethrow;
     }
   }
 }

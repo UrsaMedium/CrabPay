@@ -130,44 +130,46 @@ class CrabPayApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
-    return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) {
-        ColorScheme lightScheme;
-        if (lightDynamic != null) {
-          lightScheme = ColorScheme.fromSeed(
-            seedColor: lightDynamic.primary,
-            brightness: Brightness.light,
-          );
-        } else {
-          lightScheme = ColorScheme.fromSeed(seedColor: Colors.red);
-        }
-
-        ColorScheme darkScheme;
-        if (darkDynamic != null) {
-          darkScheme = ColorScheme.fromSeed(
-            seedColor: darkDynamic.primary,
-            brightness: Brightness.dark,
-          );
-        } else {
-          darkScheme = ColorScheme.fromSeed(
-            seedColor: Colors.red,
-            brightness: Brightness.dark,
-          );
-        }
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'CrabPay Demo',
-          theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
-          darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-          routerConfig: _router,
-          builder: (context, child) {
-            return Overlay(
-              key: overlayKey,
-              initialEntries: [OverlayEntry(builder: (context) => child!)],
+    return SafeArea(
+      child: DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) {
+          ColorScheme lightScheme;
+          if (lightDynamic != null) {
+            lightScheme = ColorScheme.fromSeed(
+              seedColor: lightDynamic.primary,
+              brightness: Brightness.light,
             );
-          },
-        );
-      },
+          } else {
+            lightScheme = ColorScheme.fromSeed(seedColor: Colors.red);
+          }
+      
+          ColorScheme darkScheme;
+          if (darkDynamic != null) {
+            darkScheme = ColorScheme.fromSeed(
+              seedColor: darkDynamic.primary,
+              brightness: Brightness.dark,
+            );
+          } else {
+            darkScheme = ColorScheme.fromSeed(
+              seedColor: Colors.red,
+              brightness: Brightness.dark,
+            );
+          }
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'CrabPay Demo',
+            theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
+            darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+            routerConfig: _router,
+            builder: (context, child) {
+              return Overlay(
+                key: overlayKey,
+                initialEntries: [OverlayEntry(builder: (context) => child!)],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

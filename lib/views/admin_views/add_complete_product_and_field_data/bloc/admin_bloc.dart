@@ -8,6 +8,7 @@ import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bl
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_price_space_filling/data_and_widgets_preperation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
 class AdminBloc extends Bloc<AdminEvent, AdminState> {
@@ -74,37 +75,41 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         image: state.appProduct!.image,
         description: state.appProduct!.description,
       );
-      event.context.read<DatabaseBloc>().add(
-        DatabaseEventAddProduct(product: productToPush),
-      );
+      try {
+        event.context.read<DatabaseBloc>().add(
+          DatabaseEventAddProduct(product: productToPush),
+        );
 
-      for (var field in state.appProductFields!) {
-        final fieldToPush = ProductField(
+        for (var field in state.appProductFields!) {
+          final fieldToPush = ProductField(
+            id: '',
+            productId: theProductId,
+            order: field.order,
+            fieldName: field.fieldName,
+            handler: field.handler,
+            attributes: field.attributes,
+            expectedData: field.expectedData,
+          );
+          event.context.read<DatabaseBloc>().add(
+            DatabaseEventAddProductField(productField: fieldToPush),
+          );
+        }
+
+        PriceFunction function = PriceFunction(
           id: '',
+          name: '',
+          type: state.functionType!,
+          currency: state.currency!,
           productId: theProductId,
-          order: field.order,
-          fieldName: field.fieldName,
-          handler: field.handler,
-          attributes: field.attributes,
-          expectedData: field.expectedData,
+          fomulas: state.priceFunction!,
         );
         event.context.read<DatabaseBloc>().add(
-          DatabaseEventAddProductField(productField: fieldToPush),
+          DatabaseEventAddPriceFunction(priceFunction: function),
         );
+        event.context.go('/');
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'BOO');
       }
-
-      PriceFunction function = PriceFunction(
-        id: '',
-        name: '',
-        type: state.functionType!,
-        currency: state.currency!,
-        productId: theProductId,
-        fomulas: state.priceFunction!,
-      );
-      event.context.read<DatabaseBloc>().add(
-        DatabaseEventAddPriceFunction(priceFunction: function),
-      );
-      Fluttertoast.showToast(msg: 'BOO');
     });
   }
 }

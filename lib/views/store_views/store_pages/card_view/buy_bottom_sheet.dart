@@ -1,8 +1,10 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
-import 'package:crabpay/core/utilities.dart'
-    show ContextExtensions, dbCache;
+import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
@@ -43,8 +45,10 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<ProductField> properties =
-        dbCache.productFields(widget.productId) ?? [];
+    List<ProductField> properties = context
+        .read<DatabaseBloc>()
+        .state
+        .productFields!;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
