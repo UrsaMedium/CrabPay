@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
@@ -7,7 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
-  const BuyBottomSheet({super.key, required this.productId});
+  final List<ProductField> productFields;
+  final List<PriceFunction> priceFunction;
+  const BuyBottomSheet({
+    super.key,
+    required this.productId,
+    required this.productFields,
+    required this.priceFunction,
+  });
 
   @override
   State<BuyBottomSheet> createState() => _BuyBottomSheetState();
@@ -74,7 +82,9 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
               top: 12,
             ),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                print(retrievedData);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.appColorScheme.primary,
                 foregroundColor: context.appColorScheme.onPrimary,

@@ -1,3 +1,5 @@
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
@@ -14,12 +16,17 @@ class CardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<ProductField>? productFields;
+    List<PriceFunction>? priceFunction = [];
     Product? product = context.read<DatabaseBloc>().state.products?.firstWhere(
       (product) => product.id == productId,
     );
     if (product != null) {
       context.read<DatabaseBloc>().add(
         DatabaseEventFetchProductFields(productId: productId),
+      );
+      context.read<DatabaseBloc>().add(
+        DatabaseEventFetchPriceFunctions(productId: productId),
       );
     }
     return product == null
@@ -56,21 +63,43 @@ class CardView extends StatelessWidget {
                   Expanded(child: Container()),
                   ElevatedButton(
                     onPressed: () async {
-                      if (context.read<DatabaseBloc>().state.productFields !=
-                          null) {
+                      productFields = context
+                          .read<DatabaseBloc>()
+                          .state
+                          .productFields;
+                      priceFunction = context
+                          .read<DatabaseBloc>()
+                          .state
+                          .priceFunctions;
+
+                      if (productFields != null && priceFunction != null) {
                         showModalBottomSheet(
                           showDragHandle: true,
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
                             return Wrap(
-                              children: [BuyBottomSheet(productId: product.id)],
+                              children: [
+                                BuyBottomSheet(
+                                  productId: product.id,
+                                  productFields: productFields!,
+                                  priceFunction: priceFunction!,
+                                ),
+                              ],
                             );
                           },
                         );
                       } else {
                         Fluttertoast.showToast(
                           msg: 'No Fields! Something went wrong.',
+                        );
+                        context.read<DatabaseBloc>().add(
+                          DatabaseEventFetchProductFields(productId: productId),
+                        );
+                        context.read<DatabaseBloc>().add(
+                          DatabaseEventFetchPriceFunctions(
+                            productId: productId,
+                          ),
                         );
                       }
                     },

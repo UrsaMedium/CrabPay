@@ -75,7 +75,7 @@ class _AddCompleteProductProductViewState
                     Image.asset(
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: MediaQuery.of(context).size.height * 0.3,
-                      _imageUrl ?? 'lib/assets/images/gas-gas-gas.jpg',
+                      'lib/assets/images/gas-gas-gas.jpg',
                       color: context.appColorScheme.error.withAlpha(50),
                       colorBlendMode: BlendMode.dstIn,
                     ),

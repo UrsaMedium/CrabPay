@@ -333,18 +333,18 @@ class _PriceSpaceMapingViewState extends State<PriceSpaceMapingView> {
                               gateKeeper = false;
                             } else {
                               if (_functionType == 'linear' &&
-                                  _priceRangeField!.fieldName != 'InputField') {
+                                  _priceRangeField!.handler != 'InputField') {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'Linear function MUST have \'User Custom Input\' field as the range',
+                                      'Linear function MUST have \'InputField\' field as the range',
                                 );
                                 gateKeeper = false;
                               }
                               if (_functionType == 'constant' &&
-                                  _priceRangeField!.fieldName == 'InputField') {
+                                  _priceRangeField!.handler == 'InputField') {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'Constant function CANNOT have \'User Custom Input\' field as the range',
+                                      'Constant function CANNOT have \'InputField\' field as the range',
                                 );
                                 gateKeeper = false;
                               }
