@@ -227,9 +227,17 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .execute();
       for (var priceFunctions
           in fetchedProductPriceFunctions.data.priceFunctions) {
-        final formulas = Map<List<String>, double>.from(
+        final preFormulas = Map<String, int>.from(
           priceFunctions.formulas.toJson(),
         );
+        final Map<List<String>, double> formulas = {};
+        for (var formula in preFormulas.keys) {
+          final List<String> splinters = formula
+              .split(',')
+              .map((e) => e.trim())
+              .toList();
+          formulas[splinters] = preFormulas[formula]!.toDouble();
+        }
         processedFetchedProductPriceFunctions.add(
           PriceFunction(
             id: priceFunctions.id,

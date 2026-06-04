@@ -50,9 +50,14 @@ class DatabaseState {
   }) {
     return DatabaseState(
       products: products ?? this.products,
-      currencies: currencies ?? this.currencies,
-      productFields: productFields ?? this.productFields,
-      priceFunctions: priceFunctions ?? this.priceFunctions,
+      currencies:
+          currencies ?? (this.currencies == [] ? null : this.currencies),
+      productFields:
+          productFields ??
+          (this.productFields == [] ? null : this.productFields),
+      priceFunctions:
+          priceFunctions ??
+          (this.priceFunctions == [] ? null : this.priceFunctions),
       states: states ?? this.states,
       //
       recentlyAddedProduct: recentlyAddedProduct,

@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(InnerDatabaseHandler databaseHandler)
@@ -22,7 +21,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       } catch (e) {
         // Fluttertoast.showToast(msg: 'Faild to fetch products $e');
         // print('Faild to fetch products $e');
-        emit(state.copyWith(states: DatabaseStates.productsNotFetched));
+        // emit(state.copyWith(states: DatabaseStates.productsNotFetched));
         rethrow;
       }
     });
@@ -46,7 +45,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
         // print('Failed to add product $e');
-        Fluttertoast.showToast(msg: 'Failed to add product $e');
+        // Fluttertoast.showToast(msg: 'Failed to add product $e');
         rethrow;
       }
     });
@@ -56,8 +55,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteProduct(event.product);
       } catch (e) {
-        print('Failed to delete product $e');
-        Fluttertoast.showToast(msg: 'Failed to delete product $e');
+        // print('Failed to delete product $e');
+        // Fluttertoast.showToast(msg: 'Failed to delete product $e');
         rethrow;
       }
     });
@@ -76,8 +75,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
-        print('Failed to fetch product fields $e');
-        Fluttertoast.showToast(msg: 'Failed to fetch product fields $e');
+        // print('Failed to fetch product fields $e');
+        // Fluttertoast.showToast(msg: 'Failed to fetch product fields $e');
         emit(state.copyWith(states: DatabaseStates.productFieldsNotFetched));
         rethrow;
       }
@@ -93,8 +92,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addProductField(event.productField);
       } catch (e) {
-        print('Faild to add field $e');
-        Fluttertoast.showToast(msg: 'Faild to add field $e');
+        // print('Faild to add field $e');
+        // Fluttertoast.showToast(msg: 'Faild to add field $e');
         rethrow;
       }
     });
@@ -104,8 +103,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteProductField(event.productField);
       } catch (e) {
-        print('Faild to delete field $e');
-        Fluttertoast.showToast(msg: 'Faild to delete field $e');
+        // print('Faild to delete field $e');
+        // Fluttertoast.showToast(msg: 'Faild to delete field $e');
         rethrow;
       }
     });
@@ -124,8 +123,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
-        print('Failed to fetch price functions $e');
-        Fluttertoast.showToast(msg: 'Failed to fetch price functions $e');
+        // print('Failed to fetch price functions $e');
+        // Fluttertoast.showToast(msg: 'Failed to fetch price functions $e');
         emit(state.copyWith(states: DatabaseStates.priceFunctionsNotFetched));
         rethrow;
       }
@@ -135,8 +134,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addPriceFunction(event.priceFunction);
       } catch (e) {
-        print('Faild to add price function $e');
-        Fluttertoast.showToast(msg: 'Faild to add price function $e');
+        // print('Faild to add price function $e');
+        // Fluttertoast.showToast(msg: 'Faild to add price function $e');
         rethrow;
       }
     });
@@ -145,8 +144,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deletePriceFunction(event.priceFunction);
       } catch (e) {
-        print('Faild to delete price function $e');
-        Fluttertoast.showToast(msg: 'Faild to delete price function $e');
+        // print('Faild to delete price function $e');
+        // Fluttertoast.showToast(msg: 'Faild to delete price function $e');
         rethrow;
       }
     });
@@ -162,8 +161,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           ),
         );
       } catch (e) {
-        print('Failed to fetch currencies $e');
-        Fluttertoast.showToast(msg: 'Failed to fetch currencies $e');
+        // print('Failed to fetch currencies $e');
+        // Fluttertoast.showToast(msg: 'Failed to fetch currencies $e');
         emit(state.copyWith(states: DatabaseStates.currenciesNotFetched));
         rethrow;
       }
@@ -173,8 +172,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.addCurrencies(event.currencies);
       } catch (e) {
-        print('Faild to add currencies $e');
-        Fluttertoast.showToast(msg: 'Faild to add currencies $e');
+        // print('Faild to add currencies $e');
+        // Fluttertoast.showToast(msg: 'Faild to add currencies $e');
         rethrow;
       }
     });
@@ -183,8 +182,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.deleteCurrencies(event.currencies);
       } catch (e) {
-        print('Faild to delete currencies $e');
-        Fluttertoast.showToast(msg: 'Faild to delete currencies $e');
+        // print('Faild to delete currencies $e');
+        // Fluttertoast.showToast(msg: 'Faild to delete currencies $e');
         rethrow;
       }
     });

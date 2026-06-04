@@ -9,12 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
-  final List<PriceFunction> priceFunction;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
-    required this.priceFunction,
   });
 
   @override
@@ -52,6 +50,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.productFields);
     List<ProductField> properties = context
         .read<DatabaseBloc>()
         .state
