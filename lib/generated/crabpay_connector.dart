@@ -3,6 +3,14 @@ import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
+part 'get_all_products_query.dart';
+
+part 'get_product_fields_query.dart';
+
+part 'get_price_function_query.dart';
+
+part 'get_all_currencies_query.dart';
+
 part 'add_product.dart';
 
 part 'delete_product.dart';
@@ -21,14 +29,6 @@ part 'delete_currencies.dart';
 
 part 'add_product_batch.dart';
 
-part 'get_all_products_query.dart';
-
-part 'get_product_fields_query.dart';
-
-part 'get_price_function_query.dart';
-
-part 'get_all_currencies_query.dart';
-
 
 
 
@@ -36,6 +36,26 @@ part 'get_all_currencies_query.dart';
 
 
 class CrabpayConnectorConnector {
+  
+  
+  GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
+    return GetAllProductsQueryVariablesBuilder(dataConnect, );
+  }
+  
+  
+  GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
+    return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
+  }
+  
+  
+  GetPriceFunctionQueryVariablesBuilder getPriceFunctionQuery ({required String productId, }) {
+    return GetPriceFunctionQueryVariablesBuilder(dataConnect, productId: productId,);
+  }
+  
+  
+  GetAllCurrenciesQueryVariablesBuilder getAllCurrenciesQuery () {
+    return GetAllCurrenciesQueryVariablesBuilder(dataConnect, );
+  }
   
   
   AddProductVariablesBuilder addProduct ({required String description, required String imageUrl, required String name, }) {
@@ -80,26 +100,6 @@ class CrabpayConnectorConnector {
   
   AddProductBatchVariablesBuilder addProductBatch ({required String productId, required String description, required String imageUrl, required String productName, required String functionName, required String type, required dynamic formulas, required String currency, }) {
     return AddProductBatchVariablesBuilder(dataConnect, productId: productId,description: description,imageUrl: imageUrl,productName: productName,functionName: functionName,type: type,formulas: formulas,currency: currency,);
-  }
-  
-  
-  GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
-    return GetAllProductsQueryVariablesBuilder(dataConnect, );
-  }
-  
-  
-  GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
-    return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
-  }
-  
-  
-  GetPriceFunctionQueryVariablesBuilder getPriceFunctionQuery ({required String productId, }) {
-    return GetPriceFunctionQueryVariablesBuilder(dataConnect, productId: productId,);
-  }
-  
-  
-  GetAllCurrenciesQueryVariablesBuilder getAllCurrenciesQuery () {
-    return GetAllCurrenciesQueryVariablesBuilder(dataConnect, );
   }
   
 

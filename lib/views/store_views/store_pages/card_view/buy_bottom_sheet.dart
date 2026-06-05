@@ -50,7 +50,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.productFields);
     List<ProductField> properties = context
         .read<DatabaseBloc>()
         .state

@@ -40,19 +40,7 @@ class CardView extends StatelessWidget {
             ),
             body: Center(child: Text('Something went wrong')),
           )
-        : Hero(
-            tag: 'card-hero-${product.id}',
-            child: Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/buySheetShit/widget_factory.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+  }}
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
@@ -107,18 +95,85 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.6,
+ Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: TextButton(
+                  onPressed: () async {
+                    _productNameUI = await showOnInputDialog(
+                      context,
+                      'Product Name',
+                    );
+                    if (_productNameUI == '') {
+                      _productNameUI = null;
+                    } else {
+                      setState(() {});
+                    }
+                  },
+                  child: Text(
+                    'Product Name: $_productNameUI',
+                    style: TextStyle(
+                      backgroundColor: context.appColorScheme.onPrimary,
+                    ),
+                  ),
+                ),
               ),
-              child: CustomScrollView(
-                shrinkWrap: true,
-                slivers: _propertySlivers(properties),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                  vertical: 4,
+                ),
+                child: TextField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  onSubmitted: (value) {
+                    if (value.trim() == '') {
+                      _description = null;
+                    }
+                    _refreshOnDescription(value);
+                  },
+                ),
               ),
-            ),
-          ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MarkdownBody(
+                  selectable: true,
+                  data: '$_description',
+                  builders: {'latex': LatexElementBuilder()},
+                  extensionSet: md.ExtensionSet(
+                    [LatexBlockSyntax()],
+                    [LatexInlineSyntax()],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: .end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (GoRouter.of(context).canPop()) {
+                        context.pop();
+                      }
+                    },
+                    child: Text('Back'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Product? collectedAppProduct = _collectProduct();
+                      if (collectedAppProduct != null) {
+                        context.read<AdminBloc>().add(
+                          AdminEventSubmitsProduct(
+                            appProduct: collectedAppProduct,
+                          ),
+                        );
+                        context.go(
+                          '/add_complete_product_product_view/add_product_fields_view',
+                        );
+                      } else {
+                        Fluttertoast.showToast(msg: 'Not enough data');
+                      }
+                    },
+                    child: Text('Next'),
+                  ),
           Padding(
             padding: const EdgeInsets.only(
               left: 16,
@@ -147,55 +202,3 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   }
 }
 
-                  onPressed: () {
-                    if (GoRouter.of(context).canPop()) {
-                      context.pop();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
-              ),
-              body: Column(
-                children: [
-                  Image.network(product.image),
-                  Text(product.name),
-                  Expanded(child: Container()),
-                  ElevatedButton(
-                    onPressed: () async {
-                      productFields = context
-                          .read<DatabaseBloc>()
-                          .state
-                          .productFields;
-                      priceFunction = context
-                          .read<DatabaseBloc>()
-                          .state
-                          .priceFunctions;
-
-                      if (productFields != null && priceFunction != null) {
-                        showModalBottomSheet(
-                          showDragHandle: true,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (BuildContext context) {
-                            return Wrap(
-                              children: [
-                                BuyBottomSheet(
-                                  productId: product.id,
-                                  productFields: productFields!,
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                       
-                      }
-                    },
-                    child: Text("Buy"),
-                  ),
-                ],
-              ),
-            ),
-          );
-  }
-}
