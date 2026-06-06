@@ -17,7 +17,7 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ProductField>? productFields;
-    List<PriceFunction>? priceFunction;
+    List<PriceFunction>? priceFunctions;
     Product? product = context.read<DatabaseBloc>().state.products?.firstWhere(
       (product) => product.id == productId,
     );
@@ -65,12 +65,12 @@ class CardView extends StatelessWidget {
                           .read<DatabaseBloc>()
                           .state
                           .productFields;
-                      priceFunction = context
+                      priceFunctions = context
                           .read<DatabaseBloc>()
                           .state
                           .priceFunctions;
 
-                      if (productFields != null && priceFunction != null) {
+                      if (productFields != null && priceFunctions != null) {
                         showModalBottomSheet(
                           showDragHandle: true,
                           context: context,
@@ -81,6 +81,7 @@ class CardView extends StatelessWidget {
                                 BuyBottomSheet(
                                   productId: product.id,
                                   productFields: productFields!,
+                                  priceFunctions: priceFunctions!,
                                 ),
                               ],
                             );
@@ -91,11 +92,11 @@ class CardView extends StatelessWidget {
                             .read<DatabaseBloc>()
                             .state
                             .productFields;
-                        priceFunction = context
+                        priceFunctions = context
                             .read<DatabaseBloc>()
                             .state
                             .priceFunctions;
-                        if (productFields == null || priceFunction == null) {
+                        if (productFields == null || priceFunctions == null) {
                           Fluttertoast.showToast(
                             msg: 'No Fields! Something went wrong.',
                           );

@@ -9,10 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
+  final List<PriceFunction> priceFunctions;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
+    required this.priceFunctions,
   });
 
   @override
@@ -21,10 +23,12 @@ class BuyBottomSheet extends StatefulWidget {
 
 class _BuyBottomSheetState extends State<BuyBottomSheet> {
   Map<String, String> retrievedData = {};
+  double precalculatedPrice = 0;
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
       retrievedData[fieldName] = dataReceived;
+      precalculatedPrice = double.parse(retrievedData.values.first);
     });
   }
 
@@ -79,19 +83,48 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
               bottom: 32,
               top: 12,
             ),
-            child: ElevatedButton(
-              onPressed: () {
-                print(retrievedData);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: context.appColorScheme.primary,
-                foregroundColor: context.appColorScheme.onPrimary,
-                minimumSize: Size(double.infinity, 50),
-              ),
-              child: Text(
-                'Add To Cart',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Container(
+                    height: 50,
+                    alignment: .center,
+                    padding: .only(left: 16, right: 20),
+                    decoration: BoxDecoration(
+                      color: context.appColorScheme.onPrimary,
+                      borderRadius: BorderRadius.circular(30),
+                      border: BoxBorder.all(
+                        color: context.appColorScheme.outline,
+                      ),
+                    ),
+                    child: Text(
+                      '\$$precalculatedPrice',
+                      style: TextStyle(color: context.appColorScheme.primary),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: context.appColorScheme.primary,
+                      foregroundColor: context.appColorScheme.onPrimary,
+                      minimumSize: Size(double.maxFinite, 50),
+                    ),
+
+                    child: Text(
+                      'Add To Cart',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
