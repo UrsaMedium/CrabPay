@@ -56,7 +56,7 @@ class CardView extends StatelessWidget {
               ),
               body: Column(
                 children: [
-                  Image.network(product.image),
+                  Image.network('http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}'),
                   Text(product.name),
                   Expanded(child: Container()),
                   ElevatedButton(

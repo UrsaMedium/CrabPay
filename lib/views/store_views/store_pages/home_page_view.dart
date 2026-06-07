@@ -60,7 +60,34 @@ class _HomePageViewState extends State<HomePageView> {
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
-                  Image.network(product.image, fit: .cover),
+                  Image.network(
+                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                    width: double.infinity,
+                    height: 200,
+                    fit: .cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: context.appColorScheme.onInverseSurface,
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.broken_image,
+                        color: context.appColorScheme.inversePrimary,
+                        size: 48,
+                      ),
+                    ),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: context.appColorScheme.inversePrimary,
+                        alignment: .center,
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
