@@ -446,13 +446,13 @@ ref.execute();
 #### Required Arguments
 ```dart
 String productId = ...;
-String name = ...;
+String functionImageField = ...;
 String type = ...;
 AnyValue formulas = ...;
 String currency = ...;
 CrabpayConnectorConnector.instance.addPriceFunction(
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,
@@ -474,7 +474,7 @@ class OperationResult<Data, Variables> {
 
 final result = await CrabpayConnectorConnector.instance.addPriceFunction(
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,
@@ -488,14 +488,14 @@ Each builder returns an `execute` function, which is a helper function that crea
 An example of how to use the `Ref` object is shown below:
 ```dart
 String productId = ...;
-String name = ...;
+String functionImageField = ...;
 String type = ...;
 AnyValue formulas = ...;
 String currency = ...;
 
 final ref = CrabpayConnectorConnector.instance.addPriceFunction(
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,
@@ -640,83 +640,6 @@ String id = ...;
 
 final ref = CrabpayConnectorConnector.instance.deleteCurrencies(
   id: id,
-).ref();
-ref.execute();
-```
-
-
-### AddProductBatch
-#### Required Arguments
-```dart
-String productId = ...;
-String description = ...;
-String imageUrl = ...;
-String productName = ...;
-String functionName = ...;
-String type = ...;
-AnyValue formulas = ...;
-String currency = ...;
-CrabpayConnectorConnector.instance.addProductBatch(
-  productId: productId,
-  description: description,
-  imageUrl: imageUrl,
-  productName: productName,
-  functionName: functionName,
-  type: type,
-  formulas: formulas,
-  currency: currency,
-).execute();
-```
-
-
-
-#### Return Type
-`execute()` returns a `OperationResult<AddProductBatchData, AddProductBatchVariables>`
-```dart
-/// Result of an Operation Request (query/mutation).
-class OperationResult<Data, Variables> {
-  OperationResult(this.dataConnect, this.data, this.ref);
-  Data data;
-  OperationRef<Data, Variables> ref;
-  FirebaseDataConnect dataConnect;
-}
-
-final result = await CrabpayConnectorConnector.instance.addProductBatch(
-  productId: productId,
-  description: description,
-  imageUrl: imageUrl,
-  productName: productName,
-  functionName: functionName,
-  type: type,
-  formulas: formulas,
-  currency: currency,
-);
-AddProductBatchData data = result.data;
-final ref = result.ref;
-```
-
-#### Getting the Ref
-Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
-An example of how to use the `Ref` object is shown below:
-```dart
-String productId = ...;
-String description = ...;
-String imageUrl = ...;
-String productName = ...;
-String functionName = ...;
-String type = ...;
-AnyValue formulas = ...;
-String currency = ...;
-
-final ref = CrabpayConnectorConnector.instance.addProductBatch(
-  productId: productId,
-  description: description,
-  imageUrl: imageUrl,
-  productName: productName,
-  functionName: functionName,
-  type: type,
-  formulas: formulas,
-  currency: currency,
 ).ref();
 ref.execute();
 ```
@@ -935,14 +858,14 @@ ref.execute();
 ```dart
 String id = ...;
 String productId = ...;
-String name = ...;
+String functionImageField = ...;
 String type = ...;
 AnyValue formulas = ...;
 String currency = ...;
 CrabpayConnectorConnector.instance.priceFunctionUpdate(
   id: id,
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,
@@ -965,7 +888,7 @@ class OperationResult<Data, Variables> {
 final result = await CrabpayConnectorConnector.instance.priceFunctionUpdate(
   id: id,
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,
@@ -980,7 +903,7 @@ An example of how to use the `Ref` object is shown below:
 ```dart
 String id = ...;
 String productId = ...;
-String name = ...;
+String functionImageField = ...;
 String type = ...;
 AnyValue formulas = ...;
 String currency = ...;
@@ -988,7 +911,7 @@ String currency = ...;
 final ref = CrabpayConnectorConnector.instance.priceFunctionUpdate(
   id: id,
   productId: productId,
-  name: name,
+  functionImageField: functionImageField,
   type: type,
   formulas: formulas,
   currency: currency,

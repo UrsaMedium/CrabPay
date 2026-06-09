@@ -9,8 +9,8 @@ CrabpayConnectorConnector.instance.AddPriceFunction(addPriceFunctionVariables).e
 CrabpayConnectorConnector.instance.DeletePriceFunction(deletePriceFunctionVariables).execute();
 CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
-CrabpayConnectorConnector.instance.AddProductBatch(addProductBatchVariables).execute();
 CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
+CrabpayConnectorConnector.instance.productFieldUpdate(productFieldUpdateVariables).execute();
 
 ```
 

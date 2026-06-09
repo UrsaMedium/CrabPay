@@ -350,13 +350,13 @@ input PriceFunction_Data {
   """
   formulas_expr: Any_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `PriceFunction`.`name` of type `String!`
+  ✨ Generated from Field `PriceFunction`.`functionImageField` of type `String!`
   """
-  name: String
+  functionImageField: String
   """
-  ✨ `_expr` server value variant of `name` (✨ Generated from Field `PriceFunction`.`name` of type `String!`)
+  ✨ `_expr` server value variant of `functionImageField` (✨ Generated from Field `PriceFunction`.`functionImageField` of type `String!`)
   """
-  name_expr: String_Expr @fdc_forbiddenInVariables
+  functionImageField_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `PriceFunction`.`type` of type `String!`
   """
@@ -403,9 +403,9 @@ input PriceFunction_Filter {
   """
   formulas: Any_Filter
   """
-  ✨ Generated from Field `PriceFunction`.`name` of type `String!`
+  ✨ Generated from Field `PriceFunction`.`functionImageField` of type `String!`
   """
-  name: String_Filter
+  functionImageField: String_Filter
   """
   ✨ Generated from Field `PriceFunction`.`type` of type `String!`
   """
@@ -457,13 +457,13 @@ input PriceFunction_Having {
   """
   formulas_count: Int_Filter
   """
+  ✨ Generated from Field `PriceFunction`.`functionImageField_count` of type `Int!`
+  """
+  functionImageField_count: Int_Filter
+  """
   ✨ Generated from Field `PriceFunction`.`id_count` of type `Int!`
   """
   id_count: Int_Filter
-  """
-  ✨ Generated from Field `PriceFunction`.`name_count` of type `Int!`
-  """
-  name_count: Int_Filter
   """
   ✨ Generated from Field `PriceFunction`.`productId_count` of type `Int!`
   """
@@ -532,9 +532,9 @@ input PriceFunction_Order {
   """
   formulas: OrderDirection
   """
-  ✨ Generated from Field `PriceFunction`.`name` of type `String!`
+  ✨ Generated from Field `PriceFunction`.`functionImageField` of type `String!`
   """
-  name: OrderDirection
+  functionImageField: OrderDirection
   """
   ✨ Generated from Field `PriceFunction`.`type` of type `String!`
   """
@@ -552,13 +552,13 @@ input PriceFunction_Order {
   """
   formulas_count: OrderDirection
   """
+  ✨ Generated from Field `PriceFunction`.`functionImageField_count` of type `Int!`
+  """
+  functionImageField_count: OrderDirection
+  """
   ✨ Generated from Field `PriceFunction`.`id_count` of type `Int!`
   """
   id_count: OrderDirection
-  """
-  ✨ Generated from Field `PriceFunction`.`name_count` of type `Int!`
-  """
-  name_count: OrderDirection
   """
   ✨ Generated from Field `PriceFunction`.`productId_count` of type `Int!`
   """

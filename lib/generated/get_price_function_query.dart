@@ -21,7 +21,7 @@ class GetPriceFunctionQueryVariablesBuilder {
 class GetPriceFunctionQueryPriceFunctions {
   final String productId;
   final String id;
-  final String name;
+  final String functionImageField;
   final String type;
   final AnyValue formulas;
   final String currency;
@@ -29,7 +29,7 @@ class GetPriceFunctionQueryPriceFunctions {
   
   productId = nativeFromJson<String>(json['productId']),
   id = nativeFromJson<String>(json['id']),
-  name = nativeFromJson<String>(json['name']),
+  functionImageField = nativeFromJson<String>(json['functionImageField']),
   type = nativeFromJson<String>(json['type']),
   formulas = AnyValue.fromJson(json['formulas']),
   currency = nativeFromJson<String>(json['currency']);
@@ -45,21 +45,21 @@ class GetPriceFunctionQueryPriceFunctions {
     final GetPriceFunctionQueryPriceFunctions otherTyped = other as GetPriceFunctionQueryPriceFunctions;
     return productId == otherTyped.productId && 
     id == otherTyped.id && 
-    name == otherTyped.name && 
+    functionImageField == otherTyped.functionImageField && 
     type == otherTyped.type && 
     formulas == otherTyped.formulas && 
     currency == otherTyped.currency;
     
   }
   @override
-  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, name.hashCode, type.hashCode, formulas.hashCode, currency.hashCode]);
+  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, functionImageField.hashCode, type.hashCode, formulas.hashCode, currency.hashCode]);
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['productId'] = nativeToJson<String>(productId);
     json['id'] = nativeToJson<String>(id);
-    json['name'] = nativeToJson<String>(name);
+    json['functionImageField'] = nativeToJson<String>(functionImageField);
     json['type'] = nativeToJson<String>(type);
     json['formulas'] = formulas.toJson();
     json['currency'] = nativeToJson<String>(currency);
@@ -69,7 +69,7 @@ class GetPriceFunctionQueryPriceFunctions {
   GetPriceFunctionQueryPriceFunctions({
     required this.productId,
     required this.id,
-    required this.name,
+    required this.functionImageField,
     required this.type,
     required this.formulas,
     required this.currency,

@@ -242,7 +242,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           PriceFunction(
             id: priceFunctions.id,
             productId: productId,
-            name: priceFunctions.name,
+            functionImageField: priceFunctions.functionImageField,
             type: priceFunctions.type,
             fomulas: formulas,
             currency: priceFunctions.currency,
@@ -271,7 +271,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       await CrabpayConnectorConnector.instance
           .addPriceFunction(
             productId: priceFunction.productId,
-            name: priceFunction.name,
+            functionImageField: priceFunction.functionImageField,
             type: priceFunction.type,
             formulas: fomulas,
             currency: priceFunction.currency,

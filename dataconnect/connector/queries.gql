@@ -23,7 +23,7 @@ query GetPriceFunctionQuery($productId: UUID!) @auth(level: PUBLIC) {
   priceFunctions(where: { productId: { eq: $productId } }) {
     productId
     id
-    name
+    functionImageField
     type
     formulas
     currency

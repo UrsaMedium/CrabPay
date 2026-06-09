@@ -3,13 +3,13 @@ part of 'crabpay_connector.dart';
 class PriceFunctionUpdateVariablesBuilder {
   String id;
   String productId;
-  String name;
+  String functionImageField;
   String type;
   AnyValue formulas;
   String currency;
 
   final FirebaseDataConnect _dataConnect;
-  PriceFunctionUpdateVariablesBuilder(this._dataConnect, {required  this.id,required  this.productId,required  this.name,required  this.type,required  this.formulas,required  this.currency,});
+  PriceFunctionUpdateVariablesBuilder(this._dataConnect, {required  this.id,required  this.productId,required  this.functionImageField,required  this.type,required  this.formulas,required  this.currency,});
   Deserializer<PriceFunctionUpdateData> dataDeserializer = (dynamic json)  => PriceFunctionUpdateData.fromJson(jsonDecode(json));
   Serializer<PriceFunctionUpdateVariables> varsSerializer = (PriceFunctionUpdateVariables vars) => jsonEncode(vars.toJson());
   Future<OperationResult<PriceFunctionUpdateData, PriceFunctionUpdateVariables>> execute() {
@@ -17,7 +17,7 @@ class PriceFunctionUpdateVariablesBuilder {
   }
 
   MutationRef<PriceFunctionUpdateData, PriceFunctionUpdateVariables> ref() {
-    PriceFunctionUpdateVariables vars= PriceFunctionUpdateVariables(id: id,productId: productId,name: name,type: type,formulas: formulas,currency: currency,);
+    PriceFunctionUpdateVariables vars= PriceFunctionUpdateVariables(id: id,productId: productId,functionImageField: functionImageField,type: type,formulas: formulas,currency: currency,);
     return _dataConnect.mutation("priceFunctionUpdate", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -96,7 +96,7 @@ class PriceFunctionUpdateData {
 class PriceFunctionUpdateVariables {
   final String id;
   final String productId;
-  final String name;
+  final String functionImageField;
   final String type;
   final AnyValue formulas;
   final String currency;
@@ -105,7 +105,7 @@ class PriceFunctionUpdateVariables {
   
   id = nativeFromJson<String>(json['id']),
   productId = nativeFromJson<String>(json['productId']),
-  name = nativeFromJson<String>(json['name']),
+  functionImageField = nativeFromJson<String>(json['functionImageField']),
   type = nativeFromJson<String>(json['type']),
   formulas = AnyValue.fromJson(json['formulas']),
   currency = nativeFromJson<String>(json['currency']);
@@ -121,21 +121,21 @@ class PriceFunctionUpdateVariables {
     final PriceFunctionUpdateVariables otherTyped = other as PriceFunctionUpdateVariables;
     return id == otherTyped.id && 
     productId == otherTyped.productId && 
-    name == otherTyped.name && 
+    functionImageField == otherTyped.functionImageField && 
     type == otherTyped.type && 
     formulas == otherTyped.formulas && 
     currency == otherTyped.currency;
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, name.hashCode, type.hashCode, formulas.hashCode, currency.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, functionImageField.hashCode, type.hashCode, formulas.hashCode, currency.hashCode]);
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['id'] = nativeToJson<String>(id);
     json['productId'] = nativeToJson<String>(productId);
-    json['name'] = nativeToJson<String>(name);
+    json['functionImageField'] = nativeToJson<String>(functionImageField);
     json['type'] = nativeToJson<String>(type);
     json['formulas'] = formulas.toJson();
     json['currency'] = nativeToJson<String>(currency);
@@ -145,7 +145,7 @@ class PriceFunctionUpdateVariables {
   PriceFunctionUpdateVariables({
     required this.id,
     required this.productId,
-    required this.name,
+    required this.functionImageField,
     required this.type,
     required this.formulas,
     required this.currency,

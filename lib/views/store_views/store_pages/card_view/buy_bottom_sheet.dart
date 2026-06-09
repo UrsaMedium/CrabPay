@@ -1,20 +1,18 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
-  final List<PriceFunction> priceFunctions;
+  final PriceFunction priceFunction;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
-    required this.priceFunctions,
+    required this.priceFunction,
   });
 
   @override
@@ -24,11 +22,39 @@ class BuyBottomSheet extends StatefulWidget {
 class _BuyBottomSheetState extends State<BuyBottomSheet> {
   Map<String, String> retrievedData = {};
   double precalculatedPrice = 0;
+  List<String> functionDimentions = [];
+  double theCoeffitient = 1;
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
+      int ifAllGood = 0;
       retrievedData[fieldName] = dataReceived;
-      precalculatedPrice = double.parse(retrievedData.values.first);
+      for (var formula in widget.priceFunction.fomulas.keys) {
+        if (Set.from(retrievedData.keys).containsAll(formula)) {
+          theCoeffitient = widget.priceFunction.fomulas[formula]!;
+          ifAllGood++;
+        }
+      }
+      if (ifAllGood == 1) {
+        if (widget.priceFunction.type == 'linear') {
+          double? input = double.tryParse(
+            retrievedData[retrievedData.keys.firstWhere(
+                  (element) =>
+                      element == widget.priceFunction.functionImageField,
+                )] ??
+                'q',
+          );
+          if (input != null) {
+            precalculatedPrice = input * theCoeffitient;
+          } else {
+            precalculatedPrice = 0;
+          }
+        } else {
+          precalculatedPrice = theCoeffitient;
+        }
+      } else {
+        print('bugger -- $ifAllGood');
+      }
     });
   }
 
@@ -54,10 +80,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<ProductField> properties = context
-        .read<DatabaseBloc>()
-        .state
-        .productFields!;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -72,7 +94,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
               ),
               child: CustomScrollView(
                 shrinkWrap: true,
-                slivers: _propertySlivers(properties),
+                slivers: _propertySlivers(widget.productFields),
               ),
             ),
           ),
@@ -86,20 +108,26 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 16),
+                  padding: const EdgeInsets.only(right: 8),
                   child: Container(
                     height: 50,
+                    width: 100,
                     alignment: .center,
-                    padding: .only(left: 16, right: 20),
+                    padding: .only(left: 16, right: 16),
                     decoration: BoxDecoration(
-                      color: context.appColorScheme.onPrimary,
+                      color: precalculatedPrice == 0
+                          ? context.appColorScheme.surfaceContainerHigh
+                          : context.appColorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(30),
                       border: BoxBorder.all(
-                        color: context.appColorScheme.outline,
+                        color: precalculatedPrice == 0
+                            ? context.appColorScheme.surfaceContainerHighest
+                            : context.appColorScheme.outline,
                       ),
                     ),
                     child: Text(
-                      '\$$precalculatedPrice',
+                      precalculatedPrice == 0 ? '--' : '\$$precalculatedPrice',
+                      overflow: .clip,
                       style: TextStyle(color: context.appColorScheme.primary),
                     ),
                   ),

@@ -18,7 +18,7 @@ type ProductField @table(key: "id") {
 type PriceFunction @table(key: "id") {
   id: UUID! @default(expr: "uuidV4()")
   product: Product!
-  name: String!
+  functionImageField: String! @default(value: "Field Name")
   type: String!
   formulas: Any!
   currency: String!

@@ -97,7 +97,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
 
         PriceFunction function = PriceFunction(
           id: '',
-          name: '',
+          functionImageField: '',
           type: state.functionType!,
           currency: state.currency!,
           productId: theProductId,

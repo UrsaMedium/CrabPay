@@ -19,8 +19,6 @@ part 'add_currencies.dart';
 
 part 'delete_currencies.dart';
 
-part 'add_product_batch.dart';
-
 part 'update_product.dart';
 
 part 'product_field_update.dart';
@@ -66,8 +64,8 @@ class CrabpayConnectorConnector {
   }
   
   
-  AddPriceFunctionVariablesBuilder addPriceFunction ({required String productId, required String name, required String type, required dynamic formulas, required String currency, }) {
-    return AddPriceFunctionVariablesBuilder(dataConnect, productId: productId,name: name,type: type,formulas: formulas,currency: currency,);
+  AddPriceFunctionVariablesBuilder addPriceFunction ({required String productId, required String functionImageField, required String type, required dynamic formulas, required String currency, }) {
+    return AddPriceFunctionVariablesBuilder(dataConnect, productId: productId,functionImageField: functionImageField,type: type,formulas: formulas,currency: currency,);
   }
   
   
@@ -86,11 +84,6 @@ class CrabpayConnectorConnector {
   }
   
   
-  AddProductBatchVariablesBuilder addProductBatch ({required String productId, required String description, required String imageUrl, required String productName, required String functionName, required String type, required dynamic formulas, required String currency, }) {
-    return AddProductBatchVariablesBuilder(dataConnect, productId: productId,description: description,imageUrl: imageUrl,productName: productName,functionName: functionName,type: type,formulas: formulas,currency: currency,);
-  }
-  
-  
   UpdateProductVariablesBuilder updateProduct ({required String id, required String name, required String description, required String imageUrl, }) {
     return UpdateProductVariablesBuilder(dataConnect, id: id,name: name,description: description,imageUrl: imageUrl,);
   }
@@ -106,8 +99,8 @@ class CrabpayConnectorConnector {
   }
   
   
-  PriceFunctionUpdateVariablesBuilder priceFunctionUpdate ({required String id, required String productId, required String name, required String type, required dynamic formulas, required String currency, }) {
-    return PriceFunctionUpdateVariablesBuilder(dataConnect, id: id,productId: productId,name: name,type: type,formulas: formulas,currency: currency,);
+  PriceFunctionUpdateVariablesBuilder priceFunctionUpdate ({required String id, required String productId, required String functionImageField, required String type, required dynamic formulas, required String currency, }) {
+    return PriceFunctionUpdateVariablesBuilder(dataConnect, id: id,productId: productId,functionImageField: functionImageField,type: type,formulas: formulas,currency: currency,);
   }
   
   

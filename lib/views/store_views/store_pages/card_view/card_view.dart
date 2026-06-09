@@ -56,7 +56,9 @@ class CardView extends StatelessWidget {
               ),
               body: Column(
                 children: [
-                  Image.network('http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}'),
+                  Image.network(
+                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                  ),
                   Text(product.name),
                   Expanded(child: Container()),
                   ElevatedButton(
@@ -81,7 +83,10 @@ class CardView extends StatelessWidget {
                                 BuyBottomSheet(
                                   productId: product.id,
                                   productFields: productFields!,
-                                  priceFunctions: priceFunctions!,
+                                  priceFunction: priceFunctions!.firstWhere(
+                                    (element) =>
+                                        element.productId == product.id,
+                                  ),
                                 ),
                               ],
                             );
