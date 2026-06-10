@@ -5,6 +5,7 @@ class AddProductVariablesBuilder {
   String description;
   String imageUrl;
   String name;
+  String currencies;
 
   final FirebaseDataConnect _dataConnect;
   AddProductVariablesBuilder id(String? t) {
@@ -12,7 +13,7 @@ class AddProductVariablesBuilder {
    return this;
   }
 
-  AddProductVariablesBuilder(this._dataConnect, {required  this.description,required  this.imageUrl,required  this.name,});
+  AddProductVariablesBuilder(this._dataConnect, {required  this.description,required  this.imageUrl,required  this.name,required  this.currencies,});
   Deserializer<AddProductData> dataDeserializer = (dynamic json)  => AddProductData.fromJson(jsonDecode(json));
   Serializer<AddProductVariables> varsSerializer = (AddProductVariables vars) => jsonEncode(vars.toJson());
   Future<OperationResult<AddProductData, AddProductVariables>> execute() {
@@ -20,7 +21,7 @@ class AddProductVariablesBuilder {
   }
 
   MutationRef<AddProductData, AddProductVariables> ref() {
-    AddProductVariables vars= AddProductVariables(id: _id,description: description,imageUrl: imageUrl,name: name,);
+    AddProductVariables vars= AddProductVariables(id: _id,description: description,imageUrl: imageUrl,name: name,currencies: currencies,);
     return _dataConnect.mutation("AddProduct", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -99,16 +100,19 @@ class AddProductVariables {
   final String description;
   final String imageUrl;
   final String name;
+  final String currencies;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   AddProductVariables.fromJson(Map<String, dynamic> json):
   
   description = nativeFromJson<String>(json['description']),
   imageUrl = nativeFromJson<String>(json['imageUrl']),
-  name = nativeFromJson<String>(json['name']) {
+  name = nativeFromJson<String>(json['name']),
+  currencies = nativeFromJson<String>(json['currencies']) {
   
   
     id = Optional.optional(nativeFromJson, nativeToJson);
     id.value = json['id'] == null ? null : nativeFromJson<String>(json['id']);
+  
   
   
   
@@ -127,11 +131,12 @@ class AddProductVariables {
     return id == otherTyped.id && 
     description == otherTyped.description && 
     imageUrl == otherTyped.imageUrl && 
-    name == otherTyped.name;
+    name == otherTyped.name && 
+    currencies == otherTyped.currencies;
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, description.hashCode, imageUrl.hashCode, name.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, description.hashCode, imageUrl.hashCode, name.hashCode, currencies.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -142,6 +147,7 @@ class AddProductVariables {
     json['description'] = nativeToJson<String>(description);
     json['imageUrl'] = nativeToJson<String>(imageUrl);
     json['name'] = nativeToJson<String>(name);
+    json['currencies'] = nativeToJson<String>(currencies);
     return json;
   }
 
@@ -150,6 +156,7 @@ class AddProductVariables {
     required this.description,
     required this.imageUrl,
     required this.name,
+    required this.currencies,
   });
 }
 

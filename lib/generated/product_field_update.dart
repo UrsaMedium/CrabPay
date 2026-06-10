@@ -8,6 +8,7 @@ class ProductFieldUpdateVariablesBuilder {
   Optional<List<String>> _expectedData = Optional.optional(listDeserializer(nativeFromJson), listSerializer(nativeToJson));
   String handler;
   String fieldName;
+  bool isPriceImage;
 
   final FirebaseDataConnect _dataConnect;
   ProductFieldUpdateVariablesBuilder id(String? t) {
@@ -23,7 +24,7 @@ class ProductFieldUpdateVariablesBuilder {
    return this;
   }
 
-  ProductFieldUpdateVariablesBuilder(this._dataConnect, {required  this.productId,required  this.order,required  this.handler,required  this.fieldName,});
+  ProductFieldUpdateVariablesBuilder(this._dataConnect, {required  this.productId,required  this.order,required  this.handler,required  this.fieldName,required  this.isPriceImage,});
   Deserializer<ProductFieldUpdateData> dataDeserializer = (dynamic json)  => ProductFieldUpdateData.fromJson(jsonDecode(json));
   Serializer<ProductFieldUpdateVariables> varsSerializer = (ProductFieldUpdateVariables vars) => jsonEncode(vars.toJson());
   Future<OperationResult<ProductFieldUpdateData, ProductFieldUpdateVariables>> execute() {
@@ -31,7 +32,7 @@ class ProductFieldUpdateVariablesBuilder {
   }
 
   MutationRef<ProductFieldUpdateData, ProductFieldUpdateVariables> ref() {
-    ProductFieldUpdateVariables vars= ProductFieldUpdateVariables(id: _id,productId: productId,order: order,attributes: _attributes,expectedData: _expectedData,handler: handler,fieldName: fieldName,);
+    ProductFieldUpdateVariables vars= ProductFieldUpdateVariables(id: _id,productId: productId,order: order,attributes: _attributes,expectedData: _expectedData,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
     return _dataConnect.mutation("productFieldUpdate", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -115,13 +116,15 @@ class ProductFieldUpdateVariables {
   late final Optional<List<String>>expectedData;
   final String handler;
   final String fieldName;
+  final bool isPriceImage;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   ProductFieldUpdateVariables.fromJson(Map<String, dynamic> json):
   
   productId = nativeFromJson<String>(json['productId']),
   order = nativeFromJson<int>(json['order']),
   handler = nativeFromJson<String>(json['handler']),
-  fieldName = nativeFromJson<String>(json['fieldName']) {
+  fieldName = nativeFromJson<String>(json['fieldName']),
+  isPriceImage = nativeFromJson<bool>(json['isPriceImage']) {
   
   
     id = Optional.optional(nativeFromJson, nativeToJson);
@@ -138,6 +141,7 @@ class ProductFieldUpdateVariables {
     expectedData.value = json['expectedData'] == null ? null : (json['expectedData'] as List<dynamic>)
         .map((e) => nativeFromJson<String>(e))
         .toList();
+  
   
   
   
@@ -158,11 +162,12 @@ class ProductFieldUpdateVariables {
     attributes == otherTyped.attributes && 
     expectedData == otherTyped.expectedData && 
     handler == otherTyped.handler && 
-    fieldName == otherTyped.fieldName;
+    fieldName == otherTyped.fieldName && 
+    isPriceImage == otherTyped.isPriceImage;
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, order.hashCode, attributes.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, order.hashCode, attributes.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode, isPriceImage.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -180,6 +185,7 @@ class ProductFieldUpdateVariables {
     }
     json['handler'] = nativeToJson<String>(handler);
     json['fieldName'] = nativeToJson<String>(fieldName);
+    json['isPriceImage'] = nativeToJson<bool>(isPriceImage);
     return json;
   }
 
@@ -191,6 +197,7 @@ class ProductFieldUpdateVariables {
     required this.expectedData,
     required this.handler,
     required this.fieldName,
+    required this.isPriceImage,
   });
 }
 

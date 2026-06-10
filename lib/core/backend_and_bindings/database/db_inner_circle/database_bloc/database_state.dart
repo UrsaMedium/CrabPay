@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:flutter/material.dart' show immutable;
@@ -24,7 +23,6 @@ class DatabaseState {
   final List<Product>? products;
   final List<Currencies>? currencies;
   final List<ProductField>? productFields;
-  final List<PriceFunction>? priceFunctions;
   final DatabaseStates states;
   //
   final Product? recentlyAddedProduct;
@@ -33,7 +31,6 @@ class DatabaseState {
     this.products,
     this.currencies,
     this.productFields,
-    this.priceFunctions,
     this.states = DatabaseStates.initial,
     //
     this.recentlyAddedProduct,
@@ -43,7 +40,6 @@ class DatabaseState {
     List<Product>? products,
     List<Currencies>? currencies,
     List<ProductField>? productFields,
-    List<PriceFunction>? priceFunctions,
     DatabaseStates? states,
     //
     Product? recentlyAddedProduct,
@@ -55,9 +51,6 @@ class DatabaseState {
       productFields:
           productFields ??
           (this.productFields == [] ? null : this.productFields),
-      priceFunctions:
-          priceFunctions ??
-          (this.priceFunctions == [] ? null : this.priceFunctions),
       states: states ?? this.states,
       //
       recentlyAddedProduct: recentlyAddedProduct,

@@ -4,6 +4,7 @@ query GetAllProductsQuery @auth(level: PUBLIC) {
     name
     description
     imageUrl
+    currencies
   }
 }
 
@@ -13,22 +14,13 @@ query GetProductFieldsQuery($productId: UUID!) @auth(level: PUBLIC) {
     id
     order
     fieldName
+    isPriceImage
     handler
     attributes
     expectedData
   }
 }
 
-query GetPriceFunctionQuery($productId: UUID!) @auth(level: PUBLIC) {
-  priceFunctions(where: { productId: { eq: $productId } }) {
-    productId
-    id
-    functionImageField
-    type
-    formulas
-    currency
-  }
-}
 
 query GetAllCurrenciesQuery @auth(level: PUBLIC) {
   currenciess {

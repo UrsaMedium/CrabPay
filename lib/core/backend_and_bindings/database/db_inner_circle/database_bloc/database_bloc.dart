@@ -109,46 +109,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    // Price Functions
-    // fetch Price Function
-    on<DatabaseEventFetchPriceFunctions>((event, emit) async {
-      try {
-        final priceFunctions = await databaseHandler.fetchPriceFunctions(
-          event.productId,
-        );
-        emit(
-          state.copyWith(
-            priceFunctions: priceFunctions,
-            states: DatabaseStates.priceFunctionsFetched,
-          ),
-        );
-      } catch (e) {
-        // print('Failed to fetch price functions $e');
-        // Fluttertoast.showToast(msg: 'Failed to fetch price functions $e');
-        emit(state.copyWith(states: DatabaseStates.priceFunctionsNotFetched));
-        rethrow;
-      }
-    });
-    // add Price Function
-    on<DatabaseEventAddPriceFunction>((event, emit) async {
-      try {
-        await databaseHandler.addPriceFunction(event.priceFunction);
-      } catch (e) {
-        // print('Faild to add price function $e');
-        // Fluttertoast.showToast(msg: 'Faild to add price function $e');
-        rethrow;
-      }
-    });
-    // delete Price Function
-    on<DatabaseEventDeletePriceFunction>((event, emit) async {
-      try {
-        await databaseHandler.deletePriceFunction(event.priceFunction);
-      } catch (e) {
-        // print('Faild to delete price function $e');
-        // Fluttertoast.showToast(msg: 'Faild to delete price function $e');
-        rethrow;
-      }
-    });
     // Currencies
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {

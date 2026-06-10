@@ -109,117 +109,7 @@ extend type Currencies {
   """
   _id: ID! @fdc_generated(from: "Currencies.id", purpose: ENTITY_ID)
 }
-extend type PriceFunction {
-  """
-  Implicit metadata field that cannot be written. It provides extra information about query results.
-  """
-  _metadata: _Metadata @fdc_generated(from: "PriceFunction", purpose: METADATA_FIELD)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table.
-  """
-  _count: Int! @fdc_generated(from: "PriceFunction.", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `currency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  currency_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.currency", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `formulas` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  formulas_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `functionImageField` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  functionImageField_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.functionImageField", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  id_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.id", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  productId_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.productId", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `PriceFunction` table where the `type` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  type_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction.type", purpose: QUERY_COUNT)
-  """
-  ✨ Minimum of the `formulas` field in the `PriceFunction` table.
-  """
-  formulas_min: Any @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_MIN)
-  """
-  ✨ Maximum of the `formulas` field in the `PriceFunction` table.
-  """
-  formulas_max: Any @fdc_generated(from: "PriceFunction.formulas", purpose: QUERY_MAX)
-  """
-  A generated field that is used for caching results in SDKs.
-  """
-  _id: ID! @fdc_generated(from: "PriceFunction.id", purpose: ENTITY_ID)
-}
 extend type Product {
-  """
-  ✨ List `PriceFunction` objects in a one-to-many relationship (where `PriceFunction`.`product` is this object).
-  """
-  priceFunctions_on_product(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: PriceFunction_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [PriceFunction_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: PriceFunction_Having
-  ): [PriceFunction!]! @fdc_generated(from: "PriceFunction.product", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `ProductField` objects in a one-to-many relationship (where `ProductField`.`product` is this object).
   """
@@ -262,6 +152,15 @@ extend type Product {
   ✨ Count the number of rows in the `Product` table.
   """
   _count: Int! @fdc_generated(from: "Product.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Product` table where the `currencies` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  currencies_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Product.currencies", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Product` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -348,6 +247,15 @@ extend type ProductField {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ProductField.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ProductField` table where the `isPriceImage` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  isPriceImage_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProductField.isPriceImage", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ProductField` table where the `order` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """

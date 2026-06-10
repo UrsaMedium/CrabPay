@@ -1,6 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_outer_circle/outer_database_handler.dart';
@@ -38,20 +37,6 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> deleteProductField(ProductField field) =>
       dbHandler.deleteProductField(field);
-
-  // Price Function
-  @override
-  Future<List<PriceFunction>?> fetchPriceFunctions(String productId) =>
-      dbHandler.fetchPriceFunctions(productId);
-
-  @override
-  Future<void> addPriceFunction(PriceFunction priceFunction) =>
-      dbHandler.addPriceFunction(priceFunction);
-
-  @override
-  Future<void> deletePriceFunction(PriceFunction priceFunction) =>
-      dbHandler.deletePriceFunction(priceFunction);
-
   // Currencies
   @override
   Future<List<Currencies>?> fetchAllCurencies() =>

@@ -9,15 +9,6 @@ extend type Mutation {
     data: Currencies_Data!
   ): Currencies_KeyOutput! @fdc_generated(from: "Currencies", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `PriceFunction` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  priceFunction_insert(
-    """
-    Data object to insert into the table.
-    """
-    data: PriceFunction_Data!
-  ): PriceFunction_KeyOutput! @fdc_generated(from: "PriceFunction", purpose: INSERT_SINGLE)
-  """
   ✨ Insert a single `Product` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   product_insert(
@@ -44,15 +35,6 @@ extend type Mutation {
     """
     data: [Currencies_Data!]!
   ): [Currencies_KeyOutput!]! @fdc_generated(from: "Currencies", purpose: INSERT_MULTIPLE)
-  """
-  ✨ Insert `PriceFunction` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  priceFunction_insertMany(
-    """
-    List of data objects to insert into the table.
-    """
-    data: [PriceFunction_Data!]!
-  ): [PriceFunction_KeyOutput!]! @fdc_generated(from: "PriceFunction", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert `Product` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -81,15 +63,6 @@ extend type Mutation {
     data: Currencies_Data!
   ): Currencies_KeyOutput! @fdc_generated(from: "Currencies", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `PriceFunction` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PriceFunction`.
-  """
-  priceFunction_upsert(
-    """
-    Data object to insert or update if it already exists.
-    """
-    data: PriceFunction_Data!
-  ): PriceFunction_KeyOutput! @fdc_generated(from: "PriceFunction", purpose: UPSERT_SINGLE)
-  """
   ✨ Insert or update a single `Product` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
   product_upsert(
@@ -116,15 +89,6 @@ extend type Mutation {
     """
     data: [Currencies_Data!]!
   ): [Currencies_KeyOutput!]! @fdc_generated(from: "Currencies", purpose: UPSERT_MULTIPLE)
-  """
-  ✨ Insert or update `PriceFunction` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PriceFunction`.
-  """
-  priceFunction_upsertMany(
-    """
-    List of data objects to insert or update if it already exists.
-    """
-    data: [PriceFunction_Data!]!
-  ): [PriceFunction_KeyOutput!]! @fdc_generated(from: "PriceFunction", purpose: UPSERT_MULTIPLE)
   """
   ✨ Insert or update `Product` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
@@ -167,30 +131,6 @@ extend type Mutation {
     """
     data: Currencies_Data!
   ): Currencies_KeyOutput @fdc_generated(from: "Currencies", purpose: UPDATE_SINGLE)
-  """
-  ✨ Update a single `PriceFunction` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `PriceFunction` or `null` if not found.
-  """
-  priceFunction_update(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
-    The key used to identify the object.
-    """
-    key: PriceFunction_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: PriceFunction_FirstRow
-
-    """
-    Data object containing fields to be updated.
-    """
-    data: PriceFunction_Data!
-  ): PriceFunction_KeyOutput @fdc_generated(from: "PriceFunction", purpose: UPDATE_SINGLE)
   """
   ✨ Update a single `Product` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Product` or `null` if not found.
   """
@@ -259,25 +199,6 @@ extend type Mutation {
     data: Currencies_Data!
   ): Int! @fdc_generated(from: "Currencies", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `PriceFunction` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
-  """
-  priceFunction_updateMany(
-    """
-    Filter condition to specify which rows to update.
-    """
-    where: PriceFunction_Filter
-
-    """
-    Set to true to update all rows.
-    """
-    all: Boolean = false
-
-    """
-    Data object containing fields to update.
-    """
-    data: PriceFunction_Data!
-  ): Int! @fdc_generated(from: "PriceFunction", purpose: UPDATE_MULTIPLE)
-  """
   ✨ Update `Product` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   product_updateMany(
@@ -335,25 +256,6 @@ extend type Mutation {
     first: Currencies_FirstRow
   ): Currencies_KeyOutput @fdc_generated(from: "Currencies", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `PriceFunction` based on `id`, `key` or `first` and return its key (or `null` if not found).
-  """
-  priceFunction_delete(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
-    The key used to identify the object.
-    """
-    key: PriceFunction_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: PriceFunction_FirstRow
-  ): PriceFunction_KeyOutput @fdc_generated(from: "PriceFunction", purpose: DELETE_SINGLE)
-  """
   ✨ Delete a single `Product` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   product_delete(
@@ -405,20 +307,6 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "Currencies", purpose: DELETE_MULTIPLE)
-  """
-  ✨ Delete `PriceFunction` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
-  """
-  priceFunction_deleteMany(
-    """
-    Filter condition to specify which rows to delete.
-    """
-    where: PriceFunction_Filter
-
-    """
-    Set to true to delete all rows.
-    """
-    all: Boolean = false
-  ): Int! @fdc_generated(from: "PriceFunction", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `Product` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """

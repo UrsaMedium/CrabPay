@@ -162,6 +162,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                           productId: 'productId',
                           order: 0,
                           fieldName: fieldName!,
+                          isPriceImage: false,
                           handler: handler!,
                           expectedData: handler! == 'InputField'
                               ? [fieldName!]

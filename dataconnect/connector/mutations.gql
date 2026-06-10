@@ -3,6 +3,7 @@ mutation AddProduct(
   $description: String!
   $imageUrl: String!
   $name: String!
+  $currencies: String!
 ) @auth(level: PUBLIC) {
   product_insert(
     data: {
@@ -10,6 +11,7 @@ mutation AddProduct(
       description: $description
       imageUrl: $imageUrl
       name: $name
+      currencies: $currencies
     }
   )
 }
@@ -25,6 +27,7 @@ mutation AddProductField(
   $expectedData: [String!]
   $handler: String!
   $fieldName: String!
+  $isPriceImage: Boolean!
 ) @auth(level: PUBLIC) {
   productField_insert(
     data: {
@@ -34,34 +37,13 @@ mutation AddProductField(
       expectedData: $expectedData
       handler: $handler
       fieldName: $fieldName
+      isPriceImage: $isPriceImage
     }
   )
 }
 
 mutation DeleteProductField($id: UUID!) @auth(level: PUBLIC) {
   productField_delete(key: { id: $id })
-}
-
-mutation AddPriceFunction(
-  $productId: UUID!
-  $functionImageField: String!
-  $type: String!
-  $formulas: Any!
-  $currency: String!
-) @auth(level: PUBLIC) {
-  priceFunction_insert(
-    data: {
-      productId: $productId
-      functionImageField: $functionImageField
-      type: $type
-      formulas: $formulas
-      currency: $currency
-    }
-  )
-}
-
-mutation DeletePriceFunction($id: UUID!) @auth(level: PUBLIC) {
-  priceFunction_delete(key: { id: $id })
 }
 
 mutation AddCurrencies(
@@ -79,45 +61,21 @@ mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
   currencies_delete(key: { id: $id })
 }
 
-# mutation AddProductBatch(
-#   $productId: UUID!
-#   $description: String!
-#   $imageUrl: String!
-#   $productName: String!
-#   $functionRange: String!
-#   $type: String!
-#   $formulas: Any!
-#   $currency: String!
-# ) @auth(level: PUBLIC) {
-#   product_insert(
-#     data: {
-#       id: $productId
-#       name: $productName
-#       description: $description
-#       imageUrl: $imageUrl
-#     }
-#   )
-
-#   priceFunction_insert(
-#     data: {
-#       productId: $productId
-#       range: $functionRange
-#       type: $type
-#       formulas: $formulas
-#       currency: $currency
-#     }
-#   )
-# }
-
 mutation UpdateProduct(
   $id: UUID!
   $name: String!
   $description: String!
   $imageUrl: String!
+  $currencies: String!
 ) @auth(level: PUBLIC) {
   product_update(
     id: $id
-    data: { name: $name, description: $description, imageUrl: $imageUrl }
+    data: {
+      name: $name
+      description: $description
+      imageUrl: $imageUrl
+      currencies: $currencies
+    }
   )
 }
 
@@ -129,6 +87,7 @@ mutation productFieldUpdate(
   $expectedData: [String!]
   $handler: String!
   $fieldName: String!
+  $isPriceImage: Boolean!
 ) @auth(level: PUBLIC) {
   productField_update(
     id: $id
@@ -139,6 +98,7 @@ mutation productFieldUpdate(
       expectedData: $expectedData
       handler: $handler
       fieldName: $fieldName
+      isPriceImage: $isPriceImage
     }
   )
 }
@@ -153,25 +113,5 @@ mutation currenciesUpdate(
   currencies_update(
     id: $id
     data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
-  )
-}
-
-mutation priceFunctionUpdate(
-  $id: UUID!
-  $productId: UUID!
-  $functionImageField: String!
-  $type: String!
-  $formulas: Any!
-  $currency: String!
-) @auth(level: PUBLIC) {
-  priceFunction_update(
-    id: $id
-    data: {
-      productId: $productId
-      functionImageField: $functionImageField
-      type: $type
-      formulas: $formulas
-      currency: $currency
-    }
   )
 }

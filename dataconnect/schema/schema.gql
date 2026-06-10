@@ -3,6 +3,7 @@ type Product @table(key: "id") {
   name: String!
   description: String!
   imageUrl: String!
+  currencies: String!
 }
 
 type ProductField @table(key: "id") {
@@ -10,18 +11,10 @@ type ProductField @table(key: "id") {
   product: Product!
   order: Int!
   fieldName: String!
+  isPriceImage: Boolean! @default(value: false)
   handler: String!
   attributes: Any
-  expectedData: [String!]
-}
-
-type PriceFunction @table(key: "id") {
-  id: UUID! @default(expr: "uuidV4()")
-  product: Product!
-  functionImageField: String! @default(value: "Field Name")
-  type: String!
-  formulas: Any!
-  currency: String!
+  expectedData: [String!] # which fields will return an information
 }
 
 type Currencies @table(key: "id") {

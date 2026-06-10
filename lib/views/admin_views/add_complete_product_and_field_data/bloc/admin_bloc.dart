@@ -1,11 +1,10 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -29,17 +28,6 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         state.copyWith(
           appProductFields: event.appProductFields,
           states: AdminStates.adminSubmitedAppProductFields,
-        ),
-      );
-    });
-
-    on<AdminEventSubmitsPriceDimensions>((event, emit) {
-      emit(
-        state.copyWith(
-          priceDimensions: event.priceDimensions,
-          functionType: event.functionType,
-          currency: event.currency,
-          states: AdminStates.adminSubmitedPriceDimensions,
         ),
       );
     });
@@ -74,6 +62,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         name: state.appProduct!.name,
         image: state.appProduct!.image,
         description: state.appProduct!.description,
+        currencies: state.appProduct!.currencies,
       );
       try {
         event.context.read<DatabaseBloc>().add(
@@ -86,6 +75,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
             productId: theProductId,
             order: field.order,
             fieldName: field.fieldName,
+            isPriceImage: field.isPriceImage,
             handler: field.handler,
             attributes: field.attributes,
             expectedData: field.expectedData,
@@ -94,18 +84,6 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
             DatabaseEventAddProductField(productField: fieldToPush),
           );
         }
-
-        PriceFunction function = PriceFunction(
-          id: '',
-          functionImageField: '',
-          type: state.functionType!,
-          currency: state.currency!,
-          productId: theProductId,
-          fomulas: state.priceFunction!,
-        );
-        event.context.read<DatabaseBloc>().add(
-          DatabaseEventAddPriceFunction(priceFunction: function),
-        );
         event.context.go('/');
       } catch (e) {
         Fluttertoast.showToast(msg: 'BOO');

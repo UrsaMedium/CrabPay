@@ -1,4 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -7,12 +6,10 @@ import 'package:flutter/material.dart';
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
-  final PriceFunction priceFunction;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
-    required this.priceFunction,
   });
 
   @override
@@ -27,34 +24,34 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
-      int ifAllGood = 0;
-      retrievedData[fieldName] = dataReceived;
-      for (var formula in widget.priceFunction.fomulas.keys) {
-        if (Set.from(retrievedData.keys).containsAll(formula)) {
-          theCoeffitient = widget.priceFunction.fomulas[formula]!;
-          ifAllGood++;
-        }
-      }
-      if (ifAllGood == 1) {
-        if (widget.priceFunction.type == 'linear') {
-          double? input = double.tryParse(
-            retrievedData[retrievedData.keys.firstWhere(
-                  (element) =>
-                      element == widget.priceFunction.functionImageField,
-                )] ??
-                'q',
-          );
-          if (input != null) {
-            precalculatedPrice = input * theCoeffitient;
-          } else {
-            precalculatedPrice = 0;
-          }
-        } else {
-          precalculatedPrice = theCoeffitient;
-        }
-      } else {
-        print('bugger -- $ifAllGood');
-      }
+      // int ifAllGood = 0;
+      // retrievedData[fieldName] = dataReceived;
+      // for (var formula in widget.priceFunction.fomulas.keys) {
+      //   if (Set.from(retrievedData.keys).containsAll(formula)) {
+      //     theCoeffitient = widget.priceFunction.fomulas[formula]!;
+      //     ifAllGood++;
+      //   }
+      // }
+      // if (ifAllGood == 1) {
+      //   if (widget.priceFunction.type == 'linear') {
+      //     double? input = double.tryParse(
+      //       retrievedData[retrievedData.keys.firstWhere(
+      //             (element) =>
+      //                 element == widget.priceFunction.functionImageField,
+      //           )] ??
+      //           'q',
+      //     );
+      //     if (input != null) {
+      //       precalculatedPrice = input * theCoeffitient;
+      //     } else {
+      //       precalculatedPrice = 0;
+      //     }
+      //   } else {
+      //     precalculatedPrice = theCoeffitient;
+      //   }
+      // } else {
+      //   print('bugger -- $ifAllGood');
+      // }
     });
   }
 

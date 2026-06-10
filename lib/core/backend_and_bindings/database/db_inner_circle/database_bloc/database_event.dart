@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:flutter/widgets.dart';
@@ -48,25 +47,6 @@ class DatabaseEventAddProductField implements DatabaseEvent {
 class DatabaseEventDeleteProductField implements DatabaseEvent {
   final ProductField productField;
   DatabaseEventDeleteProductField({required this.productField});
-}
-
-// Price Function events
-// fetch Price Function
-class DatabaseEventFetchPriceFunctions implements DatabaseEvent {
-  final String productId;
-  DatabaseEventFetchPriceFunctions({required this.productId});
-}
-
-// add Price Function
-class DatabaseEventAddPriceFunction implements DatabaseEvent {
-  final PriceFunction priceFunction;
-  DatabaseEventAddPriceFunction({required this.priceFunction});
-}
-
-// delete Price Function
-class DatabaseEventDeletePriceFunction implements DatabaseEvent {
-  final PriceFunction priceFunction;
-  DatabaseEventDeletePriceFunction({required this.priceFunction});
 }
 
 // Currencies events

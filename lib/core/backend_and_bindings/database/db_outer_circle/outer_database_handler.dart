@@ -1,6 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
@@ -24,6 +23,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             name: product.name,
             image: product.imageUrl,
             description: product.description,
+            currencies: product.currencies,
           ),
         );
       }
@@ -45,6 +45,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             description: product.description,
             imageUrl: product.image,
             name: product.name,
+            currencies: product.currencies,
           )
           .id(product.id == '' ? null : product.id)
           .execute();
@@ -97,6 +98,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             productId: productId,
             order: each.order,
             fieldName: each.fieldName,
+            isPriceImage: each.isPriceImage,
             handler: each.handler,
             attributes: attributes,
             expectedData: expectedData,
@@ -129,6 +131,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             order: field.order,
             handler: field.handler,
             fieldName: field.fieldName,
+            isPriceImage: field.isPriceImage,
           )
           .attributes(attributes)
           .expectedData(expectedData)
@@ -211,90 +214,6 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to delete the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the currencies: $e');
-      rethrow;
-    }
-  }
-
-  // Price Function
-  // fetch product price functions
-  @override
-  Future<List<PriceFunction>?> fetchPriceFunctions(String productId) async {
-    List<PriceFunction> processedFetchedProductPriceFunctions = [];
-    try {
-      final fetchedProductPriceFunctions = await CrabpayConnectorConnector
-          .instance
-          .getPriceFunctionQuery(productId: productId)
-          .execute();
-      for (var priceFunctions
-          in fetchedProductPriceFunctions.data.priceFunctions) {
-        final preFormulas = Map<String, int>.from(
-          priceFunctions.formulas.toJson(),
-        );
-        final Map<List<String>, double> formulas = {};
-        for (var formula in preFormulas.keys) {
-          final List<String> splinters = formula
-              .split(',')
-              .map((e) => e.trim())
-              .toList();
-          formulas[splinters] = preFormulas[formula]!.toDouble();
-        }
-        processedFetchedProductPriceFunctions.add(
-          PriceFunction(
-            id: priceFunctions.id,
-            productId: productId,
-            functionImageField: priceFunctions.functionImageField,
-            type: priceFunctions.type,
-            fomulas: formulas,
-            currency: priceFunctions.currency,
-          ),
-        );
-      }
-      return processedFetchedProductPriceFunctions;
-    } catch (e) {
-      print('Failed to fetch product price functions: $e');
-      Fluttertoast.showToast(
-        msg: 'Failed to fetch product price functions: $e',
-      );
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> addPriceFunction(PriceFunction priceFunction) async {
-    try {
-      final temp = priceFunction.fomulas.map((key, value) {
-        final keysString = key.join(', ');
-        return MapEntry(keysString, value);
-      });
-      final fomulas = AnyValue(temp);
-
-      await CrabpayConnectorConnector.instance
-          .addPriceFunction(
-            productId: priceFunction.productId,
-            functionImageField: priceFunction.functionImageField,
-            type: priceFunction.type,
-            formulas: fomulas,
-            currency: priceFunction.currency,
-          )
-          .execute();
-    } catch (e) {
-      print(
-        'Failed to add the price function: $e --------------------------------------------------------------------------',
-      );
-      Fluttertoast.showToast(msg: 'Failed to add the price function $e');
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> deletePriceFunction(PriceFunction priceFunction) async {
-    try {
-      await CrabpayConnectorConnector.instance
-          .deletePriceFunction(id: priceFunction.id)
-          .execute();
-    } catch (e) {
-      print('Failed to delete the price function: $e');
-      Fluttertoast.showToast(msg: 'Failed to delete the price function: $e');
       rethrow;
     }
   }

@@ -19,7 +19,6 @@ class AddProductFieldsView extends StatefulWidget {
 class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   Product? _appProduct;
 
-  final List<ProductField> _fieldsList = [];
   final Map<ProductField, Widget> _fieldWidgetsMap = {};
   final Map<String, String> _dataFromFieldsToTest = {};
   final List<String> _fieldNames = [];
@@ -35,11 +34,13 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   }
 
   void _updateFieldsList(ProductField field) {
-    if (!_fieldsList.any((element) => element.fieldName == field.fieldName)) {
+    if (!_fieldWidgetsMap.keys.any(
+      (element) => element.fieldName == field.fieldName,
+    )) {
       setState(() {
-        _fieldsList.add(field);
         _fieldNames.add(field.fieldName);
         _fieldWidgetsMap[field] = AField(
+          fieldIsImage: _theImageIsChosen,
           field: field,
           dataBridge: _dataBridgeToTest,
           deleteMe: _deleteField,
@@ -52,9 +53,21 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
     }
   }
 
+  void _theImageIsChosen(ProductField chosenImage) {
+    for (var field in _fieldWidgetsMap.keys) {
+      field.makeThemImage = chosenImage.fieldName == field.fieldName;
+      _fieldWidgetsMap[field] = AField(
+        fieldIsImage: _theImageIsChosen,
+        field: field,
+        dataBridge: _dataBridgeToTest,
+        deleteMe: _deleteField,
+      );
+    }
+    setState(() {});
+  }
+
   void _deleteField(ProductField fieldToDelte) {
     setState(() {
-      _fieldsList.remove(fieldToDelte);
       _fieldNames.remove(fieldToDelte.fieldName);
       _fieldWidgetsMap.remove(fieldToDelte);
     });
@@ -67,24 +80,29 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   }
 
   List<ProductField>? _collectFields() {
+    int imageChecker = 0;
     List<ProductField> result = [];
-    for (int i = 0; i < _fieldsList.length; i++) {
-      if (_fieldsList[i].fieldName != '' && _fieldsList[i].handler != '') {
+    for (int i = 0; i < _fieldWidgetsMap.length; i++) {
+      if (_fieldWidgetsMap.keys.toList()[i].fieldName != '' &&
+          _fieldWidgetsMap.keys.toList()[i].handler != '') {
         result.add(
           ProductField(
             id: '$i',
             productId: _appProduct!.id,
             order: i * 10,
-            fieldName: _fieldsList[i].fieldName,
-            handler: _fieldsList[i].handler,
-            attributes: _fieldsList[i].attributes,
-            expectedData: _fieldsList[i].expectedData,
+            fieldName: _fieldWidgetsMap.keys.toList()[i].fieldName,
+            handler: _fieldWidgetsMap.keys.toList()[i].handler,
+            attributes: _fieldWidgetsMap.keys.toList()[i].attributes,
+            expectedData: _fieldWidgetsMap.keys.toList()[i].expectedData,
+            isPriceImage: _fieldWidgetsMap.keys.toList()[i].isPriceImage,
           ),
         );
+        if (_fieldWidgetsMap.keys.toList()[i].isPriceImage) imageChecker++;
       } else {
         return null;
       }
     }
+    if (imageChecker != 1) return null;
     return result;
   }
 
@@ -116,9 +134,9 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                   shrinkWrap: true,
                   slivers: [
                     SliverList.builder(
-                      itemCount: _fieldsList.length,
+                      itemCount: _fieldWidgetsMap.length,
                       itemBuilder: (context, index) {
-                        return _fieldWidgetsMap[_fieldsList[index]];
+                        return _fieldWidgetsMap.values.toList()[index];
                       },
                     ),
                     SliverToBoxAdapter(
@@ -190,7 +208,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                             ),
                           );
                           context.go(
-                            '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view',
+                            '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view',
                           );
                         } else {
                           Fluttertoast.showToast(
@@ -199,48 +217,6 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                         }
                       },
                       child: Text('Next'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        List<ProductField>? collectFields = [
-                          ProductField(
-                            id: 'id1',
-                            productId: '5bbcb82ecc15438ab758586309c0afc5',
-                            order: 10,
-                            fieldName: 'Mock field 1',
-                            handler: 'InputField',
-                            expectedData: ['Mock field 1'],
-                          ),
-                          ProductField(
-                            id: 'id2',
-                            productId: '5bbcb82ecc15438ab758586309c0afc5',
-                            order: 20,
-                            fieldName: 'Mock field 2',
-                            handler: 'DropdownList',
-                            expectedData: ['drop1', 'drop2', 'drop3'],
-                          ),
-                          ProductField(
-                            id: 'id3',
-                            productId: '5bbcb82ecc15438ab758586309c0afc5',
-                            order: 30,
-                            fieldName: 'Mock field 3',
-                            handler: 'RadioList',
-                            expectedData: ['radio1', 'radio2', 'radio3'],
-                          ),
-                        ];
-                        context.read<AdminBloc>().add(
-                          AdminEventSubmitsFields(
-                            appProductFields: collectFields,
-                          ),
-                        );
-                        context.go(
-                          '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view',
-                        );
-                      },
-                      child: Text('Mock Data'),
                     ),
                   ),
                 ],
@@ -253,7 +229,8 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   }
 }
 
-class AField extends StatelessWidget {
+class AField extends StatefulWidget {
+  final Function(ProductField) fieldIsImage;
   final Function(String, String) dataBridge;
   final Function(ProductField) deleteMe;
   final ProductField field;
@@ -262,29 +239,49 @@ class AField extends StatelessWidget {
     required this.field,
     required this.dataBridge,
     required this.deleteMe,
+    required this.fieldIsImage,
   });
 
   @override
+  State<AField> createState() => _AFieldState();
+}
+
+class _AFieldState extends State<AField> {
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      // key: ValueKey(field.fieldName),
+    return Row(
       children: [
-        theAppWidgetBuilder(
-          collectedDataBridge: dataBridge,
-          context: context,
-          fieldName: field.fieldName,
-          handler: field.handler,
-          attributes: null,
-          expectedData: field.expectedData,
+        InkWell(
+          onTap: () => widget.fieldIsImage(widget.field),
+          child: Icon(
+            widget.field.isPriceImage
+                ? Icons.radio_button_checked
+                : Icons.radio_button_off,
+          ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Container(
-            alignment: .topRight,
-            child: IconButton(
-              onPressed: () => deleteMe(field),
-              icon: Icon(Icons.delete),
-            ),
+        Expanded(
+          child: Stack(
+            // key: ValueKey(field.fieldName),
+            children: [
+              theAppWidgetBuilder(
+                collectedDataBridge: widget.dataBridge,
+                context: context,
+                fieldName: widget.field.fieldName,
+                handler: widget.field.handler,
+                attributes: null,
+                expectedData: widget.field.expectedData,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  alignment: .topRight,
+                  child: IconButton(
+                    onPressed: () => widget.deleteMe(widget.field),
+                    icon: Icon(Icons.delete),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

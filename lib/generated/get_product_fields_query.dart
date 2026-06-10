@@ -23,6 +23,7 @@ class GetProductFieldsQueryProductFields {
   final String id;
   final int order;
   final String fieldName;
+  final bool isPriceImage;
   final String handler;
   final AnyValue? attributes;
   final List<String>? expectedData;
@@ -32,6 +33,7 @@ class GetProductFieldsQueryProductFields {
   id = nativeFromJson<String>(json['id']),
   order = nativeFromJson<int>(json['order']),
   fieldName = nativeFromJson<String>(json['fieldName']),
+  isPriceImage = nativeFromJson<bool>(json['isPriceImage']),
   handler = nativeFromJson<String>(json['handler']),
   attributes = json['attributes'] == null ? null : AnyValue.fromJson(json['attributes']),
   expectedData = json['expectedData'] == null ? null : (json['expectedData'] as List<dynamic>)
@@ -51,13 +53,14 @@ class GetProductFieldsQueryProductFields {
     id == otherTyped.id && 
     order == otherTyped.order && 
     fieldName == otherTyped.fieldName && 
+    isPriceImage == otherTyped.isPriceImage && 
     handler == otherTyped.handler && 
     attributes == otherTyped.attributes && 
     expectedData == otherTyped.expectedData;
     
   }
   @override
-  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, order.hashCode, fieldName.hashCode, handler.hashCode, attributes.hashCode, expectedData.hashCode]);
+  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, order.hashCode, fieldName.hashCode, isPriceImage.hashCode, handler.hashCode, attributes.hashCode, expectedData.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -66,6 +69,7 @@ class GetProductFieldsQueryProductFields {
     json['id'] = nativeToJson<String>(id);
     json['order'] = nativeToJson<int>(order);
     json['fieldName'] = nativeToJson<String>(fieldName);
+    json['isPriceImage'] = nativeToJson<bool>(isPriceImage);
     json['handler'] = nativeToJson<String>(handler);
     if (attributes != null) {
       json['attributes'] = attributes!.toJson();
@@ -81,6 +85,7 @@ class GetProductFieldsQueryProductFields {
     required this.id,
     required this.order,
     required this.fieldName,
+    required this.isPriceImage,
     required this.handler,
     this.attributes,
     this.expectedData,

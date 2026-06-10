@@ -22,12 +22,14 @@ class GetAllProductsQueryProducts {
   final String name;
   final String description;
   final String imageUrl;
+  final String currencies;
   GetAllProductsQueryProducts.fromJson(dynamic json):
   
   id = nativeFromJson<String>(json['id']),
   name = nativeFromJson<String>(json['name']),
   description = nativeFromJson<String>(json['description']),
-  imageUrl = nativeFromJson<String>(json['imageUrl']);
+  imageUrl = nativeFromJson<String>(json['imageUrl']),
+  currencies = nativeFromJson<String>(json['currencies']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -41,11 +43,12 @@ class GetAllProductsQueryProducts {
     return id == otherTyped.id && 
     name == otherTyped.name && 
     description == otherTyped.description && 
-    imageUrl == otherTyped.imageUrl;
+    imageUrl == otherTyped.imageUrl && 
+    currencies == otherTyped.currencies;
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, name.hashCode, description.hashCode, imageUrl.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, name.hashCode, description.hashCode, imageUrl.hashCode, currencies.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -54,6 +57,7 @@ class GetAllProductsQueryProducts {
     json['name'] = nativeToJson<String>(name);
     json['description'] = nativeToJson<String>(description);
     json['imageUrl'] = nativeToJson<String>(imageUrl);
+    json['currencies'] = nativeToJson<String>(currencies);
     return json;
   }
 
@@ -62,6 +66,7 @@ class GetAllProductsQueryProducts {
     required this.name,
     required this.description,
     required this.imageUrl,
+    required this.currencies,
   });
 }
 

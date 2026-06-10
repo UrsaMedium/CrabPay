@@ -1,4 +1,3 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/price_function_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
@@ -17,15 +16,11 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ProductField>? productFields;
-    List<PriceFunction>? priceFunctions;
     Product? product = context.read<DatabaseBloc>().state.products?.firstWhere(
       (product) => product.id == productId,
     );
     context.read<DatabaseBloc>().add(
       DatabaseEventFetchProductFields(productId: productId),
-    );
-    context.read<DatabaseBloc>().add(
-      DatabaseEventFetchPriceFunctions(productId: productId),
     );
     return product == null
         ? Scaffold(
@@ -67,12 +62,7 @@ class CardView extends StatelessWidget {
                           .read<DatabaseBloc>()
                           .state
                           .productFields;
-                      priceFunctions = context
-                          .read<DatabaseBloc>()
-                          .state
-                          .priceFunctions;
-
-                      if (productFields != null && priceFunctions != null) {
+                      if (productFields != null) {
                         showModalBottomSheet(
                           showDragHandle: true,
                           context: context,
@@ -83,10 +73,6 @@ class CardView extends StatelessWidget {
                                 BuyBottomSheet(
                                   productId: product.id,
                                   productFields: productFields!,
-                                  priceFunction: priceFunctions!.firstWhere(
-                                    (element) =>
-                                        element.productId == product.id,
-                                  ),
                                 ),
                               ],
                             );
@@ -97,11 +83,7 @@ class CardView extends StatelessWidget {
                             .read<DatabaseBloc>()
                             .state
                             .productFields;
-                        priceFunctions = context
-                            .read<DatabaseBloc>()
-                            .state
-                            .priceFunctions;
-                        if (productFields == null || priceFunctions == null) {
+                        if (productFields == null) {
                           Fluttertoast.showToast(
                             msg: 'No Fields! Something went wrong.',
                           );

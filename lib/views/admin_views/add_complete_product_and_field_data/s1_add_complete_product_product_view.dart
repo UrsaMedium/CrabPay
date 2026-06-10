@@ -1,4 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
@@ -25,6 +27,8 @@ class _AddCompleteProductProductViewState
   String? _description;
   String? _imageUrl;
   String? _productNameUI;
+  String? _currency;
+  final TextEditingController _currencyController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   void _refreshOnDescription(String value) {
     setState(() {
@@ -33,13 +37,23 @@ class _AddCompleteProductProductViewState
     });
   }
 
+  @override
+  void dispose() {
+    _currencyController.dispose();
+    super.dispose();
+  }
+
   Product? _collectProduct() {
-    if (_productNameUI != null && _imageUrl != null && _description != null) {
+    if (_productNameUI != null &&
+        _imageUrl != null &&
+        _description != null &&
+        _currency != null) {
       return Product(
         id: 'id',
         name: _productNameUI!,
         image: _imageUrl!,
         description: _description!,
+        currencies: _currency!,
       );
     } else {
       return null;
@@ -106,6 +120,45 @@ class _AddCompleteProductProductViewState
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+                child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                  builder: (context, state) {
+                    bool enableCurreniesDropdownMenu = false;
+                    final List<DropdownMenuEntry<String>> currencies = [];
+                    if (state.states == DatabaseStates.currenciesFetched) {
+                      enableCurreniesDropdownMenu = true;
+                      for (var currencyTable in state.currencies!) {
+                        currencies.add(
+                          DropdownMenuEntry(
+                            value: currencyTable.name,
+                            label: 'From ${currencyTable.name}',
+                          ),
+                        );
+                      }
+                    } else {
+                      enableCurreniesDropdownMenu = false;
+                    }
+                    return DropdownMenu<String>(
+                      enabled: enableCurreniesDropdownMenu,
+                      expandedInsets: EdgeInsets.zero,
+                      inputDecorationTheme: InputDecorationTheme(
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: context.appColorScheme.primary,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      onSelected: (value) => _currency = value,
+                      controller: _currencyController,
+                      dropdownMenuEntries: currencies,
+                    );
+                  },
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32.0,
                   vertical: 4,
@@ -169,6 +222,7 @@ class _AddCompleteProductProductViewState
                         name: 'Mock Name4',
                         image: 'lib/assets/images/gas-gas-gas.jpg',
                         description: 'Mock description',
+                        currencies: 'rubDefault',
                       );
                       context.read<AdminBloc>().add(
                         AdminEventSubmitsProduct(
