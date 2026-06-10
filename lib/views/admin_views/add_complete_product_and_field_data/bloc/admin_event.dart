@@ -21,29 +21,24 @@ class AdminEventSubmitsFields extends AdminEvent {
   const AdminEventSubmitsFields({required this.appProductFields});
 }
 
-class AdminEventSubmitsPriceDimensions extends AdminEvent {
-  final String? functionType;
-  final String? currency;
-  final Map<ProductField, String>? priceDimensions;
-  const AdminEventSubmitsPriceDimensions({
-    required this.priceDimensions,
-    required this.functionType,
-    required this.currency,
-  });
-}
-
-class AdminEventEntersSpaceFillingView extends AdminEvent {
+class AdminEventEntersPriceImageFilling extends AdminEvent {
   final BuildContext context;
-  const AdminEventEntersSpaceFillingView({required this.context});
+  const AdminEventEntersPriceImageFilling({required this.context});
 }
 
-class AdminEventSpaceFillingDataIsPrepared extends AdminEvent {
-  const AdminEventSpaceFillingDataIsPrepared();
+class AdminEventPriceFillingDataIsPrepared extends AdminEvent {
+  const AdminEventPriceFillingDataIsPrepared();
 }
 
-class AdminEventSubmitsPriceFunction extends AdminEvent {
-  final Map<List<String>, double> priceFunction;
-  const AdminEventSubmitsPriceFunction({required this.priceFunction});
+class AdminEventSubmitsPriceImage extends AdminEvent {
+  final Map<String, double> priceImage;
+  final ProductField imageField;
+  final List<ProductField> fieldsList;
+  const AdminEventSubmitsPriceImage({
+    required this.priceImage,
+    required this.imageField,
+    required this.fieldsList,
+  });
 }
 
 class AdminEventPushesData extends AdminEvent {

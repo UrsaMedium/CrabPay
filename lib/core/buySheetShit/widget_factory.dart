@@ -282,7 +282,7 @@ Widget theAppWidgetBuilder({
   required BuildContext context,
   required String fieldName,
   required String handler,
-  Map<String, String?>? attributes,
+  Map<String, dynamic>? attributes,
   List<String>? expectedData,
 }) {
   Map<String, String> attr = {};

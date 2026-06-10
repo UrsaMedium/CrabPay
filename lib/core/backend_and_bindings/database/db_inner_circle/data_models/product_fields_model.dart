@@ -5,7 +5,7 @@ class ProductField {
   final String fieldName;
   bool isPriceImage;
   final String handler;
-  final Map<String, String?>? attributes;
+  Map<String, dynamic>? attributes;
   final List<String>? expectedData;
 
   ProductField({
@@ -20,6 +20,8 @@ class ProductField {
   });
 
   set makeThemImage(bool isItThough) => isPriceImage = isItThough;
+
+  set giveImageToAttributes(Map<String, double> pricaImage) => attributes = pricaImage;
 
   factory ProductField.intial() => ProductField(
     id: '',

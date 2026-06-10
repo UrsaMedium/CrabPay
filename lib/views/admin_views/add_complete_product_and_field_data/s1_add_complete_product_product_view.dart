@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
@@ -30,6 +31,13 @@ class _AddCompleteProductProductViewState
   String? _currency;
   final TextEditingController _currencyController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
+    super.initState();
+  }
+
   void _refreshOnDescription(String value) {
     setState(() {
       _description = value;

@@ -85,7 +85,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       for (var each in fetchedFields.data.productFields) {
         final attributes = each.attributes?.toJson() == null
             ? null
-            : Map<String, String?>.from(each.attributes?.toJson());
+            : Map<String, dynamic>.from(each.attributes?.toJson());
         final expectedData = each.expectedData == []
             ? null
             : each.expectedData?.toList();

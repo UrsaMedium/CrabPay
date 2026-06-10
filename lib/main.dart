@@ -7,7 +7,7 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s4_price_space_fill_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';

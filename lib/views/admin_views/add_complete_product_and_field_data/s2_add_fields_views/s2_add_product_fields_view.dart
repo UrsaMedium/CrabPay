@@ -202,6 +202,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                       onPressed: () {
                         List<ProductField>? collectFields = _collectFields();
                         if (collectFields != null) {
+                          print('s2-----------------------');
                           context.read<AdminBloc>().add(
                             AdminEventSubmitsFields(
                               appProductFields: collectFields,

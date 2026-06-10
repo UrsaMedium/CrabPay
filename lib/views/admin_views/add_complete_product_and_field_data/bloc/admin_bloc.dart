@@ -32,7 +32,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       );
     });
 
-    on<AdminEventEntersSpaceFillingView>((event, emit) {
+    on<AdminEventEntersPriceImageFilling>((event, emit) {
       DataAndWidgetsPreperation dataAndWidgetsPreperation =
           DataAndWidgetsPreperation(context: event.context);
       emit(
@@ -40,16 +40,21 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       );
     });
 
-    on<AdminEventSpaceFillingDataIsPrepared>(
+    on<AdminEventPriceFillingDataIsPrepared>(
       (event, emit) =>
           emit(state.copyWith(states: AdminStates.dataForSpaceFillingIsReady)),
     );
 
-    on<AdminEventSubmitsPriceFunction>((event, emit) {
+    on<AdminEventSubmitsPriceImage>((event, emit) {
+      for (var field in event.fieldsList) {
+        if (field.isPriceImage) {
+          field.giveImageToAttributes = event.priceImage;
+        }
+      }
       emit(
         state.copyWith(
-          priceFunction: event.priceFunction,
-          states: AdminStates.adminSubmitedPriceFunctions,
+          appProductFields: event.fieldsList,
+          states: AdminStates.adminSubmitedPriceImage,
         ),
       );
     });

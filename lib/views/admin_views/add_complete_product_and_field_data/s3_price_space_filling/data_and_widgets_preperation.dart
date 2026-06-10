@@ -10,129 +10,60 @@ import 'package:go_router/go_router.dart';
 
 class DataAndWidgetsPreperation {
   final BuildContext context;
-  Map<ProductField, String>? _priceSpace;
-  ProductField? _priceRangeDimension;
-  final Map<String, List<String>> _priceDomainDimensions = {};
-  final Map<List<String>, double> priceMatrixInput = {};
-  final List<Map<String, String>> _domainMatrix = [];
-  final List<List<String>> _functionsList = [];
-  final Map<List<String>, Map<String, TextEditingController>>
-  _textEditingControllers = {};
-  final List<Widget> everyPriceFunctionListOfWidgets = [];
+  List<ProductField>? productFields;
+  ProductField? imageField;
+  final Map<String, double> priceImage = {};
+  final Map<String, TextEditingController> _textEditingControllers = {};
+  Widget? priceImageWidget;
 
   DataAndWidgetsPreperation({required this.context}) {
-    _priceSpace = context.read<AdminBloc>().state.priceDimensions;
-    //if the price space doesn't exist go back
-    if (_priceSpace == null) {
-      Fluttertoast.showToast(msg: 'No price space is created');
+    productFields = context.read<AdminBloc>().state.appProductFields;
+
+    if (productFields == null) {
+      Fluttertoast.showToast(msg: 'No fields is created');
       context.pop();
     }
-    //retreaving range dimension
-    for (var field in _priceSpace!.keys) {
-      if (_priceSpace![field] == 'range') {
-        _priceRangeDimension = field;
+
+    int imageChecker = 0;
+    for (var field in productFields!) {
+      if (field.isPriceImage) {
+        imageField = field;
+        imageChecker++;
       }
     }
-    //if there is no range dimension go back
-    if (_priceRangeDimension == null) {
-      Fluttertoast.showToast(msg: 'How come there is no range');
+
+    if (imageChecker != 1) {
+      Fluttertoast.showToast(msg: 'How come there is not just one image field');
       context.pop();
     }
-    //if the range dimantion is empty go back
-    if (_priceRangeDimension!.expectedData == null) {
-      Fluttertoast.showToast(
-        msg:
-            'What? The range field ${_priceRangeDimension!} has no description of the expectedData',
-      );
-      context.pop();
-    }
-    //retreaving domain dimensions
-    for (var field in _priceSpace!.keys) {
-      if (_priceSpace![field] == 'domain') {
-        //if a domain dimension is empty go back
-        if (field.expectedData == null) {
-          Fluttertoast.showToast(
-            msg:
-                'What? The ${field.fieldName} domain field has no description for the expectadeData',
-          );
-          context.pop();
-        } else {
-          _priceDomainDimensions[field.fieldName] = field.expectedData!;
-        }
-      }
-    }
-    try {
-      _leafWalker();
-    } catch (_) {
-      rethrow;
-    }
-    for (var priceFunction in _domainMatrix) {
-      _functionsList.add(priceFunction.values.toList());
-    }
+
     if (_textEditingControllers.isNotEmpty) {
       for (var c in _textEditingControllers.values) {
-        for (var element in c.values) {
-          element.dispose();
-        }
+        c.dispose();
       }
       _textEditingControllers.clear();
     }
+
     _textEditingControllers.addAll(_createTextEditingControllers());
-    if (everyPriceFunctionListOfWidgets.isNotEmpty) {
-      everyPriceFunctionListOfWidgets.clear();
-    }
-    everyPriceFunctionListOfWidgets.addAll(_everyPriceFunction(context));
-    context.read<AdminBloc>().add(AdminEventSpaceFillingDataIsPrepared());
+
+    priceImageWidget = _everyPriceFunction(context);
+    context.read<AdminBloc>().add(AdminEventPriceFillingDataIsPrepared());
+    print('1-----------------------');
   }
 
-  void _leafWalker({Map<String, String>? leafNPath}) {
-    if (leafNPath == null) {
-      leafNPath = {};
-      _domainMatrix.clear();
-      _leafWalker(leafNPath: leafNPath);
-    } else {
-      String dimension = _priceDomainDimensions.keys.firstWhere(
-        (ofDomains) => !leafNPath!.keys.any((element) => element == ofDomains),
-        orElse: () => 'null',
-      );
-      if (dimension != 'null') {
-        for (var value in _priceDomainDimensions[dimension]!) {
-          leafNPath[dimension] = value;
-          final newPath = Map<String, String>.from(leafNPath);
-          _leafWalker(leafNPath: newPath);
-        }
-      } else {
-        _domainMatrix.add(leafNPath);
-      }
-    }
-  }
-
-  Map<List<String>, Map<String, TextEditingController>>
-  _createTextEditingControllers() {
-    Map<List<String>, Map<String, TextEditingController>> result = {};
-    for (var function in _functionsList) {
-      Map<String, TextEditingController> newMap = {};
-      for (var image in _priceRangeDimension!.expectedData!) {
-        TextEditingController newController = TextEditingController();
-        newMap[image] = newController;
-      }
-      result[function] = newMap;
+  Map<String, TextEditingController> _createTextEditingControllers() {
+    Map<String, TextEditingController> result = {};
+    for (var iamgePrice in imageField!.expectedData!) {
+      TextEditingController newController = TextEditingController();
+      result[iamgePrice] = newController;
     }
     return result;
   }
 
-  void _inputing(List<String> func, double value) {
-    final List<String> newF = List<String>.from(func);
-    final double newV = value;
-    priceMatrixInput[newF] = newV;
-  }
-
-  List<Widget> _priceRangeListWidgetGenerator(List<String> function) {
-    List<String> localFunc = List<String>.from(function);
-    Map<String, TextEditingController> controllers =
-        _textEditingControllers[function]!;
+  List<Widget> _priceRangeListWidgetGenerator() {
+    Map<String, TextEditingController> controllers = _textEditingControllers;
     List<Widget> result = [];
-    for (var aPriceImage in _priceRangeDimension!.expectedData!) {
+    for (var aPriceImage in imageField!.expectedData!) {
       result.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
@@ -152,9 +83,9 @@ class DataAndWidgetsPreperation {
                   child: TextField(
                     controller: controllers[aPriceImage],
                     onChanged: (value) {
-                      localFunc.add(aPriceImage);
-                      _inputing(localFunc, double.parse(value));
-                      localFunc.remove(aPriceImage);
+                      priceImage[aPriceImage] = double.parse(
+                        _textEditingControllers[aPriceImage]!.text,
+                      );
                     },
                     keyboardType: .number,
                     inputFormatters: [
@@ -178,32 +109,24 @@ class DataAndWidgetsPreperation {
     return result;
   }
 
-  List<Widget> _everyPriceFunction(BuildContext context) {
-    List<Widget> result = [];
-    for (var function in _functionsList) {
-      result.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ExpansionTile(
-            childrenPadding: EdgeInsets.only(bottom: 4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(30),
-            ),
-            collapsedShape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(30),
-            ),
-            backgroundColor: context.appColorScheme.onPrimaryFixed,
-            collapsedBackgroundColor:
-                context.appColorScheme.onPrimaryFixedVariant,
-
-            title: Text(function.toString()),
-            subtitle: Text('Fill the weights for the domain'),
-            children: _priceRangeListWidgetGenerator(function),
-          ),
+  Widget _everyPriceFunction(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionTile(
+        childrenPadding: EdgeInsets.only(bottom: 4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
         ),
-      );
-    }
+        collapsedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
+        ),
+        backgroundColor: context.appColorScheme.onPrimaryFixed,
+        collapsedBackgroundColor: context.appColorScheme.onPrimaryFixedVariant,
 
-    return result;
+        title: Text(imageField!.fieldName),
+        subtitle: Text('Fill the price options'),
+        children: _priceRangeListWidgetGenerator(),
+      ),
+    );
   }
 }

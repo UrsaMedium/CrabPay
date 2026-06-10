@@ -7,7 +7,7 @@ enum AdminStates {
   initial,
   adminSubmitedAppProduct,
   adminSubmitedAppProductFields,
-  adminSubmitedPriceFunctions,
+  adminSubmitedPriceImage,
   dataForSpaceFillingIsReady,
 }
 
@@ -30,10 +30,7 @@ class AdminState {
   AdminState copyWith({
     Product? appProduct,
     List<ProductField>? appProductFields,
-    Map<ProductField, String>? priceDimensions,
-    String? functionType,
     String? currency,
-    Map<List<String>, double>? priceFunction,
     DataAndWidgetsPreperation? dataAndWidgetsPreperation,
     AdminStates? states,
   }) {

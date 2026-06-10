@@ -17,10 +17,6 @@ class DataOverviewView extends StatelessWidget {
         .read<AdminBloc>()
         .state
         .appProductFields;
-    final Map<List<String>, double>? priceFunction = context
-        .read<AdminBloc>()
-        .state
-        .priceFunction;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -34,8 +30,7 @@ class DataOverviewView extends StatelessWidget {
       ),
       body:
           !(appProductFields != null &&
-              appProduct != null &&
-              priceFunction != null)
+              appProduct != null)
           ? Text('no data')
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -44,7 +39,6 @@ class DataOverviewView extends StatelessWidget {
                   children: [
                     _productOverview(context, appProduct),
                     _fieldsOverview(context, appProductFields),
-                    _priceFunctionOverview(context, priceFunction),
                     Padding(
                       padding: const EdgeInsets.only(
                         left: 32.0,
@@ -72,89 +66,6 @@ class DataOverviewView extends StatelessWidget {
             ),
     );
   }
-}
-
-Widget _priceFunctionOverview(
-  BuildContext context,
-  Map<List<String>, double> priceFunction,
-) {
-  List<Widget> solutions = [];
-  for (var function in priceFunction.keys) {
-    solutions.add(
-      Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(30),
-        ),
-        color: context.appColorScheme.onPrimaryFixedVariant,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
-          child: Column(
-            children: [
-              Card(
-                elevation: 7,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 2,
-                  ),
-                  child: Column(
-                    children: [Text('Variables\' Names:'), Text('$function')],
-                  ),
-                ),
-              ),
-              Column(
-                spacing: 8,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: .spaceAround,
-                        children: [
-                          Text('Solution: '),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 180),
-                            child: Text('${priceFunction[function]}'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(30),
-      ),
-      color: context.appColorScheme.onPrimaryFixed,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 6, bottom: 16, top: 8, right: 6),
-        child: Column(
-          children: [
-            Card(
-              elevation: 7,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 2,
-                ),
-                child: Text('Price Resolutions'),
-              ),
-            ),
-            ...solutions,
-          ],
-        ),
-      ),
-    ),
-  );
 }
 
 Widget _fieldsOverview(

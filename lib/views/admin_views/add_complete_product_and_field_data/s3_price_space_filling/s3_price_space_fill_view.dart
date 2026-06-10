@@ -18,9 +18,11 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
 
   @override
   void initState() {
+    print('s31-----------------------');
     context.read<AdminBloc>().add(
-      AdminEventEntersSpaceFillingView(context: context),
+      AdminEventEntersPriceImageFilling(context: context),
     );
+    print('s32-----------------------');
     super.initState();
   }
 
@@ -43,13 +45,13 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
             BlocBuilder<AdminBloc, AdminState>(
               builder: (context, state) {
                 _dataAndWidgetsPreperation = state.dataAndWidgetsPreperation;
-                return Column(
-                  children: state.dataAndWidgetsPreperation == null
-                      ? []
-                      : state
-                            .dataAndWidgetsPreperation!
-                            .everyPriceFunctionListOfWidgets,
-                );
+                if (state.dataAndWidgetsPreperation != null) {
+                  if (state.dataAndWidgetsPreperation!.priceImageWidget !=
+                      null) {
+                    return state.dataAndWidgetsPreperation!.priceImageWidget!;
+                  }
+                }
+                return Text('');
               },
             ),
             Padding(
@@ -73,16 +75,20 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_dataAndWidgetsPreperation != null) {
-                          final priceFunction = Map<List<String>, double>.from(
-                            _dataAndWidgetsPreperation!.priceMatrixInput,
+                          final priceImages = Map<String, double>.from(
+                            _dataAndWidgetsPreperation!.priceImage,
                           );
                           context.read<AdminBloc>().add(
-                            AdminEventSubmitsPriceFunction(
-                              priceFunction: priceFunction,
+                            AdminEventSubmitsPriceImage(
+                              priceImage: priceImages,
+                              imageField:
+                                  _dataAndWidgetsPreperation!.imageField!,
+                              fieldsList:
+                                  _dataAndWidgetsPreperation!.productFields!,
                             ),
                           );
                           context.go(
-                            '/add_complete_product_product_view/add_product_fields_view/price_space_maping_view/price_space_fill_view/data_overview_view',
+                            '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view/data_overview_view',
                           );
                         }
                       },

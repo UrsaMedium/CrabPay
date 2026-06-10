@@ -14,7 +14,7 @@ type ProductField @table(key: "id") {
   isPriceImage: Boolean! @default(value: false)
   handler: String!
   attributes: Any
-  expectedData: [String!] # which fields will return an information
+  expectedData: [String!] 
 }
 
 type Currencies @table(key: "id") {
