@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePageView extends StatefulWidget {
-  // final String id;
   const HomePageView({super.key});
 
   @override
@@ -18,29 +17,42 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
-    context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+    if (context.read<DatabaseBloc>().state.products == null ||
+        context.read<DatabaseBloc>().state.products == []) {
+      context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          BlocBuilder<DatabaseBloc, DatabaseState>(
-            buildWhen: (previous, current) =>
-                current.states == DatabaseStates.productsFetched,
-            builder: (context, state) {
-              final products =
-                  context.read<DatabaseBloc>().state.products ?? [];
-              final productCards = _appHomeCard(context, products);
-              return SliverList.builder(
-                itemCount: products.length,
-                itemBuilder: (context, index) => productCards[index],
-              );
-            },
-          ),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+          await context.read<DatabaseBloc>().stream.firstWhere(
+            (state) =>
+                (state.states == DatabaseStates.productsFetched ||
+                state.states == DatabaseStates.productsNotFetched),
+          );
+        },
+        child: CustomScrollView(
+          slivers: [
+            BlocBuilder<DatabaseBloc, DatabaseState>(
+              buildWhen: (previous, current) =>
+                  current.states == DatabaseStates.productsFetched,
+              builder: (context, state) {
+                final products =
+                    context.read<DatabaseBloc>().state.products ?? [];
+                final productCards = _appHomeCard(context, products);
+                return SliverList.builder(
+                  itemCount: products.length,
+                  itemBuilder: (context, index) => productCards[index],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

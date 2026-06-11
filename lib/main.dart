@@ -122,6 +122,7 @@ class CrabPayApp extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
     return SafeArea(
+      top: false,
       child: DynamicColorBuilder(
         builder: (lightDynamic, darkDynamic) {
           ColorScheme lightScheme;
