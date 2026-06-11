@@ -212,15 +212,6 @@ extend type ProductField {
   """
   _count: Int! @fdc_generated(from: "ProductField.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProductField` table where the `attributes` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  attributes_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProductField.attributes", purpose: QUERY_COUNT)
-  """
   ✨ Count the number of rows in the `ProductField` table where the `fieldName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   fieldName_count(
@@ -266,6 +257,15 @@ extend type ProductField {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ProductField.order", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ProductField` table where the `priceImages` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  priceImages_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProductField.priceImages", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ProductField` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   productId_count(
@@ -293,21 +293,21 @@ extend type ProductField {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "ProductField.order", purpose: QUERY_AVG)
   """
-  ✨ Minimum of the `attributes` field in the `ProductField` table.
-  """
-  attributes_min: Any @fdc_generated(from: "ProductField.attributes", purpose: QUERY_MIN)
-  """
   ✨ Minimum of the `order` field in the `ProductField` table.
   """
   order_min: Int @fdc_generated(from: "ProductField.order", purpose: QUERY_MIN)
   """
-  ✨ Maximum of the `attributes` field in the `ProductField` table.
+  ✨ Minimum of the `priceImages` field in the `ProductField` table.
   """
-  attributes_max: Any @fdc_generated(from: "ProductField.attributes", purpose: QUERY_MAX)
+  priceImages_min: Any @fdc_generated(from: "ProductField.priceImages", purpose: QUERY_MIN)
   """
   ✨ Maximum of the `order` field in the `ProductField` table.
   """
   order_max: Int @fdc_generated(from: "ProductField.order", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `priceImages` field in the `ProductField` table.
+  """
+  priceImages_max: Any @fdc_generated(from: "ProductField.priceImages", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """

@@ -3,14 +3,14 @@ part of 'crabpay_connector.dart';
 class AddProductFieldVariablesBuilder {
   String productId;
   int order;
-  Optional<AnyValue> _attributes = Optional.optional(AnyValue.fromJson, defaultSerializer);
+  Optional<AnyValue> _priceImages = Optional.optional(AnyValue.fromJson, defaultSerializer);
   Optional<List<String>> _expectedData = Optional.optional(listDeserializer(nativeFromJson), listSerializer(nativeToJson));
   String handler;
   String fieldName;
   bool isPriceImage;
 
-  final FirebaseDataConnect _dataConnect;  AddProductFieldVariablesBuilder attributes(AnyValue? t) {
-   _attributes.value = t;
+  final FirebaseDataConnect _dataConnect;  AddProductFieldVariablesBuilder priceImages(AnyValue? t) {
+   _priceImages.value = t;
    return this;
   }
   AddProductFieldVariablesBuilder expectedData(List<String>? t) {
@@ -26,7 +26,7 @@ class AddProductFieldVariablesBuilder {
   }
 
   MutationRef<AddProductFieldData, AddProductFieldVariables> ref() {
-    AddProductFieldVariables vars= AddProductFieldVariables(productId: productId,order: order,attributes: _attributes,expectedData: _expectedData,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
+    AddProductFieldVariables vars= AddProductFieldVariables(productId: productId,order: order,priceImages: _priceImages,expectedData: _expectedData,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
     return _dataConnect.mutation("AddProductField", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -103,7 +103,7 @@ class AddProductFieldData {
 class AddProductFieldVariables {
   final String productId;
   final int order;
-  late final Optional<AnyValue>attributes;
+  late final Optional<AnyValue>priceImages;
   late final Optional<List<String>>expectedData;
   final String handler;
   final String fieldName;
@@ -120,8 +120,8 @@ class AddProductFieldVariables {
   
   
   
-    attributes = Optional.optional(AnyValue.fromJson, defaultSerializer);
-    attributes.value = json['attributes'] == null ? null : AnyValue.fromJson(json['attributes']);
+    priceImages = Optional.optional(AnyValue.fromJson, defaultSerializer);
+    priceImages.value = json['priceImages'] == null ? null : AnyValue.fromJson(json['priceImages']);
   
   
     expectedData = Optional.optional(listDeserializer(nativeFromJson), listSerializer(nativeToJson));
@@ -145,7 +145,7 @@ class AddProductFieldVariables {
     final AddProductFieldVariables otherTyped = other as AddProductFieldVariables;
     return productId == otherTyped.productId && 
     order == otherTyped.order && 
-    attributes == otherTyped.attributes && 
+    priceImages == otherTyped.priceImages && 
     expectedData == otherTyped.expectedData && 
     handler == otherTyped.handler && 
     fieldName == otherTyped.fieldName && 
@@ -153,15 +153,15 @@ class AddProductFieldVariables {
     
   }
   @override
-  int get hashCode => Object.hashAll([productId.hashCode, order.hashCode, attributes.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode, isPriceImage.hashCode]);
+  int get hashCode => Object.hashAll([productId.hashCode, order.hashCode, priceImages.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode, isPriceImage.hashCode]);
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['productId'] = nativeToJson<String>(productId);
     json['order'] = nativeToJson<int>(order);
-    if(attributes.state == OptionalState.set) {
-      json['attributes'] = attributes.toJson();
+    if(priceImages.state == OptionalState.set) {
+      json['priceImages'] = priceImages.toJson();
     }
     if(expectedData.state == OptionalState.set) {
       json['expectedData'] = expectedData.toJson();
@@ -175,7 +175,7 @@ class AddProductFieldVariables {
   AddProductFieldVariables({
     required this.productId,
     required this.order,
-    required this.attributes,
+    required this.priceImages,
     required this.expectedData,
     required this.handler,
     required this.fieldName,

@@ -297,8 +297,8 @@ The builder pattern allows Data Connect to distinguish between fields that haven
 ```dart
 class AddProductFieldVariablesBuilder {
   ...
-   AddProductFieldVariablesBuilder attributes(AnyValue? t) {
-   _attributes.value = t;
+   AddProductFieldVariablesBuilder priceImages(AnyValue? t) {
+   _priceImages.value = t;
    return this;
   }
   AddProductFieldVariablesBuilder expectedData(List<String>? t) {
@@ -315,7 +315,7 @@ CrabpayConnectorConnector.instance.addProductField(
   fieldName: fieldName,
   isPriceImage: isPriceImage,
 )
-.attributes(attributes)
+.priceImages(priceImages)
 .expectedData(expectedData)
 .execute();
 ```
@@ -594,8 +594,8 @@ class ProductFieldUpdateVariablesBuilder {
    _id.value = t;
    return this;
   }
-  ProductFieldUpdateVariablesBuilder attributes(AnyValue? t) {
-   _attributes.value = t;
+  ProductFieldUpdateVariablesBuilder priceImages(AnyValue? t) {
+   _priceImages.value = t;
    return this;
   }
   ProductFieldUpdateVariablesBuilder expectedData(List<String>? t) {
@@ -613,7 +613,7 @@ CrabpayConnectorConnector.instance.productFieldUpdate(
   isPriceImage: isPriceImage,
 )
 .id(id)
-.attributes(attributes)
+.priceImages(priceImages)
 .expectedData(expectedData)
 .execute();
 ```

@@ -4,7 +4,7 @@ class ProductFieldUpdateVariablesBuilder {
   Optional<String> _id = Optional.optional(nativeFromJson, nativeToJson);
   String productId;
   int order;
-  Optional<AnyValue> _attributes = Optional.optional(AnyValue.fromJson, defaultSerializer);
+  Optional<AnyValue> _priceImages = Optional.optional(AnyValue.fromJson, defaultSerializer);
   Optional<List<String>> _expectedData = Optional.optional(listDeserializer(nativeFromJson), listSerializer(nativeToJson));
   String handler;
   String fieldName;
@@ -15,8 +15,8 @@ class ProductFieldUpdateVariablesBuilder {
    _id.value = t;
    return this;
   }
-  ProductFieldUpdateVariablesBuilder attributes(AnyValue? t) {
-   _attributes.value = t;
+  ProductFieldUpdateVariablesBuilder priceImages(AnyValue? t) {
+   _priceImages.value = t;
    return this;
   }
   ProductFieldUpdateVariablesBuilder expectedData(List<String>? t) {
@@ -32,7 +32,7 @@ class ProductFieldUpdateVariablesBuilder {
   }
 
   MutationRef<ProductFieldUpdateData, ProductFieldUpdateVariables> ref() {
-    ProductFieldUpdateVariables vars= ProductFieldUpdateVariables(id: _id,productId: productId,order: order,attributes: _attributes,expectedData: _expectedData,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
+    ProductFieldUpdateVariables vars= ProductFieldUpdateVariables(id: _id,productId: productId,order: order,priceImages: _priceImages,expectedData: _expectedData,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
     return _dataConnect.mutation("productFieldUpdate", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -112,7 +112,7 @@ class ProductFieldUpdateVariables {
   late final Optional<String>id;
   final String productId;
   final int order;
-  late final Optional<AnyValue>attributes;
+  late final Optional<AnyValue>priceImages;
   late final Optional<List<String>>expectedData;
   final String handler;
   final String fieldName;
@@ -133,8 +133,8 @@ class ProductFieldUpdateVariables {
   
   
   
-    attributes = Optional.optional(AnyValue.fromJson, defaultSerializer);
-    attributes.value = json['attributes'] == null ? null : AnyValue.fromJson(json['attributes']);
+    priceImages = Optional.optional(AnyValue.fromJson, defaultSerializer);
+    priceImages.value = json['priceImages'] == null ? null : AnyValue.fromJson(json['priceImages']);
   
   
     expectedData = Optional.optional(listDeserializer(nativeFromJson), listSerializer(nativeToJson));
@@ -159,7 +159,7 @@ class ProductFieldUpdateVariables {
     return id == otherTyped.id && 
     productId == otherTyped.productId && 
     order == otherTyped.order && 
-    attributes == otherTyped.attributes && 
+    priceImages == otherTyped.priceImages && 
     expectedData == otherTyped.expectedData && 
     handler == otherTyped.handler && 
     fieldName == otherTyped.fieldName && 
@@ -167,7 +167,7 @@ class ProductFieldUpdateVariables {
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, order.hashCode, attributes.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode, isPriceImage.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, productId.hashCode, order.hashCode, priceImages.hashCode, expectedData.hashCode, handler.hashCode, fieldName.hashCode, isPriceImage.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -177,8 +177,8 @@ class ProductFieldUpdateVariables {
     }
     json['productId'] = nativeToJson<String>(productId);
     json['order'] = nativeToJson<int>(order);
-    if(attributes.state == OptionalState.set) {
-      json['attributes'] = attributes.toJson();
+    if(priceImages.state == OptionalState.set) {
+      json['priceImages'] = priceImages.toJson();
     }
     if(expectedData.state == OptionalState.set) {
       json['expectedData'] = expectedData.toJson();
@@ -193,7 +193,7 @@ class ProductFieldUpdateVariables {
     required this.id,
     required this.productId,
     required this.order,
-    required this.attributes,
+    required this.priceImages,
     required this.expectedData,
     required this.handler,
     required this.fieldName,

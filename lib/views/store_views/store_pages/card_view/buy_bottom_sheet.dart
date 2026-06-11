@@ -20,38 +20,20 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   Map<String, String> retrievedData = {};
   double precalculatedPrice = 0;
   List<String> functionDimentions = [];
-  double theCoeffitient = 1;
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
-      // int ifAllGood = 0;
-      // retrievedData[fieldName] = dataReceived;
-      // for (var formula in widget.priceFunction.fomulas.keys) {
-      //   if (Set.from(retrievedData.keys).containsAll(formula)) {
-      //     theCoeffitient = widget.priceFunction.fomulas[formula]!;
-      //     ifAllGood++;
-      //   }
-      // }
-      // if (ifAllGood == 1) {
-      //   if (widget.priceFunction.type == 'linear') {
-      //     double? input = double.tryParse(
-      //       retrievedData[retrievedData.keys.firstWhere(
-      //             (element) =>
-      //                 element == widget.priceFunction.functionImageField,
-      //           )] ??
-      //           'q',
-      //     );
-      //     if (input != null) {
-      //       precalculatedPrice = input * theCoeffitient;
-      //     } else {
-      //       precalculatedPrice = 0;
-      //     }
-      //   } else {
-      //     precalculatedPrice = theCoeffitient;
-      //   }
-      // } else {
-      //   print('bugger -- $ifAllGood');
-      // }
+      double retrievedPrice = 0;
+      retrievedData[fieldName] = dataReceived;
+      if (fieldName ==
+          widget.productFields
+              .firstWhere((element) => element.isPriceImage)
+              .fieldName) {
+        retrievedPrice = widget.productFields
+            .firstWhere((element) => element.fieldName == fieldName)
+            .priceImages![dataReceived]!;
+      }
+      precalculatedPrice = retrievedPrice;
     });
   }
 
@@ -66,7 +48,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
             context: context,
             fieldName: each.fieldName,
             handler: each.handler,
-            attributes: each.attributes,
+            priceImages: each.priceImages,
             expectedData: each.expectedData,
           ),
         ),

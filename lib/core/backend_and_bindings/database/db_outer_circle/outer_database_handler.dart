@@ -83,15 +83,15 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
           .execute();
       List<ProductField> processedFetchedFields = [];
       for (var each in fetchedFields.data.productFields) {
-        final attributes = each.attributes?.toJson() == null
+        final jsonPriceImages = each.priceImages?.toJson();
+        final priceImages = jsonPriceImages == null
             ? null
-            : Map<String, dynamic>.from(each.attributes?.toJson());
+            : Map<String, dynamic>.from(
+                jsonPriceImages,
+              ).map((key, value) => MapEntry(key, (value as num).toDouble()));
         final expectedData = each.expectedData == []
             ? null
             : each.expectedData?.toList();
-        // print(
-        //   '    ${each.id}, $productId,  ${each.order},  ${each.fieldName},  ${each.handler}, $attributes, $expectedData',
-        // );
         processedFetchedFields.add(
           ProductField(
             id: each.id,
@@ -100,7 +100,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             fieldName: each.fieldName,
             isPriceImage: each.isPriceImage,
             handler: each.handler,
-            attributes: attributes,
+            priceImages: priceImages,
             expectedData: expectedData,
           ),
         );
@@ -117,9 +117,9 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> addProductField(ProductField field) async {
     try {
-      AnyValue? attributes;
-      if (field.attributes != null) {
-        attributes = AnyValue(field.attributes!.cast<String, dynamic>());
+      AnyValue? priceImages;
+      if (field.priceImages != null) {
+        priceImages = AnyValue(field.priceImages!.cast<String, double>());
       }
       List<String>? expectedData;
       if (field.expectedData != null) {
@@ -133,7 +133,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
             fieldName: field.fieldName,
             isPriceImage: field.isPriceImage,
           )
-          .attributes(attributes)
+          .priceImages(priceImages)
           .expectedData(expectedData)
           .execute();
     } catch (e) {

@@ -35,15 +35,33 @@ Color widgetPropertyColor(BuildContext context, String? color) {
   }
 }
 
+// InkWell(
+//           onTap: () => radioReacts(widget.priceImages![each].toString()),
+//           child: Row(
+//             children: [
+//               Expanded(
+//                 child: ListTile(
+//                   title: Text(each),
+//                   leading: Radio<String>(value: each),
+//                 ),
+//               ),
+//               if (widget.priceImages != null)
+//                 Text(widget.priceImages![each].toString()),
+//             ],
+//           ),
+//         ),
+//       );
 class RadioConstructor extends StatefulWidget {
   final Function(String, String) collectedDataBridge;
   final List<String> expectedData;
   final String feildName;
+  final Map<String, double>? priceImages;
   const RadioConstructor({
     super.key,
     required this.expectedData,
     required this.feildName,
     required this.collectedDataBridge,
+    this.priceImages,
   });
 
   @override
@@ -66,9 +84,20 @@ class _RadioConstructorState extends State<RadioConstructor> {
       resultList.add(
         InkWell(
           onTap: () => radioReacts(each),
-          child: ListTile(
-            title: Text(each),
-            leading: Radio<String>(value: each),
+          child: Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  title: Text(each),
+                  leading: Radio<String>(value: each),
+                ),
+              ),
+              if (widget.priceImages != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Text(widget.priceImages![each].toString()),
+                ),
+            ],
           ),
         ),
       );
@@ -282,36 +311,34 @@ Widget theAppWidgetBuilder({
   required BuildContext context,
   required String fieldName,
   required String handler,
-  Map<String, dynamic>? attributes,
+  Map<String, double>? priceImages,
   List<String>? expectedData,
 }) {
-  Map<String, String> attr = {};
-  if (attributes != null) {
-    for (var each in attributes.keys) {
-      if (attributes[each] == '') {
-        attr[each] = 'null';
-      } else {
-        attr[each] = attributes[each]!;
-      }
+  Map<String, double> pricing = {};
+  if (priceImages != null) {
+    for (var each in priceImages.keys) {
+      pricing[each] = priceImages[each]!;
     }
   }
 
   switch (handler) {
-    case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
-      return Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 16),
-        child: Container(
-          alignment: widgetPropertyAlignment(attr['alignment']),
-          child: Text(
-            attr['text']!,
-            style: TextStyle(
-              color: widgetPropertyColor(context, attr['color']),
-              fontSize: double.tryParse(attr['fontSize']!) ?? 14,
-              fontWeight: FontWeight(int.tryParse(attr['fontWeight']!) ?? 400),
-            ),
-          ),
-        ),
-      );
+    // case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
+    //   return Padding(
+    //     padding: const EdgeInsets.only(top: 8.0, left: 16),
+    //     child: Container(
+    //       alignment: widgetPropertyAlignment(pricing['alignment']),
+    //       child: Text(
+    //         pricing['text']!,
+    //         style: TextStyle(
+    //           color: widgetPropertyColor(context, pricing['color']),
+    //           fontSize: double.tryParse(pricing['fontSize']!) ?? 14,
+    //           fontWeight: FontWeight(
+    //             int.tryParse(pricing['fontWeight']!) ?? 400,
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   );
     case 'InputField': // pass the name of entered data
       return InputFieldConstructor(
         collectedDataBridge: collectedDataBridge,
@@ -321,6 +348,7 @@ Widget theAppWidgetBuilder({
       );
     case 'RadioList': // pass map of option name : option
       return RadioConstructor(
+        priceImages: priceImages,
         collectedDataBridge: collectedDataBridge,
         expectedData: expectedData ?? ['error'],
         feildName: fieldName,

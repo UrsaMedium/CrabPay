@@ -82,7 +82,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
             fieldName: field.fieldName,
             isPriceImage: field.isPriceImage,
             handler: field.handler,
-            attributes: field.attributes,
+            priceImages: field.priceImages,
             expectedData: field.expectedData,
           );
           event.context.read<DatabaseBloc>().add(

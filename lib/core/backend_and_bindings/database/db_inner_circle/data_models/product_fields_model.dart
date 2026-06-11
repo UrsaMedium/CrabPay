@@ -5,7 +5,7 @@ class ProductField {
   final String fieldName;
   bool isPriceImage;
   final String handler;
-  Map<String, dynamic>? attributes;
+  Map<String, double>? priceImages;
   final List<String>? expectedData;
 
   ProductField({
@@ -14,14 +14,14 @@ class ProductField {
     required this.order,
     required this.fieldName,
     required this.handler,
-    this.attributes,
+    this.priceImages,
     this.expectedData,
     required this.isPriceImage,
   });
 
   set makeThemImage(bool isItThough) => isPriceImage = isItThough;
 
-  set giveImageToAttributes(Map<String, double> pricaImage) => attributes = pricaImage;
+  set giveImageToAttributes(Map<String, double> pricaImage) => priceImages = pricaImage;
 
   factory ProductField.intial() => ProductField(
     id: '',

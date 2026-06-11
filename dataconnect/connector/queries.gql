@@ -16,7 +16,7 @@ query GetProductFieldsQuery($productId: UUID!) @auth(level: PUBLIC) {
     fieldName
     isPriceImage
     handler
-    attributes
+    priceImages
     expectedData
   }
 }

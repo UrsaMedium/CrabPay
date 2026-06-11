@@ -551,14 +551,6 @@ input ProductField_Data {
   """
   product: Product_Key @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `ProductField`.`attributes` of type `Any`
-  """
-  attributes: Any
-  """
-  ✨ `_expr` server value variant of `attributes` (✨ Generated from Field `ProductField`.`attributes` of type `Any`)
-  """
-  attributes_expr: Any_Expr @fdc_forbiddenInVariables
-  """
   ✨ Generated from Field `ProductField`.`expectedData` of type `[String!]`
   """
   expectedData: [String!]
@@ -602,6 +594,14 @@ input ProductField_Data {
   ✨ `_update` server value variant of `order` (✨ Generated from Field `ProductField`.`order` of type `Int!`)
   """
   order_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ProductField`.`priceImages` of type `Any`
+  """
+  priceImages: Any
+  """
+  ✨ `_expr` server value variant of `priceImages` (✨ Generated from Field `ProductField`.`priceImages` of type `Any`)
+  """
+  priceImages_expr: Any_Expr @fdc_forbiddenInVariables
 }
 """
 ✨ Generated filter input type for table 'ProductField'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -632,10 +632,6 @@ input ProductField_Filter {
   """
   product: Product_Filter
   """
-  ✨ Generated from Field `ProductField`.`attributes` of type `Any`
-  """
-  attributes: Any_Filter
-  """
   ✨ Generated from Field `ProductField`.`expectedData` of type `[String!]`
   """
   expectedData: String_ListFilter
@@ -655,6 +651,10 @@ input ProductField_Filter {
   ✨ Generated from Field `ProductField`.`order` of type `Int!`
   """
   order: Int_Filter
+  """
+  ✨ Generated from Field `ProductField`.`priceImages` of type `Any`
+  """
+  priceImages: Any_Filter
 }
 """
 ✨ Generated first-row input type for table 'ProductField'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -694,10 +694,6 @@ input ProductField_Having {
   """
   _count: Int_Filter
   """
-  ✨ Generated from Field `ProductField`.`attributes_count` of type `Int!`
-  """
-  attributes_count: Int_Filter
-  """
   ✨ Generated from Field `ProductField`.`fieldName_count` of type `Int!`
   """
   fieldName_count: Int_Filter
@@ -718,6 +714,10 @@ input ProductField_Having {
   """
   order_count: Int_Filter
   """
+  ✨ Generated from Field `ProductField`.`priceImages_count` of type `Int!`
+  """
+  priceImages_count: Int_Filter
+  """
   ✨ Generated from Field `ProductField`.`productId_count` of type `Int!`
   """
   productId_count: Int_Filter
@@ -730,21 +730,21 @@ input ProductField_Having {
   """
   order_avg: Float_Filter
   """
-  ✨ Generated from Field `ProductField`.`attributes_min` of type `Any`
-  """
-  attributes_min: Any_Filter
-  """
   ✨ Generated from Field `ProductField`.`order_min` of type `Int`
   """
   order_min: Int_Filter
   """
-  ✨ Generated from Field `ProductField`.`attributes_max` of type `Any`
+  ✨ Generated from Field `ProductField`.`priceImages_min` of type `Any`
   """
-  attributes_max: Any_Filter
+  priceImages_min: Any_Filter
   """
   ✨ Generated from Field `ProductField`.`order_max` of type `Int`
   """
   order_max: Int_Filter
+  """
+  ✨ Generated from Field `ProductField`.`priceImages_max` of type `Any`
+  """
+  priceImages_max: Any_Filter
 }
 """
 ✨ Generated key input type for table 'ProductField'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -789,10 +789,6 @@ input ProductField_Order {
   """
   product: Product_Order
   """
-  ✨ Generated from Field `ProductField`.`attributes` of type `Any`
-  """
-  attributes: OrderDirection
-  """
   ✨ Generated from Field `ProductField`.`fieldName` of type `String!`
   """
   fieldName: OrderDirection
@@ -809,13 +805,13 @@ input ProductField_Order {
   """
   order: OrderDirection
   """
+  ✨ Generated from Field `ProductField`.`priceImages` of type `Any`
+  """
+  priceImages: OrderDirection
+  """
   ✨ Generated from Field `ProductField`.`_count` of type `Int!`
   """
   _count: OrderDirection
-  """
-  ✨ Generated from Field `ProductField`.`attributes_count` of type `Int!`
-  """
-  attributes_count: OrderDirection
   """
   ✨ Generated from Field `ProductField`.`fieldName_count` of type `Int!`
   """
@@ -837,6 +833,10 @@ input ProductField_Order {
   """
   order_count: OrderDirection
   """
+  ✨ Generated from Field `ProductField`.`priceImages_count` of type `Int!`
+  """
+  priceImages_count: OrderDirection
+  """
   ✨ Generated from Field `ProductField`.`productId_count` of type `Int!`
   """
   productId_count: OrderDirection
@@ -849,19 +849,19 @@ input ProductField_Order {
   """
   order_avg: OrderDirection
   """
-  ✨ Generated from Field `ProductField`.`attributes_min` of type `Any`
-  """
-  attributes_min: OrderDirection
-  """
   ✨ Generated from Field `ProductField`.`order_min` of type `Int`
   """
   order_min: OrderDirection
   """
-  ✨ Generated from Field `ProductField`.`attributes_max` of type `Any`
+  ✨ Generated from Field `ProductField`.`priceImages_min` of type `Any`
   """
-  attributes_max: OrderDirection
+  priceImages_min: OrderDirection
   """
   ✨ Generated from Field `ProductField`.`order_max` of type `Int`
   """
   order_max: OrderDirection
+  """
+  ✨ Generated from Field `ProductField`.`priceImages_max` of type `Any`
+  """
+  priceImages_max: OrderDirection
 }

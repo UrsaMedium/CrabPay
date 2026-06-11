@@ -25,7 +25,7 @@ class GetProductFieldsQueryProductFields {
   final String fieldName;
   final bool isPriceImage;
   final String handler;
-  final AnyValue? attributes;
+  final AnyValue? priceImages;
   final List<String>? expectedData;
   GetProductFieldsQueryProductFields.fromJson(dynamic json):
   
@@ -35,7 +35,7 @@ class GetProductFieldsQueryProductFields {
   fieldName = nativeFromJson<String>(json['fieldName']),
   isPriceImage = nativeFromJson<bool>(json['isPriceImage']),
   handler = nativeFromJson<String>(json['handler']),
-  attributes = json['attributes'] == null ? null : AnyValue.fromJson(json['attributes']),
+  priceImages = json['priceImages'] == null ? null : AnyValue.fromJson(json['priceImages']),
   expectedData = json['expectedData'] == null ? null : (json['expectedData'] as List<dynamic>)
         .map((e) => nativeFromJson<String>(e))
         .toList();
@@ -55,12 +55,12 @@ class GetProductFieldsQueryProductFields {
     fieldName == otherTyped.fieldName && 
     isPriceImage == otherTyped.isPriceImage && 
     handler == otherTyped.handler && 
-    attributes == otherTyped.attributes && 
+    priceImages == otherTyped.priceImages && 
     expectedData == otherTyped.expectedData;
     
   }
   @override
-  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, order.hashCode, fieldName.hashCode, isPriceImage.hashCode, handler.hashCode, attributes.hashCode, expectedData.hashCode]);
+  int get hashCode => Object.hashAll([productId.hashCode, id.hashCode, order.hashCode, fieldName.hashCode, isPriceImage.hashCode, handler.hashCode, priceImages.hashCode, expectedData.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -71,8 +71,8 @@ class GetProductFieldsQueryProductFields {
     json['fieldName'] = nativeToJson<String>(fieldName);
     json['isPriceImage'] = nativeToJson<bool>(isPriceImage);
     json['handler'] = nativeToJson<String>(handler);
-    if (attributes != null) {
-      json['attributes'] = attributes!.toJson();
+    if (priceImages != null) {
+      json['priceImages'] = priceImages!.toJson();
     }
     if (expectedData != null) {
       json['expectedData'] = expectedData?.map((e) => nativeToJson<String>(e)).toList();
@@ -87,7 +87,7 @@ class GetProductFieldsQueryProductFields {
     required this.fieldName,
     required this.isPriceImage,
     required this.handler,
-    this.attributes,
+    this.priceImages,
     this.expectedData,
   });
 }

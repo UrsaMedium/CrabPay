@@ -13,7 +13,7 @@ type ProductField @table(key: "id") {
   fieldName: String!
   isPriceImage: Boolean! @default(value: false)
   handler: String!
-  attributes: Any
+  priceImages: Any
   expectedData: [String!] 
 }
 

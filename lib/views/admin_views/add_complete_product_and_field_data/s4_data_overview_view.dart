@@ -121,7 +121,7 @@ Widget _fieldsOverview(
                           Text('Attributes'),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 180),
-                            child: Text("${field.attributes}"),
+                            child: Text("${field.priceImages}"),
                           ),
                         ],
                       ),

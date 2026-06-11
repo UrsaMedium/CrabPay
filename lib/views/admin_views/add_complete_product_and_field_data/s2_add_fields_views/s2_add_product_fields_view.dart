@@ -92,7 +92,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
             order: i * 10,
             fieldName: _fieldWidgetsMap.keys.toList()[i].fieldName,
             handler: _fieldWidgetsMap.keys.toList()[i].handler,
-            attributes: _fieldWidgetsMap.keys.toList()[i].attributes,
+            priceImages: _fieldWidgetsMap.keys.toList()[i].priceImages,
             expectedData: _fieldWidgetsMap.keys.toList()[i].expectedData,
             isPriceImage: _fieldWidgetsMap.keys.toList()[i].isPriceImage,
           ),
@@ -269,7 +269,7 @@ class _AFieldState extends State<AField> {
                 context: context,
                 fieldName: widget.field.fieldName,
                 handler: widget.field.handler,
-                attributes: null,
+                priceImages: null,
                 expectedData: widget.field.expectedData,
               ),
               Padding(

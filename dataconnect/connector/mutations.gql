@@ -23,7 +23,7 @@ mutation DeleteProduct($id: UUID!) @auth(level: PUBLIC) {
 mutation AddProductField(
   $productId: UUID!
   $order: Int!
-  $attributes: Any
+  $priceImages: Any
   $expectedData: [String!]
   $handler: String!
   $fieldName: String!
@@ -33,7 +33,7 @@ mutation AddProductField(
     data: {
       productId: $productId
       order: $order
-      attributes: $attributes
+      priceImages: $priceImages
       expectedData: $expectedData
       handler: $handler
       fieldName: $fieldName
@@ -83,7 +83,7 @@ mutation productFieldUpdate(
   $id: UUID
   $productId: UUID!
   $order: Int!
-  $attributes: Any
+  $priceImages: Any
   $expectedData: [String!]
   $handler: String!
   $fieldName: String!
@@ -94,7 +94,7 @@ mutation productFieldUpdate(
     data: {
       productId: $productId
       order: $order
-      attributes: $attributes
+      priceImages: $priceImages
       expectedData: $expectedData
       handler: $handler
       fieldName: $fieldName
