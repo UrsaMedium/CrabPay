@@ -3,6 +3,12 @@ import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
+part 'get_all_products_query.dart';
+
+part 'get_product_fields_query.dart';
+
+part 'get_all_currencies_query.dart';
+
 part 'add_product.dart';
 
 part 'delete_product.dart';
@@ -21,11 +27,7 @@ part 'product_field_update.dart';
 
 part 'currencies_update.dart';
 
-part 'get_all_products_query.dart';
-
-part 'get_product_fields_query.dart';
-
-part 'get_all_currencies_query.dart';
+part 'cart_product.dart';
 
 
 
@@ -34,6 +36,21 @@ part 'get_all_currencies_query.dart';
 
 
 class CrabpayConnectorConnector {
+  
+  
+  GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
+    return GetAllProductsQueryVariablesBuilder(dataConnect, );
+  }
+  
+  
+  GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
+    return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
+  }
+  
+  
+  GetAllCurrenciesQueryVariablesBuilder getAllCurrenciesQuery () {
+    return GetAllCurrenciesQueryVariablesBuilder(dataConnect, );
+  }
   
   
   AddProductVariablesBuilder addProduct ({required String description, required String imageUrl, required String name, required String currencies, }) {
@@ -81,18 +98,8 @@ class CrabpayConnectorConnector {
   }
   
   
-  GetAllProductsQueryVariablesBuilder getAllProductsQuery () {
-    return GetAllProductsQueryVariablesBuilder(dataConnect, );
-  }
-  
-  
-  GetProductFieldsQueryVariablesBuilder getProductFieldsQuery ({required String productId, }) {
-    return GetProductFieldsQueryVariablesBuilder(dataConnect, productId: productId,);
-  }
-  
-  
-  GetAllCurrenciesQueryVariablesBuilder getAllCurrenciesQuery () {
-    return GetAllCurrenciesQueryVariablesBuilder(dataConnect, );
+  CartProductVariablesBuilder cartProduct ({required String userId, required String userName, required String productId, required String productName, required dynamic purchaseData, required String currency, required double checkoutPrice, required String status, }) {
+    return CartProductVariablesBuilder(dataConnect, userId: userId,userName: userName,productId: productId,productName: productName,purchaseData: purchaseData,currency: currency,checkoutPrice: checkoutPrice,status: status,);
   }
   
 

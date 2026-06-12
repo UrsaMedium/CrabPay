@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';

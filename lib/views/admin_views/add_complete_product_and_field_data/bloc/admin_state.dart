@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
 import 'package:flutter/foundation.dart' show immutable;
 

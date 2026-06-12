@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_controller.dart'
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_controller.dart'
     show DatabaseDataHandler;
 import 'package:flutter/material.dart';
 

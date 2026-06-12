@@ -1,8 +1,8 @@
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/db_outer_circle/outer_database_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
 
 class BindingDatabaseHandler implements InnerDatabaseHandler {
   final InnerDatabaseHandler dbHandler;

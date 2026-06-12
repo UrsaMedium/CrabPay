@@ -115,3 +115,31 @@ mutation currenciesUpdate(
     data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
   )
 }
+
+mutation cartProduct(
+  $id: UUID
+  $userId: String!
+  $userName: String!
+  $productId: UUID!
+  $productName: String!
+  $purchaseData: Any!
+  $currency: UUID!
+  $checkoutPrice: Float!
+  $status: String!
+  $comment: String
+) {
+  cartProduct_insert(
+    data: {
+      id: $id
+      userId: $userId
+      userName: $userName
+      productId: $productId
+      productName: $productName
+      purchaseData: $purchaseData
+      currency: $currency
+      checkoutPrice: $checkoutPrice
+      status: $status
+      comment: $comment
+    }
+  )
+}

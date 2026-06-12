@@ -14,7 +14,7 @@ type ProductField @table(key: "id") {
   isPriceImage: Boolean! @default(value: false)
   handler: String!
   priceImages: Any
-  expectedData: [String!] 
+  expectedData: [String!]
 }
 
 type Currencies @table(key: "id") {
@@ -23,4 +23,19 @@ type Currencies @table(key: "id") {
   mainCurrency: String!
   rub: Float!
   usd: Float!
+}
+
+type CartProduct @table(key: "id") {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String!
+  userName: String!
+  productId: UUID!
+  productName: String!
+  purchaseData: Any!
+  currency: UUID!
+  checkoutPrice: Float!
+  createdAt: Timestamp! @default(expr: "request.time")
+  status: String!
+  comment: String
+  statusChangedAt: Timestamp! @default(expr: "request.time")
 }
