@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
@@ -22,6 +23,11 @@ class CardView extends StatelessWidget {
     context.read<DatabaseBloc>().add(
       DatabaseEventFetchProductFields(productId: productId),
     );
+    Currencies currency = context
+        .read<DatabaseBloc>()
+        .state
+        .currencies!
+        .firstWhere((curr) => curr.name == product?.currencies);
     return product == null
         ? Scaffold(
             appBar: AppBar(
@@ -71,6 +77,7 @@ class CardView extends StatelessWidget {
                             return Wrap(
                               children: [
                                 BuyBottomSheet(
+                                  currency: currency,
                                   productId: product.id,
                                   productFields: productFields!,
                                 ),

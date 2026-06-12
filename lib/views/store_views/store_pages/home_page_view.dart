@@ -20,6 +20,7 @@ class _HomePageViewState extends State<HomePageView> {
     if (context.read<DatabaseBloc>().state.products == null ||
         context.read<DatabaseBloc>().state.products == []) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+      context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
     }
     super.initState();
   }
@@ -29,6 +30,7 @@ class _HomePageViewState extends State<HomePageView> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
+          context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
           context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
           await context.read<DatabaseBloc>().stream.firstWhere(
             (state) =>

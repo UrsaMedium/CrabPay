@@ -1,15 +1,25 @@
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
+  final Currencies currency;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
+    required this.currency,
   });
 
   @override
@@ -20,6 +30,15 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   Map<String, String> retrievedData = {};
   double precalculatedPrice = 0;
   List<String> functionDimentions = [];
+  Product? product;
+
+  @override
+  void initState() {
+    product = context.read<DatabaseBloc>().state.products?.firstWhere(
+      (product) => product.id == widget.productId,
+    );
+    super.initState();
+  }
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
@@ -114,7 +133,24 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                 Flexible(
                   child: ElevatedButton(
                     onPressed: () {
-                      setState(() {});
+                      CartItem cartItem = CartItem(
+                        id: 'id',
+                        userId: 'mockuser0',
+                        userName: 'mocluser',
+                        productId: widget.productId,
+                        productName: product!.name,
+                        purchaseData: retrievedData,
+                        currency: widget.currency.name,
+                        checkoutPrice: precalculatedPrice,
+                        status: 'created',
+                      );
+                      try {
+                        context.read<CartBloc>().add(
+                          CartEventAddCartItem(cartItem: cartItem),
+                        );
+                      } on Exception catch (e) {
+                        Fluttertoast.showToast(msg: 'Bee');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.appColorScheme.primary,

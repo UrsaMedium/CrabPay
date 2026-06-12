@@ -71,13 +71,13 @@ input CartItem_Data {
   """
   createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `CartItem`.`currency` of type `UUID!`
+  ✨ Generated from Field `CartItem`.`currency` of type `String!`
   """
-  currency: UUID
+  currency: String
   """
-  ✨ `_expr` server value variant of `currency` (✨ Generated from Field `CartItem`.`currency` of type `UUID!`)
+  ✨ `_expr` server value variant of `currency` (✨ Generated from Field `CartItem`.`currency` of type `String!`)
   """
-  currency_expr: UUID_Expr @fdc_forbiddenInVariables
+  currency_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `CartItem`.`productId` of type `UUID!`
   """
@@ -176,9 +176,9 @@ input CartItem_Filter {
   """
   createdAt: Timestamp_Filter
   """
-  ✨ Generated from Field `CartItem`.`currency` of type `UUID!`
+  ✨ Generated from Field `CartItem`.`currency` of type `String!`
   """
-  currency: UUID_Filter
+  currency: String_Filter
   """
   ✨ Generated from Field `CartItem`.`productId` of type `UUID!`
   """
@@ -381,7 +381,7 @@ input CartItem_Order {
   """
   createdAt: OrderDirection
   """
-  ✨ Generated from Field `CartItem`.`currency` of type `UUID!`
+  ✨ Generated from Field `CartItem`.`currency` of type `String!`
   """
   currency: OrderDirection
   """

@@ -30,12 +30,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<CartEventDeleteCartItem>((event, emit) async {
       try {
+        print(event.cartItem.id);
         await cartHandler.deleteCartItem(event.cartItem.id);
-        final toReduce = state.cartItems;
-        toReduce!.remove(
-          toReduce.firstWhere((element) => element.id == event.cartItem.id),
-        );
-        emit(state.copyWith(cartItems: toReduce, states: CartStates.deleting));
+
+        emit(state.copyWith(states: CartStates.deleting));
       } catch (e) {
         rethrow;
       }

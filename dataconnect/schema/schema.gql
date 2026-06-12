@@ -32,7 +32,7 @@ type CartItem @table(key: "id") {
   productId: UUID!
   productName: String!
   purchaseData: Any!
-  currency: UUID!
+  currency: String!
   checkoutPrice: Float!
   createdAt: Timestamp! @default(expr: "request.time")
   status: String!

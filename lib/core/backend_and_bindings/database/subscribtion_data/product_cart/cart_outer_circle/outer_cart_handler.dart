@@ -41,7 +41,9 @@ class OuterCartHandler implements InnerCartHandler {
   @override
   Future<void> deleteCartItem(String cartItemId) async {
     try {
-      CrabpayConnectorConnector.instance.deleteCartItem(id: cartItemId);
+      CrabpayConnectorConnector.instance
+          .deleteCartItem(id: cartItemId)
+          .execute();
     } catch (e) {
       print('Failed to delete the cart item: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the cart item: $e');
@@ -55,6 +57,8 @@ class OuterCartHandler implements InnerCartHandler {
       final purchaseData = AnyValue(
         cartItem.purchaseData.cast<String, String>(),
       );
+      print('ooo');
+      print(cartItem);
       CrabpayConnectorConnector.instance
           .addCartItem(
             userId: cartItem.userId,
@@ -66,7 +70,9 @@ class OuterCartHandler implements InnerCartHandler {
             checkoutPrice: cartItem.checkoutPrice,
             status: cartItem.status,
           )
-          .comment(cartItem.comment);
+          .comment(cartItem.comment)
+          .execute();
+      print('ahh');
     } catch (e) {
       print('Failed to add the cart item: $e');
       Fluttertoast.showToast(msg: 'Failed to add the cart item: $e');
