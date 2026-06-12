@@ -26,152 +26,149 @@ class _CartPageViewState extends State<CartPageView> {
     super.initState();
   }
 
-  void _refreshCartItems() {
-    context.read<CartBloc>().add(CartEventFetchCartItems(userId: 'mockuser0'));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: .stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                'Shopping Cart',
-                textAlign: .left,
-                style: TextStyle(
-                  color: context.appColorScheme.primaryFixedDim,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Text('Confirm the purchase', textAlign: .left),
-            ),
-            Expanded(
-              child: CustomScrollView(
-                shrinkWrap: true,
-                slivers: [
-                  BlocBuilder<CartBloc, CartState>(
-                    builder: (context, state) {
-                      cartItems = context.read<CartBloc>().state.cartItems;
-                      if (cartItems != null ? (cartItems!.isNotEmpty) : false) {
-                        return SliverList.builder(
-                          itemCount: cartItems!.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              elevation: 3,
-                              clipBehavior: Clip.antiAlias,
-                              color: context.appColorScheme.surfaceContainer,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(
-                                  color: context
-                                      .appColorScheme
-                                      .surfaceContainerHigh,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Image.network(
-                                        'http://regred-rainbowbridge.ru/crabpay/images/products/${products!.firstWhere((product) => product.id == cartItems![index].productId).image}',
-                                        fit: .cover,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: .start,
-                                          children: [
-                                            Text(
-                                              products!
-                                                  .firstWhere(
-                                                    (product) =>
-                                                        product.id ==
-                                                        cartItems![index]
-                                                            .productId,
-                                                  )
-                                                  .name,
-                                            ),
-                                            Text(
-                                              '${cartItems![index].checkoutPrice}',
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: context
-                                                    .appColorScheme
-                                                    .primary,
-                                                fontWeight: .w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: context.appColorScheme.onPrimary,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: IconButton(
-                                        iconSize: 25,
-                                        padding: .all(0),
-                                        onPressed: () {
-                                          _refreshCartItems();
-                                          context.read<CartBloc>().add(
-                                            CartEventDeleteCartItem(
-                                              cartItem: cartItems![index],
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(
-                                          Icons.delete_outline_rounded,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return SliverToBoxAdapter(child: Text('...'));
-                      }
-                    },
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            cartItems = context.read<CartBloc>().state.cartItems;
+            bool cartItemsNotEmpty = cartItems != null
+                ? (cartItems!.isNotEmpty)
+                : false;
+            double total = 0;
+            for (var item in cartItems!) {
+              total = total + item.checkoutPrice;
+            }
+            return Column(
+              crossAxisAlignment: .stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    'Shopping Cart',
+                    textAlign: .left,
+                    style: TextStyle(
+                      color: context.appColorScheme.primaryFixedDim,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                ],
-              ),
-            ),
-            BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) {
-                double total = 0;
-                if (cartItems != null ? cartItems!.isNotEmpty : false) {
-                  for (var item in cartItems!) {
-                    total = total + item.checkoutPrice;
-                  }
-                }
-                return Card(
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Text('Confirm the purchase', textAlign: .left),
+                ),
+                Expanded(
+                  child: CustomScrollView(
+                    shrinkWrap: true,
+                    slivers: [
+                      !cartItemsNotEmpty
+                          ? SliverToBoxAdapter(child: Text('...'))
+                          : SliverList.builder(
+                              itemCount: cartItems!.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  elevation: 3,
+                                  clipBehavior: Clip.antiAlias,
+                                  color:
+                                      context.appColorScheme.surfaceContainer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    side: BorderSide(
+                                      color: context
+                                          .appColorScheme
+                                          .surfaceContainerHigh,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                          ),
+                                          child: Image.network(
+                                            'http://regred-rainbowbridge.ru/crabpay/images/products/${products!.firstWhere((product) => product.id == cartItems![index].productId).image}',
+                                            fit: .cover,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: .start,
+                                              children: [
+                                                Text(
+                                                  products!
+                                                      .firstWhere(
+                                                        (product) =>
+                                                            product.id ==
+                                                            cartItems![index]
+                                                                .productId,
+                                                      )
+                                                      .name,
+                                                ),
+                                                Text(
+                                                  '${cartItems![index].checkoutPrice}',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: context
+                                                        .appColorScheme
+                                                        .primary,
+                                                    fontWeight: .w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: BoxDecoration(
+                                            color: context
+                                                .appColorScheme
+                                                .onPrimary,
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                          ),
+                                          child: IconButton(
+                                            iconSize: 25,
+                                            padding: .all(0),
+                                            onPressed: () {
+                                              context.read<CartBloc>().add(
+                                                CartEventDeleteCartItem(
+                                                  cartItem: cartItems![index],
+                                                ),
+                                              );
+                                            },
+                                            icon: Icon(
+                                              Icons.delete_outline_rounded,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ],
+                  ),
+                ),
+                Card(
                   elevation: 3,
                   clipBehavior: Clip.antiAlias,
                   color: context.appColorScheme.surfaceContainer,
@@ -226,10 +223,10 @@ class _CartPageViewState extends State<CartPageView> {
                       ],
                     ),
                   ),
-                );
-              },
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

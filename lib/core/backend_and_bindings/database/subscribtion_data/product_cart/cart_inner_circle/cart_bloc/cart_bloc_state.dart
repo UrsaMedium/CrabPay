@@ -1,7 +1,18 @@
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
-enum CartStates { empty, adding, deleting, getting }
+enum CartStates {
+  empty,
+  adding,
+  added,
+  failedToAdd,
+  deleting,
+  deleted,
+  failedToDelete,
+  getting,
+  got,
+  failedToGet,
+}
 
 @immutable
 class CartState {
