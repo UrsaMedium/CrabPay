@@ -1,6 +1,6 @@
 part of 'crabpay_connector.dart';
 
-class CartProductVariablesBuilder {
+class AddCartItemVariablesBuilder {
   Optional<String> _id = Optional.optional(nativeFromJson, nativeToJson);
   String userId;
   String userName;
@@ -13,32 +13,32 @@ class CartProductVariablesBuilder {
   Optional<String> _comment = Optional.optional(nativeFromJson, nativeToJson);
 
   final FirebaseDataConnect _dataConnect;
-  CartProductVariablesBuilder id(String? t) {
+  AddCartItemVariablesBuilder id(String? t) {
    _id.value = t;
    return this;
   }
-  CartProductVariablesBuilder comment(String? t) {
+  AddCartItemVariablesBuilder comment(String? t) {
    _comment.value = t;
    return this;
   }
 
-  CartProductVariablesBuilder(this._dataConnect, {required  this.userId,required  this.userName,required  this.productId,required  this.productName,required  this.purchaseData,required  this.currency,required  this.checkoutPrice,required  this.status,});
-  Deserializer<CartProductData> dataDeserializer = (dynamic json)  => CartProductData.fromJson(jsonDecode(json));
-  Serializer<CartProductVariables> varsSerializer = (CartProductVariables vars) => jsonEncode(vars.toJson());
-  Future<OperationResult<CartProductData, CartProductVariables>> execute() {
+  AddCartItemVariablesBuilder(this._dataConnect, {required  this.userId,required  this.userName,required  this.productId,required  this.productName,required  this.purchaseData,required  this.currency,required  this.checkoutPrice,required  this.status,});
+  Deserializer<AddCartItemData> dataDeserializer = (dynamic json)  => AddCartItemData.fromJson(jsonDecode(json));
+  Serializer<AddCartItemVariables> varsSerializer = (AddCartItemVariables vars) => jsonEncode(vars.toJson());
+  Future<OperationResult<AddCartItemData, AddCartItemVariables>> execute() {
     return ref().execute();
   }
 
-  MutationRef<CartProductData, CartProductVariables> ref() {
-    CartProductVariables vars= CartProductVariables(id: _id,userId: userId,userName: userName,productId: productId,productName: productName,purchaseData: purchaseData,currency: currency,checkoutPrice: checkoutPrice,status: status,comment: _comment,);
-    return _dataConnect.mutation("cartProduct", dataDeserializer, varsSerializer, vars);
+  MutationRef<AddCartItemData, AddCartItemVariables> ref() {
+    AddCartItemVariables vars= AddCartItemVariables(id: _id,userId: userId,userName: userName,productId: productId,productName: productName,purchaseData: purchaseData,currency: currency,checkoutPrice: checkoutPrice,status: status,comment: _comment,);
+    return _dataConnect.mutation("addCartItem", dataDeserializer, varsSerializer, vars);
   }
 }
 
 @immutable
-class CartProductCartProductInsert {
+class AddCartItemCartItemInsert {
   final String id;
-  CartProductCartProductInsert.fromJson(dynamic json):
+  AddCartItemCartItemInsert.fromJson(dynamic json):
   
   id = nativeFromJson<String>(json['id']);
   @override
@@ -50,7 +50,7 @@ class CartProductCartProductInsert {
       return false;
     }
 
-    final CartProductCartProductInsert otherTyped = other as CartProductCartProductInsert;
+    final AddCartItemCartItemInsert otherTyped = other as AddCartItemCartItemInsert;
     return id == otherTyped.id;
     
   }
@@ -64,17 +64,17 @@ class CartProductCartProductInsert {
     return json;
   }
 
-  CartProductCartProductInsert({
+  AddCartItemCartItemInsert({
     required this.id,
   });
 }
 
 @immutable
-class CartProductData {
-  final CartProductCartProductInsert cartProduct_insert;
-  CartProductData.fromJson(dynamic json):
+class AddCartItemData {
+  final AddCartItemCartItemInsert cartItem_insert;
+  AddCartItemData.fromJson(dynamic json):
   
-  cartProduct_insert = CartProductCartProductInsert.fromJson(json['cartProduct_insert']);
+  cartItem_insert = AddCartItemCartItemInsert.fromJson(json['cartItem_insert']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -84,27 +84,27 @@ class CartProductData {
       return false;
     }
 
-    final CartProductData otherTyped = other as CartProductData;
-    return cartProduct_insert == otherTyped.cartProduct_insert;
+    final AddCartItemData otherTyped = other as AddCartItemData;
+    return cartItem_insert == otherTyped.cartItem_insert;
     
   }
   @override
-  int get hashCode => cartProduct_insert.hashCode;
+  int get hashCode => cartItem_insert.hashCode;
   
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['cartProduct_insert'] = cartProduct_insert.toJson();
+    json['cartItem_insert'] = cartItem_insert.toJson();
     return json;
   }
 
-  CartProductData({
-    required this.cartProduct_insert,
+  AddCartItemData({
+    required this.cartItem_insert,
   });
 }
 
 @immutable
-class CartProductVariables {
+class AddCartItemVariables {
   late final Optional<String>id;
   final String userId;
   final String userName;
@@ -116,7 +116,7 @@ class CartProductVariables {
   final String status;
   late final Optional<String>comment;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
-  CartProductVariables.fromJson(Map<String, dynamic> json):
+  AddCartItemVariables.fromJson(Map<String, dynamic> json):
   
   userId = nativeFromJson<String>(json['userId']),
   userName = nativeFromJson<String>(json['userName']),
@@ -153,7 +153,7 @@ class CartProductVariables {
       return false;
     }
 
-    final CartProductVariables otherTyped = other as CartProductVariables;
+    final AddCartItemVariables otherTyped = other as AddCartItemVariables;
     return id == otherTyped.id && 
     userId == otherTyped.userId && 
     userName == otherTyped.userName && 
@@ -189,7 +189,7 @@ class CartProductVariables {
     return json;
   }
 
-  CartProductVariables({
+  AddCartItemVariables({
     required this.id,
     required this.userId,
     required this.userName,

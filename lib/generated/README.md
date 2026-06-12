@@ -151,6 +151,55 @@ ref.execute();
 ref.subscribe(...);
 ```
 
+
+### GetCartItemsQuery
+#### Required Arguments
+```dart
+String userId = ...;
+CrabpayConnectorConnector.instance.getCartItemsQuery(
+  userId: userId,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<GetCartItemsQueryData, GetCartItemsQueryVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await CrabpayConnectorConnector.instance.getCartItemsQuery(
+  userId: userId,
+);
+GetCartItemsQueryData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String userId = ...;
+
+final ref = CrabpayConnectorConnector.instance.getCartItemsQuery(
+  userId: userId,
+).ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
 ## Mutations
 
 ### AddProduct
@@ -723,7 +772,49 @@ ref.execute();
 ```
 
 
-### cartProduct
+### deleteCartItem
+#### Required Arguments
+```dart
+String id = ...;
+CrabpayConnectorConnector.instance.deleteCartItem(
+  id: id,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<deleteCartItemData, deleteCartItemVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.deleteCartItem(
+  id: id,
+);
+deleteCartItemData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String id = ...;
+
+final ref = CrabpayConnectorConnector.instance.deleteCartItem(
+  id: id,
+).ref();
+ref.execute();
+```
+
+
+### addCartItem
 #### Required Arguments
 ```dart
 String userId = ...;
@@ -734,7 +825,7 @@ AnyValue purchaseData = ...;
 String currency = ...;
 double checkoutPrice = ...;
 String status = ...;
-CrabpayConnectorConnector.instance.cartProduct(
+CrabpayConnectorConnector.instance.addCartItem(
   userId: userId,
   userName: userName,
   productId: productId,
@@ -747,24 +838,24 @@ CrabpayConnectorConnector.instance.cartProduct(
 ```
 
 #### Optional Arguments
-We return a builder for each query. For cartProduct, we created `cartProductBuilder`. For queries and mutations with optional parameters, we return a builder class.
+We return a builder for each query. For addCartItem, we created `addCartItemBuilder`. For queries and mutations with optional parameters, we return a builder class.
 The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
 ```dart
-class CartProductVariablesBuilder {
+class AddCartItemVariablesBuilder {
   ...
  
-  CartProductVariablesBuilder id(String? t) {
+  AddCartItemVariablesBuilder id(String? t) {
    _id.value = t;
    return this;
   }
-  CartProductVariablesBuilder comment(String? t) {
+  AddCartItemVariablesBuilder comment(String? t) {
    _comment.value = t;
    return this;
   }
 
   ...
 }
-CrabpayConnectorConnector.instance.cartProduct(
+CrabpayConnectorConnector.instance.addCartItem(
   userId: userId,
   userName: userName,
   productId: productId,
@@ -780,7 +871,7 @@ CrabpayConnectorConnector.instance.cartProduct(
 ```
 
 #### Return Type
-`execute()` returns a `OperationResult<cartProductData, cartProductVariables>`
+`execute()` returns a `OperationResult<addCartItemData, addCartItemVariables>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -790,7 +881,7 @@ class OperationResult<Data, Variables> {
   FirebaseDataConnect dataConnect;
 }
 
-final result = await CrabpayConnectorConnector.instance.cartProduct(
+final result = await CrabpayConnectorConnector.instance.addCartItem(
   userId: userId,
   userName: userName,
   productId: productId,
@@ -800,7 +891,7 @@ final result = await CrabpayConnectorConnector.instance.cartProduct(
   checkoutPrice: checkoutPrice,
   status: status,
 );
-cartProductData data = result.data;
+addCartItemData data = result.data;
 final ref = result.ref;
 ```
 
@@ -817,7 +908,7 @@ String currency = ...;
 double checkoutPrice = ...;
 String status = ...;
 
-final ref = CrabpayConnectorConnector.instance.cartProduct(
+final ref = CrabpayConnectorConnector.instance.addCartItem(
   userId: userId,
   userName: userName,
   productId: productId,

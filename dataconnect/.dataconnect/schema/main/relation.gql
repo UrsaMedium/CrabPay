@@ -1,174 +1,174 @@
-extend type CartProduct {
+extend type CartItem {
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
-  _metadata: _Metadata @fdc_generated(from: "CartProduct", purpose: METADATA_FIELD)
+  _metadata: _Metadata @fdc_generated(from: "CartItem", purpose: METADATA_FIELD)
   """
-  ✨ Count the number of rows in the `CartProduct` table.
+  ✨ Count the number of rows in the `CartItem` table.
   """
-  _count: Int! @fdc_generated(from: "CartProduct.", purpose: QUERY_COUNT)
+  _count: Int! @fdc_generated(from: "CartItem.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `checkoutPrice` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `checkoutPrice` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   checkoutPrice_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.checkoutPrice", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.checkoutPrice", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `comment` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `comment` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   comment_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.comment", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.comment", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.createdAt", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.createdAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `currency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `currency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   currency_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.currency", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.currency", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.id", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   productId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.productId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.productId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `productName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `productName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   productName_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.productName", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.productName", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `purchaseData` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `purchaseData` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   purchaseData_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.purchaseData", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.purchaseData", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `statusChangedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `statusChangedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   statusChangedAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.statusChangedAt", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.statusChangedAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `status` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `status` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   status_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.status", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.status", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   userId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.userId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.userId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `CartProduct` table where the `userName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `CartItem` table where the `userName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   userName_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct.userName", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "CartItem.userName", purpose: QUERY_COUNT)
   """
-  ✨ Sum the `checkoutPrice` field in the `CartProduct` table.
+  ✨ Sum the `checkoutPrice` field in the `CartItem` table.
   """
   checkoutPrice_sum(
     """
     Set to true to sum the distinct values.
     """
     distinct: Boolean = false
-  ): Float @fdc_generated(from: "CartProduct.checkoutPrice", purpose: QUERY_SUM)
+  ): Float @fdc_generated(from: "CartItem.checkoutPrice", purpose: QUERY_SUM)
   """
-  ✨ Average the `checkoutPrice` field in the `CartProduct` table.
+  ✨ Average the `checkoutPrice` field in the `CartItem` table.
   """
   checkoutPrice_avg(
     """
     Set to true to average the distinct values.
     """
     distinct: Boolean = false
-  ): Float @fdc_generated(from: "CartProduct.checkoutPrice", purpose: QUERY_AVG)
+  ): Float @fdc_generated(from: "CartItem.checkoutPrice", purpose: QUERY_AVG)
   """
-  ✨ Minimum of the `checkoutPrice` field in the `CartProduct` table.
+  ✨ Minimum of the `checkoutPrice` field in the `CartItem` table.
   """
-  checkoutPrice_min: Float @fdc_generated(from: "CartProduct.checkoutPrice", purpose: QUERY_MIN)
+  checkoutPrice_min: Float @fdc_generated(from: "CartItem.checkoutPrice", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `createdAt` field in the `CartProduct` table.
+  ✨ Minimum of the `createdAt` field in the `CartItem` table.
   """
-  createdAt_min: Timestamp @fdc_generated(from: "CartProduct.createdAt", purpose: QUERY_MIN)
+  createdAt_min: Timestamp @fdc_generated(from: "CartItem.createdAt", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `purchaseData` field in the `CartProduct` table.
+  ✨ Minimum of the `purchaseData` field in the `CartItem` table.
   """
-  purchaseData_min: Any @fdc_generated(from: "CartProduct.purchaseData", purpose: QUERY_MIN)
+  purchaseData_min: Any @fdc_generated(from: "CartItem.purchaseData", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `statusChangedAt` field in the `CartProduct` table.
+  ✨ Minimum of the `statusChangedAt` field in the `CartItem` table.
   """
-  statusChangedAt_min: Timestamp @fdc_generated(from: "CartProduct.statusChangedAt", purpose: QUERY_MIN)
+  statusChangedAt_min: Timestamp @fdc_generated(from: "CartItem.statusChangedAt", purpose: QUERY_MIN)
   """
-  ✨ Maximum of the `checkoutPrice` field in the `CartProduct` table.
+  ✨ Maximum of the `checkoutPrice` field in the `CartItem` table.
   """
-  checkoutPrice_max: Float @fdc_generated(from: "CartProduct.checkoutPrice", purpose: QUERY_MAX)
+  checkoutPrice_max: Float @fdc_generated(from: "CartItem.checkoutPrice", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `createdAt` field in the `CartProduct` table.
+  ✨ Maximum of the `createdAt` field in the `CartItem` table.
   """
-  createdAt_max: Timestamp @fdc_generated(from: "CartProduct.createdAt", purpose: QUERY_MAX)
+  createdAt_max: Timestamp @fdc_generated(from: "CartItem.createdAt", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `purchaseData` field in the `CartProduct` table.
+  ✨ Maximum of the `purchaseData` field in the `CartItem` table.
   """
-  purchaseData_max: Any @fdc_generated(from: "CartProduct.purchaseData", purpose: QUERY_MAX)
+  purchaseData_max: Any @fdc_generated(from: "CartItem.purchaseData", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `statusChangedAt` field in the `CartProduct` table.
+  ✨ Maximum of the `statusChangedAt` field in the `CartItem` table.
   """
-  statusChangedAt_max: Timestamp @fdc_generated(from: "CartProduct.statusChangedAt", purpose: QUERY_MAX)
+  statusChangedAt_max: Timestamp @fdc_generated(from: "CartItem.statusChangedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "CartProduct.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "CartItem.id", purpose: ENTITY_ID)
 }
 extend type Currencies {
   """

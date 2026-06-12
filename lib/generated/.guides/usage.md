@@ -1,9 +1,6 @@
 # Basic Usage
 
 ```dart
-CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
-CrabpayConnectorConnector.instance.GetProductFieldsQuery(getProductFieldsQueryVariables).execute();
-CrabpayConnectorConnector.instance.GetAllCurrenciesQuery().execute();
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProduct(deleteProductVariables).execute();
 CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
@@ -11,6 +8,9 @@ CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariable
 CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
+CrabpayConnectorConnector.instance.productFieldUpdate(productFieldUpdateVariables).execute();
+CrabpayConnectorConnector.instance.currenciesUpdate(currenciesUpdateVariables).execute();
+CrabpayConnectorConnector.instance.deleteCartItem(deleteCartItemVariables).execute();
 
 ```
 
@@ -23,7 +23,7 @@ Optional fields can be discovered based on classes that have `Optional` object t
 This is an example of a mutation with an optional field:
 
 ```dart
-await CrabpayConnectorConnector.instance.cartProduct({ ... })
+await CrabpayConnectorConnector.instance.addCartItem({ ... })
 .id(...)
 .execute();
 ```

@@ -1,8 +1,8 @@
 extend type Query {
   """
-  ✨ Look up a single `CartProduct` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `CartItem` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  cartProduct(
+  cartItem(
     """
     The unique ID of the object.
     """
@@ -11,13 +11,13 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: CartProduct_Key
+    key: CartItem_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: CartProduct_FirstRow
-  ): CartProduct @fdc_generated(from: "CartProduct", purpose: QUERY_SINGLE)
+    first: CartItem_FirstRow
+  ): CartItem @fdc_generated(from: "CartItem", purpose: QUERY_SINGLE)
   """
   ✨ Look up a single `Currencies` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
@@ -76,18 +76,18 @@ extend type Query {
     first: ProductField_FirstRow
   ): ProductField @fdc_generated(from: "ProductField", purpose: QUERY_SINGLE)
   """
-  ✨ List `CartProduct` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `CartItem` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  cartProducts(
+  cartItems(
     """
     Filter condition to narrow down the query results.
     """
-    where: CartProduct_Filter
+    where: CartItem_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [CartProduct_Order!]
+    orderBy: [CartItem_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -107,8 +107,8 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: CartProduct_Having
-  ): [CartProduct!]! @fdc_generated(from: "CartProduct", purpose: QUERY_MULTIPLE)
+    having: CartItem_Having
+  ): [CartItem!]! @fdc_generated(from: "CartItem", purpose: QUERY_MULTIPLE)
   """
   ✨ List `Currencies` objects in the table and return selected fields, optionally filtered by `where` conditions
   """

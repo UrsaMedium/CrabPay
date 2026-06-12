@@ -116,7 +116,11 @@ mutation currenciesUpdate(
   )
 }
 
-mutation cartProduct(
+mutation deleteCartItem($id: UUID!) @auth(level: PUBLIC) {
+  cartItem_delete(key: { id: $id })
+}
+
+mutation addCartItem(
   $id: UUID
   $userId: String!
   $userName: String!
@@ -127,8 +131,8 @@ mutation cartProduct(
   $checkoutPrice: Float!
   $status: String!
   $comment: String
-) {
-  cartProduct_insert(
+) @auth(level: PUBLIC) {
+  cartItem_insert(
     data: {
       id: $id
       userId: $userId

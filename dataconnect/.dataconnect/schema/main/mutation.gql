@@ -1,13 +1,13 @@
 extend type Mutation {
   """
-  ✨ Insert a single `CartProduct` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `CartItem` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  cartProduct_insert(
+  cartItem_insert(
     """
     Data object to insert into the table.
     """
-    data: CartProduct_Data!
-  ): CartProduct_KeyOutput! @fdc_generated(from: "CartProduct", purpose: INSERT_SINGLE)
+    data: CartItem_Data!
+  ): CartItem_KeyOutput! @fdc_generated(from: "CartItem", purpose: INSERT_SINGLE)
   """
   ✨ Insert a single `Currencies` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -36,14 +36,14 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: INSERT_SINGLE)
   """
-  ✨ Insert `CartProduct` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `CartItem` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  cartProduct_insertMany(
+  cartItem_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [CartProduct_Data!]!
-  ): [CartProduct_KeyOutput!]! @fdc_generated(from: "CartProduct", purpose: INSERT_MULTIPLE)
+    data: [CartItem_Data!]!
+  ): [CartItem_KeyOutput!]! @fdc_generated(from: "CartItem", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert `Currencies` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -72,14 +72,14 @@ extend type Mutation {
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert or update a single `CartProduct` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartProduct`.
+  ✨ Insert or update a single `CartItem` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
-  cartProduct_upsert(
+  cartItem_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: CartProduct_Data!
-  ): CartProduct_KeyOutput! @fdc_generated(from: "CartProduct", purpose: UPSERT_SINGLE)
+    data: CartItem_Data!
+  ): CartItem_KeyOutput! @fdc_generated(from: "CartItem", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update a single `Currencies` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Currencies`.
   """
@@ -108,14 +108,14 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update `CartProduct` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartProduct`.
+  ✨ Insert or update `CartItem` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
-  cartProduct_upsertMany(
+  cartItem_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [CartProduct_Data!]!
-  ): [CartProduct_KeyOutput!]! @fdc_generated(from: "CartProduct", purpose: UPSERT_MULTIPLE)
+    data: [CartItem_Data!]!
+  ): [CartItem_KeyOutput!]! @fdc_generated(from: "CartItem", purpose: UPSERT_MULTIPLE)
   """
   ✨ Insert or update `Currencies` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Currencies`.
   """
@@ -144,9 +144,9 @@ extend type Mutation {
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Update a single `CartProduct` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CartProduct` or `null` if not found.
+  ✨ Update a single `CartItem` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CartItem` or `null` if not found.
   """
-  cartProduct_update(
+  cartItem_update(
     """
     The unique ID of the object.
     """
@@ -155,18 +155,18 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: CartProduct_Key
+    key: CartItem_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: CartProduct_FirstRow
+    first: CartItem_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: CartProduct_Data!
-  ): CartProduct_KeyOutput @fdc_generated(from: "CartProduct", purpose: UPDATE_SINGLE)
+    data: CartItem_Data!
+  ): CartItem_KeyOutput @fdc_generated(from: "CartItem", purpose: UPDATE_SINGLE)
   """
   ✨ Update a single `Currencies` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Currencies` or `null` if not found.
   """
@@ -240,13 +240,13 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: UPDATE_SINGLE)
   """
-  ✨ Update `CartProduct` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `CartItem` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  cartProduct_updateMany(
+  cartItem_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: CartProduct_Filter
+    where: CartItem_Filter
 
     """
     Set to true to update all rows.
@@ -256,8 +256,8 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: CartProduct_Data!
-  ): Int! @fdc_generated(from: "CartProduct", purpose: UPDATE_MULTIPLE)
+    data: CartItem_Data!
+  ): Int! @fdc_generated(from: "CartItem", purpose: UPDATE_MULTIPLE)
   """
   ✨ Update `Currencies` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -316,9 +316,9 @@ extend type Mutation {
     data: ProductField_Data!
   ): Int! @fdc_generated(from: "ProductField", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Delete a single `CartProduct` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `CartItem` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  cartProduct_delete(
+  cartItem_delete(
     """
     The unique ID of the object.
     """
@@ -327,13 +327,13 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: CartProduct_Key
+    key: CartItem_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: CartProduct_FirstRow
-  ): CartProduct_KeyOutput @fdc_generated(from: "CartProduct", purpose: DELETE_SINGLE)
+    first: CartItem_FirstRow
+  ): CartItem_KeyOutput @fdc_generated(from: "CartItem", purpose: DELETE_SINGLE)
   """
   ✨ Delete a single `Currencies` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -392,19 +392,19 @@ extend type Mutation {
     first: ProductField_FirstRow
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: DELETE_SINGLE)
   """
-  ✨ Delete `CartProduct` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `CartItem` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  cartProduct_deleteMany(
+  cartItem_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: CartProduct_Filter
+    where: CartItem_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "CartProduct", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "CartItem", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `Currencies` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """

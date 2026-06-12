@@ -1,19 +1,22 @@
-
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
-abstract class CartBlocEvent {
-  const CartBlocEvent();
+abstract class CartEvent {
+  const CartEvent();
 }
 
-class AddItemCartBlocEvent {
-  const AddItemCartBlocEvent();
+class CartEventAddCartItem implements CartEvent {
+  final CartItem cartItem;
+  const CartEventAddCartItem({required this.cartItem});
 }
 
-class DeleteItemCartBlocEvent {
-  const DeleteItemCartBlocEvent();
-} 
+class CartEventFetchCartItems implements CartEvent {
+  final String userId;
+  CartEventFetchCartItems({required this.userId});
+}
 
-class DeleteAllItemsCartBlocEvent {
-  const DeleteAllItemsCartBlocEvent();
-} 
+class CartEventDeleteCartItem implements CartEvent {
+  final CartItem cartItem;
+  const CartEventDeleteCartItem({required this.cartItem});
+}

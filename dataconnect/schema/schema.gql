@@ -25,7 +25,7 @@ type Currencies @table(key: "id") {
   usd: Float!
 }
 
-type CartProduct @table(key: "id") {
+type CartItem @table(key: "id") {
   id: UUID! @default(expr: "uuidV4()")
   userId: String!
   userName: String!

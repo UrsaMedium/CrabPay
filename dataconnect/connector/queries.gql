@@ -31,3 +31,20 @@ query GetAllCurrenciesQuery @auth(level: PUBLIC) {
     usd
   }
 }
+
+query GetCartItemsQuery($userId: String!) @auth(level: PUBLIC) {
+  cartItems(where: { userId: { eq: $userId } }) {
+  id
+  userId
+  userName
+  productId
+  productName
+  purchaseData
+  currency
+  checkoutPrice
+  createdAt
+  status
+  comment
+  statusChangedAt
+  }
+}

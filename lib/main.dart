@@ -3,6 +3,8 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
@@ -30,7 +32,10 @@ Future<void> main() async {
       create: (context) => AuthBloc(FirebaseOuterInterface()),
       child: BlocProvider(
         create: (context) => DatabaseBloc(OuterDatabaseHandler()),
-        child: const CrabPayApp(),
+        child: BlocProvider(
+          create: (context) => CartBloc(OuterCartHandler()),
+          child: const CrabPayApp(),
+        ),
       ),
     ),
   );
