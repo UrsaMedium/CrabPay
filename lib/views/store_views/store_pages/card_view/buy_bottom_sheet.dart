@@ -31,28 +31,36 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   double precalculatedPrice = 0;
   List<String> functionDimentions = [];
   Product? product;
+  ProductField? imageField;
 
   @override
   void initState() {
     product = context.read<DatabaseBloc>().state.products?.firstWhere(
       (product) => product.id == widget.productId,
     );
+    imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
     super.initState();
   }
 
   void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
     setState(() {
-      double retrievedPrice = 0;
       retrievedData[fieldName] = dataReceived;
-      if (fieldName ==
-          widget.productFields
-              .firstWhere((element) => element.isPriceImage)
-              .fieldName) {
-        retrievedPrice = widget.productFields
-            .firstWhere((element) => element.fieldName == fieldName)
-            .priceImages![dataReceived]!;
+      if (imageField != null) {
+        if (imageField!.handler == 'InputField') {
+          final dataFromIamgeField = retrievedData[imageField!.fieldName];
+          final imageCoefficient =
+              imageField!.priceImages![dataFromIamgeField] ?? 0;
+          precalculatedPrice =
+              double.parse(dataFromIamgeField ?? '0') * imageCoefficient;
+        } else {
+          double retrievedPrice = 0;
+          final dataFromIamgeField = retrievedData[imageField!.fieldName];
+          retrievedPrice = imageField!.priceImages![dataFromIamgeField] ?? 0;
+          precalculatedPrice = retrievedPrice;
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'eee');
       }
-      precalculatedPrice = retrievedPrice;
     });
   }
 
@@ -149,7 +157,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                           CartEventAddCartItem(cartItem: cartItem),
                         );
                       } on Exception catch (e) {
-                        Fluttertoast.showToast(msg: 'Bee');
+                        Fluttertoast.showToast(msg: 'Bee: $e');
                       }
                     },
                     style: ElevatedButton.styleFrom(
