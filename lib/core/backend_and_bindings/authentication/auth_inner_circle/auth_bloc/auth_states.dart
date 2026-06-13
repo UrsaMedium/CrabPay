@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 abstract class AuthState {
   final Exception? bloodyAuthException;
-  const AuthState({this.bloodyAuthException});
+  final AuthUser? currentUser;
+  const AuthState({this.bloodyAuthException, this.currentUser});
 }
 
 class AuthStateUninitialized extends AuthState {
@@ -13,17 +14,17 @@ class AuthStateUninitialized extends AuthState {
 }
 
 class AuthStateLoggedIn extends AuthState {
-  final AuthUser user;
-  const AuthStateLoggedIn({required this.user});
+  const AuthStateLoggedIn({required super.currentUser});
 }
 
-  class AuthStateLoggedOut extends AuthState with EquatableMixin {
-    final String? reason;
-    const AuthStateLoggedOut({
-      required super.bloodyAuthException,
-      String? loadingText, this.reason,
-    });
+class AuthStateLoggedOut extends AuthState with EquatableMixin {
+  final String? reason;
+  const AuthStateLoggedOut({
+    required super.bloodyAuthException,
+    String? loadingText,
+    this.reason,
+  });
 
-    @override
-    List<Object?> get props => [bloodyAuthException, reason];
-  }
+  @override
+  List<Object?> get props => [bloodyAuthException, reason];
+}

@@ -45,7 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } else {
         hideLoading();
-        emit(AuthStateLoggedIn(user: user));
+        emit(AuthStateLoggedIn(currentUser: user));
       }
     });
 
@@ -84,7 +84,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         await interface.sendPasswordReset(toEmail: event.email);
         hideLoading();
-        if (event.context.mounted) await showOnPasswordResetDialog(event.context);
+        if (event.context.mounted)
+          await showOnPasswordResetDialog(event.context);
         // print('Password Reset Email Is Sent' + '_________________________________________________________________________________');
         // showScnackBarMessege(event.context, 'Password Reset Email Is Sent');
         // print('Password Reset Email Is Sent' + '_________________________________________________________________________________');
@@ -157,7 +158,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           // print('LOGIN' + '_________________________________________________________________________________');
           // showScnackBarMessege(event.context, 'LOGIN');
           // print('LOGIN' + '_________________________________________________________________________________');
-          emit(AuthStateLoggedIn(user: user));
+          emit(AuthStateLoggedIn(currentUser: user));
         } else {
           hideLoading();
           if (event.context.mounted) {
