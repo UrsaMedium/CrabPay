@@ -20,8 +20,19 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final PageController _pageController = PageController();
+  late final PageController _pageController;
   int _pageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final currentState = context.read<HomeViewBloc>().state;
+    _pageIndex =
+        currentState.pageIndex ?? 0;
+
+    _pageController = PageController(initialPage: _pageIndex);
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -80,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, state) {
           return ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            child: NavigationBar(              
+            child: NavigationBar(
               selectedIndex: _pageIndex,
               onDestinationSelected: _emitOnTabTapEventAndChangePage,
               destinations: const [

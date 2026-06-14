@@ -295,7 +295,7 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
               onChanged: (value) {
                 widget.collectedDataBridge(
                   widget.fieldName,
-                  _textFieldController.text,
+                  _textFieldController.text.trim(),
                 );
               },
             ),

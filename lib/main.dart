@@ -41,6 +41,8 @@ Future<void> main() async {
   );
 }
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
@@ -50,7 +52,6 @@ final GoRouter _router = GoRouter(
         child: const HomeView(),
       ),
       routes: <RouteBase>[
-        // ...adminPowerRoutes(),
         GoRoute(
           path: '${CardView.routeName}/:productId',
           name: CardView.routeName,

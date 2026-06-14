@@ -17,10 +17,14 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
-    if (context.read<DatabaseBloc>().state.products == null ||
-        context.read<DatabaseBloc>().state.products == []) {
+    if (context.read<DatabaseBloc>().state.products == null) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
+    } else {
+      if (context.read<DatabaseBloc>().state.products!.isEmpty) {
+        context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+        context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
+      }
     }
     super.initState();
   }
@@ -39,13 +43,13 @@ class _HomePageViewState extends State<HomePageView> {
           );
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             BlocBuilder<DatabaseBloc, DatabaseState>(
               buildWhen: (previous, current) =>
-                  current.states == DatabaseStates.productsFetched,
+                  (previous.products != current.products),
               builder: (context, state) {
-                final products =
-                    context.read<DatabaseBloc>().state.products ?? [];
+                final products = state.products ?? [];
                 final productCards = _appHomeCard(context, products);
                 return SliverList.builder(
                   itemCount: products.length,
