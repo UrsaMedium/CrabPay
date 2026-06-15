@@ -1,27 +1,27 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
-import 'package:crabpay/views/auth_views/login_view.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
-import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
+import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
-import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -41,7 +41,123 @@ Future<void> main() async {
   );
 }
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+//TODO
+final GoRouter _routser = GoRouter(
+  initialLocation: '/',
+  routes: <RouteBase>[
+    // StatefulShellRoute creates a persistent multi-branch structure
+    StatefulShellRoute.indexedStack(
+      builder:
+          (
+            BuildContext context,
+            GoRouterState state,
+            StatefulNavigationShell navigationShell,
+          ) {
+            // We wrap the home views shell with its structural HomeViewBloc
+            return BlocProvider(
+              create: (context) => HomeViewBloc(),
+              child: HomeView(navigationShell: navigationShell),
+            );
+          },
+      branches: <StatefulShellBranch>[    
+        // BRANCH 1: Main Home and Product Exploration Details
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/',
+              builder: (BuildContext context, GoRouterState state) {
+                // Return your main dashboard/scrolling catalog widget
+                // (This acts as the root page component managed by the branch shell)
+                return const Center(
+                  child: Text('Home Catalog Dashboard Target'),
+                );
+              },
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '${CardView.routeName}/:productId',
+                  name: CardView.routeName,
+                  pageBuilder: (BuildContext context, GoRouterState state) {
+                    return CustomTransitionPage(
+                      key: state.pageKey,
+                      child: CardView(
+                        productId: state.pathParameters['productId'] ?? '0',
+                      ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // BRANCH 2: Administrative Flow (Keeps your old nested ShellRoute logic safe)
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            ShellRoute(
+              builder: (context, state, child) =>
+                  BlocProvider(create: (context) => AdminBloc(), child: child),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/add_complete_product_product_view',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const AddCompleteProductProductView(),
+                  routes: <RouteBase>[
+                    GoRoute(
+                      path: 'add_product_fields_view',
+                      builder: (context, state) => const AddProductFieldsView(),
+                      routes: <RouteBase>[
+                        GoRoute(
+                          path: 'price_space_fill_view',
+                          builder: (context, state) =>
+                              const PriceSpaceFillView(),
+                          routes: <RouteBase>[
+                            GoRoute(
+                              path: 'data_overview_view',
+                              builder: (context, state) =>
+                                  const DataOverviewView(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // BRANCH 3: Authentication Portal
+        StatefulShellBranch(
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/login_view',
+              builder: (BuildContext context, GoRouterState state) =>
+                  const LoginView(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'register_view',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const RegisterView(),
+                ),
+                GoRoute(
+                  path: 'password-forgot_view',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const PasswordForgotView(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
+);
+//TODO
+
 
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[

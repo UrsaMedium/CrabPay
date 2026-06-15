@@ -25,12 +25,12 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    super.initState();
     final currentState = context.read<HomeViewBloc>().state;
     _pageIndex =
         currentState.pageIndex ?? 0;
 
     _pageController = PageController(initialPage: _pageIndex);
+    super.initState();
   }
 
   @override
