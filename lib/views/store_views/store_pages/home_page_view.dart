@@ -1,10 +1,14 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePageView extends StatefulWidget {
@@ -72,7 +76,10 @@ class _HomePageViewState extends State<HomePageView> {
           child: Hero(
             tag: 'card-hero-${product.id}',
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8,
+              ),
               child: Card(
                 clipBehavior: .antiAlias,
                 shape: RoundedRectangleBorder(borderRadius: .circular(32)),
@@ -133,15 +140,30 @@ class _HomePageViewState extends State<HomePageView> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
-                              onPressed: () {
-                                context.goNamed(
-                                  'card-view',
+                              onPressed: () async {
+                                await context.pushNamed(
+                                  'card_view',
                                   pathParameters: {'productId': product.id},
                                 );
+                                if (context.mounted) {
+                                  context.read<AuthBloc>().state.currentUser !=
+                                          null
+                                      ? context.read<CartBloc>().add(
+                                          CartEventFetchCartItems(
+                                            userId: context
+                                                .read<AuthBloc>()
+                                                .state
+                                                .currentUser!
+                                                .id,
+                                          ),
+                                        )
+                                      : '';
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: context.appColorScheme.primary,
-                                foregroundColor: context.appColorScheme.onPrimary,
+                                foregroundColor:
+                                    context.appColorScheme.onPrimary,
                               ),
                               child: Text('ook'),
                             ),

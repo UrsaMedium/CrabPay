@@ -1,28 +1,40 @@
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
+import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_event.dart';
+import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_state.dart';
+import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/store_views/profile_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/store_views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final StatefulNavigationShell navigationShell;
+  const HomeView({super.key, required this.navigationShell});
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
   late final PageController _pageController;
-  int _pageIndex = 0;
+  bool _isSyncingByNavBarTap = false;
+  int itemsCount = 0;
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: _pageIndex);
+    context.read<AuthBloc>().add(AuthEventInitialize(context: context));
+    _pageController = PageController(
+      initialPage: widget.navigationShell.currentIndex,
+    );
+    itemsCount = context.read<CartBloc>().state.cartItems?.length ?? 0;
     super.initState();
   }
 
@@ -30,6 +42,20 @@ class _HomeViewState extends State<HomeView> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_pageController.hasClients &&
+        _pageController.page?.round() != widget.navigationShell.currentIndex &&
+        !_isSyncingByNavBarTap) {
+      _pageController.animateToPage(
+        widget.navigationShell.currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -61,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
               } else {
                 return IconButton(
                   onPressed: () {
-                    context.go('/login_view');
+                    context.push('login_view');
                   },
                   icon: Icon(Icons.account_circle_outlined),
                 );
@@ -72,52 +98,105 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: PageView(
         controller: _pageController,
-        onPageChanged: (index) => setState(() {
-          _pageIndex = index;
-        }),
-        children: const [
-          HomePageView(),
-          StorePageView(),
-          AskPageView(),
-          CartPageView(),
+        onPageChanged: _handlePageSwipe,
+        children: [
+          _buildIsolatedBranch(const HomePageView()),
+          _buildIsolatedBranch(const StorePageView()),
+          _buildIsolatedBranch(const AskPageView()),
+          _buildIsolatedBranch(const CartPageView()),
         ],
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-        child: NavigationBar(
-          selectedIndex: _pageIndex,
-          onDestinationSelected: (index) => setState(() {
-            _pageIndex = index;
-            _pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-            );
-          }),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_filled),
-              label: 'Home',
+      bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
+        builder: (context, state) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            child: NavigationBar(
+              selectedIndex: widget.navigationShell.currentIndex,
+              onDestinationSelected: _handleNavBarTap,
+              destinations: [
+                NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  selectedIcon: Icon(Icons.home_filled),
+                  label: 'Home',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.storefront_outlined),
+                  selectedIcon: Icon(Icons.storefront),
+                  label: 'Store',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.message_outlined),
+                  selectedIcon: Icon(Icons.message_rounded),
+                  label: 'Ask',
+                ),
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    itemsCount = state.cartItems?.length ?? 0;
+                    return NavigationDestination(
+                      icon: Badge(
+                        backgroundColor: context.appColorScheme.error,
+                        textColor: context.appColorScheme.onError,
+                        label: Text(itemsCount.toString()),
+                        isLabelVisible: itemsCount > 0,
+                        child: Icon(Icons.shopping_cart_checkout_outlined),
+                      ),
+                      selectedIcon: Badge(
+                        backgroundColor: context.appColorScheme.error,
+                        textColor: context.appColorScheme.onError,
+                        label: Text(itemsCount.toString()),
+                        isLabelVisible: itemsCount > 0,
+                        child: Icon(Icons.shopping_cart_rounded),
+                      ),
+                      label: 'Cart',
+                    );
+                  },
+                ),
+              ],
             ),
-            NavigationDestination(
-              icon: Icon(Icons.storefront_outlined),
-              selectedIcon: Icon(Icons.storefront),
-              label: 'Store',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.message_outlined),
-              selectedIcon: Icon(Icons.message_rounded),
-              label: 'Ask',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.shopping_cart_checkout_outlined),
-              selectedIcon: Icon(Icons.shopping_cart_rounded),
-              label: 'Cart',
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
+  }
+
+  Widget _buildIsolatedBranch(Widget page) {
+    return Navigator(
+      onGenerateRoute: (settings) =>
+          MaterialPageRoute(builder: (context) => page),
+    );
+  }
+
+  void _handlePageSwipe(int index) {
+    if (_isSyncingByNavBarTap) return;
+
+    widget.navigationShell.goBranch(index);
+    context.read<HomeViewBloc>().add(
+      HomeViewOnPageSwipeEvent(pageIndex: index),
+    );
+  }
+
+  void _handleNavBarTap(int index) async {
+    if (index == widget.navigationShell.currentIndex) {
+      widget.navigationShell.goBranch(index, initialLocation: true);
+      return;
+    }
+
+    setState(() => _isSyncingByNavBarTap = true);
+
+    widget.navigationShell.goBranch(index);
+    context.read<HomeViewBloc>().add(
+      HomeViewOnPageSwipeEvent(pageIndex: index),
+    );
+
+    // Smoothly animate the page swap when a tab item is clicked
+    await _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+
+    if (mounted) {
+      setState(() => _isSyncingByNavBarTap = false);
+    }
   }
 }

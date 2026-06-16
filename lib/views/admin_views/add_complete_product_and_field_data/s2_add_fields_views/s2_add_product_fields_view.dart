@@ -167,7 +167,8 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     context.appColorScheme.onPrimary,
-                                foregroundColor: context.appColorScheme.primary,
+                                foregroundColor:
+                                    context.appColorScheme.primary,
                                 // minimumSize: Size(double.infinity, 50),
                               ),
                               label: Icon(Icons.add),
@@ -208,7 +209,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                               appProductFields: collectFields,
                             ),
                           );
-                          context.go(
+                          context.push(
                             '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view',
                           );
                         } else {

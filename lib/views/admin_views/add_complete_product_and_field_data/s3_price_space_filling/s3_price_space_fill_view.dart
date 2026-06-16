@@ -87,7 +87,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                                   _dataAndWidgetsPreperation!.productFields!,
                             ),
                           );
-                          context.go(
+                          context.push(
                             '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view/data_overview_view',
                           );
                         }

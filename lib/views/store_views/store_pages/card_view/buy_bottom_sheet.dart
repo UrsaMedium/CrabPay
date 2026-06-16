@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
@@ -8,6 +9,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -37,6 +39,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   List<String> functionDimentions = [];
   Product? product;
   ProductField? imageField;
+  AuthUser? currentUser;
+  int itemsCount = 0;
 
   @override
   void initState() {
@@ -44,6 +48,13 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       (product) => product.id == widget.productId,
     );
     imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
+    currentUser = context.read<AuthBloc>().state.currentUser;
+    currentUser == null
+        ? ()
+        : context.read<CartBloc>().add(
+            CartEventFetchCartItems(userId: currentUser!.id),
+          );
+    itemsCount = context.read<CartBloc>().state.cartItems?.length ?? 0;
     super.initState();
   }
 
@@ -217,8 +228,13 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                               );
                               try {
                                 context.read<CartBloc>().add(
-                                  CartEventAddCartItem(cartItem: cartItem),
+                                  CartEventAddCartItem(
+                                    cartItem: cartItem,
+                                    userId: currentUser!.id,
+                                  ),
                                 );
+                                itemsCount += 1;
+                                Fluttertoast.showToast(msg: 'It\'s in your cart now');
                               } on Exception catch (e) {
                                 Fluttertoast.showToast(msg: 'Bee: $e');
                               }
@@ -245,9 +261,56 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => context.go('/'),
-                      icon: Icon(Icons.shopping_cart_checkout_rounded),
+                    BlocBuilder<CartBloc, CartState>(
+                      buildWhen: (previous, current) =>
+                          (current.states == CartStates.added &&
+                              previous.states != CartStates.added) ||
+                          (current.states == CartStates.failedToAdd &&
+                              previous.states != CartStates.failedToAdd),
+                      builder: (context, state) {
+                        if (state.states == CartStates.failedToAdd) {
+                          itemsCount -= 1;
+                          Fluttertoast.showToast(msg: 'Faild to add');
+                        } else {
+                          // Fluttertoast.showToast(msg: 'It\'s in your cart now');
+                        }
+
+                        return IconButton(
+                          onPressed: () => context.go('/cart'),
+                          icon: Badge(
+                            backgroundColor: context.appColorScheme.error,
+                            textColor: context.appColorScheme.onError,
+                            label: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              transitionBuilder:
+                                  (Widget child, Animation<double> animation) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: const Offset(
+                                            2,
+                                            0.0,
+                                          ), // Slides up slightly from the bottom
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                              child: Text(
+                                '$itemsCount',
+                                key: ValueKey<int>(itemsCount),
+                              ),
+                            ),
+                            isLabelVisible: itemsCount > 0,
+                            child: const Icon(
+                              Icons.shopping_cart_checkout_rounded,
+                              size: 35,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

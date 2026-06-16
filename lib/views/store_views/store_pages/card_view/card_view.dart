@@ -46,136 +46,151 @@ class CardView extends StatelessWidget {
             ),
             body: Center(child: Text('Something went wrong')),
           )
-        : Hero(
-            tag: 'card-hero-${product.id}',
-            child: Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    if (GoRouter.of(context).canPop()) {
-                      context.pop();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: CustomScrollView(
-                      shrinkWrap: true,
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Image.network(
-                            'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
-                            fit: .fitWidth,
-                            width: double.infinity,
-                            height: 300,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                                  color:
-                                      context.appColorScheme.onInverseSurface,
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.broken_image,
-                                    color:
-                                        context.appColorScheme.inversePrimary,
-                                    size: 48,
-                                  ),
-                                ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                color: context.appColorScheme.inversePrimary,
-                                alignment: .center,
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              product.name,
-                              textAlign: .center,
-                              style: TextStyle(
-                                color: context.appColorScheme.primaryFixedDim,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Center(
-                            child: MarkdownBody(
-                              selectable: true,
-                              data: product.description,
-                              builders: {'latex': LatexElementBuilder()},
-                              extensionSet: md.ExtensionSet(
-                                [LatexBlockSyntax()],
-                                [LatexInlineSyntax()],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+        : PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) {
+                return;
+              }
+              !Navigator.of(context).canPop() ? context.go('/') : context.pop();
+            },
+            child: Hero(
+              tag: 'card-hero-${product.id}',
+              child: Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      if (GoRouter.of(context).canPop()) {
+                        context.pop();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_back),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.appColorScheme.primary,
-                      foregroundColor: context.appColorScheme.onPrimary,
-                    ),
-                    onPressed: () async {
-                      productFields = context
-                          .read<DatabaseBloc>()
-                          .state
-                          .productFields;
-                      if (productFields != null) {
-                        showModalBottomSheet(
-                          showDragHandle: true,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (BuildContext context) {
-                            return Wrap(
-                              children: [
-                                BuyBottomSheet(
-                                  currency: currency,
-                                  productId: product.id,
-                                  productFields: productFields!,
+                ),
+                body: Column(
+                  children: [
+                    Expanded(
+                      child: CustomScrollView(
+                        shrinkWrap: true,
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Image.network(
+                              'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                              fit: .fitWidth,
+                              width: double.infinity,
+                              height: 300,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color:
+                                        context.appColorScheme.onInverseSurface,
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      color:
+                                          context.appColorScheme.inversePrimary,
+                                      size: 48,
+                                    ),
+                                  ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Container(
+                                      color:
+                                          context.appColorScheme.inversePrimary,
+                                      alignment: .center,
+                                      child: CircularProgressIndicator(
+                                        value:
+                                            loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                product.name,
+                                textAlign: .center,
+                                style: TextStyle(
+                                  color: context.appColorScheme.primaryFixedDim,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
+                              ),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                            child: Center(
+                              child: MarkdownBody(
+                                selectable: true,
+                                data: product.description,
+                                builders: {'latex': LatexElementBuilder()},
+                                extensionSet: md.ExtensionSet(
+                                  [LatexBlockSyntax()],
+                                  [LatexInlineSyntax()],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: context.appColorScheme.primary,
+                        foregroundColor: context.appColorScheme.onPrimary,
+                      ),
+                      onPressed: () async {
                         productFields = context
                             .read<DatabaseBloc>()
                             .state
                             .productFields;
-                        if (productFields == null) {
-                          Fluttertoast.showToast(
-                            msg: 'No Fields! Something went wrong.',
+                        if (productFields != null) {
+                          showModalBottomSheet(
+                            showDragHandle: true,
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return Wrap(
+                                children: [
+                                  BuyBottomSheet(
+                                    currency: currency,
+                                    productId: product.id,
+                                    productFields: productFields!,
+                                  ),
+                                ],
+                              );
+                            },
                           );
-                          context.read<DatabaseBloc>().add(
-                            DatabaseEventFetchProductFields(
-                              productId: productId,
-                            ),
-                          );
+                        } else {
+                          productFields = context
+                              .read<DatabaseBloc>()
+                              .state
+                              .productFields;
+                          if (productFields == null) {
+                            Fluttertoast.showToast(
+                              msg: 'No Fields! Something went wrong.',
+                            );
+                            context.read<DatabaseBloc>().add(
+                              DatabaseEventFetchProductFields(
+                                productId: productId,
+                              ),
+                            );
+                          }
                         }
-                      }
-                    },
-                    child: Text('Ok, I\'am ready to shop'),
-                  ),
-                ],
+                      },
+                      child: Text('Ok, I\'am ready to shop'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

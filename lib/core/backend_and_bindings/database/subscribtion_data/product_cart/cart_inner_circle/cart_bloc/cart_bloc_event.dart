@@ -7,8 +7,9 @@ abstract class CartEvent {
 }
 
 class CartEventAddCartItem implements CartEvent {
+  final String userId;
   final CartItem cartItem;
-  const CartEventAddCartItem({required this.cartItem});
+  const CartEventAddCartItem({required this.cartItem, required this.userId});
 }
 
 class CartEventFetchCartItems implements CartEvent {

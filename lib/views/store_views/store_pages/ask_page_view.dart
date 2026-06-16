@@ -18,7 +18,7 @@ class AskPageView extends StatelessWidget {
           child: Text('fetch data'),
         ),
         ElevatedButton(
-          onPressed: () => context.go('/add_complete_product_product_view'),
+          onPressed: () => context.push('/add_complete_product_product_view'),
           child: Text('Add complete product'),
         ),
       ],

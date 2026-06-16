@@ -10,11 +10,16 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
+import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,49 +46,78 @@ Future<void> main() async {
 }
 
 final GoRouter _router = GoRouter(
+  initialLocation: '/',
   routes: <RouteBase>[
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return BlocProvider(
+          create: (context) => HomeViewBloc(),
+          child: HomeView(navigationShell: navigationShell),
+        );
+      },
+      branches: <StatefulShellBranch>[
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/',
+              builder: (context, state) => const HomePageView(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/store',
+              builder: (context, state) => const StorePageView(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/ask',
+              builder: (context, state) => const AskPageView(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/cart',
+              builder: (context, state) => const CartPageView(),
+            ),
+          ],
+        ),
+      ],
+    ),
+
     GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) =>
-          const HomeView(),
+      path: '/card_view/:productId',
+      name: 'card_view',
+      builder: (context, state) =>
+          CardView(productId: state.pathParameters['productId'] ?? '0'),
+    ),
+    ShellRoute(
+      builder: (context, state, child) =>
+          BlocProvider(create: (context) => AdminBloc(), child: child),
       routes: <RouteBase>[
         GoRoute(
-          path: '${CardView.routeName}/:productId',
-          name: CardView.routeName,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return CustomTransitionPage(
-              key: state.pageKey,
-              child: CardView(
-                productId: state.pathParameters['productId'] ?? '0',
-              ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(opacity: animation, child: child),
-            );
-          },
-        ),
-        ShellRoute(
-          builder: (context, state, child) =>
-              BlocProvider(create: (context) => AdminBloc(), child: child),
+          path: '/add_complete_product_product_view',
+          name: 'add_complete_product_product_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              const AddCompleteProductProductView(),
           routes: <RouteBase>[
             GoRoute(
-              path: 'add_complete_product_product_view',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const AddCompleteProductProductView(),
+              path: 'add_product_fields_view',
+              builder: (context, state) => const AddProductFieldsView(),
               routes: <RouteBase>[
                 GoRoute(
-                  path: 'add_product_fields_view',
-                  builder: (context, state) => const AddProductFieldsView(),
+                  path: 'price_space_fill_view',
+                  builder: (context, state) => const PriceSpaceFillView(),
                   routes: <RouteBase>[
                     GoRoute(
-                      path: 'price_space_fill_view',
-                      builder: (context, state) => const PriceSpaceFillView(),
-                      routes: <RouteBase>[
-                        GoRoute(
-                          path: 'data_overview_view',
-                          builder: (context, state) => const DataOverviewView(),
-                        ),
-                      ],
+                      path: 'data_overview_view',
+                      builder: (context, state) => const DataOverviewView(),
                     ),
                   ],
                 ),
@@ -91,37 +125,33 @@ final GoRouter _router = GoRouter(
             ),
           ],
         ),
+      ],
+    ),
+    GoRoute(
+      path: '/login_view',
+      name: 'login_view',
+      builder: (BuildContext context, GoRouterState state) => const LoginView(),
+      routes: <RouteBase>[
         GoRoute(
-          path: 'login_view',
+          path: 'register_view',
           builder: (BuildContext context, GoRouterState state) =>
-              const LoginView(),
-          routes: <RouteBase>[
-            GoRoute(
-              path: 'register_view',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const RegisterView(),
-            ),
-            GoRoute(
-              path: 'password-forgot_view',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const PasswordForgotView(),
-            ),
-          ],
+              const RegisterView(),
+        ),
+        GoRoute(
+          path: 'password-forgot_view',
+          builder: (BuildContext context, GoRouterState state) =>
+              const PasswordForgotView(),
         ),
       ],
     ),
   ],
-  //   ),
-  // ],
 );
+
 
 class CrabPayApp extends StatelessWidget {
   const CrabPayApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    context.read<AuthBloc>().add(AuthEventInitialize(context: context));
     return SafeArea(
       top: false,
       child: DynamicColorBuilder(

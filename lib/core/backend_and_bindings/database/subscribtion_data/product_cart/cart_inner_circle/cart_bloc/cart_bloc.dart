@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/inner_cart_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(InnerCartHandler cartHandler) : super(const CartState()) {
@@ -30,6 +31,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(state.copyWith(states: CartStates.failedToAdd));
         rethrow;
       }
+      // try {
+      //   emit(state.copyWith(states: CartStates.getting));
+      //   final cartItems = await cartHandler.fetchCartItems(event.userId);
+      //   emit(state.copyWith(cartItems: cartItems, states: CartStates.got));
+      //   Fluttertoast.showToast(msg: 'msg');
+      // } catch (e) {
+      //   state.copyWith(states: CartStates.failedToGet);
+      //   rethrow;
+      // }
     });
 
     on<CartEventDeleteCartItem>((event, emit) async {
