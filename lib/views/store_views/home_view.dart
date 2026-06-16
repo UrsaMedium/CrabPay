@@ -1,8 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
-import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_event.dart';
-import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_state.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
@@ -25,10 +22,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    final currentState = context.read<HomeViewBloc>().state;
-    _pageIndex =
-        currentState.pageIndex ?? 0;
-
     _pageController = PageController(initialPage: _pageIndex);
     super.initState();
   }
@@ -79,7 +72,9 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: PageView(
         controller: _pageController,
-        onPageChanged: _emitOnPageChangeEventAndChangeTab,
+        onPageChanged: (index) => setState(() {
+          _pageIndex = index;
+        }),
         children: const [
           HomePageView(),
           StorePageView(),
@@ -87,58 +82,42 @@ class _HomeViewState extends State<HomeView> {
           CartPageView(),
         ],
       ),
-      bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
-        builder: (context, state) {
-          return ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            child: NavigationBar(
-              selectedIndex: _pageIndex,
-              onDestinationSelected: _emitOnTabTapEventAndChangePage,
-              destinations: const [
-                NavigationDestination(
-                  icon: Icon(Icons.home_outlined),
-                  selectedIcon: Icon(Icons.home_filled),
-                  label: 'Home',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.storefront_outlined),
-                  selectedIcon: Icon(Icons.storefront),
-                  label: 'Store',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.message_outlined),
-                  selectedIcon: Icon(Icons.message_rounded),
-                  label: 'Ask',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.shopping_cart_checkout_outlined),
-                  selectedIcon: Icon(Icons.shopping_cart_rounded),
-                  label: 'Cart',
-                ),
-              ],
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+        child: NavigationBar(
+          selectedIndex: _pageIndex,
+          onDestinationSelected: (index) => setState(() {
+            _pageIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+            );
+          }),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_filled),
+              label: 'Home',
             ),
-          );
-        },
+            NavigationDestination(
+              icon: Icon(Icons.storefront_outlined),
+              selectedIcon: Icon(Icons.storefront),
+              label: 'Store',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.message_outlined),
+              selectedIcon: Icon(Icons.message_rounded),
+              label: 'Ask',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.shopping_cart_checkout_outlined),
+              selectedIcon: Icon(Icons.shopping_cart_rounded),
+              label: 'Cart',
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  void _emitOnTabTapEventAndChangePage(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-    );
-    _pageIndex = index;
-    context.read<HomeViewBloc>().add(
-      HomeViewOnPageSwipeEvent(pageIndex: index),
-    );
-  }
-
-  void _emitOnPageChangeEventAndChangeTab(int index) {
-    _pageIndex = index;
-    context.read<HomeViewBloc>().add(
-      HomeViewOnPageSwipeEvent(pageIndex: index),
     );
   }
 }

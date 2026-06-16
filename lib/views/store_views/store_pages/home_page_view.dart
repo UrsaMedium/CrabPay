@@ -67,87 +67,90 @@ class _HomePageViewState extends State<HomePageView> {
     List<Widget> result = [];
     for (var product in products) {
       result.add(
-        Hero(
-          tag: 'card-hero-${product.id}',
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Card(
-              clipBehavior: .antiAlias,
-              shape: RoundedRectangleBorder(borderRadius: .circular(32)),
-              color: context.appColorScheme.surfaceContainer,
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Image.network(
-                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
-                    width: double.infinity,
-                    height: 200,
-                    fit: .cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: context.appColorScheme.onInverseSurface,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.broken_image,
-                        color: context.appColorScheme.inversePrimary,
-                        size: 48,
+        HeroMode(
+          enabled: false,
+          child: Hero(
+            tag: 'card-hero-${product.id}',
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+              child: Card(
+                clipBehavior: .antiAlias,
+                shape: RoundedRectangleBorder(borderRadius: .circular(32)),
+                color: context.appColorScheme.surfaceContainer,
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Image.network(
+                      'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                      width: double.infinity,
+                      height: 200,
+                      fit: .cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: context.appColorScheme.onInverseSurface,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.broken_image,
+                          color: context.appColorScheme.inversePrimary,
+                          size: 48,
+                        ),
+                      ),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          color: context.appColorScheme.inversePrimary,
+                          alignment: .center,
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: .start,
+                                children: [
+                                  Text(
+                                    product.name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: context.appColorScheme.primary,
+                                    ),
+                                  ),
+                                  Text(product.description),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.goNamed(
+                                  'card-view',
+                                  pathParameters: {'productId': product.id},
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: context.appColorScheme.primary,
+                                foregroundColor: context.appColorScheme.onPrimary,
+                              ),
+                              child: Text('ook'),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        color: context.appColorScheme.inversePrimary,
-                        alignment: .center,
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: .start,
-                              children: [
-                                Text(
-                                  product.name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: context.appColorScheme.primary,
-                                  ),
-                                ),
-                                Text(product.description),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.goNamed(
-                                'card-view',
-                                pathParameters: {'productId': product.id},
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: context.appColorScheme.primary,
-                              foregroundColor: context.appColorScheme.onPrimary,
-                            ),
-                            child: Text('ook'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -8,7 +8,6 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/store_views/bloc/page_view_and_navigation_bar_sync_bloc/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
@@ -41,132 +40,12 @@ Future<void> main() async {
   );
 }
 
-//TODO
-final GoRouter _routser = GoRouter(
-  initialLocation: '/',
-  routes: <RouteBase>[
-    // StatefulShellRoute creates a persistent multi-branch structure
-    StatefulShellRoute.indexedStack(
-      builder:
-          (
-            BuildContext context,
-            GoRouterState state,
-            StatefulNavigationShell navigationShell,
-          ) {
-            // We wrap the home views shell with its structural HomeViewBloc
-            return BlocProvider(
-              create: (context) => HomeViewBloc(),
-              child: HomeView(navigationShell: navigationShell),
-            );
-          },
-      branches: <StatefulShellBranch>[    
-        // BRANCH 1: Main Home and Product Exploration Details
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/',
-              builder: (BuildContext context, GoRouterState state) {
-                // Return your main dashboard/scrolling catalog widget
-                // (This acts as the root page component managed by the branch shell)
-                return const Center(
-                  child: Text('Home Catalog Dashboard Target'),
-                );
-              },
-              routes: <RouteBase>[
-                GoRoute(
-                  path: '${CardView.routeName}/:productId',
-                  name: CardView.routeName,
-                  pageBuilder: (BuildContext context, GoRouterState state) {
-                    return CustomTransitionPage(
-                      key: state.pageKey,
-                      child: CardView(
-                        productId: state.pathParameters['productId'] ?? '0',
-                      ),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // BRANCH 2: Administrative Flow (Keeps your old nested ShellRoute logic safe)
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            ShellRoute(
-              builder: (context, state, child) =>
-                  BlocProvider(create: (context) => AdminBloc(), child: child),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: '/add_complete_product_product_view',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const AddCompleteProductProductView(),
-                  routes: <RouteBase>[
-                    GoRoute(
-                      path: 'add_product_fields_view',
-                      builder: (context, state) => const AddProductFieldsView(),
-                      routes: <RouteBase>[
-                        GoRoute(
-                          path: 'price_space_fill_view',
-                          builder: (context, state) =>
-                              const PriceSpaceFillView(),
-                          routes: <RouteBase>[
-                            GoRoute(
-                              path: 'data_overview_view',
-                              builder: (context, state) =>
-                                  const DataOverviewView(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // BRANCH 3: Authentication Portal
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/login_view',
-              builder: (BuildContext context, GoRouterState state) =>
-                  const LoginView(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: 'register_view',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const RegisterView(),
-                ),
-                GoRoute(
-                  path: 'password-forgot_view',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const PasswordForgotView(),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-  ],
-);
-//TODO
-
-
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) => BlocProvider(
-        create: (context) => HomeViewBloc(),
-        child: const HomeView(),
-      ),
+      builder: (BuildContext context, GoRouterState state) =>
+          const HomeView(),
       routes: <RouteBase>[
         GoRoute(
           path: '${CardView.routeName}/:productId',
