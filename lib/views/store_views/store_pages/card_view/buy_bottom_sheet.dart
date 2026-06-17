@@ -1,22 +1,20 @@
-import 'dart:ui';
-
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
@@ -41,6 +39,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   ProductField? imageField;
   AuthUser? currentUser;
   int itemsCount = 0;
+  bool everyFieldIsSatisfied = false;
 
   @override
   void initState() {
@@ -77,22 +76,48 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       } else {
         Fluttertoast.showToast(msg: 'eee');
       }
+
+      everyFieldIsSatisfied =
+          (retrievedData.length == widget.productFields.length);
+      if (everyFieldIsSatisfied) {
+        for (var retrievedField in retrievedData.keys) {
+          if (retrievedData[retrievedField]!.isEmpty) {
+            everyFieldIsSatisfied = false;
+            break;
+          }
+        }
+      }
+
+      //TODO internal testing
+      if (everyFieldIsSatisfied) {
+        for (var originalField in widget.productFields) {
+          if (!retrievedData.containsKey(originalField.fieldName)) {
+            everyFieldIsSatisfied = false;
+            Fluttertoast.showToast(
+              msg:
+                  'Retrieved field ${originalField.fieldName} is not among retrieved from input fields',
+            );
+            break;
+          }
+        }
+      }
+      //TODO internal testing
     });
   }
 
-  List<Widget> _propertySlivers(List<ProductField> properties) {
-    properties.sort((a, b) => a.order.compareTo(b.order));
+  List<Widget> _fieldSlivers(List<ProductField> fields) {
+    fields.sort((a, b) => a.order.compareTo(b.order));
     List<Widget> result = [];
-    for (var each in properties) {
+    for (var field in fields) {
       result.add(
         SliverToBoxAdapter(
           child: theAppWidgetBuilder(
             collectedDataBridge: _onBottomSheetDataRetrieved,
             context: context,
-            fieldName: each.fieldName,
-            handler: each.handler,
-            priceImages: each.priceImages,
-            expectedData: each.expectedData,
+            fieldName: field.fieldName,
+            handler: field.handler,
+            priceImages: field.priceImages,
+            expectedData: field.expectedData,
           ),
         ),
       );
@@ -116,7 +141,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.6,
+                    maxHeight: MediaQuery.of(context).size.height * 0.5,
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(!isLoggedIn ? 30 : 8),
@@ -124,7 +149,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                       children: [
                         CustomScrollView(
                           shrinkWrap: true,
-                          slivers: _propertySlivers(widget.productFields),
+                          slivers: _fieldSlivers(widget.productFields),
                         ),
                         if (!isLoggedIn)
                           Positioned.fill(
@@ -181,39 +206,77 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                         ),
                       ),
                     ),
+                    BlocBuilder<CartBloc, CartState>(
+                      buildWhen: (previous, current) =>
+                          (current.states == CartStates.added &&
+                              previous.states != CartStates.added) ||
+                          (current.states == CartStates.failedToAdd &&
+                              previous.states != CartStates.failedToAdd),
+                      builder: (context, state) {
+                        if (state.states == CartStates.failedToAdd) {
+                          itemsCount -= 1;
+                          Fluttertoast.showToast(msg: 'Faild to add');
+                        } else {
+                          // Fluttertoast.showToast(msg: 'It\'s in your cart now');
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Container(
+                            height: 50,
+                            width: 80,
+                            alignment: .center,
+                            padding: .only(left: 16, right: 16),
+                            decoration: BoxDecoration(
+                              color: context.appColorScheme.primary,
+                              borderRadius: BorderRadius.circular(30),
+                              border: BoxBorder.all(
+                                color: context.appColorScheme.outline,
+                              ),
+                            ),
+                            child: IconButton(
+                              onPressed: () => context.go('/cart'),
+                              icon: Badge(
+                                backgroundColor: context.appColorScheme.onError,
+                                textColor: context.appColorScheme.error,
+                                label: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 250),
+                                  transitionBuilder:
+                                      (
+                                        Widget child,
+                                        Animation<double> animation,
+                                      ) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(2, 0.0),
+                                              end: Offset.zero,
+                                            ).animate(animation),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                  child: Text(
+                                    '$itemsCount',
+                                    key: ValueKey<int>(itemsCount),
+                                  ),
+                                ),
+                                isLabelVisible: itemsCount > 0,
+                                child: Icon(
+                                  color: context.appColorScheme.onPrimary,
+                                  Icons.shopping_cart_checkout_rounded,
+                                  size: 35,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     Flexible(
                       child: ElevatedButton(
                         onPressed: () {
                           if (isLoggedIn && state.currentUser != null) {
-                            bool everyFieldIsSatisfied =
-                                (retrievedData.length ==
-                                widget.productFields.length);
-                            if (everyFieldIsSatisfied) {
-                              for (var retrievedField in retrievedData.keys) {
-                                if (retrievedData[retrievedField]!.isEmpty) {
-                                  everyFieldIsSatisfied = false;
-                                  break;
-                                }
-                              }
-                            }
-
-                            //TODO internal testing
-                            if (everyFieldIsSatisfied) {
-                              for (var originalField in widget.productFields) {
-                                if (!retrievedData.containsKey(
-                                  originalField.fieldName,
-                                )) {
-                                  everyFieldIsSatisfied = false;
-                                  Fluttertoast.showToast(
-                                    msg:
-                                        'Retrieved field ${originalField.fieldName} is not among retrieved from input fields',
-                                  );
-                                  break;
-                                }
-                              }
-                            }
-                            //TODO internal testing
-
                             if (everyFieldIsSatisfied) {
                               CartItem cartItem = CartItem(
                                 id: 'id',
@@ -234,7 +297,9 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                   ),
                                 );
                                 itemsCount += 1;
-                                Fluttertoast.showToast(msg: 'It\'s in your cart now');
+                                Fluttertoast.showToast(
+                                  msg: 'It\'s in your cart now',
+                                );
                               } on Exception catch (e) {
                                 Fluttertoast.showToast(msg: 'Bee: $e');
                               }
@@ -248,8 +313,12 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: context.appColorScheme.primary,
-                          foregroundColor: context.appColorScheme.onPrimary,
+                          backgroundColor: everyFieldIsSatisfied
+                              ? context.appColorScheme.primary
+                              : context.appColorScheme.onPrimary,
+                          foregroundColor: everyFieldIsSatisfied
+                              ? context.appColorScheme.onPrimary
+                              : context.appColorScheme.primary,
                           minimumSize: Size(double.maxFinite, 50),
                         ),
                         child: Text(
@@ -260,57 +329,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                           ),
                         ),
                       ),
-                    ),
-                    BlocBuilder<CartBloc, CartState>(
-                      buildWhen: (previous, current) =>
-                          (current.states == CartStates.added &&
-                              previous.states != CartStates.added) ||
-                          (current.states == CartStates.failedToAdd &&
-                              previous.states != CartStates.failedToAdd),
-                      builder: (context, state) {
-                        if (state.states == CartStates.failedToAdd) {
-                          itemsCount -= 1;
-                          Fluttertoast.showToast(msg: 'Faild to add');
-                        } else {
-                          // Fluttertoast.showToast(msg: 'It\'s in your cart now');
-                        }
-
-                        return IconButton(
-                          onPressed: () => context.go('/cart'),
-                          icon: Badge(
-                            backgroundColor: context.appColorScheme.error,
-                            textColor: context.appColorScheme.onError,
-                            label: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 250),
-                              transitionBuilder:
-                                  (Widget child, Animation<double> animation) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: const Offset(
-                                            2,
-                                            0.0,
-                                          ), // Slides up slightly from the bottom
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      ),
-                                    );
-                                  },
-                              child: Text(
-                                '$itemsCount',
-                                key: ValueKey<int>(itemsCount),
-                              ),
-                            ),
-                            isLabelVisible: itemsCount > 0,
-                            child: const Icon(
-                              Icons.shopping_cart_checkout_rounded,
-                              size: 35,
-                            ),
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),

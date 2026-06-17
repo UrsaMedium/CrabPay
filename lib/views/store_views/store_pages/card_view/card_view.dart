@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -143,51 +144,63 @@ class CardView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: context.appColorScheme.primary,
-                        foregroundColor: context.appColorScheme.onPrimary,
-                      ),
-                      onPressed: () async {
-                        productFields = context
-                            .read<DatabaseBloc>()
-                            .state
-                            .productFields;
-                        if (productFields != null) {
-                          showModalBottomSheet(
-                            showDragHandle: true,
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return Wrap(
-                                children: [
-                                  BuyBottomSheet(
-                                    currency: currency,
-                                    productId: product.id,
-                                    productFields: productFields!,
-                                  ),
-                                ],
+                    BlocBuilder<DatabaseBloc, DatabaseState>(
+                      buildWhen: (previous, current) =>
+                          current.states ==
+                              DatabaseStates.productFieldsFetched ||
+                          current.states !=
+                              DatabaseStates.productFieldsNotFetched,
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.appColorScheme.primary,
+                            foregroundColor: context.appColorScheme.onPrimary,
+                          ),
+                          onPressed: () async {
+                            productFields = state.productFields;
+                            if (productFields != null) {
+                              showModalBottomSheet(
+                                showDragHandle: true,
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return Wrap(
+                                    children: [
+                                      BuyBottomSheet(
+                                        currency: currency,
+                                        productId: product.id,
+                                        productFields: productFields!,
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
-                        } else {
-                          productFields = context
-                              .read<DatabaseBloc>()
-                              .state
-                              .productFields;
-                          if (productFields == null) {
-                            Fluttertoast.showToast(
-                              msg: 'No Fields! Something went wrong.',
-                            );
-                            context.read<DatabaseBloc>().add(
-                              DatabaseEventFetchProductFields(
-                                productId: productId,
-                              ),
-                            );
-                          }
-                        }
+                            } else {
+                              productFields = state.productFields;
+                              if (productFields == null) {
+                                Fluttertoast.showToast(
+                                  msg: 'No Fields! Something went wrong.',
+                                );
+                                context.read<DatabaseBloc>().add(
+                                  DatabaseEventFetchProductFields(
+                                    productId: productId,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child:
+                              state.states ==
+                                  DatabaseStates.productFieldsFetched
+                              ? Text('Ok, I\'am ready to shop')
+                              : state.states ==
+                                    DatabaseStates.productFieldsNotFetched
+                              ? Text('No fields. Tap to try again')
+                              : CircularProgressIndicator(
+                                  color: context.appColorScheme.onPrimary,
+                                ),
+                        );
                       },
-                      child: Text('Ok, I\'am ready to shop'),
                     ),
                   ],
                 ),
