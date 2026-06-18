@@ -38,6 +38,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   Product? product;
   ProductField? imageField;
   AuthUser? currentUser;
+  List<CartItem>? theCartItems;
   int itemsCount = 0;
   bool everyFieldIsSatisfied = false;
 
@@ -53,7 +54,17 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
         : context.read<CartBloc>().add(
             CartEventFetchCartItems(userId: currentUser!.id),
           );
-    itemsCount = context.read<CartBloc>().state.cartItems?.length ?? 0;
+    final allCartItems = context.read<CartBloc>().state.cartItems;
+    allCartItems == null ? theCartItems = null : theCartItems = [];
+    if (allCartItems != null) {
+      for (var cartItem in allCartItems) {
+        if (cartItem.productId == product!.id) {
+          theCartItems!.add(cartItem);
+        }
+      }
+      itemsCount = theCartItems!.length;
+    }
+
     super.initState();
   }
 
@@ -107,7 +118,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   List<Widget> _fieldSlivers(List<ProductField> fields) {
     fields.sort((a, b) => a.order.compareTo(b.order));
-    List<Widget> result = [];
+    List<Widget> result = [SliverToBoxAdapter(child: SizedBox(height: 58))];
     for (var field in fields) {
       result.add(
         SliverToBoxAdapter(
@@ -122,6 +133,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
         ),
       );
     }
+    result.add(SliverToBoxAdapter(child: SizedBox(height: 66)));
     return result;
   }
 
@@ -135,198 +147,268 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
         builder: (context, state) {
           bool isLoggedIn = false;
           if (state is AuthStateLoggedIn) isLoggedIn = true;
-          return Column(
+          return Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.5,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(!isLoggedIn ? 30 : 8),
-                    child: Stack(
-                      children: [
-                        CustomScrollView(
-                          shrinkWrap: true,
-                          slivers: _fieldSlivers(widget.productFields),
-                        ),
-                        if (!isLoggedIn)
-                          Positioned.fill(
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () => Fluttertoast.showToast(
-                                  msg: 'You are not singed in',
-                                ),
-                                child: const SizedBox.expand(),
-                              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.55,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Stack(
+                          children: [
+                            CustomScrollView(
+                              shrinkWrap: true,
+                              slivers: _fieldSlivers(widget.productFields),
                             ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  bottom: 32,
-                  top: 12,
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Container(
-                        height: 50,
-                        width: 100,
-                        alignment: .center,
-                        padding: .only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                          color: precalculatedPrice == 0
-                              ? context.appColorScheme.surfaceContainerHigh
-                              : context.appColorScheme.onPrimary,
-                          borderRadius: BorderRadius.circular(30),
-                          border: BoxBorder.all(
-                            color: precalculatedPrice == 0
-                                ? context.appColorScheme.surfaceContainerHighest
-                                : context.appColorScheme.outline,
-                          ),
-                        ),
-                        child: Text(
-                          precalculatedPrice == 0
-                              ? '--'
-                              : '\$$precalculatedPrice',
-                          overflow: .clip,
-                          style: TextStyle(
-                            color: context.appColorScheme.primary,
-                          ),
+                            if (!isLoggedIn)
+                              Positioned.fill(
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () => Fluttertoast.showToast(
+                                      msg: 'You are not singed in',
+                                    ),
+                                    child: const SizedBox.expand(),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                    BlocBuilder<CartBloc, CartState>(
-                      buildWhen: (previous, current) =>
-                          (current.states == CartStates.added &&
-                              previous.states != CartStates.added) ||
-                          (current.states == CartStates.failedToAdd &&
-                              previous.states != CartStates.failedToAdd),
-                      builder: (context, state) {
-                        if (state.states == CartStates.failedToAdd) {
-                          itemsCount -= 1;
-                          Fluttertoast.showToast(msg: 'Faild to add');
-                        } else {
-                          // Fluttertoast.showToast(msg: 'It\'s in your cart now');
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                  ),
+                ],
+              ),
+              Positioned.fill(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            left: 16,
+                            right: 8,
+                          ),
                           child: Container(
-                            height: 50,
-                            width: 80,
+                            height: 44,
+                            width: 100,
                             alignment: .center,
                             padding: .only(left: 16, right: 16),
                             decoration: BoxDecoration(
-                              color: context.appColorScheme.primary,
+                              color: precalculatedPrice == 0
+                                  ? context.appColorScheme.surfaceContainerHigh
+                                  : context.appColorScheme.onPrimary,
                               borderRadius: BorderRadius.circular(30),
                               border: BoxBorder.all(
-                                color: context.appColorScheme.outline,
+                                color: precalculatedPrice == 0
+                                    ? context
+                                          .appColorScheme
+                                          .surfaceContainerHighest
+                                    : context.appColorScheme.outline,
                               ),
                             ),
+                            child: Text(
+                              precalculatedPrice == 0
+                                  ? '--'
+                                  : '\$$precalculatedPrice',
+                              overflow: .clip,
+                              style: TextStyle(
+                                color: context.appColorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (itemsCount > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, right: 8),
                             child: IconButton(
-                              onPressed: () => context.go('/cart'),
-                              icon: Badge(
-                                backgroundColor: context.appColorScheme.onError,
-                                textColor: context.appColorScheme.error,
-                                label: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 250),
-                                  transitionBuilder:
-                                      (
-                                        Widget child,
-                                        Animation<double> animation,
-                                      ) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: const Offset(2, 0.0),
-                                              end: Offset.zero,
-                                            ).animate(animation),
-                                            child: child,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: context.appColorScheme.primary,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  itemsCount -= 1;
+                                  context.read<CartBloc>().add(
+                                    CartEventDeleteCartItem(
+                                      cartItem: theCartItems!.last,
+                                    ),
+                                  );
+                                });
+                              },
+                              icon: Icon(
+                                Icons.exposure_minus_1_rounded,
+                                color: context.appColorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
+                        BlocBuilder<CartBloc, CartState>(
+                          buildWhen: (previous, current) =>
+                              (current.states == CartStates.added &&
+                                  previous.states != CartStates.added) ||
+                              (current.states == CartStates.failedToAdd &&
+                                  previous.states != CartStates.failedToAdd),
+                          builder: (context, state) {
+                            if (state.states == CartStates.failedToAdd) {
+                              itemsCount -= 1;
+                              Fluttertoast.showToast(msg: 'Faild to add');
+                            } else {
+                              // Fluttertoast.showToast(msg: 'It\'s in your cart now');
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8, right: 16),
+                              child: Container(
+                                height: 44,
+                                alignment: .center,
+                                padding: .only(left: 16, right: 16),
+                                decoration: BoxDecoration(
+                                  color: context.appColorScheme.primary,
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: BoxBorder.all(
+                                    color: context.appColorScheme.outline,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () => context.go('/cart'),
+                                      icon: Badge(
+                                        backgroundColor:
+                                            context.appColorScheme.onError,
+                                        textColor: context.appColorScheme.error,
+                                        label: AnimatedSwitcher(
+                                          duration: const Duration(
+                                            milliseconds: 250,
+                                          ),
+                                          transitionBuilder:
+                                              (
+                                                Widget child,
+                                                Animation<double> animation,
+                                              ) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: SlideTransition(
+                                                    position: Tween<Offset>(
+                                                      begin: const Offset(
+                                                        2,
+                                                        0.0,
+                                                      ),
+                                                      end: Offset.zero,
+                                                    ).animate(animation),
+                                                    child: child,
+                                                  ),
+                                                );
+                                              },
+                                          child: Text(
+                                            '$itemsCount',
+                                            key: ValueKey<int>(itemsCount),
+                                          ),
+                                        ),
+                                        isLabelVisible: itemsCount > 0,
+                                        child: Icon(
+                                          color:
+                                              context.appColorScheme.onPrimary,
+                                          Icons.shopping_cart_checkout_rounded,
+                                          size: 30,
+                                        ),
+                                      ),
+                                    ),
+                                    if (itemsCount > 0)
+                                      TextButton(
+                                        onPressed: () => context.go('/cart'),
+                                        child: Text(
+                                          'Go To Cart',
+                                          style: TextStyle(
+                                            color: context
+                                                .appColorScheme
+                                                .onPrimary,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    Spacer(flex: 1),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 8,
+                        // top: 12,
+                      ),
+                      child: SizedBox(
+                        height: 50,
+                        width: double.maxFinite,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (isLoggedIn && state.currentUser != null) {
+                                    if (everyFieldIsSatisfied) {
+                                      CartItem cartItem = CartItem(
+                                        id: 'id',
+                                        userId: state.currentUser!.id,
+                                        userName: state.currentUser!.email,
+                                        productId: widget.productId,
+                                        productName: product!.name,
+                                        purchaseData: retrievedData,
+                                        currency: widget.currency.name,
+                                        checkoutPrice: precalculatedPrice,
+                                        status: 'created',
+                                      );
+                                      try {
+                                        context.read<CartBloc>().add(
+                                          CartEventAddCartItem(
+                                            cartItem: cartItem,
+                                            userId: currentUser!.id,
                                           ),
                                         );
-                                      },
-                                  child: Text(
-                                    '$itemsCount',
-                                    key: ValueKey<int>(itemsCount),
-                                  ),
+                                        itemsCount += 1;
+                                        Fluttertoast.showToast(
+                                          msg: 'It\'s in your cart now',
+                                        );
+                                      } on Exception catch (e) {
+                                        Fluttertoast.showToast(msg: 'Bee: $e');
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: 'Every field must be filled',
+                                      );
+                                    }
+                                  } else {
+                                    context.go('/login_view');
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: everyFieldIsSatisfied
+                                      ? context.appColorScheme.primary
+                                      : context.appColorScheme.onPrimary,
+                                  foregroundColor: everyFieldIsSatisfied
+                                      ? context.appColorScheme.onPrimary
+                                      : context.appColorScheme.primary,
+                                  minimumSize: Size(double.maxFinite, 50),
                                 ),
-                                isLabelVisible: itemsCount > 0,
-                                child: Icon(
-                                  color: context.appColorScheme.onPrimary,
-                                  Icons.shopping_cart_checkout_rounded,
-                                  size: 35,
+                                child: Text(
+                                  isLoggedIn ? 'Add To Cart' : 'Sign In First',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Flexible(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (isLoggedIn && state.currentUser != null) {
-                            if (everyFieldIsSatisfied) {
-                              CartItem cartItem = CartItem(
-                                id: 'id',
-                                userId: state.currentUser!.id,
-                                userName: state.currentUser!.email,
-                                productId: widget.productId,
-                                productName: product!.name,
-                                purchaseData: retrievedData,
-                                currency: widget.currency.name,
-                                checkoutPrice: precalculatedPrice,
-                                status: 'created',
-                              );
-                              try {
-                                context.read<CartBloc>().add(
-                                  CartEventAddCartItem(
-                                    cartItem: cartItem,
-                                    userId: currentUser!.id,
-                                  ),
-                                );
-                                itemsCount += 1;
-                                Fluttertoast.showToast(
-                                  msg: 'It\'s in your cart now',
-                                );
-                              } on Exception catch (e) {
-                                Fluttertoast.showToast(msg: 'Bee: $e');
-                              }
-                            } else {
-                              Fluttertoast.showToast(
-                                msg: 'Every field must be filled',
-                              );
-                            }
-                          } else {
-                            context.go('/login_view');
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: everyFieldIsSatisfied
-                              ? context.appColorScheme.primary
-                              : context.appColorScheme.onPrimary,
-                          foregroundColor: everyFieldIsSatisfied
-                              ? context.appColorScheme.onPrimary
-                              : context.appColorScheme.primary,
-                          minimumSize: Size(double.maxFinite, 50),
-                        ),
-                        child: Text(
-                          isLoggedIn ? 'Add To Cart' : 'Sign In First',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                          ],
                         ),
                       ),
                     ),

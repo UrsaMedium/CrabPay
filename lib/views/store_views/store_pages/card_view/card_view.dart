@@ -160,8 +160,10 @@ class CardView extends StatelessWidget {
                             productFields = state.productFields;
                             if (productFields != null) {
                               showModalBottomSheet(
-                                showDragHandle: true,
+                                showDragHandle: false,
+                                useSafeArea: false,
                                 context: context,
+                                enableDrag: true,
                                 isScrollControlled: true,
                                 builder: (BuildContext context) {
                                   return Wrap(
