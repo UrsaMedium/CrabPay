@@ -266,63 +266,63 @@ class _CartPageViewState extends State<CartPageView> {
               ),
             ),
 
-            if (!isLoggedIn)
-              Positioned.fill(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: GestureDetector(
-                    onTap: () {},
-                    behavior: .opaque,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: .center,
-                        crossAxisAlignment: .center,
-                        children: [
-                          Text(
-                            'Shopping Cart',
-                            textAlign: .center,
-                            style: TextStyle(
-                              color: context.appColorScheme.primaryFixedDim,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          Text(
-                            'You are not authorized. Please, sign in',
-                            textAlign: .center,
-                            style: TextStyle(
-                              color: context.appColorScheme.primaryFixedDim,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.go('/login_view');
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: context.appColorScheme.primary,
-                                foregroundColor:
-                                    context.appColorScheme.onPrimary,
-                                minimumSize: Size(130, 50),
-                              ),
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            // if (!isLoggedIn)
+            //   Positioned.fill(
+            //     child: BackdropFilter(
+            //       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            //       child: GestureDetector(
+            //         onTap: () {},
+            //         behavior: .opaque,
+            //         child: Center(
+            //           child: Column(
+            //             mainAxisAlignment: .center,
+            //             crossAxisAlignment: .center,
+            //             children: [
+            //               Text(
+            //                 'Shopping Cart',
+            //                 textAlign: .center,
+            //                 style: TextStyle(
+            //                   color: context.appColorScheme.primaryFixedDim,
+            //                   fontSize: 25,
+            //                   fontWeight: FontWeight.w900,
+            //                 ),
+            //               ),
+            //               Text(
+            //                 'You are not authorized. Please, sign in',
+            //                 textAlign: .center,
+            //                 style: TextStyle(
+            //                   color: context.appColorScheme.primaryFixedDim,
+            //                   fontSize: 16,
+            //                   fontWeight: FontWeight.w600,
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: ElevatedButton(
+            //                   onPressed: () {
+            //                     context.go('/login_view');
+            //                   },
+            //                   style: ElevatedButton.styleFrom(
+            //                     backgroundColor: context.appColorScheme.primary,
+            //                     foregroundColor:
+            //                         context.appColorScheme.onPrimary,
+            //                     minimumSize: Size(130, 50),
+            //                   ),
+            //                   child: Text(
+            //                     'Sign In',
+            //                     style: TextStyle(
+            //                       fontWeight: FontWeight.bold,
+            //                       fontSize: 16,
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
           ],
         );
       },

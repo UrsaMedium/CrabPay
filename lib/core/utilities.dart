@@ -1,5 +1,7 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_controller.dart'
     show DatabaseDataHandler;
+import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:flutter/material.dart';
 
 DatabaseDataHandler dbCache = DatabaseDataHandler();
@@ -7,6 +9,9 @@ DatabaseDataHandler dbCache = DatabaseDataHandler();
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;
 }
+
+//local storage
+AuthUser appTempUser = LocalStorage.tempUser;
 
 //loading
 final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
