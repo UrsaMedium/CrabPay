@@ -165,13 +165,31 @@ class CardView extends StatelessWidget {
                                 context: context,
                                 enableDrag: true,
                                 isScrollControlled: true,
+                                backgroundColor: context
+                                    .appColorScheme
+                                    .surfaceContainerLow
+                                    .withValues(alpha: .6),
+
+                                // barrierColor: context.appColorScheme.outline,
                                 builder: (BuildContext context) {
                                   return Wrap(
                                     children: [
-                                      BuyBottomSheet(
-                                        currency: currency,
-                                        productId: product.id,
-                                        productFields: productFields!,
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: .only(
+                                            topLeft: Radius.circular(40),
+                                            topRight: Radius.circular(40),
+                                          ),
+                                          border: .all(
+                                            color:
+                                                context.appColorScheme.surfaceContainerLow.withValues(alpha: .5),
+                                          ),
+                                        ),
+                                        child: BuyBottomSheet(
+                                          currency: currency,
+                                          productId: product.id,
+                                          productFields: productFields!,
+                                        ),
                                       ),
                                     ],
                                   );

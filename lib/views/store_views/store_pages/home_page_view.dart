@@ -60,6 +60,7 @@ class _HomePageViewState extends State<HomePageView> {
                 );
               },
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 88,),)
           ],
         ),
       ),

@@ -61,6 +61,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         shape: RoundedRectangleBorder(
           side: BorderSide(
@@ -110,48 +111,53 @@ class _HomeViewState extends State<HomeView> {
         builder: (context, state) {
           return ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            child: NavigationBar(
-              selectedIndex: widget.navigationShell.currentIndex,
-              onDestinationSelected: _handleNavBarTap,
-              destinations: [
-                NavigationDestination(
-                  icon: Icon(Icons.home_outlined),
-                  selectedIcon: Icon(Icons.home_filled),
-                  label: 'Home',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.storefront_outlined),
-                  selectedIcon: Icon(Icons.storefront),
-                  label: 'Store',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.message_outlined),
-                  selectedIcon: Icon(Icons.message_rounded),
-                  label: 'Ask',
-                ),
-                BlocBuilder<CartBloc, CartState>(
-                  builder: (context, state) {
-                    itemsCount = state.cartItems?.length ?? 0;
-                    return NavigationDestination(
-                      icon: Badge(
-                        backgroundColor: context.appColorScheme.error,
-                        textColor: context.appColorScheme.onError,
-                        label: Text(itemsCount.toString()),
-                        isLabelVisible: itemsCount > 0,
-                        child: Icon(Icons.shopping_cart_checkout_outlined),
-                      ),
-                      selectedIcon: Badge(
-                        backgroundColor: context.appColorScheme.error,
-                        textColor: context.appColorScheme.onError,
-                        label: Text(itemsCount.toString()),
-                        isLabelVisible: itemsCount > 0,
-                        child: Icon(Icons.shopping_cart_rounded),
-                      ),
-                      label: 'Cart',
-                    );
-                  },
-                ),
-              ],
+            child: BackdropFilter(
+              filter: .blur(sigmaX: 8, sigmaY: 8),
+              child: NavigationBar(
+                selectedIndex: widget.navigationShell.currentIndex,
+                onDestinationSelected: _handleNavBarTap,
+                backgroundColor: context.appColorScheme.surfaceContainer
+                    .withValues(alpha: .8),
+                destinations: [
+                  NavigationDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home_filled),
+                    label: 'Home',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.storefront_outlined),
+                    selectedIcon: Icon(Icons.storefront),
+                    label: 'Store',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.message_outlined),
+                    selectedIcon: Icon(Icons.message_rounded),
+                    label: 'Ask',
+                  ),
+                  BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) {
+                      itemsCount = state.cartItems?.length ?? 0;
+                      return NavigationDestination(
+                        icon: Badge(
+                          backgroundColor: context.appColorScheme.error,
+                          textColor: context.appColorScheme.onError,
+                          label: Text(itemsCount.toString()),
+                          isLabelVisible: itemsCount > 0,
+                          child: Icon(Icons.shopping_cart_checkout_outlined),
+                        ),
+                        selectedIcon: Badge(
+                          backgroundColor: context.appColorScheme.error,
+                          textColor: context.appColorScheme.onError,
+                          label: Text(itemsCount.toString()),
+                          isLabelVisible: itemsCount > 0,
+                          child: Icon(Icons.shopping_cart_rounded),
+                        ),
+                        label: 'Cart',
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         },

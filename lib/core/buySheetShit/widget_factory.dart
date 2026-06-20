@@ -1,6 +1,8 @@
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
+final double blurLevel = 50;
+
 AlignmentGeometry widgetPropertyAlignment(String? alignment) {
   switch (alignment) {
     case 'topLeft':
@@ -108,13 +110,14 @@ class _RadioConstructorState extends State<RadioConstructor> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer,
+      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
-
-        // side: BorderSide(color: context.appColorScheme.primary)
+        side: BorderSide(
+          color: context.appColorScheme.primary.withValues(alpha: .3),
+        ),
       ),
       child: Column(
         children: [
@@ -135,7 +138,10 @@ class _RadioConstructorState extends State<RadioConstructor> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(widget.feildName, style: TextStyle(fontSize: 16)),
+                  child: Text(
+                    widget.feildName,
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -184,13 +190,15 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer,
+      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
-
-        // side: BorderSide(color: context.appColorScheme.primary)
+        
+        side: BorderSide(
+          color: context.appColorScheme.primary.withValues(alpha: .3),
+        ),
       ),
       child: Column(
         children: [
@@ -205,7 +213,10 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
+                child: Text(
+                  widget.fieldName,
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
           ),
@@ -260,10 +271,15 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+        side: BorderSide(
+          color: context.appColorScheme.primary.withValues(alpha: .3),
+        ),
+      ),
       child: Column(
         children: [
           Container(
@@ -277,7 +293,10 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
+                child: Text(
+                  widget.fieldName,
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
           ),
