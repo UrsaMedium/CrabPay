@@ -6,8 +6,9 @@ class StorePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
+        SizedBox(height: MediaQuery.paddingOf(context).top),
         Text('Store Row One'),
         Text('Store Row Two'),
         Text('Store Row Three'),

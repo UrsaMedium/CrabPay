@@ -48,6 +48,9 @@ class _HomePageViewState extends State<HomePageView> {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(height: MediaQuery.paddingOf(context).top),
+            ),
             BlocBuilder<DatabaseBloc, DatabaseState>(
               buildWhen: (previous, current) =>
                   (previous.products != current.products),
@@ -60,7 +63,9 @@ class _HomePageViewState extends State<HomePageView> {
                 );
               },
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 88,),)
+            SliverToBoxAdapter(
+              child: SizedBox(height: MediaQuery.paddingOf(context).top),
+            ),
           ],
         ),
       ),

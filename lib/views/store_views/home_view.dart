@@ -62,7 +62,10 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: context.appColorScheme.surfaceContainerLowest
+            .withValues(alpha: .95),
         shape: RoundedRectangleBorder(
           side: BorderSide(
             color: context.appColorScheme.surfaceBright,
@@ -96,6 +99,16 @@ class _HomeViewState extends State<HomeView> {
             },
           ),
         ],
+        flexibleSpace: ClipRRect(
+          borderRadius: BorderRadiusGeometry.only(
+            bottomLeft: Radius.circular(18),
+            bottomRight: Radius.circular(18),
+          ),
+          child: BackdropFilter(
+            filter: .blur(sigmaX: 8, sigmaY: 8),
+            child: Container(),
+          ),
+        ),
       ),
       body: PageView(
         controller: _pageController,

@@ -38,52 +38,75 @@ class _CartPageViewState extends State<CartPageView> {
       clipBehavior: .antiAlias,
       children: [
         Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) {
-                cartItems = context.read<CartBloc>().state.cartItems;
-                bool cartItemsNotEmpty = false;
-                double total = 0;
-                if (cartItems != null) {
-                  if (cartItems!.isNotEmpty) {
-                    cartItemsNotEmpty = true;
-                    for (var item in cartItems!) {
-                      total = total + item.checkoutPrice;
-                    }
+          body: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              cartItems = context.read<CartBloc>().state.cartItems;
+              bool cartItemsNotEmpty = false;
+              double total = 0;
+              if (cartItems != null) {
+                if (cartItems!.isNotEmpty) {
+                  cartItemsNotEmpty = true;
+                  for (var item in cartItems!) {
+                    total = total + item.checkoutPrice;
                   }
                 }
-                return Column(
-                  crossAxisAlignment: .stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'Shopping Cart',
-                        textAlign: .left,
-                        style: TextStyle(
-                          color: context.appColorScheme.primaryFixedDim,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Text('Confirm the purchase', textAlign: .left),
-                    ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          CustomScrollView(
-                            shrinkWrap: true,
-                            slivers: [
-                              !cartItemsNotEmpty
-                                  ? SliverToBoxAdapter(child: Text('...'))
-                                  : SliverList.builder(
-                                      itemCount: cartItems!.length,
-                                      itemBuilder: (context, index) {
-                                        return Card(
+              }
+              return Column(
+                crossAxisAlignment: .stretch,
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        CustomScrollView(
+                          shrinkWrap: true,
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: MediaQuery.paddingOf(context).top,
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8.0,
+                                  left: 16,
+                                ),
+                                child: Text(
+                                  'Shopping Cart',
+                                  textAlign: .left,
+                                  style: TextStyle(
+                                    color:
+                                        context.appColorScheme.primaryFixedDim,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 16,
+                                  bottom: 4.0,
+                                ),
+                                child: Text(
+                                  'Confirm the purchase',
+                                  textAlign: .left,
+                                ),
+                              ),
+                            ),
+                            !cartItemsNotEmpty
+                                ? SliverToBoxAdapter(
+                                    child: Center(child: Text('...')),
+                                  )
+                                : SliverList.builder(
+                                    itemCount: cartItems!.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        child: Card(
                                           elevation: 3,
                                           clipBehavior: Clip.antiAlias,
                                           color: context
@@ -186,19 +209,67 @@ class _CartPageViewState extends State<CartPageView> {
                                               ],
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
-                              SliverToBoxAdapter(child: SizedBox(height: 218)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Spacer(flex: 1),
-                              Card(
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.paddingOf(context).bottom + 132,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(height: MediaQuery.paddingOf(context).top),
+                            Container(
+                              alignment: .centerLeft,
+                              child: Column(
+                                crossAxisAlignment: .start,
+                                children: [
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(
+                                  //     top: 8.0,
+                                  //     left: 16,
+                                  //   ),
+                                  //   child: Text(
+                                  //     'Shopping Cart',
+                                  //     textAlign: .left,
+                                  //     style: TextStyle(
+                                  //       color: context
+                                  //           .appColorScheme
+                                  //           .primaryFixedDim,
+                                  //       fontSize: 30,
+                                  //       fontWeight: FontWeight.w900,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(
+                                  //     left: 16,
+                                  //     bottom: 4.0,
+                                  //   ),
+                                  //   child: Text(
+                                  //     'Confirm the purchase',
+                                  //     textAlign: .left,
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ),
+
+                            Spacer(flex: 1),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Card(
                                 elevation: 3,
                                 clipBehavior: Clip.antiAlias,
-                                color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
+                                color: context.appColorScheme.surfaceContainer
+                                    .withValues(alpha: .8),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   side: BorderSide(
@@ -209,7 +280,7 @@ class _CartPageViewState extends State<CartPageView> {
                                   ),
                                 ),
                                 child: BackdropFilter(
-                                  filter: .blur(sigmaX: 8,sigmaY: 8),
+                                  filter: .blur(sigmaX: 8, sigmaY: 8),
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Column(
@@ -217,9 +288,9 @@ class _CartPageViewState extends State<CartPageView> {
                                         Padding(
                                           padding: const EdgeInsets.only(
                                             bottom: 16,
-                                                                
-                                            left: 16,
-                                            right: 16,
+
+                                            left: 18,
+                                            right: 18,
                                           ),
                                           child: Row(
                                             children: [
@@ -236,23 +307,32 @@ class _CartPageViewState extends State<CartPageView> {
                                             ],
                                           ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: total == 0 ? null : () {},
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                context.appColorScheme.primary,
-                                            foregroundColor:
-                                                context.appColorScheme.onPrimary,
-                                            minimumSize: Size(
-                                              double.infinity,
-                                              50,
-                                            ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0,
                                           ),
-                                          child: Text(
-                                            'Checkout',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                          child: ElevatedButton(
+                                            onPressed: total == 0
+                                                ? null
+                                                : () {},
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: context
+                                                  .appColorScheme
+                                                  .primary,
+                                              foregroundColor: context
+                                                  .appColorScheme
+                                                  .onPrimary,
+                                              minimumSize: Size(
+                                                double.maxFinite,
+                                                50,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Checkout',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -261,76 +341,20 @@ class _CartPageViewState extends State<CartPageView> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 86),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.paddingOf(context).bottom,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
-
-        // if (!isLoggedIn)
-        //   Positioned.fill(
-        //     child: BackdropFilter(
-        //       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        //       child: GestureDetector(
-        //         onTap: () {},
-        //         behavior: .opaque,
-        //         child: Center(
-        //           child: Column(
-        //             mainAxisAlignment: .center,
-        //             crossAxisAlignment: .center,
-        //             children: [
-        //               Text(
-        //                 'Shopping Cart',
-        //                 textAlign: .center,
-        //                 style: TextStyle(
-        //                   color: context.appColorScheme.primaryFixedDim,
-        //                   fontSize: 25,
-        //                   fontWeight: FontWeight.w900,
-        //                 ),
-        //               ),
-        //               Text(
-        //                 'You are not authorized. Please, sign in',
-        //                 textAlign: .center,
-        //                 style: TextStyle(
-        //                   color: context.appColorScheme.primaryFixedDim,
-        //                   fontSize: 16,
-        //                   fontWeight: FontWeight.w600,
-        //                 ),
-        //               ),
-        //               Padding(
-        //                 padding: const EdgeInsets.all(8.0),
-        //                 child: ElevatedButton(
-        //                   onPressed: () {
-        //                     context.go('/login_view');
-        //                   },
-        //                   style: ElevatedButton.styleFrom(
-        //                     backgroundColor: context.appColorScheme.primary,
-        //                     foregroundColor:
-        //                         context.appColorScheme.onPrimary,
-        //                     minimumSize: Size(130, 50),
-        //                   ),
-        //                   child: Text(
-        //                     'Sign In',
-        //                     style: TextStyle(
-        //                       fontWeight: FontWeight.bold,
-        //                       fontSize: 16,
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
       ],
     );
   }

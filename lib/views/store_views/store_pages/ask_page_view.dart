@@ -11,6 +11,7 @@ class AskPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: MediaQuery.paddingOf(context).top),
         ElevatedButton(
           onPressed: () {
             context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
