@@ -1,20 +1,20 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
-import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_event.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_state.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/store_views/profile_view.dart';
+import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
-import 'package:flutter/material.dart';
+import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/store_views/profile_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
   final StatefulNavigationShell navigationShell;

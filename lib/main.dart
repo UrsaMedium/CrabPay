@@ -95,8 +95,19 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/card_view/:productId',
       name: 'card_view',
-      builder: (context, state) =>
-          CardView(productId: state.pathParameters['productId'] ?? '0'),
+      pageBuilder: (context, state) {
+        final productId = state.pathParameters['productId'] ?? '0';
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: CardView(productId: productId),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: child,
+            );
+          },
+        );
+      },
     ),
     ShellRoute(
       builder: (context, state, child) =>
@@ -147,7 +158,6 @@ final GoRouter _router = GoRouter(
     ),
   ],
 );
-
 
 class CrabPayApp extends StatelessWidget {
   const CrabPayApp({super.key});

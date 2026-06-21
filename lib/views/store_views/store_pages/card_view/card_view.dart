@@ -57,172 +57,184 @@ class CardView extends StatelessWidget {
             },
             child: Hero(
               tag: 'card-hero-${product.id}',
-              child: Scaffold(
-                appBar: AppBar(
-                  leading: IconButton(
-                    onPressed: () {
-                      if (GoRouter.of(context).canPop()) {
-                        context.pop();
-                      }
-                    },
-                    icon: Icon(Icons.arrow_back),
+              createRectTween: (begin, end) =>
+                  MaterialRectArcTween(begin: begin, end: end),
+              child: ClipRRect(
+                borderRadius: .zero,
+                clipBehavior: .antiAlias,
+                child: Scaffold(
+                  appBar: AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        if (GoRouter.of(context).canPop()) {
+                          context.pop();
+                        }
+                      },
+                      icon: Icon(Icons.arrow_back),
+                    ),
                   ),
-                ),
-                body: Column(
-                  children: [
-                    Expanded(
-                      child: CustomScrollView(
-                        shrinkWrap: true,
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: Image.network(
-                              'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
-                              fit: .fitWidth,
-                              width: double.infinity,
-                              height: 300,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    color:
-                                        context.appColorScheme.onInverseSurface,
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.broken_image,
-                                      color:
-                                          context.appColorScheme.inversePrimary,
-                                      size: 48,
-                                    ),
-                                  ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Container(
-                                      color:
-                                          context.appColorScheme.inversePrimary,
-                                      alignment: .center,
-                                      child: CircularProgressIndicator(
-                                        value:
-                                            loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                            : null,
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: CustomScrollView(
+                          shrinkWrap: true,
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Image.network(
+                                'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                                fit: .fitWidth,
+                                width: double.infinity,
+                                height: 300,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                      color: context
+                                          .appColorScheme
+                                          .onInverseSurface,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        color: context
+                                            .appColorScheme
+                                            .inversePrimary,
+                                        size: 48,
                                       ),
+                                    ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        color: context
+                                            .appColorScheme
+                                            .inversePrimary,
+                                        alignment: .center,
+                                        child: CircularProgressIndicator(
+                                          value:
+                                              loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  product.name,
+                                  textAlign: .center,
+                                  style: TextStyle(
+                                    color:
+                                        context.appColorScheme.primaryFixedDim,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Center(
+                                child: MarkdownBody(
+                                  selectable: true,
+                                  data: product.description,
+                                  builders: {'latex': LatexElementBuilder()},
+                                  extensionSet: md.ExtensionSet(
+                                    [LatexBlockSyntax()],
+                                    [LatexInlineSyntax()],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      BlocBuilder<DatabaseBloc, DatabaseState>(
+                        buildWhen: (previous, current) =>
+                            current.states ==
+                                DatabaseStates.productFieldsFetched ||
+                            current.states !=
+                                DatabaseStates.productFieldsNotFetched,
+                        builder: (context, state) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: context.appColorScheme.primary,
+                              foregroundColor: context.appColorScheme.onPrimary,
+                            ),
+                            onPressed: () async {
+                              productFields = state.productFields;
+                              if (productFields != null) {
+                                showModalBottomSheet(
+                                  showDragHandle: false,
+                                  useSafeArea: false,
+                                  context: context,
+                                  enableDrag: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: context
+                                      .appColorScheme
+                                      .surfaceContainerLow
+                                      .withValues(alpha: .6),
+
+                                  // barrierColor: context.appColorScheme.outline,
+                                  builder: (BuildContext context) {
+                                    return Wrap(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: .only(
+                                              topLeft: Radius.circular(40),
+                                              topRight: Radius.circular(40),
+                                            ),
+                                            border: .all(
+                                              color: context
+                                                  .appColorScheme
+                                                  .surfaceContainerLow
+                                                  .withValues(alpha: .5),
+                                            ),
+                                          ),
+                                          child: BuyBottomSheet(
+                                            currency: currency,
+                                            productId: product.id,
+                                            productFields: productFields!,
+                                          ),
+                                        ),
+                                      ],
                                     );
                                   },
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                product.name,
-                                textAlign: .center,
-                                style: TextStyle(
-                                  color: context.appColorScheme.primaryFixedDim,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Center(
-                              child: MarkdownBody(
-                                selectable: true,
-                                data: product.description,
-                                builders: {'latex': LatexElementBuilder()},
-                                extensionSet: md.ExtensionSet(
-                                  [LatexBlockSyntax()],
-                                  [LatexInlineSyntax()],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    BlocBuilder<DatabaseBloc, DatabaseState>(
-                      buildWhen: (previous, current) =>
-                          current.states ==
-                              DatabaseStates.productFieldsFetched ||
-                          current.states !=
-                              DatabaseStates.productFieldsNotFetched,
-                      builder: (context, state) {
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: context.appColorScheme.primary,
-                            foregroundColor: context.appColorScheme.onPrimary,
-                          ),
-                          onPressed: () async {
-                            productFields = state.productFields;
-                            if (productFields != null) {
-                              showModalBottomSheet(
-                                showDragHandle: false,
-                                useSafeArea: false,
-                                context: context,
-                                enableDrag: true,
-                                isScrollControlled: true,
-                                backgroundColor: context
-                                    .appColorScheme
-                                    .surfaceContainerLow
-                                    .withValues(alpha: .6),
-
-                                // barrierColor: context.appColorScheme.outline,
-                                builder: (BuildContext context) {
-                                  return Wrap(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: .only(
-                                            topLeft: Radius.circular(40),
-                                            topRight: Radius.circular(40),
-                                          ),
-                                          border: .all(
-                                            color:
-                                                context.appColorScheme.surfaceContainerLow.withValues(alpha: .5),
-                                          ),
-                                        ),
-                                        child: BuyBottomSheet(
-                                          currency: currency,
-                                          productId: product.id,
-                                          productFields: productFields!,
-                                        ),
-                                      ),
-                                    ],
+                                );
+                              } else {
+                                productFields = state.productFields;
+                                if (productFields == null) {
+                                  Fluttertoast.showToast(
+                                    msg: 'No Fields! Something went wrong.',
                                   );
-                                },
-                              );
-                            } else {
-                              productFields = state.productFields;
-                              if (productFields == null) {
-                                Fluttertoast.showToast(
-                                  msg: 'No Fields! Something went wrong.',
-                                );
-                                context.read<DatabaseBloc>().add(
-                                  DatabaseEventFetchProductFields(
-                                    productId: productId,
-                                  ),
-                                );
+                                  context.read<DatabaseBloc>().add(
+                                    DatabaseEventFetchProductFields(
+                                      productId: productId,
+                                    ),
+                                  );
+                                }
                               }
-                            }
-                          },
-                          child:
-                              state.states ==
-                                  DatabaseStates.productFieldsFetched
-                              ? Text('Ok, I\'am ready to shop')
-                              : state.states ==
-                                    DatabaseStates.productFieldsNotFetched
-                              ? Text('No fields. Tap to try again')
-                              : CircularProgressIndicator(
-                                  color: context.appColorScheme.onPrimary,
-                                ),
-                        );
-                      },
-                    ),
-                  ],
+                            },
+                            child:
+                                state.states ==
+                                    DatabaseStates.productFieldsFetched
+                                ? Text('Ok, I\'am ready to shop')
+                                : state.states ==
+                                      DatabaseStates.productFieldsNotFetched
+                                ? Text('No fields. Tap to try again')
+                                : CircularProgressIndicator(
+                                    color: context.appColorScheme.onPrimary,
+                                  ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CartPageView extends StatefulWidget {
   const CartPageView({super.key});
@@ -314,7 +316,27 @@ class _CartPageViewState extends State<CartPageView> {
                                           child: ElevatedButton(
                                             onPressed: total == 0
                                                 ? null
-                                                : () {},
+                                                : () {
+                                                    if (context
+                                                            .read<AuthBloc>()
+                                                            .state
+                                                        is AuthStateLoggedIn) {
+                                                          //TODO
+                                                      Fluttertoast.showToast(
+                                                        msg: 'logged in',
+                                                      );
+                                                    } else {
+                                                      if (context
+                                                              .read<AuthBloc>()
+                                                              .state
+                                                          is AuthStateLoggedOut) {
+                                                            //TODO
+                                                        Fluttertoast.showToast(
+                                                          msg: 'logged out',
+                                                        );
+                                                      }
+                                                    }
+                                                  },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: context
                                                   .appColorScheme

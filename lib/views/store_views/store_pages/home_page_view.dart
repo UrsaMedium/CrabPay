@@ -76,23 +76,26 @@ class _HomePageViewState extends State<HomePageView> {
     List<Widget> result = [];
     for (var product in products) {
       result.add(
-        HeroMode(
-          enabled: false,
-          child: Hero(
-            tag: 'card-hero-${product.id}',
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8,
-              ),
-              child: Card(
-                clipBehavior: .antiAlias,
-                shape: RoundedRectangleBorder(borderRadius: .circular(32)),
-                color: context.appColorScheme.surfaceContainer,
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Image.network(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Card(
+            clipBehavior: .antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: .circular(32)),
+            color: context.appColorScheme.surfaceContainer,
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Hero(
+                  tag: 'card-hero-${product.id}',
+                  createRectTween: (begin, end) =>
+                      MaterialRectArcTween(begin: begin, end: end),
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
+                    ),
+                    clipBehavior: .antiAlias,
+                    child: Image.network(
                       'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
                       width: double.infinity,
                       height: 200,
@@ -120,65 +123,61 @@ class _HomePageViewState extends State<HomePageView> {
                         );
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: .start,
-                                children: [
-                                  Text(
-                                    product.name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: context.appColorScheme.primary,
-                                    ),
-                                  ),
-                                  Text(product.description),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await context.pushNamed(
-                                  'card_view',
-                                  pathParameters: {'productId': product.id},
-                                );
-                                if (context.mounted) {
-                                  context.read<AuthBloc>().state.currentUser !=
-                                          null
-                                      ? context.read<CartBloc>().add(
-                                          CartEventFetchCartItems(
-                                            userId: context
-                                                .read<AuthBloc>()
-                                                .state
-                                                .currentUser!
-                                                .id,
-                                          ),
-                                        )
-                                      : '';
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: context.appColorScheme.primary,
-                                foregroundColor:
-                                    context.appColorScheme.onPrimary,
-                              ),
-                              child: Text('ook'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                product.name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: context.appColorScheme.primary,
+                                ),
+                              ),
+                              Text(product.description),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await context.pushNamed(
+                              'card_view',
+                              pathParameters: {'productId': product.id},
+                            );
+                            if (context.mounted) {
+                              context.read<CartBloc>().add(
+                                CartEventFetchCartItems(
+                                  userId: context
+                                      .read<AuthBloc>()
+                                      .state
+                                      .currentUser!
+                                      .id,
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.appColorScheme.primary,
+                            foregroundColor: context.appColorScheme.onPrimary,
+                          ),
+                          child: Text('ook'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
