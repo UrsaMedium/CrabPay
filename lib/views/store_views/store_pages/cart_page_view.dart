@@ -28,14 +28,18 @@ class _CartPageViewState extends State<CartPageView> {
   void initState() {
     products = context.read<DatabaseBloc>().state.products;
     currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    super.initState();
+  }
+
+  Future<void> detaFetching(BuildContext context) async {
     context.read<CartBloc>().add(
       CartEventFetchCartItems(userId: currentUser.id),
     );
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    detaFetching(context);
     return Stack(
       clipBehavior: .antiAlias,
       children: [
@@ -321,7 +325,7 @@ class _CartPageViewState extends State<CartPageView> {
                                                             .read<AuthBloc>()
                                                             .state
                                                         is AuthStateLoggedIn) {
-                                                          //TODO
+                                                      //TODO
                                                       Fluttertoast.showToast(
                                                         msg: 'logged in',
                                                       );
@@ -330,7 +334,7 @@ class _CartPageViewState extends State<CartPageView> {
                                                               .read<AuthBloc>()
                                                               .state
                                                           is AuthStateLoggedOut) {
-                                                            //TODO
+                                                        //TODO
                                                         Fluttertoast.showToast(
                                                           msg: 'logged out',
                                                         );

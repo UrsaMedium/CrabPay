@@ -1,3 +1,5 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
@@ -27,10 +29,12 @@ class _HomeViewState extends State<HomeView> {
   late final PageController _pageController;
   bool _isSyncingByNavBarTap = false;
   int itemsCount = 0;
+  late final AuthUser currentUser;
 
   @override
   void initState() {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
+    currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );

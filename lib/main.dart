@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
@@ -39,7 +40,11 @@ Future<void> main() async {
         create: (context) => DatabaseBloc(OuterDatabaseHandler()),
         child: BlocProvider(
           create: (context) => CartBloc(OuterCartHandler()),
-          child: const CrabPayApp(),
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              return const CrabPayApp();
+            },
+          ),
         ),
       ),
     ),

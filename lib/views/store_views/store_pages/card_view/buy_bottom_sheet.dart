@@ -49,9 +49,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     );
     imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
     currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
-    context.read<CartBloc>().add(
-      CartEventFetchCartItems(userId: currentUser.id),
-    );
     final allCartItems = context.read<CartBloc>().state.cartItems;
     allCartItems == null ? theCartItems = null : theCartItems = [];
     if (allCartItems != null) {
@@ -119,7 +116,12 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     List<Widget> result = [
       SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.only(left: 32.0, top: 16, bottom: 8, right: 128),
+          padding: const EdgeInsets.only(
+            left: 32.0,
+            top: 16,
+            bottom: 8,
+            right: 128,
+          ),
           child: SizedBox(
             child: Text(
               product?.name ?? 'error',
@@ -180,18 +182,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                             shrinkWrap: true,
                             slivers: _fieldSlivers(widget.productFields),
                           ),
-                          // if (!isLoggedIn)
-                          //   Positioned.fill(
-                          //     child: Material(
-                          //       color: Colors.transparent,
-                          //       child: InkWell(
-                          //         onTap: () => Fluttertoast.showToast(
-                          //           msg: 'You are not singed in',
-                          //         ),
-                          //         child: const SizedBox.expand(),
-                          //       ),
-                          //     ),
-                          //   ),
                         ],
                       ),
                     ),
@@ -243,7 +233,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                         color: precalculatedPrice == 0
                                             ? context
                                                   .appColorScheme
-                                                  .surfaceContainer.withValues(alpha: .5)
+                                                  .surfaceContainer
+                                                  .withValues(alpha: .5)
                                             : context.appColorScheme.onPrimary,
                                       ),
                                     ),
@@ -309,13 +300,9 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                           child: Row(
                                             children: [
                                               IconButton(
-                                                // style: ElevatedButton.styleFrom(
-                                                //   backgroundColor:
-                                                //       context.appColorScheme.primaryContainer,
-                                                // ),
                                                 onPressed: () {
                                                   itemsCount -= 1;
-                                                 context.read<CartBloc>().add(
+                                                  context.read<CartBloc>().add(
                                                     CartEventDeleteCartItem(
                                                       cartItem:
                                                           theCartItems!.last,
@@ -406,8 +393,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                       ),
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          // if (isLoggedIn &&
-                                          //     currentUser != null) {
                                           if (everyFieldIsSatisfied) {
                                             CartItem cartItem = CartItem(
                                               id: 'id',
@@ -441,9 +426,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                               msg: 'Every field must be filled',
                                             );
                                           }
-                                          // } else {
-                                          //   context.go('/login_view');
-                                          // }
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: everyFieldIsSatisfied

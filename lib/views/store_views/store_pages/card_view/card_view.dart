@@ -1,9 +1,12 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -19,20 +22,29 @@ class CardView extends StatelessWidget {
   final String productId;
   const CardView({super.key, required this.productId});
 
+  Future<void> dataPrefetching(BuildContext context) async {
+    context.read<DatabaseBloc>().add(
+      DatabaseEventFetchProductFields(productId: productId),
+    );
+    final currentUser =
+        context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    context.read<CartBloc>().add(
+      CartEventFetchCartItems(userId: currentUser.id),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<ProductField>? productFields;
     Product? product = context.read<DatabaseBloc>().state.products?.firstWhere(
       (product) => product.id == productId,
     );
-    context.read<DatabaseBloc>().add(
-      DatabaseEventFetchProductFields(productId: productId),
-    );
     Currencies currency = context
         .read<DatabaseBloc>()
         .state
         .currencies!
         .firstWhere((curr) => curr.name == product?.currencies);
+    dataPrefetching(context);
     return product == null
         ? Scaffold(
             appBar: AppBar(

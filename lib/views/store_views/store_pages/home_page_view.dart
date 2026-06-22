@@ -18,8 +18,8 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  @override
-  void initState() {
+
+  Future<void> dataFetching(BuildContext context) async {
     if (context.read<DatabaseBloc>().state.products == null) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
@@ -29,11 +29,11 @@ class _HomePageViewState extends State<HomePageView> {
         context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
       }
     }
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    dataFetching(context);
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
