@@ -21,7 +21,6 @@ query GetProductFieldsQuery($productId: UUID!) @auth(level: PUBLIC) {
   }
 }
 
-
 query GetAllCurrenciesQuery @auth(level: PUBLIC) {
   currenciess {
     id
@@ -34,17 +33,18 @@ query GetAllCurrenciesQuery @auth(level: PUBLIC) {
 
 query GetCartItemsQuery($userId: String!) @auth(level: PUBLIC) {
   cartItems(where: { userId: { eq: $userId } }) {
-  id
-  userId
-  userName
-  productId
-  productName
-  purchaseData
-  currency
-  checkoutPrice
-  createdAt
-  status
-  comment
-  statusChangedAt
+    id
+    userId
+    userName
+    productId
+    productName
+    purchaseData
+    currency
+    checkoutPrice
+    createdAt
+    status
+    comment
+    statusChangedAt
   }
 }
+
