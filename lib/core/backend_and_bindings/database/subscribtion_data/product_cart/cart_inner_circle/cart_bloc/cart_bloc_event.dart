@@ -21,3 +21,15 @@ class CartEventDeleteCartItem implements CartEvent {
   final CartItem cartItem;
   const CartEventDeleteCartItem({required this.cartItem});
 }
+
+class CartEventStartCartItemsStream implements CartEvent {
+  final String userId;
+  CartEventStartCartItemsStream({required this.userId});
+}
+
+class CartEventOnChangeStreamed implements CartEvent {
+  final List<CartItem> cartItems;
+  CartEventOnChangeStreamed({required this.cartItems});
+}
+
+class CartEventCloseStream implements CartEvent {}

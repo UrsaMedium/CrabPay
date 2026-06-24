@@ -12,10 +12,14 @@ enum CartStates {
   getting,
   got,
   failedToGet,
+  streamEvent
 }
+
+enum IsStreaming { yes, no }
 
 @immutable
 class CartState {
+  final IsStreaming isStreaming;
   final List<CartItem>? cartItems;
   final CartItem? cartItemToPush;
   final CartStates states;
@@ -23,17 +27,20 @@ class CartState {
     this.cartItems,
     this.states = CartStates.empty,
     this.cartItemToPush,
+    this.isStreaming = IsStreaming.no,
   });
 
   CartState copyWith({
     List<CartItem>? cartItems,
     CartStates? states,
     CartItem? cartItemToPush,
+    IsStreaming? isStreaming,
   }) {
     return CartState(
       cartItems: cartItems ?? this.cartItems,
       cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
+      isStreaming: isStreaming ?? this.isStreaming,
     );
   }
 }

@@ -20,4 +20,8 @@ class BindingCartHandler implements InnerCartHandler {
   @override
   Future<void> addCartItem(CartItem cartItem) =>
       cartHandler.addCartItem(cartItem);
+
+  @override
+  Stream<List<CartItem>> cartItemsStream(String userId) =>
+      cartHandler.cartItemsStream(userId);
 }

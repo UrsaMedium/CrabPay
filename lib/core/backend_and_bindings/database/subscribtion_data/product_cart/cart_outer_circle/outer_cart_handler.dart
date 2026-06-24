@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
@@ -5,32 +7,37 @@ import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class OuterCartHandler implements InnerCartHandler {
+  List<CartItem> dataCasting(
+    List<GetCartItemsQueryCartItems> fetchedCartItems,
+  ) {
+    List<CartItem> cartItems = [];
+    for (var item in fetchedCartItems) {
+      final purchaseData = Map<String, String>.from(item.purchaseData.toJson());
+      cartItems.add(
+        CartItem(
+          id: item.id,
+          userId: item.userId,
+          userName: item.userName,
+          productId: item.productId,
+          productName: item.productName,
+          purchaseData: purchaseData,
+          currency: item.currency,
+          checkoutPrice: item.checkoutPrice,
+          status: item.status,
+        ),
+      );
+    }
+    return cartItems;
+  }
+
   @override
   Future<List<CartItem>> fetchCartItems(String userId) async {
     try {
       final fetchedCartItems = await CrabpayConnectorConnector.instance
           .getCartItemsQuery(userId: userId)
-          .execute();
-      List<CartItem> cartItems = [];
-      for (var item in fetchedCartItems.data.cartItems) {
-        final purchaseData = Map<String, String>.from(
-          item.purchaseData.toJson(),
-        );
-        cartItems.add(
-          CartItem(
-            id: item.id,
-            userId: item.userId,
-            userName: item.userName,
-            productId: item.productId,
-            productName: item.productName,
-            purchaseData: purchaseData,
-            currency: item.currency,
-            checkoutPrice: item.checkoutPrice,
-            status: item.status,
-          ),
-        );
-      }
-      return cartItems;
+          .ref()
+          .execute(fetchPolicy: QueryFetchPolicy.serverOnly);
+      return dataCasting(fetchedCartItems.data.cartItems);
     } catch (e) {
       print('Failed to fetch cart items: $e');
       Fluttertoast.showToast(msg: 'Failed to fetch cart items: $e');
@@ -78,5 +85,17 @@ class OuterCartHandler implements InnerCartHandler {
       Fluttertoast.showToast(msg: 'Failed to add the cart item: $e');
       rethrow;
     }
+  }
+
+  @override
+  Stream<List<CartItem>> cartItemsStream(String userId) {
+    return CrabpayConnectorConnector.instance
+        .getCartItemsQuery(userId: userId)
+        .ref()
+        .subscribe()
+        .map((event) {
+          final fetchedCartItems = event.data.cartItems;
+          return dataCasting(fetchedCartItems);
+        });
   }
 }

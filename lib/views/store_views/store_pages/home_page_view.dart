@@ -156,15 +156,15 @@ class _HomePageViewState extends State<HomePageView> {
                               pathParameters: {'productId': product.id},
                             );
                             if (context.mounted) {
-                              context.read<CartBloc>().add(
-                                CartEventFetchCartItems(
-                                  userId: context
-                                      .read<AuthBloc>()
-                                      .state
-                                      .currentUser!
-                                      .id,
-                                ),
-                              );
+                              // context.read<CartBloc>().add(
+                              //   CartEventFetchCartItems(
+                              //     userId: context
+                              //         .read<AuthBloc>()
+                              //         .state
+                              //         .currentUser!
+                              //         .id,
+                              //   ),
+                              // );
                             }
                           },
                           style: ElevatedButton.styleFrom(

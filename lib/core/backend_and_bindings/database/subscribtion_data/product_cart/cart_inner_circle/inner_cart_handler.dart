@@ -2,6 +2,7 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 
 abstract class InnerCartHandler {
   Future<List<CartItem>> fetchCartItems(String userId);
+  Stream<List<CartItem>> cartItemsStream(String userId);
   Future<void> addCartItem(CartItem cartItem);
   Future<void> deleteCartItem(String cartItemId);
 }
