@@ -18,7 +18,6 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-
   Future<void> dataFetching(BuildContext context) async {
     if (context.read<DatabaseBloc>().state.products == null) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
@@ -29,6 +28,11 @@ class _HomePageViewState extends State<HomePageView> {
         context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
       }
     }
+    final currentUser =
+        context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    context.read<CartBloc>().add(
+      CartEventFetchCartItems(userId: currentUser.id),
+    );
   }
 
   @override

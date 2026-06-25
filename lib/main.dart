@@ -17,7 +17,6 @@ import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
-import 'package:crabpay/views/store_views/profile_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
@@ -110,11 +109,11 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
-    GoRoute(
-      path: '/profile_view',
-      name: 'profile_view',
-      builder: (context, state) => ProfileView(),
-    ),
+    // GoRoute(
+    //   path: '/profile_view',
+    //   name: 'profile_view',
+    //   builder: (context, state) => ProfileView(),
+    // ),
     ShellRoute(
       builder: (context, state, child) =>
           BlocProvider(create: (context) => AdminBloc(), child: child),
