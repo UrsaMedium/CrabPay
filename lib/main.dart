@@ -1,27 +1,26 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
-import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
+import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
-import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -193,11 +192,6 @@ class CrabPayApp extends StatelessWidget {
           }
 
           context.read<AuthBloc>().add(AuthEventInitialize(context: context));
-          // final currentUser =
-          //     context.read<AuthBloc>().state.currentUser ?? appTempUser;
-          // context.read<CartBloc>().add(
-          //   CartEventStartCartItemsStream(userId: currentUser.id),
-          // );
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'CrabPay Demo',

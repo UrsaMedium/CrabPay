@@ -41,6 +41,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   List<CartItem>? theCartItems;
   int itemsCount = 0;
   bool everyFieldIsSatisfied = false;
+  bool corectImageInput = false;
 
   @override
   void initState() {
@@ -70,9 +71,14 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
         if (imageField!.handler == 'InputField') {
           final dataFromIamgeField = retrievedData[imageField!.fieldName];
           final imageCoefficient =
-              imageField!.priceImages![dataFromIamgeField] ?? 0;
+              imageField!.priceImages![imageField!.fieldName] ?? 0;
           precalculatedPrice =
-              double.parse(dataFromIamgeField ?? '0') * imageCoefficient;
+              double.tryParse(dataFromIamgeField!) ?? 0 * imageCoefficient;
+          if (precalculatedPrice > 0) {
+            corectImageInput = true;
+          } else {
+            corectImageInput = false;
+          }
         } else {
           double retrievedPrice = 0;
           final dataFromIamgeField = retrievedData[imageField!.fieldName];
@@ -93,6 +99,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
           }
         }
       }
+      if (!corectImageInput) everyFieldIsSatisfied = false;
 
       //TODO internal testing
       if (everyFieldIsSatisfied) {

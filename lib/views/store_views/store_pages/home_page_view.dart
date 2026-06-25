@@ -1,14 +1,14 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:flutter/material.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -156,15 +156,15 @@ class _HomePageViewState extends State<HomePageView> {
                               pathParameters: {'productId': product.id},
                             );
                             if (context.mounted) {
-                              // context.read<CartBloc>().add(
-                              //   CartEventFetchCartItems(
-                              //     userId: context
-                              //         .read<AuthBloc>()
-                              //         .state
-                              //         .currentUser!
-                              //         .id,
-                              //   ),
-                              // );
+                              context.read<CartBloc>().add(
+                                CartEventFetchCartItems(
+                                  userId: context
+                                      .read<AuthBloc>()
+                                      .state
+                                      .currentUser!
+                                      .id,
+                                ),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(

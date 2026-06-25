@@ -218,19 +218,19 @@ class CardView extends StatelessWidget {
                                     );
                                   },
                                 );
-                                if (context.mounted) {
-                                  final currentUser =
-                                      context
-                                          .read<AuthBloc>()
-                                          .state
-                                          .currentUser ??
-                                      appTempUser;
-                                  context.read<CartBloc>().add(
-                                    CartEventFetchCartItems(
-                                      userId: currentUser.id,
-                                    ),
-                                  );
-                                }
+                                // if (context.mounted) {
+                                //   final currentUser =
+                                //       context
+                                //           .read<AuthBloc>()
+                                //           .state
+                                //           .currentUser ??
+                                //       appTempUser;
+                                //   context.read<CartBloc>().add(
+                                //     CartEventFetchCartItems(
+                                //       userId: currentUser.id,
+                                //     ),
+                                //   );
+                                // }
                               } else {
                                 productFields = state.productFields;
                                 if (productFields == null) {
