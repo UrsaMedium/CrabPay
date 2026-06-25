@@ -22,6 +22,30 @@ class CartEventDeleteCartItem implements CartEvent {
   const CartEventDeleteCartItem({required this.cartItem});
 }
 
+class CartEventUserCheckoutItems implements CartEvent {
+  final List<CartItem> checkoutItems;
+  final String? comment;
+  final String status;
+  CartEventUserCheckoutItems({
+    required this.checkoutItems,
+    this.comment,
+    required this.status,
+  });
+}
+
+class CartEventSignedOutUserCheckoutItems implements CartEvent {
+  final List<CartItem> checkoutItems;
+  final String? comment;
+  final String status;
+  CartEventSignedOutUserCheckoutItems({
+    required this.checkoutItems,
+    this.comment,
+    required this.status,
+  });
+}
+
+class CartEventFlushData implements CartEvent {}
+
 class CartEventStartCartItemsStream implements CartEvent {
   final String userId;
   CartEventStartCartItemsStream({required this.userId});

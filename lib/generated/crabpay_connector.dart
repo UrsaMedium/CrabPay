@@ -25,6 +25,8 @@ part 'delete_cart_item.dart';
 
 part 'add_cart_item.dart';
 
+part 'update_cart_item.dart';
+
 part 'get_all_products_query.dart';
 
 part 'get_product_fields_query.dart';
@@ -94,6 +96,11 @@ class CrabpayConnectorConnector {
   
   AddCartItemVariablesBuilder addCartItem ({required String userId, required String userName, required String productId, required String productName, required dynamic purchaseData, required String currency, required double checkoutPrice, required String status, }) {
     return AddCartItemVariablesBuilder(dataConnect, userId: userId,userName: userName,productId: productId,productName: productName,purchaseData: purchaseData,currency: currency,checkoutPrice: checkoutPrice,status: status,);
+  }
+  
+  
+  UpdateCartItemVariablesBuilder updateCartItem ({required String id, }) {
+    return UpdateCartItemVariablesBuilder(dataConnect, id: id,);
   }
   
   

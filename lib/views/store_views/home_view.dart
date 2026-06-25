@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
@@ -32,6 +33,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
+    context.read<AuthBloc>().add(AuthEventInitialize(context: context));
     currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
@@ -63,8 +65,15 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  Future<void> detaFetching(BuildContext context) async {
+    context.read<CartBloc>().add(
+      CartEventFetchCartItems(userId: currentUser.id),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // detaFetching(context);
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -88,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
                     showModalBottomSheet(
                       context: context,
                       showDragHandle: true,
-                      builder: (BuildContext context) => ProfileView(),
+                      builder: (BuildContext context) =>  ProfileView(),
                     );
                   },
                   icon: Icon(Icons.account_circle_rounded),

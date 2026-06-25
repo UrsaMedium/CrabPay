@@ -12,7 +12,9 @@ enum CartStates {
   getting,
   got,
   failedToGet,
-  streamEvent
+  streamEvent,
+  userCheckouts,
+  signedOutUserCheckouts,
 }
 
 enum IsStreaming { yes, no }
@@ -21,6 +23,8 @@ enum IsStreaming { yes, no }
 class CartState {
   final IsStreaming isStreaming;
   final List<CartItem>? cartItems;
+  final List<CartItem>? allUserCartItems;
+  final List<CartItem>? cartItemsFromSignedOutUser;
   final CartItem? cartItemToPush;
   final CartStates states;
   const CartState({
@@ -28,16 +32,27 @@ class CartState {
     this.states = CartStates.empty,
     this.cartItemToPush,
     this.isStreaming = IsStreaming.no,
+    this.cartItemsFromSignedOutUser,
+    this.allUserCartItems,
   });
+
+  CartState flushData() {
+    return CartState();
+  }
 
   CartState copyWith({
     List<CartItem>? cartItems,
+    List<CartItem>? allUserCartItems,
+    List<CartItem>? cartItemsFromSignedOutUser,
     CartStates? states,
     CartItem? cartItemToPush,
     IsStreaming? isStreaming,
   }) {
     return CartState(
       cartItems: cartItems ?? this.cartItems,
+      allUserCartItems: allUserCartItems ?? this.allUserCartItems,
+      cartItemsFromSignedOutUser:
+          cartItemsFromSignedOutUser ?? this.cartItemsFromSignedOutUser,
       cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
       isStreaming: isStreaming ?? this.isStreaming,

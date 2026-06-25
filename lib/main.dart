@@ -6,7 +6,6 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_circle/outer_database_handler.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
@@ -18,6 +17,7 @@ import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:crabpay/views/store_views/profile_view.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
@@ -110,6 +110,11 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: '/profile_view',
+      name: 'profile_view',
+      builder: (context, state) => ProfileView(),
+    ),
     ShellRoute(
       builder: (context, state, child) =>
           BlocProvider(create: (context) => AdminBloc(), child: child),
@@ -190,8 +195,6 @@ class CrabPayApp extends StatelessWidget {
               brightness: Brightness.dark,
             );
           }
-
-          context.read<AuthBloc>().add(AuthEventInitialize(context: context));
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'CrabPay Demo',

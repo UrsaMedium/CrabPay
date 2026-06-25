@@ -80,6 +80,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
             corectImageInput = false;
           }
         } else {
+          corectImageInput = true;
           double retrievedPrice = 0;
           final dataFromIamgeField = retrievedData[imageField!.fieldName];
           retrievedPrice = imageField!.priceImages![dataFromIamgeField] ?? 0;

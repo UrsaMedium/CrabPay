@@ -10,7 +10,6 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CartPageView extends StatefulWidget {
   const CartPageView({super.key});
@@ -23,11 +22,20 @@ class _CartPageViewState extends State<CartPageView> {
   List<CartItem>? cartItems;
   List<Product>? products;
   late final AuthUser currentUser;
+  bool isLoggedIn = false;
 
   @override
   void initState() {
     products = context.read<DatabaseBloc>().state.products;
-    currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+
+    if (context.read<AuthBloc>().state is AuthStateLoggedIn) {
+      currentUser = context.read<AuthBloc>().state.currentUser!;
+      isLoggedIn = true;
+    } else {
+      currentUser = appTempUser;
+      isLoggedIn = false;
+    }
+
     super.initState();
   }
 
@@ -230,42 +238,6 @@ class _CartPageViewState extends State<CartPageView> {
                         Column(
                           children: [
                             SizedBox(height: MediaQuery.paddingOf(context).top),
-                            Container(
-                              alignment: .centerLeft,
-                              child: Column(
-                                crossAxisAlignment: .start,
-                                children: [
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(
-                                  //     top: 8.0,
-                                  //     left: 16,
-                                  //   ),
-                                  //   child: Text(
-                                  //     'Shopping Cart',
-                                  //     textAlign: .left,
-                                  //     style: TextStyle(
-                                  //       color: context
-                                  //           .appColorScheme
-                                  //           .primaryFixedDim,
-                                  //       fontSize: 30,
-                                  //       fontWeight: FontWeight.w900,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(
-                                  //     left: 16,
-                                  //     bottom: 4.0,
-                                  //   ),
-                                  //   child: Text(
-                                  //     'Confirm the purchase',
-                                  //     textAlign: .left,
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-                            ),
-
                             Spacer(flex: 1),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -321,24 +293,26 @@ class _CartPageViewState extends State<CartPageView> {
                                             onPressed: total == 0
                                                 ? null
                                                 : () {
-                                                    if (context
-                                                            .read<AuthBloc>()
-                                                            .state
-                                                        is AuthStateLoggedIn) {
-                                                      //TODO
-                                                      Fluttertoast.showToast(
-                                                        msg: 'logged in',
+                                                    //TODO
+                                                    if (isLoggedIn) {
+                                                      context.read<CartBloc>().add(
+                                                        CartEventUserCheckoutItems(
+                                                          checkoutItems:
+                                                              cartItems!,
+                                                          status:
+                                                              'beingCheckedOut',
+                                                        ),
                                                       );
+                                                      detaFetching(context);
                                                     } else {
-                                                      if (context
-                                                              .read<AuthBloc>()
-                                                              .state
-                                                          is AuthStateLoggedOut) {
-                                                        //TODO
-                                                        Fluttertoast.showToast(
-                                                          msg: 'logged out',
-                                                        );
-                                                      }
+                                                      context.read<CartBloc>().add(
+                                                        CartEventSignedOutUserCheckoutItems(
+                                                          checkoutItems:
+                                                              cartItems!,
+                                                          status:
+                                                              'beingCheckedOut',
+                                                        ),
+                                                      );
                                                     }
                                                   },
                                             style: ElevatedButton.styleFrom(
@@ -354,7 +328,9 @@ class _CartPageViewState extends State<CartPageView> {
                                               ),
                                             ),
                                             child: Text(
-                                              'Checkout',
+                                              isLoggedIn
+                                                  ? 'Checkout'
+                                                  : 'Sign In & Checkout',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,

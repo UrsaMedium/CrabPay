@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
@@ -97,5 +98,34 @@ class OuterCartHandler implements InnerCartHandler {
           final fetchedCartItems = event.data.cartItems;
           return dataCasting(fetchedCartItems);
         });
+  }
+
+  @override
+  Future<void> updateCartItem(List<CartItem> cartItems, AuthUser? user) async {
+    try {
+      if (user == null) {
+        for (var item in cartItems) {
+          await CrabpayConnectorConnector.instance
+              .updateCartItem(id: item.id)
+              .status('beingCheckedOut')
+              .statusChangedAt(
+                Timestamp.fromJson(DateTime.now().toUtc().toIso8601String()),
+              )
+              .execute();
+        }
+      } else {
+        // await CrabpayConnectorConnector.instance
+        //     .updateCartItem(id: cartItem.id)
+        //     .userId(user.id)
+        //     .userName(user.email)
+        //     .status('beingCheckedOut')
+        //     .statusChangedAt(
+        //       Timestamp.fromJson(DateTime.now().toUtc().toIso8601String()),
+        //     )
+        //     .execute();
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

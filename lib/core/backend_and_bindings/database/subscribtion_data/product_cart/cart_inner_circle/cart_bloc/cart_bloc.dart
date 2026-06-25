@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/inner_cart_handler.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
@@ -10,8 +11,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartEventFetchCartItems>((event, emit) async {
       try {
         emit(state.copyWith(states: CartStates.getting));
-        final cartItems = await cartHandler.fetchCartItems(event.userId);
-        emit(state.copyWith(cartItems: cartItems, states: CartStates.got));
+        final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
+        List<CartItem> cartItems = [];
+        for (var cartItem in allUserCartItems) {
+          if (cartItem.status == 'created') {
+            cartItems.add(cartItem);
+          }
+        }
+        emit(
+          state.copyWith(
+            cartItems: allUserCartItems,
+            allUserCartItems: allUserCartItems,
+            states: CartStates.got,
+          ),
+        );
       } catch (e) {
         state.copyWith(states: CartStates.failedToGet);
         rethrow;
@@ -53,6 +66,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
+    on<CartEventUserCheckoutItems>((event, emit) async {
+      try {
+        await cartHandler.updateCartItem(event.checkoutItems, null);
+      } catch (e) {
+        rethrow;
+      }
+    });
+
     on<CartEventStartCartItemsStream>((event, emit) {
       emit(state.copyWith(isStreaming: IsStreaming.yes));
       _streamSubscription?.cancel();
@@ -64,7 +85,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventOnChangeStreamed>((event, emit) {
-      print('boom-----------------------------------------------------------');
       emit(
         state.copyWith(
           cartItems: event.cartItems,
@@ -77,5 +97,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       _streamSubscription?.cancel();
       emit(state.copyWith(isStreaming: IsStreaming.no));
     });
+
+    on<CartEventFlushData>((event, emit) => emit(state.flushData()));
   }
 }

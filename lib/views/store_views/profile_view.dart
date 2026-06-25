@@ -1,21 +1,27 @@
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_binding_service.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:flutter/material.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthStateLoggedOut && context.canPop()) {
-          context.pop();
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        final navigator = Navigator.of(context);
+        if (navigator.canPop()) {
+          navigator.pop(result);
+        } else {
+          context.go('/');
         }
       },
       child: SizedBox(
@@ -48,9 +54,13 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () => context.read<AuthBloc>().add(
-                        AuthEventLogOut(context: context),
-                      ),
+                      onPressed: () {
+                        context.read<CartBloc>().add(CartEventFlushData());
+                        context.read<AuthBloc>().add(
+                          AuthEventLogOut(context: context),
+                        );
+                        context.pop();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: context.appColorScheme.primary,
                         foregroundColor: context.appColorScheme.onPrimary,
