@@ -67,158 +67,149 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackButtonListener(
-      onBackButtonPressed: () async {
-        final navigator = Navigator.of(context);
-        if (navigator.canPop()) {
-          navigator.pop();
-        }
-        return false;
-      },
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: context.appColorScheme.surfaceContainerLowest
-              .withValues(alpha: .95),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: context.appColorScheme.surfaceBright,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
+    return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: context.appColorScheme.surfaceContainerLowest
+            .withValues(alpha: .8),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: context.appColorScheme.surfaceBright,
+            width: 1,
           ),
-          title: Text('Crab Pay'),
-          actions: [
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (blocContext, state) {
-                if (state is AuthStateLoggedIn) {
-                  return IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        useRootNavigator: false,
-                        showDragHandle: false,
-                        useSafeArea: false,
-                        context: blocContext,
-                        enableDrag: true,
-                        isScrollControlled: true,
-                        backgroundColor: blocContext
-                            .appColorScheme
-                            .surfaceContainerLow
-                            .withValues(alpha: .6),
-
-                        builder: (BuildContext sheetContext) => Wrap(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const .only(
-                                  topLeft: Radius.circular(40),
-                                  topRight: Radius.circular(40),
-                                ),
-                                border: .all(
-                                  color: blocContext
-                                      .appColorScheme
-                                      .surfaceContainerLow
-                                      .withValues(alpha: .5),
-                                ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
+        ),
+        title: Text('Crab Pay'),
+        actions: [
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (blocContext, state) {
+              if (state is AuthStateLoggedIn) {
+                return IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      useRootNavigator: false,
+                      showDragHandle: false,
+                      useSafeArea: false,
+                      context: blocContext,
+                      enableDrag: true,
+                      isScrollControlled: true,
+                      backgroundColor: blocContext
+                          .appColorScheme
+                          .surfaceContainerLow
+                          .withValues(alpha: .5),
+    
+                      builder: (BuildContext sheetContext) => Wrap(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const .only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
                               ),
-                              child: ProfileView(),
+                              border: .all(
+                                color: blocContext
+                                    .appColorScheme
+                                    .surfaceContainerLow
+                                    .withValues(alpha: .5),
+                              ),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.account_circle_rounded),
-                  );
-                } else {
-                  return IconButton(
-                    onPressed: () {
-                      context.push('login_view');
-                    },
-                    icon: Icon(Icons.account_circle_outlined),
-                  );
-                }
-              },
-            ),
-          ],
-          flexibleSpace: ClipRRect(
-            borderRadius: BorderRadiusGeometry.only(
-              bottomLeft: Radius.circular(18),
-              bottomRight: Radius.circular(18),
+                            child: ProfileView(),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.account_circle_rounded),
+                );
+              } else {
+                return IconButton(
+                  onPressed: () {
+                    context.push('login_view');
+                  },
+                  icon: Icon(Icons.account_circle_outlined),
+                );
+              }
+            },
+          ),
+        ],
+        flexibleSpace: ClipRRect(
+          borderRadius: BorderRadiusGeometry.only(
+            bottomLeft: Radius.circular(18),
+            bottomRight: Radius.circular(18),
+          ),
+          child: BackdropFilter(
+            filter: .blur(sigmaX: 8, sigmaY: 8),
+            child: Container(),
+          ),
+        ),
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _handlePageSwipe,
+        children: [
+          _buildIsolatedBranch(const HomePageView()),
+          _buildIsolatedBranch(const StorePageView()),
+          _buildIsolatedBranch(const AskPageView()),
+          _buildIsolatedBranch(const CartPageView()),
+        ],
+      ),
+      bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
+        builder: (context, state) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(18),
             ),
             child: BackdropFilter(
               filter: .blur(sigmaX: 8, sigmaY: 8),
-              child: Container(),
+              child: NavigationBar(
+                selectedIndex: widget.navigationShell.currentIndex,
+                onDestinationSelected: _handleNavBarTap,
+                backgroundColor: context.appColorScheme.surfaceContainer
+                    .withValues(alpha: .8),
+                destinations: [
+                  NavigationDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home_filled),
+                    label: 'Home',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.storefront_outlined),
+                    selectedIcon: Icon(Icons.storefront),
+                    label: 'Store',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.message_outlined),
+                    selectedIcon: Icon(Icons.message_rounded),
+                    label: 'Ask',
+                  ),
+                  BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) {
+                      itemsCount = state.cartItems?.length ?? 0;
+                      return NavigationDestination(
+                        icon: Badge(
+                          backgroundColor: context.appColorScheme.error,
+                          textColor: context.appColorScheme.onError,
+                          label: Text(itemsCount.toString()),
+                          isLabelVisible: itemsCount > 0,
+                          child: Icon(Icons.shopping_cart_checkout_outlined),
+                        ),
+                        selectedIcon: Badge(
+                          backgroundColor: context.appColorScheme.error,
+                          textColor: context.appColorScheme.onError,
+                          label: Text(itemsCount.toString()),
+                          isLabelVisible: itemsCount > 0,
+                          child: Icon(Icons.shopping_cart_rounded),
+                        ),
+                        label: 'Cart',
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: _handlePageSwipe,
-          children: [
-            _buildIsolatedBranch(const HomePageView()),
-            _buildIsolatedBranch(const StorePageView()),
-            _buildIsolatedBranch(const AskPageView()),
-            _buildIsolatedBranch(const CartPageView()),
-          ],
-        ),
-        bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
-          builder: (context, state) {
-            return ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(18),
-              ),
-              child: BackdropFilter(
-                filter: .blur(sigmaX: 8, sigmaY: 8),
-                child: NavigationBar(
-                  selectedIndex: widget.navigationShell.currentIndex,
-                  onDestinationSelected: _handleNavBarTap,
-                  backgroundColor: context.appColorScheme.surfaceContainer
-                      .withValues(alpha: .8),
-                  destinations: [
-                    NavigationDestination(
-                      icon: Icon(Icons.home_outlined),
-                      selectedIcon: Icon(Icons.home_filled),
-                      label: 'Home',
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.storefront_outlined),
-                      selectedIcon: Icon(Icons.storefront),
-                      label: 'Store',
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.message_outlined),
-                      selectedIcon: Icon(Icons.message_rounded),
-                      label: 'Ask',
-                    ),
-                    BlocBuilder<CartBloc, CartState>(
-                      builder: (context, state) {
-                        itemsCount = state.cartItems?.length ?? 0;
-                        return NavigationDestination(
-                          icon: Badge(
-                            backgroundColor: context.appColorScheme.error,
-                            textColor: context.appColorScheme.onError,
-                            label: Text(itemsCount.toString()),
-                            isLabelVisible: itemsCount > 0,
-                            child: Icon(Icons.shopping_cart_checkout_outlined),
-                          ),
-                          selectedIcon: Badge(
-                            backgroundColor: context.appColorScheme.error,
-                            textColor: context.appColorScheme.onError,
-                            label: Text(itemsCount.toString()),
-                            isLabelVisible: itemsCount > 0,
-                            child: Icon(Icons.shopping_cart_rounded),
-                          ),
-                          label: 'Cart',
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+          );
+        },
       ),
     );
   }

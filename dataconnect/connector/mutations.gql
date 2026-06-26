@@ -149,32 +149,31 @@ mutation addCartItem(
 }
 
 mutation UpdateCartItem(
-  $id: UUID!,
-  $userId: String,
-  $userName: String,
+  $id: UUID!
+  $userId: String
+  $userName: String
   # $productId: UUID,
   # $productName: String,
   # $purchaseData: Any,
   # $currency: String,
   # $checkoutPrice: Float,
-  $status: String,
-  $comment: String,
+  $status: String
+  $comment: String
   $statusChangedAt: Timestamp
 ) @auth(level: PUBLIC) {
   cartItem_update(
-    key: { id: $id },
+    key: { id: $id }
     data: {
-      userId: $userId,
-      userName: $userName,
+      userId: $userId
+      userName: $userName
       # productId: $productId,
       # productName: $productName,
       # purchaseData: $purchaseData,
       # currency: $currency,
       # checkoutPrice: $checkoutPrice,
-      status: $status,
-      comment: $comment,
+      status: $status
+      comment: $comment
       statusChangedAt: $statusChangedAt
     }
   )
 }
-

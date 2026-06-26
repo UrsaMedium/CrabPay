@@ -151,7 +151,7 @@ class _CartPageViewState extends State<CartPageView> {
                                                         ),
                                                   ),
                                                   child: Image.network(
-                                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${products!.firstWhere((product) => product.id == cartItems![index].productId).image}',
+                                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${products!.firstWhere((product) => product.id == cartItems![index].productId).image}.png',
                                                     fit: .cover,
                                                   ),
                                                 ),
@@ -305,14 +305,7 @@ class _CartPageViewState extends State<CartPageView> {
                                                       );
                                                       detaFetching(context);
                                                     } else {
-                                                      context.read<CartBloc>().add(
-                                                        CartEventSignedOutUserCheckoutItems(
-                                                          checkoutItems:
-                                                              cartItems!,
-                                                          status:
-                                                              'beingCheckedOut',
-                                                        ),
-                                                      );
+                                                      
                                                     }
                                                   },
                                             style: ElevatedButton.styleFrom(

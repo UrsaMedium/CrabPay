@@ -93,7 +93,7 @@ class CardView extends StatelessWidget {
                           slivers: [
                             SliverToBoxAdapter(
                               child: Image.network(
-                                'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}',
+                                'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                                 fit: .fitWidth,
                                 width: double.infinity,
                                 height: 300,

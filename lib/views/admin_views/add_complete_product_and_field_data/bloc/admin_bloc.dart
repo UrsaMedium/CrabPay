@@ -59,7 +59,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       );
     });
 
-    on<AdminEventPushesData>((event, emit) {
+    on<AdminEventPushesData>((event, emit) async {
       var uuid = Uuid();
       String theProductId = uuid.v4();
       Product productToPush = Product(

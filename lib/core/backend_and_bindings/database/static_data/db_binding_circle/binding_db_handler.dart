@@ -49,4 +49,8 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> deleteCurrencies(Currencies currencies) =>
       dbHandler.deleteCurrencies(currencies);
+
+  @override
+  Future<List<Product>?> fetchAllProductsForAdmin() =>
+      dbHandler.fetchAllProductsForAdmin();
 }

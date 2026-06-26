@@ -26,6 +26,24 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
+    on<DatabaseEventFetchAllProductsForAdmin>((event, emit) async {
+      // showLoading(event.context);
+      try {
+        final products = await databaseHandler.fetchAllProductsForAdmin();
+        emit(
+          state.copyWith(
+            products: products,
+            states: DatabaseStates.productsFetched,
+          ),
+        );
+      } catch (e) {
+        // Fluttertoast.showToast(msg: 'Faild to fetch products $e');
+        // print('Faild to fetch products $e');
+        // emit(state.copyWith(states: DatabaseStates.productsNotFetched));
+        rethrow;
+      }
+    });
+
     // Products
     // add Product
     on<DatabaseEventAddProduct>((event, emit) async {

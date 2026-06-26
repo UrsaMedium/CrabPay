@@ -66,6 +66,25 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
+    on<CartEventDeleteCartItemById>((event, emit) async {
+      try {
+        emit(state.copyWith(states: CartStates.deleting));
+        await cartHandler.deleteCartItem(event.cartItemId);
+        final reducedListOfItmes = state.cartItems
+            ?.where((item) => item.id != event.cartItemId)
+            .toList();
+        emit(
+          state.copyWith(
+            cartItems: reducedListOfItmes,
+            states: CartStates.deleted,
+          ),
+        );
+      } catch (e) {
+        state.copyWith(states: CartStates.failedToDelete);
+        rethrow;
+      }
+    });
+
     on<CartEventUserCheckoutItems>((event, emit) async {
       try {
         await cartHandler.updateCartItem(event.checkoutItems, null);

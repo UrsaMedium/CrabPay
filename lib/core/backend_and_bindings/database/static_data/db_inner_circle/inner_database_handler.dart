@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 
 abstract class InnerDatabaseHandler {
   Future<List<Product>?> fetchAllProducts();
+  Future<List<Product>?> fetchAllProductsForAdmin();
   //product
   // Future<void> fetchProduct(String id);
   Future<void> addProduct(Product product);

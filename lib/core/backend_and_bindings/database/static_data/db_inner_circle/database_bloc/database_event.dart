@@ -10,6 +10,7 @@ abstract class DatabaseEvent {
 
 // fetch all Poducts and theirs Fields
 class DatabaseEventFetchAllProducts implements DatabaseEvent {}
+class DatabaseEventFetchAllProductsForAdmin implements DatabaseEvent {}
 
 // Product events
 // add Product

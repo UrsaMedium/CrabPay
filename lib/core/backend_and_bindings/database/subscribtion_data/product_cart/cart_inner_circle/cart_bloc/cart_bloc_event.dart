@@ -22,6 +22,11 @@ class CartEventDeleteCartItem implements CartEvent {
   const CartEventDeleteCartItem({required this.cartItem});
 }
 
+class CartEventDeleteCartItemById implements CartEvent {
+  final String cartItemId;
+  const CartEventDeleteCartItemById({required this.cartItemId});
+}
+
 class CartEventUserCheckoutItems implements CartEvent {
   final List<CartItem> checkoutItems;
   final String? comment;
