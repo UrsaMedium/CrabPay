@@ -3,12 +3,17 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 
 abstract class InnerDatabaseHandler {
+  //product
   Future<List<Product>?> fetchAllProducts();
   Future<List<Product>?> fetchAllProductsForAdmin();
-  //product
-  // Future<void> fetchProduct(String id);
   Future<void> addProduct(Product product);
   Future<void> deleteProduct(Product product);
+  Future<void> updateProduct(
+    String productId,
+    String? imageName,
+    String? productName,
+    String? description,
+  );
   //fields
   Future<List<ProductField>?> fetchProductFields(String productId);
   Future<void> fetchProductField(String id); // TODO

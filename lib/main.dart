@@ -10,6 +10,8 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
+import 'package:crabpay/views/admin_views/product_field_update_view.dart';
+import 'package:crabpay/views/admin_views/product_update_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
@@ -148,6 +150,14 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/deleting_view',
       builder: (context, state) => DeleteInstancesFromDbView(),
+    ),
+    GoRoute(
+      path: '/product_field_update_view',
+      builder: (context, state) => ProductFieldUpdateView(),
+    ),
+    GoRoute(
+      path: '/product_update_view',
+      builder: (context, state) => ProductUpdateView(),
     ),
     GoRoute(
       path: '/login_view',

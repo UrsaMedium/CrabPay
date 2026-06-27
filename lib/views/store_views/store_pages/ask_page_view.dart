@@ -26,6 +26,14 @@ class AskPageView extends StatelessWidget {
           onPressed: () => context.push('/deleting_view'),
           child: Text('Delete instances from DB'),
         ),
+        ElevatedButton(
+          onPressed: () => context.push('/product_field_update_view'),
+          child: Text('Update Product Field'),
+        ),
+        ElevatedButton(
+          onPressed: () => context.push('/product_update_view'),
+          child: Text('Update a Product'),
+        ),
       ],
     );
   }

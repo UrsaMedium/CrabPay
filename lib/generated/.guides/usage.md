@@ -3,11 +3,11 @@
 ```dart
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProduct(deleteProductVariables).execute();
+CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
 CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariables).execute();
 CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
-CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
 CrabpayConnectorConnector.instance.productFieldUpdate(productFieldUpdateVariables).execute();
 CrabpayConnectorConnector.instance.currenciesUpdate(currenciesUpdateVariables).execute();
 CrabpayConnectorConnector.instance.deleteCartItem(deleteCartItemVariables).execute();

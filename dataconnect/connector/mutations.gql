@@ -20,6 +20,24 @@ mutation DeleteProduct($id: UUID!) @auth(level: PUBLIC) {
   product_delete(key: { id: $id })
 }
 
+mutation UpdateProduct(
+  $id: UUID!
+  $name: String
+  $description: String
+  $imageUrl: String
+  $currencies: String
+) @auth(level: PUBLIC) {
+  product_update(
+    key: { id: $id }
+    data: {
+      name: $name
+      description: $description
+      imageUrl: $imageUrl
+      currencies: $currencies
+    }
+  )
+}
+
 mutation AddProductField(
   $productId: UUID!
   $order: Int!
@@ -61,23 +79,6 @@ mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
   currencies_delete(key: { id: $id })
 }
 
-mutation UpdateProduct(
-  $id: UUID!
-  $name: String!
-  $description: String!
-  $imageUrl: String!
-  $currencies: String!
-) @auth(level: PUBLIC) {
-  product_update(
-    id: $id
-    data: {
-      name: $name
-      description: $description
-      imageUrl: $imageUrl
-      currencies: $currencies
-    }
-  )
-}
 
 mutation productFieldUpdate(
   $id: UUID

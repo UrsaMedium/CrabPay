@@ -7,7 +7,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(InnerDatabaseHandler databaseHandler)
     : super(const DatabaseState()) {
     //
-    // fetch all Poducts and theirs Fields
+
+    // Products------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // fetch all Poducts
     on<DatabaseEventFetchAllProducts>((event, emit) async {
       // showLoading(event.context);
       try {
@@ -26,6 +28,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
+    // instantly fetch all Poducts for admin
     on<DatabaseEventFetchAllProductsForAdmin>((event, emit) async {
       // showLoading(event.context);
       try {
@@ -44,7 +47,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    // Products
     // add Product
     on<DatabaseEventAddProduct>((event, emit) async {
       try {
@@ -79,7 +81,21 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    // Fields
+    // update a product
+    on<DatabaseEventUpdateProduct>((event, emit) async {
+      try {
+        await databaseHandler.updateProduct(
+          event.productId,
+          event.imageName,
+          event.productName,
+          event.description,
+        );
+      } catch (e) {
+        rethrow;
+      }
+    });
+
+    // Fields------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch Product Fields
     on<DatabaseEventFetchProductFields>((event, emit) async {
       try {
@@ -127,7 +143,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    // Currencies
+    // Currencies------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {
       try {

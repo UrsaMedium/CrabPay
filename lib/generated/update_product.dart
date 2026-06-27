@@ -2,13 +2,29 @@ part of 'crabpay_connector.dart';
 
 class UpdateProductVariablesBuilder {
   String id;
-  String name;
-  String description;
-  String imageUrl;
-  String currencies;
+  Optional<String> _name = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<String> _description = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<String> _imageUrl = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<String> _currencies = Optional.optional(nativeFromJson, nativeToJson);
 
-  final FirebaseDataConnect _dataConnect;
-  UpdateProductVariablesBuilder(this._dataConnect, {required  this.id,required  this.name,required  this.description,required  this.imageUrl,required  this.currencies,});
+  final FirebaseDataConnect _dataConnect;  UpdateProductVariablesBuilder name(String? t) {
+   _name.value = t;
+   return this;
+  }
+  UpdateProductVariablesBuilder description(String? t) {
+   _description.value = t;
+   return this;
+  }
+  UpdateProductVariablesBuilder imageUrl(String? t) {
+   _imageUrl.value = t;
+   return this;
+  }
+  UpdateProductVariablesBuilder currencies(String? t) {
+   _currencies.value = t;
+   return this;
+  }
+
+  UpdateProductVariablesBuilder(this._dataConnect, {required  this.id,});
   Deserializer<UpdateProductData> dataDeserializer = (dynamic json)  => UpdateProductData.fromJson(jsonDecode(json));
   Serializer<UpdateProductVariables> varsSerializer = (UpdateProductVariables vars) => jsonEncode(vars.toJson());
   Future<OperationResult<UpdateProductData, UpdateProductVariables>> execute() {
@@ -16,7 +32,7 @@ class UpdateProductVariablesBuilder {
   }
 
   MutationRef<UpdateProductData, UpdateProductVariables> ref() {
-    UpdateProductVariables vars= UpdateProductVariables(id: id,name: name,description: description,imageUrl: imageUrl,currencies: currencies,);
+    UpdateProductVariables vars= UpdateProductVariables(id: id,name: _name,description: _description,imageUrl: _imageUrl,currencies: _currencies,);
     return _dataConnect.mutation("UpdateProduct", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -94,18 +110,33 @@ class UpdateProductData {
 @immutable
 class UpdateProductVariables {
   final String id;
-  final String name;
-  final String description;
-  final String imageUrl;
-  final String currencies;
+  late final Optional<String>name;
+  late final Optional<String>description;
+  late final Optional<String>imageUrl;
+  late final Optional<String>currencies;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   UpdateProductVariables.fromJson(Map<String, dynamic> json):
   
-  id = nativeFromJson<String>(json['id']),
-  name = nativeFromJson<String>(json['name']),
-  description = nativeFromJson<String>(json['description']),
-  imageUrl = nativeFromJson<String>(json['imageUrl']),
-  currencies = nativeFromJson<String>(json['currencies']);
+  id = nativeFromJson<String>(json['id']) {
+  
+  
+  
+    name = Optional.optional(nativeFromJson, nativeToJson);
+    name.value = json['name'] == null ? null : nativeFromJson<String>(json['name']);
+  
+  
+    description = Optional.optional(nativeFromJson, nativeToJson);
+    description.value = json['description'] == null ? null : nativeFromJson<String>(json['description']);
+  
+  
+    imageUrl = Optional.optional(nativeFromJson, nativeToJson);
+    imageUrl.value = json['imageUrl'] == null ? null : nativeFromJson<String>(json['imageUrl']);
+  
+  
+    currencies = Optional.optional(nativeFromJson, nativeToJson);
+    currencies.value = json['currencies'] == null ? null : nativeFromJson<String>(json['currencies']);
+  
+  }
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -130,10 +161,18 @@ class UpdateProductVariables {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
     json['id'] = nativeToJson<String>(id);
-    json['name'] = nativeToJson<String>(name);
-    json['description'] = nativeToJson<String>(description);
-    json['imageUrl'] = nativeToJson<String>(imageUrl);
-    json['currencies'] = nativeToJson<String>(currencies);
+    if(name.state == OptionalState.set) {
+      json['name'] = name.toJson();
+    }
+    if(description.state == OptionalState.set) {
+      json['description'] = description.toJson();
+    }
+    if(imageUrl.state == OptionalState.set) {
+      json['imageUrl'] = imageUrl.toJson();
+    }
+    if(currencies.state == OptionalState.set) {
+      json['currencies'] = currencies.toJson();
+    }
     return json;
   }
 

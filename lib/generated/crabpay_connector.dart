@@ -7,6 +7,8 @@ part 'add_product.dart';
 
 part 'delete_product.dart';
 
+part 'update_product.dart';
+
 part 'add_product_field.dart';
 
 part 'delete_product_field.dart';
@@ -14,8 +16,6 @@ part 'delete_product_field.dart';
 part 'add_currencies.dart';
 
 part 'delete_currencies.dart';
-
-part 'update_product.dart';
 
 part 'product_field_update.dart';
 
@@ -54,6 +54,11 @@ class CrabpayConnectorConnector {
   }
   
   
+  UpdateProductVariablesBuilder updateProduct ({required String id, }) {
+    return UpdateProductVariablesBuilder(dataConnect, id: id,);
+  }
+  
+  
   AddProductFieldVariablesBuilder addProductField ({required String productId, required int order, required String handler, required String fieldName, required bool isPriceImage, }) {
     return AddProductFieldVariablesBuilder(dataConnect, productId: productId,order: order,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
   }
@@ -71,11 +76,6 @@ class CrabpayConnectorConnector {
   
   DeleteCurrenciesVariablesBuilder deleteCurrencies ({required String id, }) {
     return DeleteCurrenciesVariablesBuilder(dataConnect, id: id,);
-  }
-  
-  
-  UpdateProductVariablesBuilder updateProduct ({required String id, required String name, required String description, required String imageUrl, required String currencies, }) {
-    return UpdateProductVariablesBuilder(dataConnect, id: id,name: name,description: description,imageUrl: imageUrl,currencies: currencies,);
   }
   
   

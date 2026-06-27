@@ -121,104 +121,111 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.75,
-                ),
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    SliverList.builder(
-                      itemCount: _fieldWidgetsMap.length,
-                      itemBuilder: (context, index) {
-                        return _fieldWidgetsMap.values.toList()[index];
-                      },
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16,
-                          left: 32,
-                          right: 32,
-                          bottom: 32,
-                        ),
-                        child: Wrap(
-                          alignment: WrapAlignment.center,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () async {
-                                showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  isScrollControlled: true,
-                                  builder: (BuildContext context) {
-                                    return AddFieldBottomSheet(
-                                      alreadyExistingFields: _fieldNames,
-                                      onNewFieldAdding: _updateFieldsList,
-                                    );
-                                  },
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    context.appColorScheme.onPrimary,
-                                foregroundColor:
-                                    context.appColorScheme.primary,
-                                // minimumSize: Size(double.infinity, 50),
-                              ),
-                              label: Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: .end,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (GoRouter.of(context).canPop()) {
-                          context.pop();
-                        }
-                      },
-                      child: Text('Back'),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.8,
+                      ),
+                      child: CustomScrollView(
+                        shrinkWrap: true,
+                        slivers: [
+                          SliverList.builder(
+                            itemCount: _fieldWidgetsMap.length,
+                            itemBuilder: (context, index) {
+                              return _fieldWidgetsMap.values.toList()[index];
+                            },
+                          ),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                top: 16,
+                                left: 32,
+                                right: 32,
+                                bottom: 32,
+                              ),
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        showDragHandle: true,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return AddFieldBottomSheet(
+                                            alreadyExistingFields: _fieldNames,
+                                            onNewFieldAdding: _updateFieldsList,
+                                          );
+                                        },
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          context.appColorScheme.onPrimary,
+                                      foregroundColor:
+                                          context.appColorScheme.primary,
+                                      // minimumSize: Size(double.infinity, 50),
+                                    ),
+                                    label: Icon(Icons.add),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        List<ProductField>? collectFields = _collectFields();
-                        if (collectFields != null) {
-                          print('s2-----------------------');
-                          context.read<AdminBloc>().add(
-                            AdminEventSubmitsFields(
-                              appProductFields: collectFields,
-                            ),
-                          );
-                          context.push(
-                            '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view',
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: 'Every field must has a name and a handler',
-                          );
-                        }
-                      },
-                      child: Text('Next'),
+                    child: Row(
+                      mainAxisAlignment: .end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (GoRouter.of(context).canPop()) {
+                                context.pop();
+                              }
+                            },
+                            child: Text('Back'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              List<ProductField>? collectFields =
+                                  _collectFields();
+                              if (collectFields != null) {
+                                context.read<AdminBloc>().add(
+                                  AdminEventSubmitsFields(
+                                    appProductFields: collectFields,
+                                  ),
+                                );
+                                context.push(
+                                  '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view',
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      'Every field must has a name and a handler',
+                                );
+                              }
+                            },
+                            child: Text('Next'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

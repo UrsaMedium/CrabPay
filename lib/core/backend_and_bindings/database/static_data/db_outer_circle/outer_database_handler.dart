@@ -109,6 +109,47 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     }
   }
 
+  @override
+  Future<void> updateProduct(
+    String productId,
+    String? imageName,
+    String? productName,
+    String? description,
+  ) async {
+    final r = RetryOptions(
+      maxAttempts: 3,
+      delayFactor: Duration(microseconds: 500),
+    );
+    try {
+      if (imageName != null) {
+        await r.retry(
+          () => CrabpayConnectorConnector.instance
+              .updateProduct(id: productId)
+              .imageUrl(imageName)
+              .execute(),
+        );
+      }
+      if (productName != null) {
+        await r.retry(
+          () => CrabpayConnectorConnector.instance
+              .updateProduct(id: productId)
+              .name(productName)
+              .execute(),
+        );
+      }
+      if (description != null) {
+        await r.retry(
+          () => CrabpayConnectorConnector.instance
+              .updateProduct(id: productId)
+              .description(description)
+              .execute(),
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Fields
   // fetch a field
   @override

@@ -8,11 +8,12 @@ abstract class DatabaseEvent {
   const DatabaseEvent();
 }
 
-// fetch all Poducts and theirs Fields
+// Product events
+// fetch all Poducts
 class DatabaseEventFetchAllProducts implements DatabaseEvent {}
+
 class DatabaseEventFetchAllProductsForAdmin implements DatabaseEvent {}
 
-// Product events
 // add Product
 class DatabaseEventAddProduct implements DatabaseEvent {
   final Product product;
@@ -23,6 +24,20 @@ class DatabaseEventAddProduct implements DatabaseEvent {
 class DatabaseEventDeleteProduct implements DatabaseEvent {
   final Product product;
   DatabaseEventDeleteProduct({required this.product});
+}
+
+// modify product
+class DatabaseEventUpdateProduct implements DatabaseEvent {
+  final String productId;
+  final String? imageName;
+  final String? productName;
+  final String? description;
+  DatabaseEventUpdateProduct({
+    this.imageName,
+    this.productName,
+    this.description,
+    required this.productId,
+  });
 }
 
 // Fields events

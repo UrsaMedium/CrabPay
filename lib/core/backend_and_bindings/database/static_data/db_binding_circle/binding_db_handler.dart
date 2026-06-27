@@ -53,4 +53,12 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<List<Product>?> fetchAllProductsForAdmin() =>
       dbHandler.fetchAllProductsForAdmin();
+
+  @override
+  Future<void> updateProduct(
+    String productId,
+    String? imageName,
+    String? productName,
+    String? description,
+  ) => dbHandler.updateProduct(productId, imageName, productName, description);
 }
