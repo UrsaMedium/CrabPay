@@ -6,8 +6,14 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:retry/retry.dart';
 
 class OuterCartHandler implements InnerCartHandler {
+  final retryer = RetryOptions(
+    maxAttempts: 3,
+    delayFactor: Duration(milliseconds: 500),
+  );
+
   List<CartItem> dataCasting(
     List<GetCartItemsQueryCartItems> fetchedCartItems,
   ) {
@@ -34,10 +40,12 @@ class OuterCartHandler implements InnerCartHandler {
   @override
   Future<List<CartItem>> fetchCartItems(String userId) async {
     try {
-      final fetchedCartItems = await CrabpayConnectorConnector.instance
-          .getCartItemsQuery(userId: userId)
-          .ref()
-          .execute(fetchPolicy: QueryFetchPolicy.serverOnly);
+      final fetchedCartItems = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getCartItemsQuery(userId: userId)
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
       return dataCasting(fetchedCartItems.data.cartItems);
     } catch (e) {
       print('Failed to fetch cart items: $e');
@@ -49,9 +57,11 @@ class OuterCartHandler implements InnerCartHandler {
   @override
   Future<void> deleteCartItem(String cartItemId) async {
     try {
-      CrabpayConnectorConnector.instance
-          .deleteCartItem(id: cartItemId)
-          .execute();
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .deleteCartItem(id: cartItemId)
+            .execute(),
+      );
     } catch (e) {
       print('Failed to delete the cart item: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the cart item: $e');
@@ -65,22 +75,21 @@ class OuterCartHandler implements InnerCartHandler {
       final purchaseData = AnyValue(
         cartItem.purchaseData.cast<String, String>(),
       );
-      print('ooo');
-      print(cartItem);
-      CrabpayConnectorConnector.instance
-          .addCartItem(
-            userId: cartItem.userId,
-            userName: cartItem.userName,
-            productId: cartItem.productId,
-            productName: cartItem.productName,
-            purchaseData: purchaseData,
-            currency: cartItem.currency,
-            checkoutPrice: cartItem.checkoutPrice,
-            status: cartItem.status,
-          )
-          .comment(cartItem.comment)
-          .execute();
-      print('ahh');
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .addCartItem(
+              userId: cartItem.userId,
+              userName: cartItem.userName,
+              productId: cartItem.productId,
+              productName: cartItem.productName,
+              purchaseData: purchaseData,
+              currency: cartItem.currency,
+              checkoutPrice: cartItem.checkoutPrice,
+              status: cartItem.status,
+            )
+            .comment(cartItem.comment)
+            .execute(),
+      );
     } catch (e) {
       print('Failed to add the cart item: $e');
       Fluttertoast.showToast(msg: 'Failed to add the cart item: $e');
@@ -105,24 +114,16 @@ class OuterCartHandler implements InnerCartHandler {
     try {
       if (user == null) {
         for (var item in cartItems) {
-          await CrabpayConnectorConnector.instance
-              .updateCartItem(id: item.id)
-              .status('beingCheckedOut')
-              .statusChangedAt(
-                Timestamp.fromJson(DateTime.now().toUtc().toIso8601String()),
-              )
-              .execute();
+          await retryer.retry(
+            () => CrabpayConnectorConnector.instance
+                .updateCartItem(id: item.id)
+                .status('beingCheckedOut')
+                .statusChangedAt(
+                  Timestamp.fromJson(DateTime.now().toUtc().toIso8601String()),
+                )
+                .execute(),
+          );
         }
-      } else {
-        // await CrabpayConnectorConnector.instance
-        //     .updateCartItem(id: cartItem.id)
-        //     .userId(user.id)
-        //     .userName(user.email)
-        //     .status('beingCheckedOut')
-        //     .statusChangedAt(
-        //       Timestamp.fromJson(DateTime.now().toUtc().toIso8601String()),
-        //     )
-        //     .execute();
       }
     } catch (e) {
       rethrow;
@@ -132,9 +133,12 @@ class OuterCartHandler implements InnerCartHandler {
   @override
   Future<int> getProductCartItemAmount(String userId, String productId) async {
     try {
-      final fetchedAmount = await CrabpayConnectorConnector.instance
-          .getProductCartCount(userId: userId, productId: productId)
-          .execute();
+      final fetchedAmount = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getProductCartCount(userId: userId, productId: productId)
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
       final amount = fetchedAmount.data.ofUserOfProductCartItemCounters;
       if (amount.isEmpty) return 0;
       return amount.first.productCartItemCount ?? 0;
@@ -146,12 +150,36 @@ class OuterCartHandler implements InnerCartHandler {
   @override
   Future<int> getUserCartItemAmount(String userId) async {
     try {
-      final fetchedAmount = await CrabpayConnectorConnector.instance
-          .getUserCartCount(userId: userId)
-          .execute();
+      final fetchedAmount = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getUserCartCount(userId: userId)
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
       final amount = fetchedAmount.data.ofUserCartItemCounters;
       if (amount.isEmpty) return 0;
       return amount.first.userCartItemCount ?? 0;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> deletedLastAddedProductCartItem(
+    String userId,
+    String productId,
+  ) async {
+    try {
+      final tryDelete = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .deleteLastAddedProductCartItem(
+              userId: userId,
+              productId: productId,
+            )
+            .execute(),
+      );
+      final rowsDeleted = tryDelete.data.execute_ ?? 0;
+      return rowsDeleted > 0;
     } catch (e) {
       rethrow;
     }

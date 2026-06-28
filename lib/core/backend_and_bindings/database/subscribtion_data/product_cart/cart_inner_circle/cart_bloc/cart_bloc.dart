@@ -131,7 +131,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           ),
         );
       } catch (e) {
-        emit(state.copyWith(states: CartStates.faildFetchedUserCartItemCount));
+        emit(state.copyWith(states: CartStates.faildToFetchUserCartItemCount));
         rethrow;
       }
     });
@@ -149,6 +149,33 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       } catch (e) {
         emit(
           state.copyWith(states: CartStates.faildFetchedProductCartItemCount),
+        );
+        rethrow;
+      }
+    });
+
+    on<CartEventDeleteLastAddedProductCartItem>((event, emit) async {
+      try {
+        final didDelete = await cartHandler.deletedLastAddedProductCartItem(
+          event.userId,
+          event.productId,
+        );
+        if (didDelete) {
+          emit(
+            state.copyWith(states: CartStates.deletedLastAddedProductCartItem),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              states: CartStates.failedToDeleteLastAddedProductCartItem,
+            ),
+          );
+        }
+      } catch (e) {
+        emit(
+          state.copyWith(
+            states: CartStates.failedToDeleteLastAddedProductCartItem,
+          ),
         );
         rethrow;
       }

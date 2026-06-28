@@ -41,7 +41,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   int itemsCount = 0;
   bool everyFieldIsSatisfied = false;
   bool corectImageInput = false;
-  List<CartItem>? theCartItems;
 
   @override
   void initState() {
@@ -50,7 +49,13 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     );
     imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
     currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
-    _cartItemCount(context);
+    context.read<CartBloc>().add(
+      CartEventFetchProductCartItemAmount(
+        userId: currentUser.id,
+        productId: product!.id,
+      ),
+    );
+    itemsCount = context.read<CartBloc>().state.productCartItemAmount ?? 0;
     super.initState();
   }
 
@@ -149,23 +154,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     }
     result.add(SliverToBoxAdapter(child: SizedBox(height: 66)));
     return result;
-  }
-
-  void _deleteCartItem(BuildContext context) async {
-    // context.read<CartBloc>().add(
-    //   CartEventDeleteCartItem(cartItem: theCartItems!.last),
-    // );
-    // _cartItemCount(context);
-  }
-
-  void _cartItemCount(BuildContext context) async {
-    context.read<CartBloc>().add(
-      CartEventFetchProductCartItemAmount(
-        userId: currentUser.id,
-        productId: widget.productId,
-      ),
-    );
-    itemsCount = context.read<CartBloc>().state.productCartItemAmount ?? 0;
   }
 
   @override
@@ -283,7 +271,24 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                           children: [
                                             IconButton(
                                               onPressed: () {
-                                                _deleteCartItem(context);
+                                                try {
+                                                  if (itemsCount > 0) {
+                                                    context.read<CartBloc>().add(
+                                                      CartEventDeleteLastAddedProductCartItem(
+                                                        userId: currentUser.id,
+                                                        productId: product!.id,
+                                                      ),
+                                                    );
+                                                    itemsCount--;
+                                                  }
+                                                } catch (e) {
+                                                  Fluttertoast.showToast(
+                                                    msg: 'Failed to delete',
+                                                  );
+                                                  print(
+                                                    'Failed to delete last cart item::: $e',
+                                                  );
+                                                }
                                               },
                                               icon: Icon(
                                                 Icons.exposure_minus_1_rounded,
@@ -385,13 +390,16 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                 userId: currentUser.id,
                                               ),
                                             );
-                                            _cartItemCount(context);
                                             Fluttertoast.showToast(
                                               msg: 'It\'s in your cart now',
                                             );
+                                            itemsCount++;
                                           } on Exception catch (e) {
                                             Fluttertoast.showToast(
-                                              msg: 'Bee: $e',
+                                              msg: 'Failed to add to your cart',
+                                            );
+                                            print(
+                                              'Failed to add to your cart: $e',
                                             );
                                           }
                                         } else {

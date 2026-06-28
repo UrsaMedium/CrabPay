@@ -21,7 +21,9 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
-    _dataFetching(context);
+    if (context.read<DatabaseBloc>().state.products == null) {
+      _dataFetching(context);
+    }
     super.initState();
   }
 

@@ -79,7 +79,6 @@ mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
   currencies_delete(key: { id: $id })
 }
 
-
 mutation productFieldUpdate(
   $id: UUID
   $productId: UUID!
@@ -176,5 +175,22 @@ mutation UpdateCartItem(
       comment: $comment
       statusChangedAt: $statusChangedAt
     }
+  )
+}
+
+mutation DeleteLastAddedProductCartItem($userId: String!, $productId: UUID!)
+@auth(level: PUBLIC) {
+  _execute(
+    sql: """
+    DELETE FROM cart_item
+    WHERE id = (
+      SELECT id
+      FROM cart_item
+      WHERE user_id = $1 AND product_id = $2
+      ORDER BY created_at DESC
+      LIMIT 1
+    )
+    """
+    params: [$userId, $productId]
   )
 }

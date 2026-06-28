@@ -8,14 +8,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retry/retry.dart';
 
 class OuterDatabaseHandler implements InnerDatabaseHandler {
+  final retryer = RetryOptions(
+    maxAttempts: 3,
+    delayFactor: Duration(milliseconds: 500),
+  );
   // Product
   // fetch all products
   @override
   Future<List<Product>?> fetchAllProducts() async {
     try {
-      final productFetrcher = await CrabpayConnectorConnector.instance
-          .getAllProductsQuery()
-          .execute();
+      final productFetrcher = await retryer.retry(
+        () =>
+            CrabpayConnectorConnector.instance.getAllProductsQuery().execute(),
+      );
       List<Product> fetchedProducts = [];
       for (var product in productFetrcher.data.products) {
         fetchedProducts.add(
@@ -40,10 +45,12 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<List<Product>?> fetchAllProductsForAdmin() async {
     try {
-      final productFetrcher = await CrabpayConnectorConnector.instance
-          .getAllProductsQuery()
-          .ref()
-          .execute(fetchPolicy: QueryFetchPolicy.serverOnly);
+      final productFetrcher = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getAllProductsQuery()
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
       List<Product> fetchedProducts = [];
       for (var product in productFetrcher.data.products) {
         fetchedProducts.add(
@@ -68,12 +75,8 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // add Product
   @override
   Future<void> addProduct(Product product) async {
-    final r = RetryOptions(
-      maxAttempts: 3,
-      delayFactor: Duration(milliseconds: 500),
-    );
     try {
-      await r.retry(
+      await retryer.retry(
         () => CrabpayConnectorConnector.instance
             .addProduct(
               description: product.description,
@@ -93,12 +96,8 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // delete Product
   @override
   Future<void> deleteProduct(Product product) async {
-    final r = RetryOptions(
-      maxAttempts: 3,
-      delayFactor: Duration(milliseconds: 500),
-    );
     try {
-      await r.retry(
+      await retryer.retry(
         () => CrabpayConnectorConnector.instance
             .deleteProduct(id: product.id)
             .execute(),
@@ -116,13 +115,9 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     String? productName,
     String? description,
   ) async {
-    final r = RetryOptions(
-      maxAttempts: 3,
-      delayFactor: Duration(microseconds: 500),
-    );
     try {
       if (imageName != null) {
-        await r.retry(
+        await retryer.retry(
           () => CrabpayConnectorConnector.instance
               .updateProduct(id: productId)
               .imageUrl(imageName)
@@ -130,7 +125,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
         );
       }
       if (productName != null) {
-        await r.retry(
+        await retryer.retry(
           () => CrabpayConnectorConnector.instance
               .updateProduct(id: productId)
               .name(productName)
@@ -138,7 +133,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
         );
       }
       if (description != null) {
-        await r.retry(
+        await retryer.retry(
           () => CrabpayConnectorConnector.instance
               .updateProduct(id: productId)
               .description(description)
@@ -162,10 +157,12 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<List<ProductField>?> fetchProductFields(String productId) async {
     try {
-      final fetchedFields = await CrabpayConnectorConnector.instance
-          .getProductFieldsQuery(productId: productId)
-          .ref()
-          .execute(fetchPolicy: QueryFetchPolicy.serverOnly);
+      final fetchedFields = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getProductFieldsQuery(productId: productId)
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
       List<ProductField> processedFetchedFields = [];
       for (var each in fetchedFields.data.productFields) {
         final jsonPriceImages = each.priceImages?.toJson();
@@ -201,10 +198,6 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // add Product Field
   @override
   Future<void> addProductField(ProductField field) async {
-    final r = RetryOptions(
-      maxAttempts: 3,
-      delayFactor: Duration(milliseconds: 500),
-    );
     try {
       AnyValue? priceImages;
       if (field.priceImages != null) {
@@ -214,7 +207,7 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       if (field.expectedData != null) {
         expectedData = field.expectedData;
       }
-      await r.retry(
+      await retryer.retry(
         () => CrabpayConnectorConnector.instance
             .addProductField(
               productId: field.productId,
@@ -237,12 +230,8 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   // delete a Field
   @override
   Future<void> deleteProductField(ProductField field) async {
-    final r = RetryOptions(
-      maxAttempts: 3,
-      delayFactor: Duration(milliseconds: 500),
-    );
     try {
-      await r.retry(
+      await retryer.retry(
         () => CrabpayConnectorConnector.instance
             .deleteProductField(id: field.id)
             .execute(),
@@ -260,9 +249,11 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   Future<List<Currencies>?> fetchAllCurencies() async {
     List<Currencies> processedFetchedAllCurrencies = [];
     try {
-      final fetchedAllCurrencies = await CrabpayConnectorConnector.instance
-          .getAllCurrenciesQuery()
-          .execute();
+      final fetchedAllCurrencies = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getAllCurrenciesQuery()
+            .execute(),
+      );
       for (var currencies in fetchedAllCurrencies.data.currenciess) {
         processedFetchedAllCurrencies.add(
           Currencies(
@@ -286,14 +277,16 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> addCurrencies(Currencies currencies) async {
     try {
-      await CrabpayConnectorConnector.instance
-          .addCurrencies(
-            name: currencies.name,
-            mainCurrency: currencies.mainCurrency,
-            rub: currencies.rub,
-            usd: currencies.usd,
-          )
-          .execute();
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .addCurrencies(
+              name: currencies.name,
+              mainCurrency: currencies.mainCurrency,
+              rub: currencies.rub,
+              usd: currencies.usd,
+            )
+            .execute(),
+      );
     } catch (e) {
       print('Failed to add the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to add the currencies: $e');
@@ -305,9 +298,11 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> deleteCurrencies(Currencies currencies) async {
     try {
-      await CrabpayConnectorConnector.instance
-          .deleteCurrencies(id: currencies.id)
-          .execute();
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .deleteCurrencies(id: currencies.id)
+            .execute(),
+      );
     } catch (e) {
       print('Failed to delete the currencies: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the currencies: $e');

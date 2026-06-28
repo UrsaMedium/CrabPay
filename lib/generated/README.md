@@ -1117,3 +1117,50 @@ final ref = CrabpayConnectorConnector.instance.updateCartItem(
 ref.execute();
 ```
 
+
+### DeleteLastAddedProductCartItem
+#### Required Arguments
+```dart
+String userId = ...;
+String productId = ...;
+CrabpayConnectorConnector.instance.deleteLastAddedProductCartItem(
+  userId: userId,
+  productId: productId,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `OperationResult<DeleteLastAddedProductCartItemData, DeleteLastAddedProductCartItemVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await CrabpayConnectorConnector.instance.deleteLastAddedProductCartItem(
+  userId: userId,
+  productId: productId,
+);
+DeleteLastAddedProductCartItemData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String userId = ...;
+String productId = ...;
+
+final ref = CrabpayConnectorConnector.instance.deleteLastAddedProductCartItem(
+  userId: userId,
+  productId: productId,
+).ref();
+ref.execute();
+```
+

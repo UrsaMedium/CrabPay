@@ -18,7 +18,9 @@ enum CartStates {
   fetchedProductCartItemCount,
   fetchedUserCartItemCount,
   faildFetchedProductCartItemCount,
-  faildFetchedUserCartItemCount,
+  faildToFetchUserCartItemCount,
+  deletedLastAddedProductCartItem,
+  failedToDeleteLastAddedProductCartItem,
 }
 
 enum IsStreaming { yes, no }

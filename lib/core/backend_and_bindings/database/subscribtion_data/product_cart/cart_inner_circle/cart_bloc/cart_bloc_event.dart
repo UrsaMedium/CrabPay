@@ -76,3 +76,12 @@ class CartEventFetchUserCartItemAmount implements CartEvent {
   final String userId;
   CartEventFetchUserCartItemAmount({required this.userId});
 }
+
+class CartEventDeleteLastAddedProductCartItem implements CartEvent {
+  final String userId;
+  final String productId;
+  CartEventDeleteLastAddedProductCartItem({
+    required this.userId,
+    required this.productId,
+  });
+}

@@ -27,6 +27,8 @@ part 'add_cart_item.dart';
 
 part 'update_cart_item.dart';
 
+part 'delete_last_added_product_cart_item.dart';
+
 part 'get_all_products_query.dart';
 
 part 'get_product_fields_query.dart';
@@ -105,6 +107,11 @@ class CrabpayConnectorConnector {
   
   UpdateCartItemVariablesBuilder updateCartItem ({required String id, }) {
     return UpdateCartItemVariablesBuilder(dataConnect, id: id,);
+  }
+  
+  
+  DeleteLastAddedProductCartItemVariablesBuilder deleteLastAddedProductCartItem ({required String userId, required String productId, }) {
+    return DeleteLastAddedProductCartItemVariablesBuilder(dataConnect, userId: userId,productId: productId,);
   }
   
   
