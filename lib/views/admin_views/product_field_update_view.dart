@@ -20,6 +20,11 @@ class _ProductFieldUpdateViewState extends State<ProductFieldUpdateView> {
   List<DropdownMenuEntry<Product>>? _productDropDownMenuEntries;
   final TextEditingController _productDropDownMenuController =
       TextEditingController();
+  final TextEditingController _newFieldNameController = TextEditingController();
+  String? _newFieldName;
+  final TextEditingController _newFieldOrderController =
+      TextEditingController();
+  int? _newFieldOrder;
   Product? _selectedProduct;
   ProductField? _selectedField;
 
@@ -106,6 +111,28 @@ class _ProductFieldUpdateViewState extends State<ProductFieldUpdateView> {
     return result;
   }
 
+  List<Widget> _priceImages(BuildContext context) {
+    List<Widget> result = [];
+    for (var expectedData in _selectedField!.priceImages!.keys) {
+      result.add(
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 2.0,
+                horizontal: 128,
+              ),
+              child: Divider(),
+            ),
+            Text('Position\'s name: $expectedData'),
+            Text('Price: ${_selectedField!.priceImages![expectedData]}'),
+          ],
+        ),
+      );
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     _productDropDownMenuEntries = _createProductDropDownMenuEntries();
@@ -150,35 +177,102 @@ class _ProductFieldUpdateViewState extends State<ProductFieldUpdateView> {
                     ),
                   ),
                   enableSearch: true,
-                  onSelected: (value) => setState(() {
-                    _selectedProduct = value;
-                    if (_selectedProduct != null) {
-                      context.read<DatabaseBloc>().add(
-                        DatabaseEventFetchProductFields(
-                          productId: _selectedProduct!.id,
-                        ),
-                      );
-                    }
-                    _selectedField = null;
-                  }),
+                  onSelected: (value) => _fieldSelected(context, value),
                   menuHeight: 432,
                 ),
               ),
               _selectedField == null
                   ? _selectedProduct != null
                         ? Flexible(
-                            child: CustomScrollView(
-                              slivers: _fieldSlivers(
-                                context
-                                        .read<DatabaseBloc>()
-                                        .state
-                                        .productFields ??
-                                    [],
+                            child: Container(
+                              color: context.appColorScheme.primaryContainer,
+                              padding: .symmetric(horizontal: 16),
+                              child: CustomScrollView(
+                                slivers: _fieldSlivers(
+                                  context
+                                          .read<DatabaseBloc>()
+                                          .state
+                                          .productFields ??
+                                      [],
+                                ),
                               ),
                             ),
                           )
                         : Text('Choose a product first')
-                  : Text(_selectedField!.fieldName),
+                  : Flexible(
+                      child: Container(
+                        color: context.appColorScheme.primaryContainer,
+                        padding: .symmetric(horizontal: 16),
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Column(
+                                children: [
+                                  // update field name
+                                  Column(
+                                    children: [
+                                      Divider(),
+                                      Text('Field\'s name'),
+                                      // Text(_selectedField!.fieldName),
+                                      TextField(
+                                        controller: _newFieldNameController,
+                                        onChanged: (value) {
+                                          _newFieldName = value.trim();
+                                        },
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Current field\'s name: ${_selectedField!.fieldName}',
+                                      ),
+                                    ],
+                                  ),
+                                  // update field oreder
+                                  Column(
+                                    children: [
+                                      Divider(),
+                                      Text('Field\'s order'),
+                                      // Text(_selectedField!.fieldName),
+                                      TextField(
+                                        controller: _newFieldOrderController,
+                                        onChanged: (value) {
+                                          _newFieldOrder = int.tryParse(
+                                            value.trim(),
+                                          );
+                                        },
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Current field\'s order: ${_selectedField!.order}',
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(),
+                                  // update prices TODO
+                                  if (_selectedField!.isPriceImage)
+                                    Column(children: _priceImages(context)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
@@ -195,5 +289,17 @@ class _ProductFieldUpdateViewState extends State<ProductFieldUpdateView> {
         ),
       ),
     );
+  }
+
+  void _fieldSelected(BuildContext context, Product? product) {
+    setState(() {
+      _selectedProduct = product;
+      if (_selectedProduct != null) {
+        context.read<DatabaseBloc>().add(
+          DatabaseEventFetchProductFields(productId: _selectedProduct!.id),
+        );
+      }
+      _selectedField = null;
+    });
   }
 }

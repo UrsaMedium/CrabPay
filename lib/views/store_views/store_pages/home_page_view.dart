@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
@@ -18,7 +19,13 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  Future<void> dataFetching(BuildContext context) async {
+  @override
+  void initState() {
+    _dataFetching(context);
+    super.initState();
+  }
+
+  Future<void> _dataFetching(BuildContext context) async {
     if (context.read<DatabaseBloc>().state.products == null) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
@@ -37,7 +44,6 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    dataFetching(context);
     return Scaffold(
       body: RefreshIndicator(
         edgeOffset: MediaQuery.paddingOf(context).top,
@@ -50,168 +56,114 @@ class _HomePageViewState extends State<HomePageView> {
                 state.states == DatabaseStates.productsNotFetched),
           );
         },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: SizedBox(height: MediaQuery.paddingOf(context).top),
-            ),
-            BlocBuilder<DatabaseBloc, DatabaseState>(
-              buildWhen: (previous, current) =>
-                  (previous.products != current.products),
-              builder: (context, state) {
-                final products = state.products ?? [];
-                final productCards = _appHomeCard(context, products);
-                return SliverList.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) => productCards[index],
-                );
-              },
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: MediaQuery.paddingOf(context).top),
-            ),
-          ],
+        child: BlocBuilder<DatabaseBloc, DatabaseState>(
+          buildWhen: (previous, current) =>
+              (previous.products != current.products),
+
+          builder: (context, state) {
+            final products = state.products ?? [];
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: .only(
+                top: MediaQuery.paddingOf(context).top,
+                bottom: MediaQuery.paddingOf(context).bottom,
+              ),
+              itemExtent: 224,
+              itemCount: products.length,
+              itemBuilder: (context, index) =>
+                  ProductCard(product: products[index]),
+            );
+          },
         ),
       ),
     );
   }
+}
 
-  List<Widget> _appHomeCard(BuildContext context, List<Product> products) {
-    List<Widget> result = [];
-    for (var product in products) {
-      result.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: Card(
-            clipBehavior: .antiAlias,
-            shape: RoundedRectangleBorder(
-              borderRadius: .circular(32),
-              side: BorderSide(
-                color: context.appColorScheme.primary.withValues(alpha: .3),
-              ),
-            ),
-            color: context.appColorScheme.surfaceContainer,
-            child: SizedBox(
-              height: 200,
+class ProductCard extends StatelessWidget {
+  final Product product;
+  const ProductCard({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    final bool isRouteCompleted =
+        modalRoute?.animation?.status == AnimationStatus.completed;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      child: Card(
+        clipBehavior: .antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: .circular(32),
+          side: BorderSide(
+            color: context.appColorScheme.primary.withValues(alpha: .3),
+          ),
+        ),
+        color: context.appColorScheme.surfaceContainer,
+        child: GestureDetector(
+          onTap: () async {
+            await context.pushNamed(
+              'card_view',
+              pathParameters: {'productId': product.id},
+            );
+            if (context.mounted) {
+              context.read<CartBloc>().add(
+                CartEventFetchCartItems(
+                  userId: context.read<AuthBloc>().state.currentUser!.id,
+                ),
+              );
+            }
+          },
+          child: SizedBox(
+            height: 200,
+            child: Hero(
+              tag: 'card-hero-${product.id}',
+              createRectTween: (begin, end) =>
+                  MaterialRectArcTween(begin: begin, end: end),
+
               child: Stack(
-                // crossAxisAlignment: .start,
                 children: [
-                  Hero(
-                    tag: 'card-hero-${product.id}',
-                    createRectTween: (begin, end) =>
-                        MaterialRectArcTween(begin: begin, end: end),
-                    child: ClipRRect(
-                      borderRadius: BorderRadiusGeometry.only(
-                        topLeft: Radius.circular(32),
-                        topRight: Radius.circular(32),
-                      ),
-                      clipBehavior: .antiAlias,
-                      child: Image.network(
-                        'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
-                        width: double.infinity,
-                        height: 200,
-                        fit: .cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: context.appColorScheme.onInverseSurface,
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.broken_image,
-                            color: context.appColorScheme.inversePrimary,
-                            size: 48,
-                          ),
+                  ClipRRect(
+                    borderRadius: BorderRadiusGeometry.all(Radius.circular(32)),
+                    clipBehavior: .antiAlias,
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                      width: double.infinity,
+                      height: 200,
+                      fit: .cover,
+                      errorWidget: (context, error, stackTrace) => Container(
+                        color: context.appColorScheme.onInverseSurface,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.broken_image,
+                          color: context.appColorScheme.inversePrimary,
+                          size: 48,
                         ),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            color: context.appColorScheme.inversePrimary,
-                            alignment: .center,
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
+                      ),
+                      placeholder: (context, url) => Container(
+                        color: context.appColorScheme.onInverseSurface,
+                        alignment: .center,
+                        child: const CircularProgressIndicator(),
                       ),
                     ),
                   ),
-                  Positioned.fill(
-                    child: Column(
-                      children: [
-                        Spacer(flex: 1),
-                        Container(
-                          color: context.appColorScheme.surfaceContainer
-                              .withValues(alpha: .8),
-
-                          child: ClipRRect(
-                            clipBehavior: .antiAlias,
-                            child: BackdropFilter(
-                              filter: .blur(sigmaX: 64, sigmaY: 64),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment: .start,
-                                          children: [
-                                            Text(
-                                              product.name,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: context
-                                                    .appColorScheme
-                                                    .primary,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          await context.pushNamed(
-                                            'card_view',
-                                            pathParameters: {
-                                              'productId': product.id,
-                                            },
-                                          );
-                                          if (context.mounted) {
-                                            context.read<CartBloc>().add(
-                                              CartEventFetchCartItems(
-                                                userId: context
-                                                    .read<AuthBloc>()
-                                                    .state
-                                                    .currentUser!
-                                                    .id,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              context.appColorScheme.primary,
-                                          foregroundColor:
-                                              context.appColorScheme.onPrimary,
-                                        ),
-                                        child: Text('Buy'),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                  Positioned(
+                    bottom: 16,
+                    left: 32,
+                    child: Container(
+                      padding: .symmetric(horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        color: context.appColorScheme.primaryContainer,
+                      ),
+                      child: Text(
+                        product.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: context.appColorScheme.onPrimaryContainer,
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -219,8 +171,7 @@ class _HomePageViewState extends State<HomePageView> {
             ),
           ),
         ),
-      );
-    }
-    return result;
+      ),
+    );
   }
 }

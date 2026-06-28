@@ -190,8 +190,6 @@ class CardView extends StatelessWidget {
                                       .appColorScheme
                                       .surfaceContainerLow
                                       .withValues(alpha: .6),
-
-                                  // barrierColor: context.appColorScheme.outline,
                                   builder: (BuildContext context) {
                                     return Wrap(
                                       children: [
