@@ -38,7 +38,7 @@ class _HomePageViewState extends State<HomePageView> {
     final currentUser =
         context.read<AuthBloc>().state.currentUser ?? appTempUser;
     context.read<CartBloc>().add(
-      CartEventFetchCartItems(userId: currentUser.id),
+      CartEventFetchUserCartItemAmount(userId: currentUser.id),
     );
   }
 
@@ -59,11 +59,10 @@ class _HomePageViewState extends State<HomePageView> {
         child: BlocBuilder<DatabaseBloc, DatabaseState>(
           buildWhen: (previous, current) =>
               (previous.products != current.products),
-
           builder: (context, state) {
             final products = state.products ?? [];
             return ListView.builder(
-              physics: const BouncingScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: .only(
                 top: MediaQuery.paddingOf(context).top,
                 bottom: MediaQuery.paddingOf(context).bottom,
@@ -86,9 +85,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ModalRoute? modalRoute = ModalRoute.of(context);
-    final bool isRouteCompleted =
-        modalRoute?.animation?.status == AnimationStatus.completed;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Card(
@@ -108,65 +104,73 @@ class ProductCard extends StatelessWidget {
             );
             if (context.mounted) {
               context.read<CartBloc>().add(
-                CartEventFetchCartItems(
+                CartEventFetchUserCartItemAmount(
                   userId: context.read<AuthBloc>().state.currentUser!.id,
                 ),
               );
             }
           },
-          child: SizedBox(
-            height: 200,
-            child: Hero(
-              tag: 'card-hero-${product.id}',
-              createRectTween: (begin, end) =>
-                  MaterialRectArcTween(begin: begin, end: end),
+          child: Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: SizedBox(
+              height: 200,
+              child: Hero(
+                tag: 'card-hero-${product.id}',
+                createRectTween: (begin, end) =>
+                    MaterialRectArcTween(begin: begin, end: end),
 
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadiusGeometry.all(Radius.circular(32)),
-                    clipBehavior: .antiAlias,
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
-                      width: double.infinity,
-                      height: 200,
-                      fit: .cover,
-                      errorWidget: (context, error, stackTrace) => Container(
-                        color: context.appColorScheme.onInverseSurface,
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.broken_image,
-                          color: context.appColorScheme.inversePrimary,
-                          size: 48,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadiusGeometry.all(
+                        Radius.circular(32),
+                      ),
+                      clipBehavior: .antiAlias,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                        width: double.infinity,
+                        height: 200,
+                        fit: .cover,
+                        errorWidget: (context, error, stackTrace) => Container(
+                          color: context.appColorScheme.onInverseSurface,
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.broken_image,
+                            color: context.appColorScheme.inversePrimary,
+                            size: 48,
+                          ),
                         ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        color: context.appColorScheme.onInverseSurface,
-                        alignment: .center,
-                        child: const CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    left: 32,
-                    child: Container(
-                      padding: .symmetric(horizontal: 16, vertical: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: context.appColorScheme.primaryContainer,
-                      ),
-                      child: Text(
-                        product.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: context.appColorScheme.onPrimaryContainer,
+                        placeholder: (context, url) => Container(
+                          color: context.appColorScheme.onInverseSurface,
+                          alignment: .center,
+                          child: const CircularProgressIndicator(),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 16,
+                      left: 32,
+                      child: Container(
+                        padding: .symmetric(horizontal: 16, vertical: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          color: context.appColorScheme.primaryContainer,
+                        ),
+                        child: Material(
+                          type: .transparency,
+                          child: Text(
+                            product.name,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: context.appColorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

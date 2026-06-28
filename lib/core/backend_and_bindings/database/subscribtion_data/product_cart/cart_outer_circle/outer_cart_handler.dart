@@ -128,4 +128,32 @@ class OuterCartHandler implements InnerCartHandler {
       rethrow;
     }
   }
+
+  @override
+  Future<int> getProductCartItemAmount(String userId, String productId) async {
+    try {
+      final fetchedAmount = await CrabpayConnectorConnector.instance
+          .getProductCartCount(userId: userId, productId: productId)
+          .execute();
+      final amount = fetchedAmount.data.ofUserOfProductCartItemCounters;
+      if (amount.isEmpty) return 0;
+      return amount.first.productCartItemCount ?? 0;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int> getUserCartItemAmount(String userId) async {
+    try {
+      final fetchedAmount = await CrabpayConnectorConnector.instance
+          .getUserCartCount(userId: userId)
+          .execute();
+      final amount = fetchedAmount.data.ofUserCartItemCounters;
+      if (amount.isEmpty) return 0;
+      return amount.first.userCartItemCount ?? 0;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

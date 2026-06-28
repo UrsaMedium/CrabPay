@@ -39,9 +39,9 @@ class _HomeViewState extends State<HomeView> {
       initialPage: widget.navigationShell.currentIndex,
     );
     context.read<CartBloc>().add(
-      CartEventFetchCartItems(userId: currentUser.id),
+      CartEventFetchUserCartItemAmount(userId: currentUser.id),
     );
-    itemsCount = context.read<CartBloc>().state.cartItems?.length ?? 0;
+    itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
     super.initState();
   }
 
@@ -98,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
                           .appColorScheme
                           .surfaceContainerLow
                           .withValues(alpha: .5),
-    
+
                       builder: (BuildContext sheetContext) => Wrap(
                         children: [
                           Container(
@@ -157,9 +157,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
         builder: (context, state) {
           return ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(18),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
             child: BackdropFilter(
               filter: .blur(sigmaX: 8, sigmaY: 8),
               child: NavigationBar(
@@ -185,7 +183,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   BlocBuilder<CartBloc, CartState>(
                     builder: (context, state) {
-                      itemsCount = state.cartItems?.length ?? 0;
+                      itemsCount = state.userCartItemAmount ?? 0;
                       return NavigationDestination(
                         icon: Badge(
                           backgroundColor: context.appColorScheme.error,

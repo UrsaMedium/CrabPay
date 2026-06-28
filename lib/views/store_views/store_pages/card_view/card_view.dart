@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
@@ -29,7 +30,10 @@ class CardView extends StatelessWidget {
     final currentUser =
         context.read<AuthBloc>().state.currentUser ?? appTempUser;
     context.read<CartBloc>().add(
-      CartEventFetchCartItems(userId: currentUser.id),
+      CartEventFetchProductCartItemAmount(
+        userId: currentUser.id,
+        productId: productId,
+      ),
     );
   }
 
@@ -92,12 +96,13 @@ class CardView extends StatelessWidget {
                           shrinkWrap: true,
                           slivers: [
                             SliverToBoxAdapter(
-                              child: Image.network(
-                                'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
-                                fit: .fitWidth,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                                 width: double.infinity,
-                                height: 300,
-                                errorBuilder: (context, error, stackTrace) =>
+                                height: 400,
+                                fit: .cover,
+                                errorWidget: (context, error, stackTrace) =>
                                     Container(
                                       color: context
                                           .appColorScheme
@@ -111,27 +116,12 @@ class CardView extends StatelessWidget {
                                         size: 48,
                                       ),
                                     ),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        color: context
-                                            .appColorScheme
-                                            .inversePrimary,
-                                        alignment: .center,
-                                        child: CircularProgressIndicator(
-                                          value:
-                                              loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    },
+                                placeholder: (context, url) => Container(
+                                  color:
+                                      context.appColorScheme.onInverseSurface,
+                                  alignment: .center,
+                                  child: const CircularProgressIndicator(),
+                                ),
                               ),
                             ),
                             SliverToBoxAdapter(
@@ -216,19 +206,6 @@ class CardView extends StatelessWidget {
                                     );
                                   },
                                 );
-                                // if (context.mounted) {
-                                //   final currentUser =
-                                //       context
-                                //           .read<AuthBloc>()
-                                //           .state
-                                //           .currentUser ??
-                                //       appTempUser;
-                                //   context.read<CartBloc>().add(
-                                //     CartEventFetchCartItems(
-                                //       userId: currentUser.id,
-                                //     ),
-                                //   );
-                                // }
                               } else {
                                 productFields = state.productFields;
                                 if (productFields == null) {

@@ -29,4 +29,12 @@ class BindingCartHandler implements InnerCartHandler {
   @override
   Future<void> updateCartItem(List<CartItem> cartItems, AuthUser? user) =>
       cartHandler.updateCartItem(cartItems, user);
+
+  @override
+  Future<int> getProductCartItemAmount(String userId, String productId) =>
+      cartHandler.getProductCartItemAmount(userId, productId);
+
+  @override
+  Future<int> getUserCartItemAmount(String userId) =>
+      cartHandler.getUserCartItemAmount(userId);
 }

@@ -52,16 +52,15 @@ class _AddCompleteProductProductViewState
   }
 
   Product? _collectProduct() {
-    if (_productNameUI != null &&
-        _imageUrl != null &&
-        _description != null &&
-        _currency != null) {
+    if (_productNameUI != null && _imageUrl != null && _description != null
+    // &&        _currency != null
+    ) {
       return Product(
         id: 'id',
         name: _productNameUI!,
         image: _imageUrl!,
         description: _description!,
-        currencies: _currency!,
+        currencies: 'rubDefault',
       );
     } else {
       return null;

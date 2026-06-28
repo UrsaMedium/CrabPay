@@ -8,17 +8,17 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
-import 'package:crabpay/views/admin_views/product_field_update_view.dart';
-import 'package:crabpay/views/admin_views/product_update_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
+import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
+import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/admin_views/product_field_update_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
+import 'package:crabpay/views/admin_views/product_update_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
 import 'package:crabpay/views/auth_views/login_view.dart';
@@ -35,6 +35,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await LocalStorage.init();
+
   runApp(
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),

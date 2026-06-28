@@ -35,6 +35,10 @@ part 'get_all_currencies_query.dart';
 
 part 'get_cart_items_query.dart';
 
+part 'get_user_cart_count.dart';
+
+part 'get_product_cart_count.dart';
+
 
 
 
@@ -121,6 +125,16 @@ class CrabpayConnectorConnector {
   
   GetCartItemsQueryVariablesBuilder getCartItemsQuery ({required String userId, }) {
     return GetCartItemsQueryVariablesBuilder(dataConnect, userId: userId,);
+  }
+  
+  
+  GetUserCartCountVariablesBuilder getUserCartCount ({required String userId, }) {
+    return GetUserCartCountVariablesBuilder(dataConnect, userId: userId,);
+  }
+  
+  
+  GetProductCartCountVariablesBuilder getProductCartCount ({required String userId, required String productId, }) {
+    return GetProductCartCountVariablesBuilder(dataConnect, userId: userId,productId: productId,);
   }
   
 

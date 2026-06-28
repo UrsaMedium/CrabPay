@@ -48,3 +48,17 @@ query GetCartItemsQuery($userId: String!) @auth(level: PUBLIC) {
   }
 }
 
+query GetUserCartCount($userId: String!) @auth(level: PUBLIC) {
+  ofUserCartItemCounters(where: { userId: { eq: $userId } }) {
+    userCartItemCount
+  }
+}
+
+query GetProductCartCount($userId: String!, $productId: UUID!)
+@auth(level: PUBLIC) {
+  ofUserOfProductCartItemCounters(
+    where: { userId: { eq: $userId }, productId: { eq: $productId } }
+  ) {
+    productCartItemCount
+  }
+}

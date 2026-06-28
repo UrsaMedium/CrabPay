@@ -62,3 +62,17 @@ class CartEventOnChangeStreamed implements CartEvent {
 }
 
 class CartEventCloseStream implements CartEvent {}
+
+class CartEventFetchProductCartItemAmount implements CartEvent {
+  final String userId;
+  final String productId;
+  CartEventFetchProductCartItemAmount({
+    required this.userId,
+    required this.productId,
+  });
+}
+
+class CartEventFetchUserCartItemAmount implements CartEvent {
+  final String userId;
+  CartEventFetchUserCartItemAmount({required this.userId});
+}

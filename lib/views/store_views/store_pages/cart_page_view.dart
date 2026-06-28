@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -71,277 +72,149 @@ class _CartPageViewState extends State<CartPageView> {
                   Expanded(
                     child: Stack(
                       children: [
-                        CustomScrollView(
-                          shrinkWrap: true,
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: SizedBox(
-                                height: MediaQuery.paddingOf(context).top,
+                        ListView(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8.0,
+                                left: 16,
                               ),
-                            ),
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 8.0,
-                                  left: 16,
-                                ),
-                                child: Text(
-                                  'Shopping Cart',
-                                  textAlign: .left,
-                                  style: TextStyle(
-                                    color:
-                                        context.appColorScheme.primaryFixedDim,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                              child: Text(
+                                'Shopping Cart',
+                                textAlign: .left,
+                                style: TextStyle(
+                                  color: context.appColorScheme.primaryFixedDim,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w900,
                                 ),
                               ),
                             ),
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 16,
-                                  bottom: 4.0,
-                                ),
-                                child: Text(
-                                  'Confirm the purchase',
-                                  textAlign: .left,
-                                ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 16, bottom: 4.0),
+                              child: Text(
+                                'Confirm the purchase',
+                                textAlign: .left,
                               ),
                             ),
                             !cartItemsNotEmpty
-                                ? SliverToBoxAdapter(
-                                    child: Center(child: Text('...')),
-                                  )
-                                : SliverList.builder(
+                                ? const Center(child: Text('...'))
+                                : ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: cartItems!.length,
+                                    padding: .only(
+                                      top: 8,
+                                      bottom:
+                                          MediaQuery.paddingOf(context).bottom +
+                                          64,
+                                    ),
+                                    shrinkWrap: true,
+                                    itemExtent: 86,
                                     itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                        ),
-                                        child: Card(
-                                          elevation: 3,
-                                          clipBehavior: Clip.antiAlias,
-                                          color: context
-                                              .appColorScheme
-                                              .surfaceContainer,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              50,
-                                            ),
-                                            side: BorderSide(
-                                              color: context
-                                                  .appColorScheme
-                                                  .surfaceContainerHigh,
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                  ),
-                                                  child: Image.network(
-                                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${products!.firstWhere((product) => product.id == cartItems![index].productId).image}.png',
-                                                    fit: .cover,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 16.0,
-                                                        ),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          .start,
-                                                      children: [
-                                                        Text(
-                                                          products!
-                                                              .firstWhere(
-                                                                (product) =>
-                                                                    product
-                                                                        .id ==
-                                                                    cartItems![index]
-                                                                        .productId,
-                                                              )
-                                                              .name,
-                                                        ),
-                                                        Text(
-                                                          '${cartItems![index].checkoutPrice}',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            color: context
-                                                                .appColorScheme
-                                                                .primary,
-                                                            fontWeight: .w600,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    color: context
-                                                        .appColorScheme
-                                                        .onPrimary,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                  ),
-                                                  child: IconButton(
-                                                    iconSize: 25,
-                                                    padding: .all(0),
-                                                    onPressed: () {
-                                                      context.read<CartBloc>().add(
-                                                        CartEventDeleteCartItem(
-                                                          cartItem:
-                                                              cartItems![index],
-                                                        ),
-                                                      );
-                                                    },
-                                                    icon: Icon(
-                                                      Icons
-                                                          .delete_outline_rounded,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                      return CaertItemBuilder(
+                                        cartItems: cartItems!,
+                                        index: index,
+                                        products: products!,
                                       );
                                     },
                                   ),
-                            SliverToBoxAdapter(
-                              child: SizedBox(
-                                height:
-                                    MediaQuery.paddingOf(context).bottom + 132,
-                              ),
-                            ),
                           ],
                         ),
-                        Column(
-                          children: [
-                            SizedBox(height: MediaQuery.paddingOf(context).top),
-                            Spacer(flex: 1),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
+                        Positioned(
+                          bottom: MediaQuery.paddingOf(context).bottom + 8,
+                          right: 16,
+                          left: 16,
+                          child: Card(
+                            elevation: 3,
+                            clipBehavior: Clip.antiAlias,
+                            color: context.appColorScheme.surfaceContainer
+                                .withValues(alpha: .5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(
+                                color: context
+                                    .appColorScheme
+                                    .surfaceContainerHigh,
+                                width: 1,
                               ),
-                              child: Card(
-                                elevation: 3,
-                                clipBehavior: Clip.antiAlias,
-                                color: context.appColorScheme.surfaceContainer
-                                    .withValues(alpha: .8),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  side: BorderSide(
-                                    color: context
-                                        .appColorScheme
-                                        .surfaceContainerHigh,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: BackdropFilter(
-                                  filter: .blur(sigmaX: 8, sigmaY: 8),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            bottom: 16,
-
-                                            left: 18,
-                                            right: 18,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Total',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: .w500,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text('$total'),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16.0,
-                                          ),
-                                          child: ElevatedButton(
-                                            onPressed: total == 0
-                                                ? null
-                                                : () {
-                                                    //TODO
-                                                    if (isLoggedIn) {
-                                                      context.read<CartBloc>().add(
-                                                        CartEventUserCheckoutItems(
-                                                          checkoutItems:
-                                                              cartItems!,
-                                                          status:
-                                                              'beingCheckedOut',
-                                                        ),
-                                                      );
-                                                      detaFetching(context);
-                                                    } else {
-                                                      
-                                                    }
-                                                  },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: context
-                                                  .appColorScheme
-                                                  .primary,
-                                              foregroundColor: context
-                                                  .appColorScheme
-                                                  .onPrimary,
-                                              minimumSize: Size(
-                                                double.maxFinite,
-                                                50,
-                                              ),
-                                            ),
+                            ),
+                            child: BackdropFilter(
+                              filter: .blur(sigmaX: 8, sigmaY: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 16,
+                                        left: 18,
+                                        right: 18,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
                                             child: Text(
-                                              isLoggedIn
-                                                  ? 'Checkout'
-                                                  : 'Sign In & Checkout',
+                                              'Total',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
                                                 fontSize: 16,
+                                                fontWeight: .w500,
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          Text('$total'),
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0,
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: total == 0
+                                            ? null
+                                            : () {
+                                                //TODO
+                                                if (isLoggedIn) {
+                                                  context.read<CartBloc>().add(
+                                                    CartEventUserCheckoutItems(
+                                                      checkoutItems:
+                                                          cartItems!,
+                                                      status:
+                                                          'beingCheckedOut',
+                                                    ),
+                                                  );
+                                                  detaFetching(context);
+                                                } else {}
+                                              },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              context.appColorScheme.primary,
+                                          foregroundColor: context
+                                              .appColorScheme
+                                              .onPrimary,
+                                          minimumSize: Size(
+                                            double.maxFinite,
+                                            50,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          isLoggedIn
+                                              ? 'Checkout'
+                                              : 'Sign In & Checkout',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: MediaQuery.paddingOf(context).bottom,
-                            ),
-                          ],
+                          ),
                         ),
+                        SizedBox(height: MediaQuery.paddingOf(context).bottom),
                       ],
                     ),
                   ),
@@ -351,6 +224,113 @@ class _CartPageViewState extends State<CartPageView> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CaertItemBuilder extends StatelessWidget {
+  final List<Product> products;
+  final List<CartItem> cartItems;
+  final int index;
+  const CaertItemBuilder({
+    super.key,
+    required this.products,
+    required this.index,
+    required this.cartItems,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        elevation: 3,
+        clipBehavior: Clip.antiAlias,
+        color: context.appColorScheme.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+          side: BorderSide(color: context.appColorScheme.surfaceContainerHigh),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      'http://regred-rainbowbridge.ru/crabpay/images/products/${products.firstWhere((product) => product.id == cartItems[index].productId).image}.png',
+                  fit: .cover,
+                  errorWidget: (context, error, stackTrace) => Container(
+                    color: context.appColorScheme.onInverseSurface,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.broken_image,
+                      color: context.appColorScheme.inversePrimary,
+                      size: 48,
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    color: context.appColorScheme.onInverseSurface,
+                    alignment: .center,
+                    child: const CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        products
+                            .firstWhere(
+                              (product) =>
+                                  product.id == cartItems[index].productId,
+                            )
+                            .name,
+                      ),
+                      Text(
+                        '${cartItems[index].checkoutPrice}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: context.appColorScheme.primary,
+                          fontWeight: .w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 40,
+                width: 40,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: context.appColorScheme.onPrimary,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: IconButton(
+                  iconSize: 25,
+                  padding: .all(0),
+                  onPressed: () {
+                    context.read<CartBloc>().add(
+                      CartEventDeleteCartItem(cartItem: cartItems[index]),
+                    );
+                  },
+                  icon: Icon(Icons.delete_outline_rounded),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

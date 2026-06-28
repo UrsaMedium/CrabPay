@@ -3,7 +3,7 @@ type Product @table(key: "id") {
   name: String!
   description: String!
   imageUrl: String!
-  currencies: String!
+  currencies: String! @default(value: "rubDefault")
 }
 
 type ProductField @table(key: "id") {
@@ -38,4 +38,29 @@ type CartItem @table(key: "id") {
   status: String!
   comment: String
   statusChangedAt: Timestamp! @default(expr: "request.time")
+}
+
+type OfUserCartItemCounter
+  @view(
+    sql: """
+    SELECT user_id, COUNT(*)::int AS user_cart_item_count
+    FROM cart_item
+    GROUP BY user_id
+    """
+  ) {
+  userId: String
+  userCartItemCount: Int
+}
+
+type OfUserOfProductCartItemCounter
+  @view(
+    sql: """
+    SELECT user_id, product_id, COUNT(*)::int AS product_cart_item_count
+    FROM cart_item
+    GROUP BY user_id, product_id
+    """
+  ) {
+  userId: String
+  productId: UUID
+  productCartItemCount: Int
 }

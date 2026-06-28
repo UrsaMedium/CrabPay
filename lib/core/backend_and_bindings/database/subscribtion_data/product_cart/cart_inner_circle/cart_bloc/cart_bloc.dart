@@ -118,5 +118,40 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventFlushData>((event, emit) => emit(state.flushData()));
+
+    on<CartEventFetchUserCartItemAmount>((event, emit) async {
+      try {
+        final userCartItemAmount = await cartHandler.getUserCartItemAmount(
+          event.userId,
+        );
+        emit(
+          state.copyWith(
+            userCartItemAmount: userCartItemAmount,
+            states: CartStates.fetchedUserCartItemCount,
+          ),
+        );
+      } catch (e) {
+        emit(state.copyWith(states: CartStates.faildFetchedUserCartItemCount));
+        rethrow;
+      }
+    });
+
+    on<CartEventFetchProductCartItemAmount>((event, emit) async {
+      try {
+        final productCartItemAmount = await cartHandler
+            .getProductCartItemAmount(event.userId, event.productId);
+        emit(
+          state.copyWith(
+            productCartItemAmount: productCartItemAmount,
+            states: CartStates.fetchedProductCartItemCount,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(states: CartStates.faildFetchedProductCartItemCount),
+        );
+        rethrow;
+      }
+    });
   }
 }

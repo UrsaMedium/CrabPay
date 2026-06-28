@@ -15,6 +15,10 @@ enum CartStates {
   streamEvent,
   userCheckouts,
   signedOutUserCheckouts,
+  fetchedProductCartItemCount,
+  fetchedUserCartItemCount,
+  faildFetchedProductCartItemCount,
+  faildFetchedUserCartItemCount,
 }
 
 enum IsStreaming { yes, no }
@@ -27,6 +31,8 @@ class CartState {
   final List<CartItem>? cartItemsFromSignedOutUser;
   final CartItem? cartItemToPush;
   final CartStates states;
+  final int? productCartItemAmount;
+  final int? userCartItemAmount;
   const CartState({
     this.cartItems,
     this.states = CartStates.empty,
@@ -34,6 +40,8 @@ class CartState {
     this.isStreaming = IsStreaming.no,
     this.cartItemsFromSignedOutUser,
     this.allUserCartItems,
+    this.productCartItemAmount,
+    this.userCartItemAmount,
   });
 
   CartState flushData() {
@@ -47,6 +55,8 @@ class CartState {
     CartStates? states,
     CartItem? cartItemToPush,
     IsStreaming? isStreaming,
+    int? productCartItemAmount,
+    int? userCartItemAmount,
   }) {
     return CartState(
       cartItems: cartItems ?? this.cartItems,
@@ -56,6 +66,9 @@ class CartState {
       cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
       isStreaming: isStreaming ?? this.isStreaming,
+      productCartItemAmount:
+          productCartItemAmount ?? this.productCartItemAmount,
+      userCartItemAmount: userCartItemAmount ?? this.userCartItemAmount,
     );
   }
 }

@@ -281,6 +281,131 @@ extend type Currencies {
   """
   _id: ID! @fdc_generated(from: "Currencies.id", purpose: ENTITY_ID)
 }
+extend type OfUserCartItemCounter {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "OfUserCartItemCounter", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `OfUserCartItemCounter` table.
+  """
+  _count: Int! @fdc_generated(from: "OfUserCartItemCounter.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `OfUserCartItemCounter` table where the `userCartItemCount` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userCartItemCount_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OfUserCartItemCounter.userCartItemCount", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `OfUserCartItemCounter` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OfUserCartItemCounter.userId", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `userCartItemCount` field in the `OfUserCartItemCounter` table.
+  """
+  userCartItemCount_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "OfUserCartItemCounter.userCartItemCount", purpose: QUERY_SUM)
+  """
+  ✨ Average the `userCartItemCount` field in the `OfUserCartItemCounter` table.
+  """
+  userCartItemCount_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "OfUserCartItemCounter.userCartItemCount", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `userCartItemCount` field in the `OfUserCartItemCounter` table.
+  """
+  userCartItemCount_min: Int @fdc_generated(from: "OfUserCartItemCounter.userCartItemCount", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `userCartItemCount` field in the `OfUserCartItemCounter` table.
+  """
+  userCartItemCount_max: Int @fdc_generated(from: "OfUserCartItemCounter.userCartItemCount", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "OfUserCartItemCounter", purpose: ENTITY_ID)
+}
+extend type OfUserOfProductCartItemCounter {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "OfUserOfProductCartItemCounter", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `OfUserOfProductCartItemCounter` table.
+  """
+  _count: Int! @fdc_generated(from: "OfUserOfProductCartItemCounter.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `OfUserOfProductCartItemCounter` table where the `productCartItemCount` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  productCartItemCount_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OfUserOfProductCartItemCounter.productCartItemCount", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `OfUserOfProductCartItemCounter` table where the `productId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  productId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OfUserOfProductCartItemCounter.productId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `OfUserOfProductCartItemCounter` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OfUserOfProductCartItemCounter.userId", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `productCartItemCount` field in the `OfUserOfProductCartItemCounter` table.
+  """
+  productCartItemCount_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "OfUserOfProductCartItemCounter.productCartItemCount", purpose: QUERY_SUM)
+  """
+  ✨ Average the `productCartItemCount` field in the `OfUserOfProductCartItemCounter` table.
+  """
+  productCartItemCount_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "OfUserOfProductCartItemCounter.productCartItemCount", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `productCartItemCount` field in the `OfUserOfProductCartItemCounter` table.
+  """
+  productCartItemCount_min: Int @fdc_generated(from: "OfUserOfProductCartItemCounter.productCartItemCount", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `productCartItemCount` field in the `OfUserOfProductCartItemCounter` table.
+  """
+  productCartItemCount_max: Int @fdc_generated(from: "OfUserOfProductCartItemCounter.productCartItemCount", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "OfUserOfProductCartItemCounter", purpose: ENTITY_ID)
+}
 extend type Product {
   """
   ✨ List `ProductField` objects in a one-to-many relationship (where `ProductField`.`product` is this object).
