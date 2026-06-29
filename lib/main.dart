@@ -73,7 +73,7 @@ final GoRouter _router = GoRouter(
           routes: [
             GoRoute(
               path: '/store',
-              builder: (context, state) => const StorePageView(),
+              builder: (context, state) => StorePageView(),
             ),
           ],
         ),
@@ -97,7 +97,7 @@ final GoRouter _router = GoRouter(
     ),
 
     GoRoute(
-      path: '/card_view/:productId',
+      path: '/store/card_view/:productId',
       name: 'card_view',
       pageBuilder: (context, state) {
         final productId = state.pathParameters['productId'] ?? '0';
