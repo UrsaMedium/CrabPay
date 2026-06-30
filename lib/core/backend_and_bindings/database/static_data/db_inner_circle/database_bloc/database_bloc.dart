@@ -181,5 +181,34 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         rethrow;
       }
     });
+
+    //Featured Products ---------------------------------------------------------------------------------------------------------------
+    //fetch all featured products
+    on<DatabaseEventFetchAllFeaturedProducts>((event, emit) async {
+      try {
+        final featuredProducts = await databaseHandler
+            .fetchAllFeaturedProducts();
+        emit(
+          state.copyWith(
+            featuredProducts: featuredProducts,
+            states: DatabaseStates.feetchedFeatuedProducts,
+          ),
+        );
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.notFeetchedFeatuedProducts));
+        rethrow;
+      }
+    });
+
+    //add featured product
+    on<DatabaseEventAddFeaturedProduct>((event, emit) async {
+      try {
+        await databaseHandler.addFeaturedProduct(event.productId);
+        emit(state.copyWith(states: DatabaseStates.addedFeatuedProducts));
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.notAddededFeatuedProducts));
+        rethrow;
+      }
+    });
   }
 }

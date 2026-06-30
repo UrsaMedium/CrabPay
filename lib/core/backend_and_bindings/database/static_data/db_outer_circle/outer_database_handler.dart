@@ -309,4 +309,41 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
       rethrow;
     }
   }
+
+  @override
+  Future<List<String>> fetchAllFeaturedProducts() async {
+    List<String> result = [];
+    try {
+      final fetchedFeaturedProducts = await retryer.retry(
+        () =>
+            CrabpayConnectorConnector.instance.getFeaturedProducts().execute(),
+      );
+      if (fetchedFeaturedProducts.data.featuredProducts.isNotEmpty) {
+        for (var featuredProduct
+            in fetchedFeaturedProducts.data.featuredProducts) {
+          result.add(featuredProduct.featuredProductId!);
+        }
+      }
+      return result;
+    } catch (e) {
+      print('Failed to fetch Featured Products: $e');
+      Fluttertoast.showToast(msg: 'Failed to fetch Featured Products');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addFeaturedProduct(String productId) async {
+    try {
+      await retryer.retry(() {
+        CrabpayConnectorConnector.instance
+            .addFeaturedProduct(featuredProductId: productId)
+            .execute();
+      });
+    } catch (e) {
+      print('Failed to add Featured Product: $e');
+      Fluttertoast.showToast(msg: 'Failed to add Featured Product');
+      rethrow;
+    }
+  }
 }

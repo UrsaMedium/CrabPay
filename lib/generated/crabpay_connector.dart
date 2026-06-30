@@ -15,6 +15,8 @@ part 'get_user_cart_count.dart';
 
 part 'get_product_cart_count.dart';
 
+part 'get_featured_products.dart';
+
 part 'add_product.dart';
 
 part 'delete_product.dart';
@@ -36,6 +38,8 @@ part 'currencies_update.dart';
 part 'delete_cart_item.dart';
 
 part 'add_cart_item.dart';
+
+part 'add_featured_product.dart';
 
 part 'update_cart_item.dart';
 
@@ -77,6 +81,11 @@ class CrabpayConnectorConnector {
   
   GetProductCartCountVariablesBuilder getProductCartCount ({required String userId, required String productId, }) {
     return GetProductCartCountVariablesBuilder(dataConnect, userId: userId,productId: productId,);
+  }
+  
+  
+  GetFeaturedProductsVariablesBuilder getFeaturedProducts () {
+    return GetFeaturedProductsVariablesBuilder(dataConnect, );
   }
   
   
@@ -132,6 +141,11 @@ class CrabpayConnectorConnector {
   
   AddCartItemVariablesBuilder addCartItem ({required String userId, required String userName, required String productId, required String productName, required dynamic purchaseData, required String currency, required double checkoutPrice, required String status, }) {
     return AddCartItemVariablesBuilder(dataConnect, userId: userId,userName: userName,productId: productId,productName: productName,purchaseData: purchaseData,currency: currency,checkoutPrice: checkoutPrice,status: status,);
+  }
+  
+  
+  AddFeaturedProductVariablesBuilder addFeaturedProduct ({required String featuredProductId, }) {
+    return AddFeaturedProductVariablesBuilder(dataConnect, featuredProductId: featuredProductId,);
   }
   
   

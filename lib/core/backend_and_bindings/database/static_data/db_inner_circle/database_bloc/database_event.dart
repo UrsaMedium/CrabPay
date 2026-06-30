@@ -80,3 +80,12 @@ class DatabaseEventDeleteCurrencies implements DatabaseEvent {
   final Currencies currencies;
   DatabaseEventDeleteCurrencies({required this.currencies});
 }
+
+//Featured products
+//fetch all featured products
+class DatabaseEventFetchAllFeaturedProducts implements DatabaseEvent {}
+
+class DatabaseEventAddFeaturedProduct implements DatabaseEvent {
+  final String productId;
+  DatabaseEventAddFeaturedProduct({required this.productId});
+}

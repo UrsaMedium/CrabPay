@@ -11,6 +11,12 @@ It has the same format as `Currencies_Key`, but is only used as mutation return 
 """
 scalar Currencies_KeyOutput
 """
+✨ `FeaturedProduct_KeyOutput` returns the primary key fields of table type `FeaturedProduct`.
+
+It has the same format as `FeaturedProduct_Key`, but is only used as mutation return value.
+"""
+scalar FeaturedProduct_KeyOutput
+"""
 ✨ `Product_KeyOutput` returns the primary key fields of table type `Product`.
 
 It has the same format as `Product_Key`, but is only used as mutation return value.
@@ -22,6 +28,12 @@ scalar Product_KeyOutput
 It has the same format as `ProductField_Key`, but is only used as mutation return value.
 """
 scalar ProductField_KeyOutput
+"""
+✨ `UserPrefence_KeyOutput` returns the primary key fields of table type `UserPrefence`.
+
+It has the same format as `UserPrefence_Key`, but is only used as mutation return value.
+"""
+scalar UserPrefence_KeyOutput
 """
 ✨ Generated data input type for table 'CartItem'. It includes all necessary fields for creating or upserting rows into table.
 """
@@ -791,6 +803,149 @@ input Currencies_Order {
   ✨ Generated from Field `Currencies`.`usd_max` of type `Float`
   """
   usd_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'FeaturedProduct'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input FeaturedProduct_Data {
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `FeaturedProduct`.`featuredProductId` of type `UUID`
+  """
+  featuredProductId: UUID
+  """
+  ✨ `_expr` server value variant of `featuredProductId` (✨ Generated from Field `FeaturedProduct`.`featuredProductId` of type `UUID`)
+  """
+  featuredProductId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'FeaturedProduct'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input FeaturedProduct_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [FeaturedProduct_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: FeaturedProduct_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [FeaturedProduct_Filter!]
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `FeaturedProduct`.`featuredProductId` of type `UUID`
+  """
+  featuredProductId: UUID_Filter
+}
+"""
+✨ Generated first-row input type for table 'FeaturedProduct'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input FeaturedProduct_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [FeaturedProduct_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: FeaturedProduct_Filter
+}
+"""
+✨ Generated having input type for table 'FeaturedProduct'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input FeaturedProduct_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [FeaturedProduct_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: FeaturedProduct_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [FeaturedProduct_Having!]
+  """
+  ✨ Generated from Field `FeaturedProduct`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `FeaturedProduct`.`featuredProductId_count` of type `Int!`
+  """
+  featuredProductId_count: Int_Filter
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'FeaturedProduct'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input FeaturedProduct_Key {
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'FeaturedProduct'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input FeaturedProduct_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: FeaturedProduct_Filter
+}
+"""
+✨ Generated order input type for table 'FeaturedProduct'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input FeaturedProduct_Order {
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `FeaturedProduct`.`featuredProductId` of type `UUID`
+  """
+  featuredProductId: OrderDirection
+  """
+  ✨ Generated from Field `FeaturedProduct`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `FeaturedProduct`.`featuredProductId_count` of type `Int!`
+  """
+  featuredProductId_count: OrderDirection
+  """
+  ✨ Generated from Field `FeaturedProduct`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
 }
 """
 ✨ Generated filter input type for table 'OfUserCartItemCounter'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -1651,4 +1806,171 @@ input ProductField_Order {
   ✨ Generated from Field `ProductField`.`priceImages_max` of type `Any`
   """
   priceImages_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'UserPrefence'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input UserPrefence_Data {
+  """
+  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPrefence`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  """
+  favoriteProductId: UUID
+  """
+  ✨ `_expr` server value variant of `favoriteProductId` (✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`)
+  """
+  favoriteProductId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `UserPrefence`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'UserPrefence'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserPrefence_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [UserPrefence_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: UserPrefence_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [UserPrefence_Filter!]
+  """
+  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  """
+  favoriteProductId: UUID_Filter
+  """
+  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  """
+  userId: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'UserPrefence'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input UserPrefence_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [UserPrefence_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: UserPrefence_Filter
+}
+"""
+✨ Generated having input type for table 'UserPrefence'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserPrefence_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [UserPrefence_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: UserPrefence_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [UserPrefence_Having!]
+  """
+  ✨ Generated from Field `UserPrefence`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `UserPrefence`.`favoriteProductId_count` of type `Int!`
+  """
+  favoriteProductId_count: Int_Filter
+  """
+  ✨ Generated from Field `UserPrefence`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `UserPrefence`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'UserPrefence'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input UserPrefence_Key {
+  """
+  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPrefence`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'UserPrefence'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input UserPrefence_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: UserPrefence_Filter
+}
+"""
+✨ Generated order input type for table 'UserPrefence'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input UserPrefence_Order {
+  """
+  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  """
+  favoriteProductId: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`favoriteProductId_count` of type `Int!`
+  """
+  favoriteProductId_count: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `UserPrefence`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
 }

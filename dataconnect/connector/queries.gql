@@ -62,3 +62,16 @@ query GetProductCartCount($userId: String!, $productId: UUID!)
     productCartItemCount
   }
 }
+
+query GetFeaturedProducts @auth(level: PUBLIC) {
+  featuredProducts {
+    id
+    featuredProductId
+  }
+}
+
+query GetUserPreferences($userId: String!) @auth(level: PUBLIC) {
+  userPreferences(where: { userId: { eq: $userId } }) {
+    favoriteProductId
+  }
+}

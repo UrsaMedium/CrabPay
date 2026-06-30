@@ -38,6 +38,25 @@ extend type Query {
     first: Currencies_FirstRow
   ): Currencies @fdc_generated(from: "Currencies", purpose: QUERY_SINGLE)
   """
+  ✨ Look up a single `FeaturedProduct` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  featuredProduct(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FeaturedProduct_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FeaturedProduct_FirstRow
+  ): FeaturedProduct @fdc_generated(from: "FeaturedProduct", purpose: QUERY_SINGLE)
+  """
   ✨ Look up a single `Product` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   product(
@@ -75,6 +94,25 @@ extend type Query {
     """
     first: ProductField_FirstRow
   ): ProductField @fdc_generated(from: "ProductField", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `UserPrefence` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userPrefence(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: UserPrefence_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPrefence_FirstRow
+  ): UserPrefence @fdc_generated(from: "UserPrefence", purpose: QUERY_SINGLE)
   """
   ✨ List `CartItem` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
@@ -143,6 +181,40 @@ extend type Query {
     """
     having: Currencies_Having
   ): [Currencies!]! @fdc_generated(from: "Currencies", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `FeaturedProduct` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  featuredProducts(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FeaturedProduct_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FeaturedProduct_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FeaturedProduct_Having
+  ): [FeaturedProduct!]! @fdc_generated(from: "FeaturedProduct", purpose: QUERY_MULTIPLE)
   """
   ✨ List `OfUserCartItemCounter` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
@@ -279,4 +351,38 @@ extend type Query {
     """
     having: ProductField_Having
   ): [ProductField!]! @fdc_generated(from: "ProductField", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `UserPrefence` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userPrefences(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPrefence_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPrefence_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPrefence_Having
+  ): [UserPrefence!]! @fdc_generated(from: "UserPrefence", purpose: QUERY_MULTIPLE)
 }

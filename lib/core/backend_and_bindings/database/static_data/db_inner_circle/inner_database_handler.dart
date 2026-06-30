@@ -23,4 +23,7 @@ abstract class InnerDatabaseHandler {
   Future<List<Currencies>?> fetchAllCurencies();
   Future<void> addCurrencies(Currencies currencies);
   Future<void> deleteCurrencies(Currencies currencies);
+  //featured products
+  Future<List<String>> fetchAllFeaturedProducts();
+  Future<void> addFeaturedProduct(String productId);
 }

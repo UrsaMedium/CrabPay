@@ -7,10 +7,10 @@ CrabpayConnectorConnector.instance.GetAllCurrenciesQuery().execute();
 CrabpayConnectorConnector.instance.GetCartItemsQuery(getCartItemsQueryVariables).execute();
 CrabpayConnectorConnector.instance.GetUserCartCount(getUserCartCountVariables).execute();
 CrabpayConnectorConnector.instance.GetProductCartCount(getProductCartCountVariables).execute();
+CrabpayConnectorConnector.instance.GetFeaturedProducts().execute();
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProduct(deleteProductVariables).execute();
 CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
-CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
 
 ```
 

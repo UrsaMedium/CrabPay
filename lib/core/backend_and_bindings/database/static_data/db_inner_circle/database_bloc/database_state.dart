@@ -13,6 +13,10 @@ enum DatabaseStates {
   priceFunctionsNotFetched,
   currenciesFetched,
   currenciesNotFetched,
+  feetchedFeatuedProducts,
+  notFeetchedFeatuedProducts,
+  addedFeatuedProducts,
+  notAddededFeatuedProducts,
   //
   productAdded,
   productNotAdded,
@@ -24,6 +28,7 @@ class DatabaseState {
   final List<Currencies>? currencies;
   final List<ProductField>? productFields;
   final DatabaseStates states;
+  final List<String>? featuredProducts;
   //
   final Product? recentlyAddedProduct;
 
@@ -34,13 +39,16 @@ class DatabaseState {
     this.states = DatabaseStates.initial,
     //
     this.recentlyAddedProduct,
+    this.featuredProducts,
   });
 
   DatabaseState copyWith({
     List<Product>? products,
     List<Currencies>? currencies,
     List<ProductField>? productFields,
+    List<String>? featuredProducts,
     DatabaseStates? states,
+
     //
     Product? recentlyAddedProduct,
   }) {
@@ -54,6 +62,7 @@ class DatabaseState {
       states: states ?? this.states,
       //
       recentlyAddedProduct: recentlyAddedProduct,
+      featuredProducts: featuredProducts ?? this.featuredProducts,
     );
   }
 }

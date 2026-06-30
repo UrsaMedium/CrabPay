@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
+import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
@@ -159,6 +160,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/product_update_view',
       builder: (context, state) => ProductUpdateView(),
+    ),
+    GoRoute(
+      path: '/add_featured_product_view',
+      builder: (context, state) => AddFeaturedProductView(),
     ),
     GoRoute(
       path: '/login_view',

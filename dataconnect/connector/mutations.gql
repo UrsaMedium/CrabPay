@@ -148,6 +148,23 @@ mutation addCartItem(
   )
 }
 
+mutation addFeaturedProduct($id: UUID, $featuredProductId: UUID!)
+@auth(level: PUBLIC) {
+  featuredProduct_insert(
+    data: { id: $id, featuredProductId: $featuredProductId }
+  )
+}
+
+mutation addUserPreference(
+  $id: UUID
+  $userId: String!
+  $favoriteProductId: UUID!
+) @auth(level: PUBLIC) {
+  userPreference_insert(
+    data: { id: $id, userId: $userId, favoriteProductId: $favoriteProductId }
+  )
+}
+
 mutation UpdateCartItem(
   $id: UUID!
   $userId: String

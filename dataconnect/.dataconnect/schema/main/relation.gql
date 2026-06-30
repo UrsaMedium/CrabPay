@@ -281,6 +281,38 @@ extend type Currencies {
   """
   _id: ID! @fdc_generated(from: "Currencies.id", purpose: ENTITY_ID)
 }
+extend type FeaturedProduct {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "FeaturedProduct", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `FeaturedProduct` table.
+  """
+  _count: Int! @fdc_generated(from: "FeaturedProduct.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `FeaturedProduct` table where the `featuredProductId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  featuredProductId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FeaturedProduct.featuredProductId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `FeaturedProduct` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FeaturedProduct.id", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "FeaturedProduct.id", purpose: ENTITY_ID)
+}
 extend type OfUserCartItemCounter {
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
@@ -609,4 +641,45 @@ extend type ProductField {
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "ProductField.id", purpose: ENTITY_ID)
+}
+extend type UserPrefence {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserPrefence", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `UserPrefence` table.
+  """
+  _count: Int! @fdc_generated(from: "UserPrefence.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserPrefence` table where the `favoriteProductId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  favoriteProductId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPrefence.favoriteProductId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserPrefence` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPrefence.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserPrefence` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPrefence.userId", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserPrefence.id", purpose: ENTITY_ID)
 }

@@ -31,8 +31,8 @@ class AskPageView extends StatelessWidget {
           child: Text('Update Product Field'),
         ),
         ElevatedButton(
-          onPressed: () => context.push('/product_update_view'),
-          child: Text('Update a Product'),
+          onPressed: () => context.push('/add_featured_product_view'),
+          child: Text('Add Featured Product'),
         ),
       ],
     );

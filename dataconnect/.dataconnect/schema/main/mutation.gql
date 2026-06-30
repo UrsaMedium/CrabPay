@@ -18,6 +18,15 @@ extend type Mutation {
     data: Currencies_Data!
   ): Currencies_KeyOutput! @fdc_generated(from: "Currencies", purpose: INSERT_SINGLE)
   """
+  ✨ Insert a single `FeaturedProduct` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  featuredProduct_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FeaturedProduct_Data!
+  ): FeaturedProduct_KeyOutput! @fdc_generated(from: "FeaturedProduct", purpose: INSERT_SINGLE)
+  """
   ✨ Insert a single `Product` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   product_insert(
@@ -35,6 +44,15 @@ extend type Mutation {
     """
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `UserPrefence` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPrefence_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserPrefence_Data!
+  ): UserPrefence_KeyOutput! @fdc_generated(from: "UserPrefence", purpose: INSERT_SINGLE)
   """
   ✨ Insert `CartItem` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -54,6 +72,15 @@ extend type Mutation {
     data: [Currencies_Data!]!
   ): [Currencies_KeyOutput!]! @fdc_generated(from: "Currencies", purpose: INSERT_MULTIPLE)
   """
+  ✨ Insert `FeaturedProduct` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  featuredProduct_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FeaturedProduct_Data!]!
+  ): [FeaturedProduct_KeyOutput!]! @fdc_generated(from: "FeaturedProduct", purpose: INSERT_MULTIPLE)
+  """
   ✨ Insert `Product` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   product_insertMany(
@@ -71,6 +98,15 @@ extend type Mutation {
     """
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `UserPrefence` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPrefence_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserPrefence_Data!]!
+  ): [UserPrefence_KeyOutput!]! @fdc_generated(from: "UserPrefence", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert or update a single `CartItem` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
@@ -90,6 +126,15 @@ extend type Mutation {
     data: Currencies_Data!
   ): Currencies_KeyOutput! @fdc_generated(from: "Currencies", purpose: UPSERT_SINGLE)
   """
+  ✨ Insert or update a single `FeaturedProduct` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FeaturedProduct`.
+  """
+  featuredProduct_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FeaturedProduct_Data!
+  ): FeaturedProduct_KeyOutput! @fdc_generated(from: "FeaturedProduct", purpose: UPSERT_SINGLE)
+  """
   ✨ Insert or update a single `Product` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
   product_upsert(
@@ -107,6 +152,15 @@ extend type Mutation {
     """
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `UserPrefence` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPrefence`.
+  """
+  userPrefence_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserPrefence_Data!
+  ): UserPrefence_KeyOutput! @fdc_generated(from: "UserPrefence", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update `CartItem` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
@@ -126,6 +180,15 @@ extend type Mutation {
     data: [Currencies_Data!]!
   ): [Currencies_KeyOutput!]! @fdc_generated(from: "Currencies", purpose: UPSERT_MULTIPLE)
   """
+  ✨ Insert or update `FeaturedProduct` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FeaturedProduct`.
+  """
+  featuredProduct_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FeaturedProduct_Data!]!
+  ): [FeaturedProduct_KeyOutput!]! @fdc_generated(from: "FeaturedProduct", purpose: UPSERT_MULTIPLE)
+  """
   ✨ Insert or update `Product` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Product`.
   """
   product_upsertMany(
@@ -143,6 +206,15 @@ extend type Mutation {
     """
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `UserPrefence` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPrefence`.
+  """
+  userPrefence_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserPrefence_Data!]!
+  ): [UserPrefence_KeyOutput!]! @fdc_generated(from: "UserPrefence", purpose: UPSERT_MULTIPLE)
   """
   ✨ Update a single `CartItem` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CartItem` or `null` if not found.
   """
@@ -192,6 +264,30 @@ extend type Mutation {
     data: Currencies_Data!
   ): Currencies_KeyOutput @fdc_generated(from: "Currencies", purpose: UPDATE_SINGLE)
   """
+  ✨ Update a single `FeaturedProduct` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FeaturedProduct` or `null` if not found.
+  """
+  featuredProduct_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FeaturedProduct_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FeaturedProduct_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FeaturedProduct_Data!
+  ): FeaturedProduct_KeyOutput @fdc_generated(from: "FeaturedProduct", purpose: UPDATE_SINGLE)
+  """
   ✨ Update a single `Product` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Product` or `null` if not found.
   """
   product_update(
@@ -240,6 +336,30 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: UPDATE_SINGLE)
   """
+  ✨ Update a single `UserPrefence` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPrefence` or `null` if not found.
+  """
+  userPrefence_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: UserPrefence_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPrefence_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserPrefence_Data!
+  ): UserPrefence_KeyOutput @fdc_generated(from: "UserPrefence", purpose: UPDATE_SINGLE)
+  """
   ✨ Update `CartItem` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   cartItem_updateMany(
@@ -277,6 +397,25 @@ extend type Mutation {
     """
     data: Currencies_Data!
   ): Int! @fdc_generated(from: "Currencies", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `FeaturedProduct` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  featuredProduct_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FeaturedProduct_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FeaturedProduct_Data!
+  ): Int! @fdc_generated(from: "FeaturedProduct", purpose: UPDATE_MULTIPLE)
   """
   ✨ Update `Product` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -316,6 +455,25 @@ extend type Mutation {
     data: ProductField_Data!
   ): Int! @fdc_generated(from: "ProductField", purpose: UPDATE_MULTIPLE)
   """
+  ✨ Update `UserPrefence` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userPrefence_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserPrefence_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserPrefence_Data!
+  ): Int! @fdc_generated(from: "UserPrefence", purpose: UPDATE_MULTIPLE)
+  """
   ✨ Delete a single `CartItem` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   cartItem_delete(
@@ -353,6 +511,25 @@ extend type Mutation {
     """
     first: Currencies_FirstRow
   ): Currencies_KeyOutput @fdc_generated(from: "Currencies", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `FeaturedProduct` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  featuredProduct_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FeaturedProduct_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FeaturedProduct_FirstRow
+  ): FeaturedProduct_KeyOutput @fdc_generated(from: "FeaturedProduct", purpose: DELETE_SINGLE)
   """
   ✨ Delete a single `Product` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -392,6 +569,25 @@ extend type Mutation {
     first: ProductField_FirstRow
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: DELETE_SINGLE)
   """
+  ✨ Delete a single `UserPrefence` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userPrefence_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: UserPrefence_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPrefence_FirstRow
+  ): UserPrefence_KeyOutput @fdc_generated(from: "UserPrefence", purpose: DELETE_SINGLE)
+  """
   ✨ Delete `CartItem` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
   cartItem_deleteMany(
@@ -420,6 +616,20 @@ extend type Mutation {
     all: Boolean = false
   ): Int! @fdc_generated(from: "Currencies", purpose: DELETE_MULTIPLE)
   """
+  ✨ Delete `FeaturedProduct` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  featuredProduct_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FeaturedProduct_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FeaturedProduct", purpose: DELETE_MULTIPLE)
+  """
   ✨ Delete `Product` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
   product_deleteMany(
@@ -447,4 +657,18 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "ProductField", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `UserPrefence` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userPrefence_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserPrefence_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserPrefence", purpose: DELETE_MULTIPLE)
 }

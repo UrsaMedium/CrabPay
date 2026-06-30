@@ -61,4 +61,12 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
     String? productName,
     String? description,
   ) => dbHandler.updateProduct(productId, imageName, productName, description);
+
+  @override
+  Future<List<String>> fetchAllFeaturedProducts() =>
+      dbHandler.fetchAllFeaturedProducts();
+
+  @override
+  Future<void> addFeaturedProduct(String productId) =>
+      dbHandler.addFeaturedProduct(productId);
 }
