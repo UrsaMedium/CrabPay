@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class ProductCard extends StatelessWidget {
+  final Function(BuildContext, String) openProductCardCallBack;
   final Product product;
-  const ProductCard({super.key, required this.product});
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.openProductCardCallBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +27,7 @@ class ProductCard extends StatelessWidget {
         color: context.appColorScheme.surfaceContainer,
         child: GestureDetector(
           onTap: () async {
-            await context.pushNamed(
-              'card_view',
-              pathParameters: {'productId': product.id},
-            );
-            if (context.mounted) {
-              context.read<CartBloc>().add(
-                CartEventFetchUserCartItemAmount(
-                  userId: context.read<AuthBloc>().state.currentUser!.id,
-                ),
-              );
-            }
+            openProductCardCallBack(context, product.id);
           },
           child: Padding(
             padding: const EdgeInsets.all(1.0),

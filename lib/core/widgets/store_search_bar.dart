@@ -1,47 +1,91 @@
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_detection/keyboard_detection.dart';
 
 class StoreSearchBarState extends StatefulWidget {
-  final Function(bool) _isSearchedFocusedCallBack;
+  final List<Product> products;
+  final Function(BuildContext, String) _openProductCardCallBack;
+  final Function(List<Product>) _onSearchSubmitedCallBack;
   const StoreSearchBarState({
     super.key,
-    required Function(bool) isSearchedFocusedCallBack,
-  }) : _isSearchedFocusedCallBack = isSearchedFocusedCallBack;
+    required this.products,
+    required Function(BuildContext, String) openProductCardCallBack,
+    required Function(List<Product>) onSearchSubmitedCallBack,
+  }) : _onSearchSubmitedCallBack = onSearchSubmitedCallBack,
+       _openProductCardCallBack = openProductCardCallBack;
 
   @override
   State<StoreSearchBarState> createState() => _StoreSearchBarStateState();
 }
 
 class _StoreSearchBarStateState extends State<StoreSearchBarState> {
-  bool _isSearchedFocused = false;
+  late KeyboardDetectionController _keyboardDetectionController;
+  KeyboardState _keyboardState = KeyboardState.hidden;
+  bool _keyBoardEventCanBeTriggered = false;
+  bool _isSearchOpen = false;
+  String? _userInput;
+  final SearchController _searchController = SearchController();
+
+  @override
+  void initState() {
+    _keyboardDetectionController = KeyboardDetectionController(
+      onChanged: (value) {
+        _keyboardState = value;
+      },
+    );
+
+    _keyboardDetectionController.registerCallback((state) {
+      if (_keyBoardEventCanBeTriggered &&
+          _keyboardState == KeyboardState.hiding) {
+        _keyBoardEventCanBeTriggered = false;
+        _userInput = null;
+        _searchController.text = '';
+        setState(() {
+          _isSearchOpen = false;
+        });
+      }
+      return true;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  bool _isUserInputEmpty() {
+    return _userInput == null || _userInput == '';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: MediaQuery.paddingOf(context).top + 16,
-      right: 32,
-      child: ClipRRect(
-        borderRadius: .circular(30),
-        child: TapRegion(
-          onTapInside: (event) => setState(() {
-            _isSearchedFocused = true;
-            widget._isSearchedFocusedCallBack(_isSearchedFocused);
-          }),
-          onTapOutside: (event) => setState(() {
-            _isSearchedFocused = false;
-            widget._isSearchedFocusedCallBack(_isSearchedFocused);
-          }),
-          child: AnimatedContainer(
+    return KeyboardDetection(
+      controller: _keyboardDetectionController,
+      child: Positioned(
+        top: MediaQuery.paddingOf(context).top + 16,
+        right: 32,
+        child: ClipRRect(
+          borderRadius: .circular(30),
+          child: AnimatedSize(
+            onEnd: () {
+              if (_isSearchOpen && !_searchController.isOpen) {
+                _searchController.openView();
+              }
+            },
             duration: const Duration(milliseconds: 400),
-            curve: Curves.fastLinearToSlowEaseIn,
-            height: _isSearchedFocused ? 60 : 50,
-            width: _isSearchedFocused
-                ? MediaQuery.sizeOf(context).width - 64
-                : 115,
+            curve: Curves.linearToEaseOut,
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 150),
-              child: _isSearchedFocused
-                  ? _expandedSearchBar(context)
-                  : _collapsedSearchBar(context),
+              duration: Duration(milliseconds: 150),
+              layoutBuilder: (currentChild, previousChildren) => Stack(
+                children: [
+                  _isSearchOpen
+                      ? _expandedSearchBar(context)
+                      : _collapsedSearchBar(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -50,22 +94,58 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
   }
 
   Widget _collapsedSearchBar(BuildContext context) {
-    return BackdropFilter(
-      filter: .blur(sigmaX: 8, sigmaY: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.appColorScheme.surfaceContainerHigh.withValues(
-            alpha: .6,
-          ),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Row(
-            children: [
-              Text('Search  ', style: TextStyle(fontWeight: .w500)),
-              Icon(Icons.search_rounded),
-            ],
+    return ClipRRect(
+      borderRadius: .circular(30),
+      child: BackdropFilter(
+        filter: .blur(sigmaX: 8, sigmaY: 8),
+        child: GestureDetector(
+          onTap: () {
+            _keyBoardEventCanBeTriggered = true;
+            setState(() {
+              _isSearchOpen = true;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.appColorScheme.surfaceContainerHigh.withValues(
+                alpha: .6,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: Row(
+                children: [
+                  Text(
+                    _isUserInputEmpty() ? 'Search' : '$_userInput',
+                    style: TextStyle(fontWeight: .w500),
+                  ),
+                  IconButton(
+                    onPressed: _isUserInputEmpty()
+                        ? () {
+                            _keyBoardEventCanBeTriggered = true;
+                            setState(() {
+                              _isSearchOpen = true;
+                            });
+                          }
+                        : () {
+                            setState(() {
+                              _userInput = null;
+                              _searchController.text = '';
+                              widget._onSearchSubmitedCallBack([]);
+                            });
+                          },
+                    icon: Icon(
+                      _isUserInputEmpty()
+                          ? Icons.search_rounded
+                          : Icons.clear_rounded,
+                    ),
+                    iconSize: 30,
+                    constraints: const BoxConstraints(minWidth: 70),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -73,38 +153,60 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
   }
 
   Widget _expandedSearchBar(BuildContext context) {
-    return BackdropFilter(
-      filter: .blur(sigmaX: 8, sigmaY: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.appColorScheme.surfaceContainerHigh.withValues(
-            alpha: .6,
-          ),
-          borderRadius: BorderRadius.circular(30),
+    return Container(
+      width: MediaQuery.sizeOf(context).width - 64,
+      decoration: BoxDecoration(
+        color: context.appColorScheme.surfaceContainerHigh.withValues(
+          alpha: .6,
         ),
-        child: SearchAnchor.bar(
-          suggestionsBuilder: (context, controller) => [],
-          isFullScreen: false,
-          shrinkWrap: true,
-          barBackgroundColor: WidgetStateProperty.all(
-            context.appColorScheme.surfaceContainerHigh.withValues(alpha: .6),
-          ),
-          viewConstraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width - 64,
-            minHeight: 120,
-          ),
-          viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
-              .withValues(alpha: .95),
-          viewBuilder: (suggestions) {
-            return ClipRRect(
-              borderRadius: .circular(30),
-              child: BackdropFilter(
-                filter: .blur(sigmaX: 2, sigmaY: 2),
-                child: ListView(children: suggestions.toList()),
-              ),
-            );
-          },
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: SearchAnchor.bar(
+        searchController: _searchController,
+        suggestionsBuilder: (context, controller) {
+          _userInput = controller.text.toLowerCase().trim();
+          return widget.products
+              .where(
+                (option) =>
+                    option.name.toLowerCase().contains(_userInput ?? ''),
+              )
+              .map(
+                (option) => ListTile(
+                  title: Text(option.name),
+                  onTap: () {
+                    _keyBoardEventCanBeTriggered = false;
+                    controller.closeView(option.name);
+                    widget._openProductCardCallBack(context, option.id);
+                  },
+                ),
+              );
+        },
+        // onChanged: (value) {},
+        onSubmitted: (value) {
+          _keyBoardEventCanBeTriggered = false;
+          _searchController.text = '';
+          _userInput = value.trim();
+          _isSearchOpen = false;
+          widget._onSearchSubmitedCallBack(
+            widget.products
+                .where(
+                  (product) =>
+                      product.name.toLowerCase().contains(value.toLowerCase()),
+                )
+                .toList(),
+          );
+        },
+        isFullScreen: false,
+        shrinkWrap: true,
+        barBackgroundColor: WidgetStateProperty.all(
+          context.appColorScheme.surfaceContainerHigh.withValues(alpha: .6),
         ),
+        viewConstraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width - 64,
+          maxHeight: 300,
+        ),
+        viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
+            .withValues(alpha: .95),
       ),
     );
   }

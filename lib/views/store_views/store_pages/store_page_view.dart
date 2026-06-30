@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
@@ -9,7 +10,7 @@ import 'package:crabpay/core/widgets/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 
 class StorePageView extends StatefulWidget {
   const StorePageView({super.key});
@@ -19,12 +20,14 @@ class StorePageView extends StatefulWidget {
 }
 
 class StorePageViewState extends State<StorePageView> {
-  LocalHistoryEntry? _historyEntryToControllTheBackCall;
-  bool _doAbsorb = false;
+  List<Product>? _filteredProductList;
+  List<Product>? _products = [];
   @override
   void initState() {
     if (context.read<DatabaseBloc>().state.products == null) {
       _dataFetching(context);
+    } else {
+      _products = context.read<DatabaseBloc>().state.products;
     }
     super.initState();
   }
@@ -46,9 +49,35 @@ class StorePageViewState extends State<StorePageView> {
     );
   }
 
-  void isSearchFocusedCallBack(bool isSearchFocused) {
-    _doAbsorb = isSearchFocused;
-    setState(() {});
+  Future<void> _openProductCardCallBack(
+    BuildContext context,
+    String productId,
+  ) async {
+    await context.pushNamed(
+      'card_view',
+      pathParameters: {'productId': productId},
+    );
+    if (context.mounted) {
+      context.read<CartBloc>().add(
+        CartEventFetchUserCartItemAmount(
+          userId: context.read<AuthBloc>().state.currentUser!.id,
+        ),
+      );
+    }
+  }
+
+  void _onSearchSubmitedCallBack(List<Product> filterdProductList) {
+    setState(() {
+      _filteredProductList = filterdProductList;
+    });
+  }
+
+  bool _isFilteredListEmpty() {
+    if (_filteredProductList == null) {
+      return true;
+    } else {
+      return _filteredProductList!.isEmpty;
+    }
   }
 
   @override
@@ -73,7 +102,7 @@ class StorePageViewState extends State<StorePageView> {
               buildWhen: (previous, current) =>
                   (previous.products != current.products),
               builder: (context, state) {
-                final products = state.products ?? [];
+                _products = state.products ?? [];
                 return ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: .only(
@@ -81,17 +110,23 @@ class StorePageViewState extends State<StorePageView> {
                     bottom: MediaQuery.paddingOf(context).bottom,
                   ),
                   itemExtent: 224,
-                  itemCount: products.length,
-                  itemBuilder: (context, index) => AbsorbPointer(
-                    absorbing: _doAbsorb,
-                    child: ProductCard(product: products[index]),
+                  itemCount: _isFilteredListEmpty()
+                      ? _products?.length ?? 0
+                      : _filteredProductList!.length,
+                  itemBuilder: (context, index) => ProductCard(
+                    product: _isFilteredListEmpty()
+                        ? _products![index]
+                        : _filteredProductList![index],
+                    openProductCardCallBack: _openProductCardCallBack,
                   ),
                 );
               },
             ),
           ),
           StoreSearchBarState(
-            isSearchedFocusedCallBack: isSearchFocusedCallBack,
+            products: _products ?? [],
+            openProductCardCallBack: _openProductCardCallBack,
+            onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
           ),
         ],
       ),
