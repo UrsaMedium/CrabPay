@@ -6,7 +6,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/widgets/product_card.dart';
-import 'package:crabpay/core/widgets/store_search_bar.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';

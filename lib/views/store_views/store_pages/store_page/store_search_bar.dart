@@ -153,19 +153,15 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
   }
 
   Widget _expandedSearchBar(BuildContext context) {
+    double transparenvyLevel = .96;
     return Container(
       width: MediaQuery.sizeOf(context).width - 64,
-      decoration: BoxDecoration(
-        color: context.appColorScheme.surfaceContainerHigh.withValues(
-          alpha: .6,
-        ),
-        borderRadius: BorderRadius.circular(30),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: SearchAnchor.bar(
         searchController: _searchController,
         suggestionsBuilder: (context, controller) {
           _userInput = controller.text.toLowerCase().trim();
-          return widget.products
+          final suggestions = widget.products
               .where(
                 (option) =>
                     option.name.toLowerCase().contains(_userInput ?? ''),
@@ -180,8 +176,8 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
                   },
                 ),
               );
+          return suggestions.toList();
         },
-        // onChanged: (value) {},
         onSubmitted: (value) {
           _keyBoardEventCanBeTriggered = false;
           _searchController.text = '';
@@ -198,15 +194,18 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
         },
         isFullScreen: false,
         shrinkWrap: true,
+        dividerColor: Colors.transparent,
         barBackgroundColor: WidgetStateProperty.all(
-          context.appColorScheme.surfaceContainerHigh.withValues(alpha: .6),
-        ),
-        viewConstraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width - 64,
-          maxHeight: 300,
+          context.appColorScheme.surfaceContainerHigh.withValues(
+            alpha: transparenvyLevel,
+          ),
         ),
         viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
-            .withValues(alpha: .95),
+            .withValues(alpha: transparenvyLevel),
+        viewConstraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width - 64,
+          maxHeight: 314,
+        ),
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolli
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_state.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
