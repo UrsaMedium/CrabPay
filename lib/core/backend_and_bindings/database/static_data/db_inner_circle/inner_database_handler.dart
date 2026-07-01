@@ -26,4 +26,9 @@ abstract class InnerDatabaseHandler {
   //featured products
   Future<List<String>> fetchAllFeaturedProducts();
   Future<void> addFeaturedProduct(String productId);
+  Future<void> deleteFeaturedProduct(String productId);
+  //user preferences
+  Future<List<String>> fetchUserPreferences(String userId);
+  Future<void> addUserPreference(String userId, String productId);
+  Future<void> deleteUserPreference(String userId, String productId);
 }

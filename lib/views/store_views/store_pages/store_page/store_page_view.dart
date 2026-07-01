@@ -8,7 +8,6 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/core/widgets/product_card.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,29 +32,22 @@ class StorePageViewState extends State<StorePageView> {
   }
 
   Future<void> _dataFetching(BuildContext context) async {
-    if (context.read<DatabaseBloc>().state.products == null) {
+    if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
-      context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
-    } else {
-      if (context.read<DatabaseBloc>().state.products!.isEmpty) {
-        context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
-        context.read<DatabaseBloc>().add(DatabaseEventFetchAllCurrencies());
-      }
     }
-    final currentUser =
-        context.read<AuthBloc>().state.currentUser ?? appTempUser;
-    context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(userId: currentUser.id),
-    );
   }
 
   Future<void> _openProductCardCallBack(
     BuildContext context,
     String productId,
+    String additionalSuffix,
   ) async {
     await context.pushNamed(
       'card_view',
-      pathParameters: {'productId': productId},
+      pathParameters: {
+        'productId': productId,
+        'additionalSuffix': additionalSuffix,
+      },
     );
     if (context.mounted) {
       context.read<CartBloc>().add(
@@ -117,6 +109,7 @@ class StorePageViewState extends State<StorePageView> {
                     product: _isFilteredListEmpty()
                         ? _products![index]
                         : _filteredProductList![index],
+                    additionalSuffix: 'store',
                     openProductCardCallBack: _openProductCardCallBack,
                   ),
                 );

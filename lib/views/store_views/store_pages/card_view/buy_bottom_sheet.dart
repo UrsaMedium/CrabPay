@@ -3,7 +3,6 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
@@ -19,12 +18,10 @@ import 'dart:ui';
 class BuyBottomSheet extends StatefulWidget {
   final String productId;
   final List<ProductField> productFields;
-  final Currencies currency;
   const BuyBottomSheet({
     super.key,
     required this.productId,
     required this.productFields,
-    required this.currency,
   });
 
   @override
@@ -379,7 +376,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                             productId: widget.productId,
                                             productName: product!.name,
                                             purchaseData: retrievedData,
-                                            currency: widget.currency.name,
+                                            currency: 'rubDefoult',
                                             checkoutPrice: precalculatedPrice,
                                             status: 'created',
                                           );

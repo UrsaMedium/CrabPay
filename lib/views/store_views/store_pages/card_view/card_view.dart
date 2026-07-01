@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
@@ -18,38 +18,62 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:markdown/markdown.dart' as md;
 
-class CardView extends StatelessWidget {
+class CardView extends StatefulWidget {
   static const routeName = 'card-view';
   final String productId;
-  const CardView({super.key, required this.productId});
+  final String additionalSuffix;
+  const CardView({
+    super.key,
+    required this.productId,
+    required this.additionalSuffix,
+  });
+
+  @override
+  State<CardView> createState() => _CardViewState();
+}
+
+class _CardViewState extends State<CardView> {
+  late final AuthUser _currentUser;
+  bool _isFavorite = false;
+  List<ProductField>? _productFields;
+  Product? _product;
+
+  @override
+  void initState() {
+    dataPrefetching(context);
+    super.initState();
+  }
 
   Future<void> dataPrefetching(BuildContext context) async {
     context.read<DatabaseBloc>().add(
-      DatabaseEventFetchProductFields(productId: productId),
+      DatabaseEventFetchProductFields(productId: widget.productId),
     );
-    final currentUser =
-        context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    if (context.read<DatabaseBloc>().state.states ==
+        DatabaseStates.productFieldsFetched) {
+      _productFields = context.read<DatabaseBloc>().state.productFields;
+    } else {
+      _productFields = null;
+    }
+    _currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     context.read<CartBloc>().add(
       CartEventFetchProductCartItemAmount(
-        userId: currentUser.id,
-        productId: productId,
+        userId: _currentUser.id,
+        productId: widget.productId,
       ),
+    );
+    _isFavorite =
+        context.read<DatabaseBloc>().state.userPreferences?.any(
+          (element) => element == widget.productId,
+        ) ??
+        false;
+    _product = context.read<DatabaseBloc>().state.products?.firstWhere(
+      (product) => product.id == widget.productId,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    List<ProductField>? productFields;
-    Product? product = context.read<DatabaseBloc>().state.products?.firstWhere(
-      (product) => product.id == productId,
-    );
-    Currencies currency = context
-        .read<DatabaseBloc>()
-        .state
-        .currencies!
-        .firstWhere((curr) => curr.name == product?.currencies);
-    dataPrefetching(context);
-    return product == null
+    return _product == null
         ? Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -72,7 +96,7 @@ class CardView extends StatelessWidget {
               !Navigator.of(context).canPop() ? context.go('/') : context.pop();
             },
             child: Hero(
-              tag: 'card-hero-${product.id}',
+              tag: 'card-hero-${_product!.id}-${widget.additionalSuffix}',
               createRectTween: (begin, end) =>
                   MaterialRectArcTween(begin: begin, end: end),
               child: ClipRRect(
@@ -88,6 +112,40 @@ class CardView extends StatelessWidget {
                       },
                       icon: Icon(Icons.arrow_back),
                     ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: IconButton(
+                          iconSize: 32,
+                          onPressed: () {
+                            if (_isFavorite) {
+                              context.read<DatabaseBloc>().add(
+                                DatabaseEventDeleteUserPreference(
+                                  productId: widget.productId,
+                                  userId: _currentUser.id,
+                                ),
+                              );
+                              setState(() {
+                                _isFavorite = false;
+                              });
+                            } else {
+                              context.read<DatabaseBloc>().add(
+                                DatabaseEventAddUserPreference(
+                                  productId: widget.productId,
+                                  userId: _currentUser.id,
+                                ),
+                              );
+                              setState(() {
+                                _isFavorite = true;
+                              });
+                            }
+                          },
+                          icon: !_isFavorite
+                              ? Icon(Icons.favorite_border_rounded)
+                              : Icon(Icons.favorite_rounded, color: Colors.red),
+                        ),
+                      ),
+                    ],
                   ),
                   body: Column(
                     children: [
@@ -98,7 +156,7 @@ class CardView extends StatelessWidget {
                             SliverToBoxAdapter(
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${_product!.image}.png',
                                 width: double.infinity,
                                 height: 400,
                                 fit: .cover,
@@ -128,7 +186,7 @@ class CardView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  product.name,
+                                  _product!.name,
                                   textAlign: .center,
                                   style: TextStyle(
                                     color:
@@ -143,7 +201,7 @@ class CardView extends StatelessWidget {
                               child: Center(
                                 child: MarkdownBody(
                                   selectable: true,
-                                  data: product.description,
+                                  data: _product!.description,
                                   builders: {'latex': LatexElementBuilder()},
                                   extensionSet: md.ExtensionSet(
                                     [LatexBlockSyntax()],
@@ -159,7 +217,7 @@ class CardView extends StatelessWidget {
                         buildWhen: (previous, current) =>
                             current.states ==
                                 DatabaseStates.productFieldsFetched ||
-                            current.states !=
+                            current.states ==
                                 DatabaseStates.productFieldsNotFetched,
                         builder: (context, state) {
                           return ElevatedButton(
@@ -168,8 +226,7 @@ class CardView extends StatelessWidget {
                               foregroundColor: context.appColorScheme.onPrimary,
                             ),
                             onPressed: () async {
-                              productFields = state.productFields;
-                              if (productFields != null) {
+                              if (_productFields != null) {
                                 await showModalBottomSheet(
                                   showDragHandle: false,
                                   useSafeArea: false,
@@ -197,9 +254,8 @@ class CardView extends StatelessWidget {
                                             ),
                                           ),
                                           child: BuyBottomSheet(
-                                            currency: currency,
-                                            productId: product.id,
-                                            productFields: productFields!,
+                                            productId: _product!.id,
+                                            productFields: _productFields!,
                                           ),
                                         ),
                                       ],
@@ -207,14 +263,14 @@ class CardView extends StatelessWidget {
                                   },
                                 );
                               } else {
-                                productFields = state.productFields;
-                                if (productFields == null) {
+                                _productFields = state.productFields;
+                                if (_productFields == null) {
                                   Fluttertoast.showToast(
                                     msg: 'No Fields! Something went wrong.',
                                   );
                                   context.read<DatabaseBloc>().add(
                                     DatabaseEventFetchProductFields(
-                                      productId: productId,
+                                      productId: widget.productId,
                                     ),
                                   );
                                 }

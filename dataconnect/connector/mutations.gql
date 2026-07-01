@@ -155,6 +155,12 @@ mutation addFeaturedProduct($id: UUID, $featuredProductId: UUID!)
   )
 }
 
+mutation DeleteFeaturedProduct($featuredProductId: UUID!) @auth(level: PUBLIC) {
+  featuredProduct_deleteMany(
+    where: { featuredProductId: { eq: $featuredProductId } }
+  )
+}
+
 mutation addUserPreference(
   $id: UUID
   $userId: String!
@@ -162,6 +168,20 @@ mutation addUserPreference(
 ) @auth(level: PUBLIC) {
   userPreference_insert(
     data: { id: $id, userId: $userId, favoriteProductId: $favoriteProductId }
+  )
+}
+
+mutation DeleteUserPreference($userId: String!, $favoriteProductId: UUID!)
+@auth(level: PUBLIC) {
+  userPreference_delete(
+    first: {
+      where: {
+        _and: [
+          { userId: { eq: $userId } }
+          { favoriteProductId: { eq: $favoriteProductId } }
+        ]
+      }
+    }
   )
 }
 

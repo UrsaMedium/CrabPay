@@ -315,8 +315,10 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     List<String> result = [];
     try {
       final fetchedFeaturedProducts = await retryer.retry(
-        () =>
-            CrabpayConnectorConnector.instance.getFeaturedProducts().execute(),
+        () => CrabpayConnectorConnector.instance
+            .getFeaturedProducts()
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
       );
       if (fetchedFeaturedProducts.data.featuredProducts.isNotEmpty) {
         for (var featuredProduct
@@ -335,14 +337,81 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> addFeaturedProduct(String productId) async {
     try {
-      await retryer.retry(() {
-        CrabpayConnectorConnector.instance
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
             .addFeaturedProduct(featuredProductId: productId)
-            .execute();
-      });
+            .execute(),
+      );
     } catch (e) {
       print('Failed to add Featured Product: $e');
       Fluttertoast.showToast(msg: 'Failed to add Featured Product');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addUserPreference(String userId, String productId) async {
+    try {
+      await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .addUserPreference(userId: userId, favoriteProductId: productId)
+            .execute(),
+      );
+    } catch (e) {
+      print('Failed to add User Preference: $e');
+      Fluttertoast.showToast(msg: 'Failed to add User Preference');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<String>> fetchUserPreferences(String userId) async {
+    List<String> result = [];
+    try {
+      final fetchedUserPreferences = await retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .getUserPreferences(userId: userId)
+            .ref()
+            .execute(fetchPolicy: QueryFetchPolicy.serverOnly),
+      );
+      for (var userPreference in fetchedUserPreferences.data.userPreferences) {
+        result.add(userPreference.favoriteProductId!);
+      }
+      return result;
+    } catch (e) {
+      print('Failed to fetch User Preference: $e');
+      Fluttertoast.showToast(msg: 'Failed to fetch User Preference');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteFeaturedProduct(String productId) async {
+    print(productId);
+    try {
+      retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .deleteFeaturedProduct(featuredProductId: productId)
+            .execute(),
+      );
+    } catch (e) {
+      print('Failed to delete Featured Product: $e');
+      Fluttertoast.showToast(msg: 'Failed to delete Featured Product');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteUserPreference(String userId, String productId) async {
+    try {
+      retryer.retry(
+        () => CrabpayConnectorConnector.instance
+            .deleteUserPreference(userId: userId, favoriteProductId: productId)
+            .execute(),
+      );
+    } catch (e) {
+      print('Failed to delete User Preference: $e');
+      Fluttertoast.showToast(msg: 'Failed to delete User Preference');
       rethrow;
     }
   }

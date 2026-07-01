@@ -40,7 +40,7 @@ type CartItem @table(key: "id") {
   statusChangedAt: Timestamp! @default(expr: "request.time")
 }
 
-type UserPrefence @table(key: "id") {
+type UserPreference @table(key: "id") {
   id: UUID! @default(expr: "uuidV4()")
   userId: String!
   favoriteProductId: UUID

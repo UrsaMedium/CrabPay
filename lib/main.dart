@@ -98,13 +98,18 @@ final GoRouter _router = GoRouter(
     ),
 
     GoRoute(
-      path: '/store/card_view/:productId',
+      path: '/store/card_view/:productId/:additionalSuffix',
       name: 'card_view',
       pageBuilder: (context, state) {
         final productId = state.pathParameters['productId'] ?? '0';
+        final additionalSuffix =
+            state.pathParameters['additionalSuffix'] ?? '0';
         return CustomTransitionPage(
           key: state.pageKey,
-          child: CardView(productId: productId),
+          child: CardView(
+            productId: productId,
+            additionalSuffix: additionalSuffix,
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

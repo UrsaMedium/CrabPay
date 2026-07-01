@@ -29,11 +29,11 @@ It has the same format as `ProductField_Key`, but is only used as mutation retur
 """
 scalar ProductField_KeyOutput
 """
-✨ `UserPrefence_KeyOutput` returns the primary key fields of table type `UserPrefence`.
+✨ `UserPreference_KeyOutput` returns the primary key fields of table type `UserPreference`.
 
-It has the same format as `UserPrefence_Key`, but is only used as mutation return value.
+It has the same format as `UserPreference_Key`, but is only used as mutation return value.
 """
-scalar UserPrefence_KeyOutput
+scalar UserPreference_KeyOutput
 """
 ✨ Generated data input type for table 'CartItem'. It includes all necessary fields for creating or upserting rows into table.
 """
@@ -1808,84 +1808,84 @@ input ProductField_Order {
   priceImages_max: OrderDirection
 }
 """
-✨ Generated data input type for table 'UserPrefence'. It includes all necessary fields for creating or upserting rows into table.
+✨ Generated data input type for table 'UserPreference'. It includes all necessary fields for creating or upserting rows into table.
 """
-input UserPrefence_Data {
+input UserPreference_Data {
   """
-  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  ✨ Generated from Field `UserPreference`.`id` of type `UUID!`
   """
   id: UUID
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPrefence`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPreference`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  ✨ Generated from Field `UserPreference`.`favoriteProductId` of type `UUID`
   """
   favoriteProductId: UUID
   """
-  ✨ `_expr` server value variant of `favoriteProductId` (✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`)
+  ✨ `_expr` server value variant of `favoriteProductId` (✨ Generated from Field `UserPreference`.`favoriteProductId` of type `UUID`)
   """
   favoriteProductId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  ✨ Generated from Field `UserPreference`.`userId` of type `String!`
   """
   userId: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `UserPrefence`.`userId` of type `String!`)
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `UserPreference`.`userId` of type `String!`)
   """
   userId_expr: String_Expr @fdc_forbiddenInVariables
 }
 """
-✨ Generated filter input type for table 'UserPrefence'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+✨ Generated filter input type for table 'UserPreference'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
 """
-input UserPrefence_Filter {
+input UserPreference_Filter {
   """
   Apply multiple filter conditions using `AND` logic.
   """
-  _and: [UserPrefence_Filter!]
+  _and: [UserPreference_Filter!]
   """
   Negate the result of the provided filter condition.
   """
-  _not: UserPrefence_Filter
+  _not: UserPreference_Filter
   """
   Apply multiple filter conditions using `OR` logic.
   """
-  _or: [UserPrefence_Filter!]
+  _or: [UserPreference_Filter!]
   """
-  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  ✨ Generated from Field `UserPreference`.`id` of type `UUID!`
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  ✨ Generated from Field `UserPreference`.`favoriteProductId` of type `UUID`
   """
   favoriteProductId: UUID_Filter
   """
-  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  ✨ Generated from Field `UserPreference`.`userId` of type `String!`
   """
   userId: String_Filter
 }
 """
-✨ Generated first-row input type for table 'UserPrefence'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+✨ Generated first-row input type for table 'UserPreference'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
 """
-input UserPrefence_FirstRow {
+input UserPreference_FirstRow {
   """
   Order the result by the specified fields.
   """
-  orderBy: [UserPrefence_Order!]
+  orderBy: [UserPreference_Order!]
   """
   Filters rows based on the specified conditions.
   """
-  where: UserPrefence_Filter
+  where: UserPreference_Filter
 }
 """
-✨ Generated having input type for table 'UserPrefence'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+✨ Generated having input type for table 'UserPreference'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
 """
-input UserPrefence_Having {
+input UserPreference_Having {
   """
   Apply multiple Having conditions using `AND` logic.
   """
-  _and: [UserPrefence_Having!]
+  _and: [UserPreference_Having!]
   """
   Whether to apply DISTINCT to the aggregate function.
   """
@@ -1893,45 +1893,45 @@ input UserPrefence_Having {
   """
   Negate the result of the provided Having condition.
   """
-  _not: UserPrefence_Having
+  _not: UserPreference_Having
   """
   Apply multiple Having conditions using `OR` logic.
   """
-  _or: [UserPrefence_Having!]
+  _or: [UserPreference_Having!]
   """
-  ✨ Generated from Field `UserPrefence`.`_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`_count` of type `Int!`
   """
   _count: Int_Filter
   """
-  ✨ Generated from Field `UserPrefence`.`favoriteProductId_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`favoriteProductId_count` of type `Int!`
   """
   favoriteProductId_count: Int_Filter
   """
-  ✨ Generated from Field `UserPrefence`.`id_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`id_count` of type `Int!`
   """
   id_count: Int_Filter
   """
-  ✨ Generated from Field `UserPrefence`.`userId_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`userId_count` of type `Int!`
   """
   userId_count: Int_Filter
 }
 """
-✨ Generated key input type for table 'UserPrefence'. It represents the primary key fields used to uniquely identify a row in the table.
+✨ Generated key input type for table 'UserPreference'. It represents the primary key fields used to uniquely identify a row in the table.
 """
-input UserPrefence_Key {
+input UserPreference_Key {
   """
-  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  ✨ Generated from Field `UserPreference`.`id` of type `UUID!`
   """
   id: UUID
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPrefence`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `UserPreference`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
 }
 """
-✨ Generated list filter input type for table 'UserPrefence'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+✨ Generated list filter input type for table 'UserPreference'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
 """
-input UserPrefence_ListFilter {
+input UserPreference_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
@@ -1939,38 +1939,38 @@ input UserPrefence_ListFilter {
   """
   Condition of the related objects to filter for.
   """
-  exist: UserPrefence_Filter
+  exist: UserPreference_Filter
 }
 """
-✨ Generated order input type for table 'UserPrefence'. This input defines the sorting order of rows in query results based on one or more fields.
+✨ Generated order input type for table 'UserPreference'. This input defines the sorting order of rows in query results based on one or more fields.
 """
-input UserPrefence_Order {
+input UserPreference_Order {
   """
-  ✨ Generated from Field `UserPrefence`.`id` of type `UUID!`
+  ✨ Generated from Field `UserPreference`.`id` of type `UUID!`
   """
   id: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`favoriteProductId` of type `UUID`
+  ✨ Generated from Field `UserPreference`.`favoriteProductId` of type `UUID`
   """
   favoriteProductId: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`userId` of type `String!`
+  ✨ Generated from Field `UserPreference`.`userId` of type `String!`
   """
   userId: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`_count` of type `Int!`
   """
   _count: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`favoriteProductId_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`favoriteProductId_count` of type `Int!`
   """
   favoriteProductId_count: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`id_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`id_count` of type `Int!`
   """
   id_count: OrderDirection
   """
-  ✨ Generated from Field `UserPrefence`.`userId_count` of type `Int!`
+  ✨ Generated from Field `UserPreference`.`userId_count` of type `Int!`
   """
   userId_count: OrderDirection
 }

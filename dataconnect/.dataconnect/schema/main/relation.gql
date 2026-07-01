@@ -642,44 +642,44 @@ extend type ProductField {
   """
   _id: ID! @fdc_generated(from: "ProductField.id", purpose: ENTITY_ID)
 }
-extend type UserPrefence {
+extend type UserPreference {
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
-  _metadata: _Metadata @fdc_generated(from: "UserPrefence", purpose: METADATA_FIELD)
+  _metadata: _Metadata @fdc_generated(from: "UserPreference", purpose: METADATA_FIELD)
   """
-  ✨ Count the number of rows in the `UserPrefence` table.
+  ✨ Count the number of rows in the `UserPreference` table.
   """
-  _count: Int! @fdc_generated(from: "UserPrefence.", purpose: QUERY_COUNT)
+  _count: Int! @fdc_generated(from: "UserPreference.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `UserPrefence` table where the `favoriteProductId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `UserPreference` table where the `favoriteProductId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   favoriteProductId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "UserPrefence.favoriteProductId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "UserPreference.favoriteProductId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `UserPrefence` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `UserPreference` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "UserPrefence.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "UserPreference.id", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `UserPrefence` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `UserPreference` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   userId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "UserPrefence.userId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "UserPreference.userId", purpose: QUERY_COUNT)
   """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "UserPrefence.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "UserPreference.id", purpose: ENTITY_ID)
 }

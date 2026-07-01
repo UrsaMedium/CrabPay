@@ -8,6 +8,11 @@ abstract class DatabaseEvent {
   const DatabaseEvent();
 }
 
+class DatabaseEventInitialize implements DatabaseEvent {
+  final String userId;
+  DatabaseEventInitialize({required this.userId});
+}
+
 // Product events
 // fetch all Poducts
 class DatabaseEventFetchAllProducts implements DatabaseEvent {}
@@ -88,4 +93,37 @@ class DatabaseEventFetchAllFeaturedProducts implements DatabaseEvent {}
 class DatabaseEventAddFeaturedProduct implements DatabaseEvent {
   final String productId;
   DatabaseEventAddFeaturedProduct({required this.productId});
+}
+
+//delete featured product
+class DatabaseEventDeleteFeaturedProduct implements DatabaseEvent {
+  final String productId;
+  DatabaseEventDeleteFeaturedProduct({required this.productId});
+}
+
+//user preferences
+// fetch user preferences
+class DatabaseEventFetchUserPreferences implements DatabaseEvent {
+  final String userId;
+  DatabaseEventFetchUserPreferences({required this.userId});
+}
+
+// add user preferences
+class DatabaseEventAddUserPreference implements DatabaseEvent {
+  final String userId;
+  final String productId;
+  DatabaseEventAddUserPreference({
+    required this.userId,
+    required this.productId,
+  });
+}
+
+//delete user preference
+class DatabaseEventDeleteUserPreference implements DatabaseEvent {
+  final String productId;
+  final String userId;
+  DatabaseEventDeleteUserPreference({
+    required this.productId,
+    required this.userId,
+  });
 }

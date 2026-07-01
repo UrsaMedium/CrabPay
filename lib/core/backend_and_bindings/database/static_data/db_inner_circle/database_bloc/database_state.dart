@@ -5,21 +5,37 @@ import 'package:flutter/material.dart' show immutable;
 
 enum DatabaseStates {
   initial,
+  initialized,
+  notInitialized,
+  //
   productsFetched,
   productsNotFetched,
+  productAdded,
+  productNotAdded,
+  productDeleted,
+  productNotDeleted,
+  //
   productFieldsFetched,
   productFieldsNotFetched,
-  priceFunctionsFetched,
-  priceFunctionsNotFetched,
+  //
   currenciesFetched,
   currenciesNotFetched,
-  feetchedFeatuedProducts,
+  //
+  fetchedFeatuedProducts,
   notFeetchedFeatuedProducts,
   addedFeatuedProducts,
   notAddededFeatuedProducts,
+  deletedFeatuedProducts,
+  notDeletedFeatuedProducts,
   //
-  productAdded,
-  productNotAdded,
+  fetchedUserPreferebces,
+  notFetchedUserPreferebces,
+  addedUserPreferences,
+  notAddedUserPreferences,
+  deletedUserPreferences,
+  notDeletedUserPreferences,
+
+  //
 }
 
 @immutable
@@ -29,7 +45,7 @@ class DatabaseState {
   final List<ProductField>? productFields;
   final DatabaseStates states;
   final List<String>? featuredProducts;
-  //
+  final List<String>? userPreferences;
   final Product? recentlyAddedProduct;
 
   const DatabaseState({
@@ -37,20 +53,19 @@ class DatabaseState {
     this.currencies,
     this.productFields,
     this.states = DatabaseStates.initial,
-    //
     this.recentlyAddedProduct,
     this.featuredProducts,
+    this.userPreferences,
   });
 
   DatabaseState copyWith({
     List<Product>? products,
     List<Currencies>? currencies,
     List<ProductField>? productFields,
-    List<String>? featuredProducts,
     DatabaseStates? states,
-
-    //
     Product? recentlyAddedProduct,
+    List<String>? featuredProducts,
+    List<String>? userPreferences,
   }) {
     return DatabaseState(
       products: products ?? this.products,
@@ -63,6 +78,7 @@ class DatabaseState {
       //
       recentlyAddedProduct: recentlyAddedProduct,
       featuredProducts: featuredProducts ?? this.featuredProducts,
+      userPreferences: userPreferences ?? this.userPreferences,
     );
   }
 }

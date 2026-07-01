@@ -1,4 +1,6 @@
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
@@ -38,9 +40,14 @@ class _HomeViewState extends State<HomeView> {
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
-    context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(userId: currentUser.id),
-    );
+    if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
+      context.read<DatabaseBloc>().add(
+        DatabaseEventInitialize(userId: currentUser.id),
+      );
+      context.read<CartBloc>().add(
+        CartEventFetchUserCartItemAmount(userId: currentUser.id),
+      );
+    }
     itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
     super.initState();
   }

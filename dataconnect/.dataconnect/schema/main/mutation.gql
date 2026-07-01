@@ -45,14 +45,14 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `UserPrefence` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `UserPreference` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  userPrefence_insert(
+  userPreference_insert(
     """
     Data object to insert into the table.
     """
-    data: UserPrefence_Data!
-  ): UserPrefence_KeyOutput! @fdc_generated(from: "UserPrefence", purpose: INSERT_SINGLE)
+    data: UserPreference_Data!
+  ): UserPreference_KeyOutput! @fdc_generated(from: "UserPreference", purpose: INSERT_SINGLE)
   """
   ✨ Insert `CartItem` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -99,14 +99,14 @@ extend type Mutation {
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `UserPrefence` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `UserPreference` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  userPrefence_insertMany(
+  userPreference_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [UserPrefence_Data!]!
-  ): [UserPrefence_KeyOutput!]! @fdc_generated(from: "UserPrefence", purpose: INSERT_MULTIPLE)
+    data: [UserPreference_Data!]!
+  ): [UserPreference_KeyOutput!]! @fdc_generated(from: "UserPreference", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert or update a single `CartItem` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
@@ -153,14 +153,14 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput! @fdc_generated(from: "ProductField", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `UserPrefence` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPrefence`.
+  ✨ Insert or update a single `UserPreference` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreference`.
   """
-  userPrefence_upsert(
+  userPreference_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: UserPrefence_Data!
-  ): UserPrefence_KeyOutput! @fdc_generated(from: "UserPrefence", purpose: UPSERT_SINGLE)
+    data: UserPreference_Data!
+  ): UserPreference_KeyOutput! @fdc_generated(from: "UserPreference", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update `CartItem` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CartItem`.
   """
@@ -207,14 +207,14 @@ extend type Mutation {
     data: [ProductField_Data!]!
   ): [ProductField_KeyOutput!]! @fdc_generated(from: "ProductField", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `UserPrefence` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPrefence`.
+  ✨ Insert or update `UserPreference` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreference`.
   """
-  userPrefence_upsertMany(
+  userPreference_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [UserPrefence_Data!]!
-  ): [UserPrefence_KeyOutput!]! @fdc_generated(from: "UserPrefence", purpose: UPSERT_MULTIPLE)
+    data: [UserPreference_Data!]!
+  ): [UserPreference_KeyOutput!]! @fdc_generated(from: "UserPreference", purpose: UPSERT_MULTIPLE)
   """
   ✨ Update a single `CartItem` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CartItem` or `null` if not found.
   """
@@ -336,9 +336,9 @@ extend type Mutation {
     data: ProductField_Data!
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `UserPrefence` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPrefence` or `null` if not found.
+  ✨ Update a single `UserPreference` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPreference` or `null` if not found.
   """
-  userPrefence_update(
+  userPreference_update(
     """
     The unique ID of the object.
     """
@@ -347,18 +347,18 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: UserPrefence_Key
+    key: UserPreference_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: UserPrefence_FirstRow
+    first: UserPreference_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: UserPrefence_Data!
-  ): UserPrefence_KeyOutput @fdc_generated(from: "UserPrefence", purpose: UPDATE_SINGLE)
+    data: UserPreference_Data!
+  ): UserPreference_KeyOutput @fdc_generated(from: "UserPreference", purpose: UPDATE_SINGLE)
   """
   ✨ Update `CartItem` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -455,13 +455,13 @@ extend type Mutation {
     data: ProductField_Data!
   ): Int! @fdc_generated(from: "ProductField", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `UserPrefence` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `UserPreference` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  userPrefence_updateMany(
+  userPreference_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: UserPrefence_Filter
+    where: UserPreference_Filter
 
     """
     Set to true to update all rows.
@@ -471,8 +471,8 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: UserPrefence_Data!
-  ): Int! @fdc_generated(from: "UserPrefence", purpose: UPDATE_MULTIPLE)
+    data: UserPreference_Data!
+  ): Int! @fdc_generated(from: "UserPreference", purpose: UPDATE_MULTIPLE)
   """
   ✨ Delete a single `CartItem` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -569,9 +569,9 @@ extend type Mutation {
     first: ProductField_FirstRow
   ): ProductField_KeyOutput @fdc_generated(from: "ProductField", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `UserPrefence` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `UserPreference` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  userPrefence_delete(
+  userPreference_delete(
     """
     The unique ID of the object.
     """
@@ -580,13 +580,13 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: UserPrefence_Key
+    key: UserPreference_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: UserPrefence_FirstRow
-  ): UserPrefence_KeyOutput @fdc_generated(from: "UserPrefence", purpose: DELETE_SINGLE)
+    first: UserPreference_FirstRow
+  ): UserPreference_KeyOutput @fdc_generated(from: "UserPreference", purpose: DELETE_SINGLE)
   """
   ✨ Delete `CartItem` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
@@ -658,17 +658,17 @@ extend type Mutation {
     all: Boolean = false
   ): Int! @fdc_generated(from: "ProductField", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `UserPrefence` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `UserPreference` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  userPrefence_deleteMany(
+  userPreference_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: UserPrefence_Filter
+    where: UserPreference_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "UserPrefence", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "UserPreference", purpose: DELETE_MULTIPLE)
 }

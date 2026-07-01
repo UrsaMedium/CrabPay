@@ -95,9 +95,9 @@ extend type Query {
     first: ProductField_FirstRow
   ): ProductField @fdc_generated(from: "ProductField", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `UserPrefence` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `UserPreference` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  userPrefence(
+  userPreference(
     """
     The unique ID of the object.
     """
@@ -106,13 +106,13 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: UserPrefence_Key
+    key: UserPreference_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: UserPrefence_FirstRow
-  ): UserPrefence @fdc_generated(from: "UserPrefence", purpose: QUERY_SINGLE)
+    first: UserPreference_FirstRow
+  ): UserPreference @fdc_generated(from: "UserPreference", purpose: QUERY_SINGLE)
   """
   ✨ List `CartItem` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
@@ -352,18 +352,18 @@ extend type Query {
     having: ProductField_Having
   ): [ProductField!]! @fdc_generated(from: "ProductField", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `UserPrefence` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `UserPreference` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  userPrefences(
+  userPreferences(
     """
     Filter condition to narrow down the query results.
     """
-    where: UserPrefence_Filter
+    where: UserPreference_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [UserPrefence_Order!]
+    orderBy: [UserPreference_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -383,6 +383,6 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: UserPrefence_Having
-  ): [UserPrefence!]! @fdc_generated(from: "UserPrefence", purpose: QUERY_MULTIPLE)
+    having: UserPreference_Having
+  ): [UserPreference!]! @fdc_generated(from: "UserPreference", purpose: QUERY_MULTIPLE)
 }
