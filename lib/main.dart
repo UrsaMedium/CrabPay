@@ -1,6 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_outer_circle/outer_cart_handler.dart';
-import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
@@ -11,11 +10,12 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
+import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/admin_views/product_field_update_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';
@@ -98,17 +98,19 @@ final GoRouter _router = GoRouter(
     ),
 
     GoRoute(
-      path: '/store/card_view/:productId/:additionalSuffix',
+      path: '/store/card_view/:productId/:additionalSuffix/:index',
       name: 'card_view',
       pageBuilder: (context, state) {
         final productId = state.pathParameters['productId'] ?? '0';
         final additionalSuffix =
             state.pathParameters['additionalSuffix'] ?? '0';
+        final index = state.pathParameters['index'] ?? '0';
         return CustomTransitionPage(
           key: state.pageKey,
           child: CardView(
             productId: productId,
             additionalSuffix: additionalSuffix,
+            index: index,
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(

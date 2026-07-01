@@ -4,14 +4,16 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  final Function(BuildContext, String, String) openProductCardCallBack;
-  final Product product;
-  final String additionalSuffix;
+  final Function(BuildContext, String, String, String) openProductCardCallBack;
+  final Product product; //also tag identoty
+  final String additionalSuffix; //tag identoty
+  final String index; //tag identoty
   const ProductCard({
     super.key,
     required this.product,
     required this.openProductCardCallBack,
     required this.additionalSuffix,
+    required this.index,
   });
 
   @override
@@ -28,15 +30,20 @@ class ProductCard extends StatelessWidget {
         ),
         color: context.appColorScheme.surfaceContainer,
         child: GestureDetector(
-          onTap: () async {
-            openProductCardCallBack(context, product.id, additionalSuffix);
+          onTap: () {
+            openProductCardCallBack(
+              context,
+              product.id,
+              additionalSuffix,
+              index,
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(1.0),
             child: SizedBox(
               height: 200,
               child: Hero(
-                tag: 'card-hero-${product.id}-$additionalSuffix',
+                tag: 'card-hero-${product.id}-$additionalSuffix-$index',
                 createRectTween: (begin, end) =>
                     MaterialRectArcTween(begin: begin, end: end),
 

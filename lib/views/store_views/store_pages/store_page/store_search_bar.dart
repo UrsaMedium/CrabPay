@@ -5,12 +5,13 @@ import 'package:keyboard_detection/keyboard_detection.dart';
 
 class StoreSearchBarState extends StatefulWidget {
   final List<Product> products;
-  final Function(BuildContext, String, String) _openProductCardCallBack;
+  final Function(BuildContext, String, String, String) _openProductCardCallBack;
   final Function(List<Product>) _onSearchSubmitedCallBack;
   const StoreSearchBarState({
     super.key,
     required this.products,
-    required Function(BuildContext, String, String) openProductCardCallBack,
+    required Function(BuildContext, String, String, String)
+    openProductCardCallBack,
     required Function(List<Product>) onSearchSubmitedCallBack,
   }) : _onSearchSubmitedCallBack = onSearchSubmitedCallBack,
        _openProductCardCallBack = openProductCardCallBack;
@@ -170,12 +171,14 @@ class _StoreSearchBarStateState extends State<StoreSearchBarState> {
                 (option) => ListTile(
                   title: Text(option.name),
                   onTap: () {
+                    final index = widget.products.indexOf(option);
                     _keyBoardEventCanBeTriggered = false;
                     controller.closeView(option.name);
                     widget._openProductCardCallBack(
                       context,
                       option.id,
                       'storeSearch',
+                      '$index',
                     );
                   },
                 ),

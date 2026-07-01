@@ -1,18 +1,14 @@
 import 'dart:async';
-
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -43,27 +39,6 @@ class _HomePageViewState extends State<HomePageView> {
     }
   }
 
-  Future<void> _openProductCardCallBack(
-    BuildContext context,
-    String productId,
-    String additionalSuffix,
-  ) async {
-    await context.pushNamed(
-      'card_view',
-      pathParameters: {
-        'productId': productId,
-        'additionalSuffix': additionalSuffix,
-      },
-    );
-    if (context.mounted) {
-      context.read<CartBloc>().add(
-        CartEventFetchUserCartItemAmount(
-          userId: context.read<AuthBloc>().state.currentUser!.id,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -84,14 +59,28 @@ class _HomePageViewState extends State<HomePageView> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16, left: 24),
-                child: Text(
-                  'Featured',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: .w700,
-                    color: context.appColorScheme.secondary,
+              child: Align(
+                alignment: .centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12, left: 8, bottom: 8),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.appColorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: context.appColorScheme.outline),
+                    ),
+                    child: Text(
+                      'Featured',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: .w700,
+                        color: context.appColorScheme.onPrimaryContainer,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -119,7 +108,8 @@ class _HomePageViewState extends State<HomePageView> {
                         itemBuilder: (context, index) => ProductCard(
                           product: _featuredProducts![index],
                           additionalSuffix: 'featuredProduct',
-                          openProductCardCallBack: _openProductCardCallBack,
+                          openProductCardCallBack: openProductCardCallBack,
+                          index: '$index',
                         ),
                       )
                     : SliverToBoxAdapter(
@@ -137,14 +127,36 @@ class _HomePageViewState extends State<HomePageView> {
 
                 return userPreferencesId.isNotEmpty
                     ? SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4, left: 24),
-                          child: Text(
-                            'Your Favorite',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: .w700,
-                              color: context.appColorScheme.secondary,
+                        child: Align(
+                          alignment: .centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: 8,
+                              left: 8,
+                              bottom: 8,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 6,
+                              ),
+
+                              decoration: BoxDecoration(
+                                color: context.appColorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: context.appColorScheme.outline,
+                                ),
+                              ),
+                              child: Text(
+                                'Favorite',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: .w700,
+                                  color:
+                                      context.appColorScheme.onPrimaryContainer,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -153,10 +165,25 @@ class _HomePageViewState extends State<HomePageView> {
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text(
-                              'You favore nothing :(',
-                              style: TextStyle(
-                                color: context.appColorScheme.primary,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: context.appColorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: context.appColorScheme.outline,
+                                ),
+                              ),
+                              child: Text(
+                                'You Favore Nothing :(',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: .w700,
+                                  color: context.appColorScheme.secondary,
+                                ),
                               ),
                             ),
                           ),
@@ -166,12 +193,12 @@ class _HomePageViewState extends State<HomePageView> {
             ),
             BlocBuilder<DatabaseBloc, DatabaseState>(
               builder: (context, state) {
-                final userPreferencesId =
+                final userpreferencesProductId =
                     context.read<DatabaseBloc>().state.userPreferences ?? [];
-                if (userPreferencesId.isNotEmpty &&
+                if (userpreferencesProductId.isNotEmpty &&
                     (state.products?.isNotEmpty ?? false)) {
                   _userPreferences = [];
-                  for (var productId in userPreferencesId) {
+                  for (var productId in userpreferencesProductId) {
                     _userPreferences!.add(
                       state.products!.firstWhere(
                         (product) => product.id == productId,
@@ -187,10 +214,16 @@ class _HomePageViewState extends State<HomePageView> {
                         itemBuilder: (context, index) => ProductCard(
                           product: _userPreferences![index],
                           additionalSuffix: 'userPreferences',
-                          openProductCardCallBack: _openProductCardCallBack,
+                          openProductCardCallBack: openProductCardCallBack,
+                          index: '$index',
                         ),
                       )
-                    : SliverPadding(padding: EdgeInsetsGeometry.all(1));
+                    : SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 177),
+                          child: Text(''),
+                        ),
+                      );
               },
             ),
             SliverPadding(

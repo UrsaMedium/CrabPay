@@ -1,15 +1,12 @@
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
-import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/core/widgets/product_card.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class StorePageView extends StatefulWidget {
   const StorePageView({super.key});
@@ -34,27 +31,6 @@ class StorePageViewState extends State<StorePageView> {
   Future<void> _dataFetching(BuildContext context) async {
     if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
       context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
-    }
-  }
-
-  Future<void> _openProductCardCallBack(
-    BuildContext context,
-    String productId,
-    String additionalSuffix,
-  ) async {
-    await context.pushNamed(
-      'card_view',
-      pathParameters: {
-        'productId': productId,
-        'additionalSuffix': additionalSuffix,
-      },
-    );
-    if (context.mounted) {
-      context.read<CartBloc>().add(
-        CartEventFetchUserCartItemAmount(
-          userId: context.read<AuthBloc>().state.currentUser!.id,
-        ),
-      );
     }
   }
 
@@ -110,7 +86,8 @@ class StorePageViewState extends State<StorePageView> {
                         ? _products![index]
                         : _filteredProductList![index],
                     additionalSuffix: 'store',
-                    openProductCardCallBack: _openProductCardCallBack,
+                    openProductCardCallBack: openProductCardCallBack,
+                    index: '$index',
                   ),
                 );
               },
@@ -118,7 +95,7 @@ class StorePageViewState extends State<StorePageView> {
           ),
           StoreSearchBarState(
             products: _products ?? [],
-            openProductCardCallBack: _openProductCardCallBack,
+            openProductCardCallBack: openProductCardCallBack,
             onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
           ),
         ],

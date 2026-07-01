@@ -36,19 +36,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     context.read<AuthBloc>().add(AuthEventInitialize(context: context));
-    currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
-    if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
-      context.read<DatabaseBloc>().add(
-        DatabaseEventInitialize(userId: currentUser.id),
-      );
-      context.read<CartBloc>().add(
-        CartEventFetchUserCartItemAmount(userId: currentUser.id),
-      );
-    }
-    itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
+
     super.initState();
   }
 
@@ -74,147 +65,163 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: context.appColorScheme.surfaceContainerLowest
-            .withValues(alpha: .8),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: context.appColorScheme.surfaceBright,
-            width: 1,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+        if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
+          context.read<DatabaseBloc>().add(
+            DatabaseEventInitialize(userId: currentUser.id),
+          );
+          context.read<CartBloc>().add(
+            CartEventFetchUserCartItemAmount(userId: currentUser.id),
+          );
+        }
+        itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
+      },
+      child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: context.appColorScheme.surfaceContainerLowest
+              .withValues(alpha: .8),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: context.appColorScheme.surfaceBright,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
           ),
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
-        ),
-        title: Text('Crab Pay'),
-        actions: [
-          BlocBuilder<AuthBloc, AuthState>(
-            builder: (blocContext, state) {
-              if (state is AuthStateLoggedIn) {
-                return IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      useRootNavigator: false,
-                      showDragHandle: false,
-                      useSafeArea: false,
-                      context: blocContext,
-                      enableDrag: true,
-                      isScrollControlled: true,
-                      backgroundColor: blocContext
-                          .appColorScheme
-                          .surfaceContainerLow
-                          .withValues(alpha: .5),
+          title: Text('Crab Pay'),
+          actions: [
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (blocContext, state) {
+                if (state is AuthStateLoggedIn) {
+                  return IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        useRootNavigator: false,
+                        showDragHandle: false,
+                        useSafeArea: false,
+                        context: blocContext,
+                        enableDrag: true,
+                        isScrollControlled: true,
+                        backgroundColor: blocContext
+                            .appColorScheme
+                            .surfaceContainerLow
+                            .withValues(alpha: .5),
 
-                      builder: (BuildContext sheetContext) => Wrap(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const .only(
-                                topLeft: Radius.circular(40),
-                                topRight: Radius.circular(40),
+                        builder: (BuildContext sheetContext) => Wrap(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const .only(
+                                  topLeft: Radius.circular(40),
+                                  topRight: Radius.circular(40),
+                                ),
+                                border: .all(
+                                  color: blocContext
+                                      .appColorScheme
+                                      .surfaceContainerLow
+                                      .withValues(alpha: .5),
+                                ),
                               ),
-                              border: .all(
-                                color: blocContext
-                                    .appColorScheme
-                                    .surfaceContainerLow
-                                    .withValues(alpha: .5),
-                              ),
+                              child: ProfileView(),
                             ),
-                            child: ProfileView(),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.account_circle_rounded),
-                );
-              } else {
-                return IconButton(
-                  onPressed: () {
-                    context.push('login_view');
-                  },
-                  icon: Icon(Icons.account_circle_outlined),
-                );
-              }
-            },
-          ),
-        ],
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadiusGeometry.only(
-            bottomLeft: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-          ),
-          child: BackdropFilter(
-            filter: .blur(sigmaX: 8, sigmaY: 8),
-            child: Container(),
-          ),
-        ),
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _handlePageSwipe,
-        children: [
-          _buildIsolatedBranch(const HomePageView()),
-          _buildIsolatedBranch(const StorePageView()),
-          _buildIsolatedBranch(const AskPageView()),
-          _buildIsolatedBranch(const CartPageView()),
-        ],
-      ),
-      bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
-        builder: (context, state) {
-          return ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            child: BackdropFilter(
-              filter: .blur(sigmaX: 8, sigmaY: 8),
-              child: NavigationBar(
-                selectedIndex: widget.navigationShell.currentIndex,
-                onDestinationSelected: _handleNavBarTap,
-                backgroundColor: context.appColorScheme.surfaceContainer
-                    .withValues(alpha: .8),
-                destinations: [
-                  NavigationDestination(
-                    icon: Icon(Icons.home_outlined),
-                    selectedIcon: Icon(Icons.home_filled),
-                    label: 'Home',
-                  ),
-                  NavigationDestination(
-                    icon: Icon(Icons.storefront_outlined),
-                    selectedIcon: Icon(Icons.storefront),
-                    label: 'Store',
-                  ),
-                  NavigationDestination(
-                    icon: Icon(Icons.message_outlined),
-                    selectedIcon: Icon(Icons.message_rounded),
-                    label: 'Ask',
-                  ),
-                  BlocBuilder<CartBloc, CartState>(
-                    builder: (context, state) {
-                      itemsCount = state.userCartItemAmount ?? 0;
-                      return NavigationDestination(
-                        icon: Badge(
-                          backgroundColor: context.appColorScheme.error,
-                          textColor: context.appColorScheme.onError,
-                          label: Text(itemsCount.toString()),
-                          isLabelVisible: itemsCount > 0,
-                          child: Icon(Icons.shopping_cart_checkout_outlined),
+                          ],
                         ),
-                        selectedIcon: Badge(
-                          backgroundColor: context.appColorScheme.error,
-                          textColor: context.appColorScheme.onError,
-                          label: Text(itemsCount.toString()),
-                          isLabelVisible: itemsCount > 0,
-                          child: Icon(Icons.shopping_cart_rounded),
-                        ),
-                        label: 'Cart',
                       );
                     },
-                  ),
-                ],
-              ),
+                    icon: Icon(Icons.account_circle_rounded),
+                  );
+                } else {
+                  return IconButton(
+                    onPressed: () {
+                      context.push('login_view');
+                    },
+                    icon: Icon(Icons.account_circle_outlined),
+                  );
+                }
+              },
             ),
-          );
-        },
+          ],
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadiusGeometry.only(
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+            ),
+            child: BackdropFilter(
+              filter: .blur(sigmaX: 8, sigmaY: 8),
+              child: Container(),
+            ),
+          ),
+        ),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _handlePageSwipe,
+          children: [
+            _buildIsolatedBranch(const HomePageView()),
+            _buildIsolatedBranch(const StorePageView()),
+            _buildIsolatedBranch(const AskPageView()),
+            _buildIsolatedBranch(const CartPageView()),
+          ],
+        ),
+        bottomNavigationBar: BlocBuilder<HomeViewBloc, HomeViewState>(
+          builder: (context, state) {
+            return ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(18),
+              ),
+              child: BackdropFilter(
+                filter: .blur(sigmaX: 8, sigmaY: 8),
+                child: NavigationBar(
+                  selectedIndex: widget.navigationShell.currentIndex,
+                  onDestinationSelected: _handleNavBarTap,
+                  backgroundColor: context.appColorScheme.surfaceContainer
+                      .withValues(alpha: .8),
+                  destinations: [
+                    NavigationDestination(
+                      icon: Icon(Icons.home_outlined),
+                      selectedIcon: Icon(Icons.home_filled),
+                      label: 'Home',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.storefront_outlined),
+                      selectedIcon: Icon(Icons.storefront),
+                      label: 'Store',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.message_outlined),
+                      selectedIcon: Icon(Icons.message_rounded),
+                      label: 'Ask',
+                    ),
+                    BlocBuilder<CartBloc, CartState>(
+                      builder: (context, state) {
+                        itemsCount = state.userCartItemAmount ?? 0;
+                        return NavigationDestination(
+                          icon: Badge(
+                            backgroundColor: context.appColorScheme.error,
+                            textColor: context.appColorScheme.onError,
+                            label: Text(itemsCount.toString()),
+                            isLabelVisible: itemsCount > 0,
+                            child: Icon(Icons.shopping_cart_checkout_outlined),
+                          ),
+                          selectedIcon: Badge(
+                            backgroundColor: context.appColorScheme.error,
+                            textColor: context.appColorScheme.onError,
+                            label: Text(itemsCount.toString()),
+                            isLabelVisible: itemsCount > 0,
+                            child: Icon(Icons.shopping_cart_rounded),
+                          ),
+                          label: 'Cart',
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -248,7 +255,6 @@ class _HomeViewState extends State<HomeView> {
       HomeViewOnPageSwipeEvent(pageIndex: index),
     );
 
-    // Smoothly animate the page swap when a tab item is clicked
     await _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
