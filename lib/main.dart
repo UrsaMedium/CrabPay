@@ -165,8 +165,12 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => ProductFieldUpdateView(),
     ),
     GoRoute(
-      path: '/product_update_view',
-      builder: (context, state) => ProductUpdateView(),
+      path: '/product_update_view/:productId',
+      name: 'product_update_view',
+      builder: (context, state) {
+        final productId = state.pathParameters['productId'];
+        return ProductUpdateView(productId: productId);
+      },
     ),
     GoRoute(
       path: '/add_featured_product_view',

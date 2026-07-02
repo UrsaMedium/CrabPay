@@ -74,6 +74,16 @@ class CardView extends StatelessWidget {
                       icon: Icon(Icons.arrow_back),
                     ),
                     actions: [
+                      IconButton(
+                        onPressed: () {
+                          context.pushNamed(
+                            'product_update_view',
+                            pathParameters: {'productId': productId},
+                          );
+                        },
+                        icon: Icon(Icons.settings),
+                        color: context.appColorScheme.errorContainer,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0),
                         child: BlocBuilder<DatabaseBloc, DatabaseState>(
