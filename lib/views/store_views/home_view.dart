@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    context.read<AuthBloc>().add(AuthEventInitialize(context: context));
+    context.read<AuthBloc>().add(AuthEventInitialize());
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
@@ -67,16 +67,22 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
-        if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
-          context.read<DatabaseBloc>().add(
-            DatabaseEventInitialize(userId: currentUser.id),
-          );
-          context.read<CartBloc>().add(
-            CartEventFetchUserCartItemAmount(userId: currentUser.id),
-          );
+        if (state is AuthStateLoading) {
+          showLoading(context);
+        } else {
+          hideLoading();
+          currentUser =
+              context.read<AuthBloc>().state.currentUser ?? appTempUser;
+          if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
+            context.read<DatabaseBloc>().add(
+              DatabaseEventInitialize(currentUser: currentUser),
+            );
+            context.read<CartBloc>().add(
+              CartEventFetchUserCartItemAmount(userId: currentUser.id),
+            );
+          }
+          itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
         }
-        itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
       },
       child: Scaffold(
         extendBody: true,
@@ -156,6 +162,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         body: PageView(
+          physics: const CustomFasterPageScrollPhysics(),
           controller: _pageController,
           onPageChanged: _handlePageSwipe,
           children: [

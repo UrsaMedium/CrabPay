@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
@@ -9,8 +10,8 @@ abstract class DatabaseEvent {
 }
 
 class DatabaseEventInitialize implements DatabaseEvent {
-  final String userId;
-  DatabaseEventInitialize({required this.userId});
+  final AuthUser currentUser;
+  DatabaseEventInitialize({required this.currentUser});
 }
 
 // Product events

@@ -31,7 +31,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   void _reLoader(BuildContext context) {
     context.read<DatabaseBloc>().add(
-      DatabaseEventInitialize(userId: currentUser.id),
+      DatabaseEventInitialize(currentUser: currentUser),
     );
     //
     if (_refreshCompleter != null) {

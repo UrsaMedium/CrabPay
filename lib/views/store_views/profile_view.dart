@@ -1,6 +1,5 @@
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_binding_service.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,21 +39,19 @@ class ProfileView extends StatelessWidget {
                                 color: context.appColorScheme.primary,
                               ),
                             ),
-                            Text(
-                              appUserEmail() ??
-                                  'If you see me. You are in limbo',
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            // Text(
+                            //   appUserEmail() ??
+                            //       'If you see me. You are in limbo',
+                            //   textAlign: TextAlign.left,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
                           ],
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           context.read<CartBloc>().add(CartEventFlushData());
-                          context.read<AuthBloc>().add(
-                            AuthEventLogOut(context: context),
-                          );
+                          context.read<AuthBloc>().add(AuthEventLogOut());
                           Navigator.of(context, rootNavigator: true).pop();
                         },
                         style: ElevatedButton.styleFrom(

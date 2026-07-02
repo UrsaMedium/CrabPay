@@ -4,7 +4,7 @@ mutation AddProduct(
   $imageUrl: String!
   $name: String!
   $currencies: String!
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   product_insert(
     data: {
       id: $id
@@ -16,7 +16,8 @@ mutation AddProduct(
   )
 }
 
-mutation DeleteProduct($id: UUID!) @auth(level: PUBLIC) {
+mutation DeleteProduct($id: UUID!)
+@auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   product_delete(key: { id: $id })
 }
 
@@ -26,7 +27,7 @@ mutation UpdateProduct(
   $description: String
   $imageUrl: String
   $currencies: String
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   product_update(
     key: { id: $id }
     data: {
@@ -46,7 +47,7 @@ mutation AddProductField(
   $handler: String!
   $fieldName: String!
   $isPriceImage: Boolean!
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   productField_insert(
     data: {
       productId: $productId
@@ -60,7 +61,8 @@ mutation AddProductField(
   )
 }
 
-mutation DeleteProductField($id: UUID!) @auth(level: PUBLIC) {
+mutation DeleteProductField($id: UUID!)
+@auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   productField_delete(key: { id: $id })
 }
 
@@ -69,13 +71,14 @@ mutation AddCurrencies(
   $mainCurrency: String!
   $rub: Float!
   $usd: Float!
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   currencies_insert(
     data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
   )
 }
 
-mutation DeleteCurrencies($id: UUID!) @auth(level: PUBLIC) {
+mutation DeleteCurrencies($id: UUID!)
+@auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   currencies_delete(key: { id: $id })
 }
 
@@ -88,7 +91,7 @@ mutation productFieldUpdate(
   $handler: String!
   $fieldName: String!
   $isPriceImage: Boolean!
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   productField_update(
     id: $id
     data: {
@@ -109,14 +112,18 @@ mutation currenciesUpdate(
   $mainCurrency: String!
   $rub: Float!
   $usd: Float!
-) @auth(level: PUBLIC) {
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   currencies_update(
     id: $id
     data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
   )
 }
 
-mutation deleteCartItem($id: UUID!) @auth(level: PUBLIC) {
+mutation deleteCartItem($id: UUID!)
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   cartItem_delete(key: { id: $id })
 }
 
@@ -131,7 +138,11 @@ mutation addCartItem(
   $checkoutPrice: Float!
   $status: String!
   $comment: String
-) @auth(level: PUBLIC) {
+)
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   cartItem_insert(
     data: {
       id: $id
@@ -149,13 +160,14 @@ mutation addCartItem(
 }
 
 mutation addFeaturedProduct($id: UUID, $featuredProductId: UUID!)
-@auth(level: PUBLIC) {
+@auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   featuredProduct_insert(
     data: { id: $id, featuredProductId: $featuredProductId }
   )
 }
 
-mutation DeleteFeaturedProduct($featuredProductId: UUID!) @auth(level: PUBLIC) {
+mutation DeleteFeaturedProduct($featuredProductId: UUID!)
+@auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   featuredProduct_deleteMany(
     where: { featuredProductId: { eq: $featuredProductId } }
   )
@@ -165,14 +177,14 @@ mutation addUserPreference(
   $id: UUID
   $userId: String!
   $favoriteProductId: UUID!
-) @auth(level: PUBLIC) {
+) @auth(level: USER, insecureReason: "Available to authorized users") {
   userPreference_insert(
     data: { id: $id, userId: $userId, favoriteProductId: $favoriteProductId }
   )
 }
 
 mutation DeleteUserPreference($userId: String!, $favoriteProductId: UUID!)
-@auth(level: PUBLIC) {
+@auth(level: USER, insecureReason: "Available to authorized users") {
   userPreference_delete(
     first: {
       where: {
@@ -197,7 +209,7 @@ mutation UpdateCartItem(
   $status: String
   $comment: String
   $statusChangedAt: Timestamp
-) @auth(level: PUBLIC) {
+) @auth(level: USER, insecureReason: "Available to authorized users") {
   cartItem_update(
     key: { id: $id }
     data: {
@@ -216,7 +228,10 @@ mutation UpdateCartItem(
 }
 
 mutation DeleteLastAddedProductCartItem($userId: String!, $productId: UUID!)
-@auth(level: PUBLIC) {
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   _execute(
     sql: """
     DELETE FROM cart_item

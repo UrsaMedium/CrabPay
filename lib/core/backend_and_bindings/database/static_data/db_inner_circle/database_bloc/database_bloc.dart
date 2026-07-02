@@ -21,9 +21,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         final products = await databaseHandler.fetchAllProductsForAdmin();
         final featuredProducts = await databaseHandler
             .fetchAllFeaturedProducts();
-        final userPreferences = await databaseHandler.fetchUserPreferences(
-          event.userId,
-        );
+        List<String> userPreferences = [];
+        if (!event.currentUser.isAnonymous) {
+          userPreferences = await databaseHandler.fetchUserPreferences(
+            event.currentUser.id,
+          );
+        }
         emit(
           state.copyWith(
             products: products,
@@ -261,9 +264,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventFetchAllFeaturedProducts fired');
       print('---');
       try {
-        emit(
-          state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded),
-        );
+        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
         final featuredProducts = await databaseHandler
             .fetchAllFeaturedProducts();
         emit(
@@ -284,9 +285,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddFeaturedProduct fired');
       print('---');
       try {
-        emit(
-          state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded),
-        );
+        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
         await databaseHandler.addFeaturedProduct(event.productId);
         emit(state.copyWith(states: DatabaseStates.featuedProductsAdded));
       } catch (e) {
@@ -300,9 +299,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteFeaturedProduct fired');
       print('---');
       try {
-        emit(
-          state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded),
-        );
+        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
         await databaseHandler.deleteFeaturedProduct(event.productId);
         emit(state.copyWith(states: DatabaseStates.featuedProductsDeleted));
       } catch (e) {
@@ -345,9 +342,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddUserPreference fired');
       print('---');
       try {
-        emit(
-          state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded),
-        );
+        emit(state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded));
         await databaseHandler.addUserPreference(event.userId, event.productId);
         List<String> newPreference = state.userPreferences ?? [];
         newPreference.add(event.productId);
@@ -368,9 +363,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteUserPreference fired');
       print('---');
       try {
-        emit(
-          state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded),
-        );
+        emit(state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded));
         await databaseHandler.deleteUserPreference(
           event.userId,
           event.productId,

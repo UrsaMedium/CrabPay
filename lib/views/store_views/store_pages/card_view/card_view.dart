@@ -74,16 +74,17 @@ class CardView extends StatelessWidget {
                       icon: Icon(Icons.arrow_back),
                     ),
                     actions: [
-                      IconButton(
-                        onPressed: () {
-                          context.pushNamed(
-                            'product_update_view',
-                            pathParameters: {'productId': productId},
-                          );
-                        },
-                        icon: Icon(Icons.settings),
-                        color: context.appColorScheme.errorContainer,
-                      ),
+                      if (currentUser.isAdmin)
+                        IconButton(
+                          onPressed: () {
+                            context.pushNamed(
+                              'product_admin_panel_view',
+                              pathParameters: {'productId': productId},
+                            );
+                          },
+                          icon: Icon(Icons.settings),
+                          color: context.appColorScheme.errorContainer,
+                        ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0),
                         child: BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -103,24 +104,28 @@ class CardView extends StatelessWidget {
                             return IconButton(
                               iconSize: 32,
                               onPressed: () {
-                                if (beingLoaded) {
-                                  Fluttertoast.showToast(msg: 'Please, wait');
-                                } else {
-                                  if (isFavorite) {
-                                    context.read<DatabaseBloc>().add(
-                                      DatabaseEventDeleteUserPreference(
-                                        productId: productId,
-                                        userId: currentUser.id,
-                                      ),
-                                    );
+                                if (!currentUser.isAnonymous) {
+                                  if (beingLoaded) {
+                                    Fluttertoast.showToast(msg: 'Please, wait');
                                   } else {
-                                    context.read<DatabaseBloc>().add(
-                                      DatabaseEventAddUserPreference(
-                                        productId: productId,
-                                        userId: currentUser.id,
-                                      ),
-                                    );
+                                    if (isFavorite) {
+                                      context.read<DatabaseBloc>().add(
+                                        DatabaseEventDeleteUserPreference(
+                                          productId: productId,
+                                          userId: currentUser.id,
+                                        ),
+                                      );
+                                    } else {
+                                      context.read<DatabaseBloc>().add(
+                                        DatabaseEventAddUserPreference(
+                                          productId: productId,
+                                          userId: currentUser.id,
+                                        ),
+                                      );
+                                    }
                                   }
+                                } else {
+                                  Fluttertoast.showToast(msg: 'Sign In');
                                 }
                               },
                               icon: beingLoaded

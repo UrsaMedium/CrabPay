@@ -38,104 +38,109 @@ class _PasswordForgotViewState extends State<PasswordForgotView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              if (GoRouter.of(context).canPop()) {
-                _turnOffOnLeave();
-                context.pop();
-              }
-            },
-            icon: Icon(Icons.arrow_back),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthStateLoading) {showLoading(context);} else {hideLoading();}
+      },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                if (GoRouter.of(context).canPop()) {
+                  _turnOffOnLeave();
+                  context.pop();
+                }
+              },
+              icon: Icon(Icons.arrow_back),
+            ),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Reset Password',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                  color: context.appColorScheme.primaryFixedDim,
+          body: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Reset Password',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    color: context.appColorScheme.primaryFixedDim,
+                  ),
                 ),
-              ),
-              Container(height: 10),
-              Text(
-                'Enter your email address and we\'ll send you instructions to reset your password',
-              ),
-              Container(height: 40),
-              BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  return TextField(
-                    controller: _emailControler,
-                    autocorrect: false,
-                    autofocus: false,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (_) => _doRedOnError = false,
-                    decoration: InputDecoration(
-                      filled: true,
-                      label: Text('Email'),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: _doRedOnError
-                              ? context.appColorScheme.onError
-                              : context.appColorScheme.primaryFixed,
+                Container(height: 10),
+                Text(
+                  'Enter your email address and we\'ll send you instructions to reset your password',
+                ),
+                Container(height: 40),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return TextField(
+                      controller: _emailControler,
+                      autocorrect: false,
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (_) => _doRedOnError = false,
+                      decoration: InputDecoration(
+                        filled: true,
+                        label: Text('Email'),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: _doRedOnError
+                                ? context.appColorScheme.onError
+                                : context.appColorScheme.primaryFixed,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: _doRedOnError
-                              ? context.appColorScheme.onError
-                              : context.appColorScheme.primaryFixed,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: _doRedOnError
+                                ? context.appColorScheme.onError
+                                : context.appColorScheme.primaryFixed,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              Container(height: 40),
-              BlocListener<AuthBloc, AuthState>(
-                listener: (context, state) {
-                  if (GoRouterState.of(context).uri.toString() ==
-                      '/login_view/password-forgot_view') {
-                    if (state.bloodyAuthException == null) {
-                      context.go('/login_view');
-                    } else {
-                      _doRedOnError = true;
-                    }
-                  }
-                },
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                      AuthEventForgotPassword(
-                        email: _emailControler.text,
-                        context: context,
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: context.appColorScheme.primary,
-                    foregroundColor: context.appColorScheme.onPrimary,
-                    minimumSize: Size(double.infinity, 50),
-                  ),
-                  child: Text(
-                    'Send Reset Link',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Container(height: 40),
+                BlocListener<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (GoRouterState.of(context).uri.toString() ==
+                        '/login_view/password-forgot_view') {
+                      if (state.bloodyAuthException == null) {
+                        context.go('/login_view');
+                      } else {
+                        _doRedOnError = true;
+                      }
+                    }
+                  },
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                        AuthEventForgotPassword(email: _emailControler.text),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: context.appColorScheme.primary,
+                      foregroundColor: context.appColorScheme.onPrimary,
+                      minimumSize: Size(double.infinity, 50),
+                    ),
+                    child: Text(
+                      'Send Reset Link',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

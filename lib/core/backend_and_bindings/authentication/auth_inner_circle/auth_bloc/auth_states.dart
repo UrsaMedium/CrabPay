@@ -13,8 +13,20 @@ class AuthStateUninitialized extends AuthState {
   const AuthStateUninitialized();
 }
 
+class AuthStateLoading extends AuthState {
+  const AuthStateLoading();
+}
+
 class AuthStateLoggedIn extends AuthState {
   const AuthStateLoggedIn({required super.currentUser});
+}
+
+class AuthStateLoggedInWithUnverifiedEmail extends AuthState {
+  const AuthStateLoggedInWithUnverifiedEmail({required super.currentUser});
+}
+
+class AuthStateLoggedInAnonymously extends AuthState {
+  const AuthStateLoggedInAnonymously({required super.currentUser});
 }
 
 class AuthStateLoggedOut extends AuthState with EquatableMixin {

@@ -4,7 +4,7 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:firebase_core/firebase_core.dart';
 import 'package:crabpay/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'
-    show FirebaseAuth, FirebaseAuthException;
+    show EmailAuthProvider, FirebaseAuth, FirebaseAuthException, User;
 
 class FirebaseOuterInterface implements AuthInnerInterface {
   @override
@@ -13,11 +13,22 @@ class FirebaseOuterInterface implements AuthInnerInterface {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final user = currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null && currentUser.isAnonymous) {
+        final credentialsOfAnonUser = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+        await currentUser.linkWithCredential(credentialsOfAnonUser);
+      } else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      }
+
+      final user = await getUser();
       if (user != null) {
         return user;
       } else {
@@ -26,7 +37,8 @@ class FirebaseOuterInterface implements AuthInnerInterface {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw WeakPasswordAuthException();
-      } else if (e.code == 'email-already-in-use') {
+      } else if (e.code == 'email-already-in-use' ||
+          e.code == 'credential-already-in-use') {
         throw EmailAlreadyTakenException();
       } else if (e.code == 'invalid-email') {
         throw InvalidEmailAuthException();
@@ -38,13 +50,38 @@ class FirebaseOuterInterface implements AuthInnerInterface {
     }
   }
 
+  Future<bool> _checkIfAdmin(User user) async {
+    final tokenResult = await user.getIdTokenResult();
+    return tokenResult.claims?['admin'] == true;
+  }
+
   @override
-  AuthUser? get currentUser {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      return AuthUser.fromFirebase(user);
-    } else {
-      return null;
+  Future<AuthUser?> getUser() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final isAdmin = await _checkIfAdmin(user);
+        return AuthUser.fromFirebase(user, isAdmin: isAdmin);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AuthUser?> signInAnonymously() async {
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+      final anonUser = FirebaseAuth.instance.currentUser;
+      if (anonUser != null) {
+        return AuthUser.fromFirebase(anonUser, isAdmin: false);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -58,7 +95,7 @@ class FirebaseOuterInterface implements AuthInnerInterface {
         email: email,
         password: password,
       );
-      final user = currentUser;
+      final user = await getUser();
       if (user != null) {
         return user;
       } else {
@@ -90,7 +127,7 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   @override
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+    if (user != null && !user.isAnonymous) {
       await user.sendEmailVerification();
     } else {
       throw NoUserSignInException();

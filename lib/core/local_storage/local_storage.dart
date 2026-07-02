@@ -15,6 +15,8 @@ class LocalStorage {
       id: _preferences.getString('tempUserId')!,
       email: 'tempUser_id=${_preferences.getString('tempUserId')!}',
       isEmailVerified: false,
+      isAnonymous: true,
+      isAdmin: false,
     );
   }
 

@@ -372,7 +372,9 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                           CartItem cartItem = CartItem(
                                             id: 'id',
                                             userId: currentUser.id,
-                                            userName: currentUser.email,
+                                            userName:
+                                                currentUser.email ??
+                                                'AnonUser-id:${currentUser.id}',
                                             productId: widget.productId,
                                             productName: product!.name,
                                             purchaseData: retrievedData,

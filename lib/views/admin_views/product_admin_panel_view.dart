@@ -9,32 +9,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-class ProductUpdateView extends StatefulWidget {
-  static const routeName = 'product_update_view';
+class ProductAdminPanelView extends StatefulWidget {
+  static const routeName = 'product_admin_panel_view';
   final String? productId;
-  const ProductUpdateView({super.key, required this.productId});
+  const ProductAdminPanelView({super.key, required this.productId});
 
   @override
-  State<ProductUpdateView> createState() => _ProductUpdateViewState();
+  State<ProductAdminPanelView> createState() => _ProductAdminPanelViewState();
 }
 
-class _ProductUpdateViewState extends State<ProductUpdateView> {
+class _ProductAdminPanelViewState extends State<ProductAdminPanelView> {
   List<Product>? _products;
   List<DropdownMenuEntry<Product>>? _productDropDownMenuEntries;
-  TextEditingController _productDropDownMenuController =
+  final TextEditingController _productDropDownMenuController =
       TextEditingController();
   Product? _selectedProduct;
-  TextEditingController _imageNameController = TextEditingController();
+  final TextEditingController _imageNameController = TextEditingController();
   String _imageName = '';
-  TextEditingController _productNameController = TextEditingController();
+  final TextEditingController _productNameController = TextEditingController();
   String _productName = '';
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   String _descriptionText = '';
-  late bool _ignoreStates;
+  bool _ignoreStates = true;
 
   @override
   void initState() {
-    _ignoreStates = true;
     _products = context.read<DatabaseBloc>().state.products;
     if (widget.productId != null && _products != null) {
       _selectedProduct = _products!.firstWhere(
@@ -56,19 +55,15 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
   }
 
   void _resetPage() {
-    _productDropDownMenuController.dispose();
-    _imageNameController.dispose();
-    _productNameController.dispose();
-    _descriptionController.dispose();
+    _productDropDownMenuController.clear();
+    _imageNameController.clear();
+    _productNameController.clear();
+    _descriptionController.clear();
     _descriptionText = '';
     _productName = '';
     _imageName = '';
     _selectedProduct = null;
     _productDropDownMenuEntries = null;
-    _productDropDownMenuController = TextEditingController();
-    _descriptionController = TextEditingController();
-    _productNameController = TextEditingController();
-    _imageNameController = TextEditingController();
     //
     _products = context.read<DatabaseBloc>().state.products;
     _productDropDownMenuEntries = _createProductDropDownMenuEntries();

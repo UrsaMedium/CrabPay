@@ -2,7 +2,8 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_ci
 
 abstract class AuthInnerInterface {
   Future<void> initialize();
-  AuthUser? get currentUser;
+  Future<AuthUser?> getUser();
+  Future<AuthUser?> signInAnonymously();
   Future<AuthUser> logIn({required String email, required String password});
   Future<AuthUser> createUser({
     required String email,

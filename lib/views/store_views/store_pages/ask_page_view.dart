@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:flutter/material.dart';
@@ -9,32 +10,41 @@ class AskPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.paddingOf(context).top),
-        ElevatedButton(
-          onPressed: () {
-            context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
-          },
-          child: Text('fetch data'),
-        ),
-        ElevatedButton(
-          onPressed: () => context.push('/add_complete_product_product_view'),
-          child: Text('Add complete product'),
-        ),
-        ElevatedButton(
-          onPressed: () => context.push('/deleting_view'),
-          child: Text('Delete instances from DB'),
-        ),
-        ElevatedButton(
-          onPressed: () => context.push('/product_field_update_view'),
-          child: Text('Update Product Field'),
-        ),
-        ElevatedButton(
-          onPressed: () => context.push('/add_featured_product_view'),
-          child: Text('Add Featured Product'),
-        ),
-      ],
-    );
+    final currentUser = context.read<AuthBloc>().state.currentUser;
+    return currentUser?.isAdmin ?? false
+        ? Column(
+            children: [
+              SizedBox(height: MediaQuery.paddingOf(context).top),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<DatabaseBloc>().add(
+                    DatabaseEventFetchAllProducts(),
+                  );
+                },
+                child: Text('fetch data'),
+              ),
+              ElevatedButton(
+                onPressed: () =>
+                    context.push('/add_complete_product_product_view'),
+                child: Text('Add complete product'),
+              ),
+              ElevatedButton(
+                onPressed: () => context.push('/deleting_view'),
+                child: Text('Delete instances from DB'),
+              ),
+              ElevatedButton(
+                onPressed: () => context.push('/product_field_update_view'),
+                child: Text('Update Product Field'),
+              ),
+              ElevatedButton(
+                onPressed: () => context.push('/add_featured_product_view'),
+                child: Text('Add Featured Product'),
+              ),
+            ],
+          )
+        : Padding(
+            padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+            child: Center(child: Text('Hey :)')),
+          );
   }
 }

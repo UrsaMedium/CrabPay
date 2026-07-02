@@ -1,4 +1,8 @@
-query GetAllProductsQuery @auth(level: PUBLIC) {
+query GetAllProductsQuery
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   products {
     id
     name
@@ -8,7 +12,11 @@ query GetAllProductsQuery @auth(level: PUBLIC) {
   }
 }
 
-query GetProductFieldsQuery($productId: UUID!) @auth(level: PUBLIC) {
+query GetProductFieldsQuery($productId: UUID!)
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   productFields(where: { productId: { eq: $productId } }) {
     productId
     id
@@ -21,7 +29,11 @@ query GetProductFieldsQuery($productId: UUID!) @auth(level: PUBLIC) {
   }
 }
 
-query GetAllCurrenciesQuery @auth(level: PUBLIC) {
+query GetAllCurrenciesQuery
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   currenciess {
     id
     name
@@ -31,7 +43,11 @@ query GetAllCurrenciesQuery @auth(level: PUBLIC) {
   }
 }
 
-query GetCartItemsQuery($userId: String!) @auth(level: PUBLIC) {
+query GetCartItemsQuery($userId: String!)
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   cartItems(where: { userId: { eq: $userId } }) {
     id
     userId
@@ -48,14 +64,21 @@ query GetCartItemsQuery($userId: String!) @auth(level: PUBLIC) {
   }
 }
 
-query GetUserCartCount($userId: String!) @auth(level: PUBLIC) {
+query GetUserCartCount($userId: String!)
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   ofUserCartItemCounters(where: { userId: { eq: $userId } }) {
     userCartItemCount
   }
 }
 
 query GetProductCartCount($userId: String!, $productId: UUID!)
-@auth(level: PUBLIC) {
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   ofUserOfProductCartItemCounters(
     where: { userId: { eq: $userId }, productId: { eq: $productId } }
   ) {
@@ -63,14 +86,19 @@ query GetProductCartCount($userId: String!, $productId: UUID!)
   }
 }
 
-query GetFeaturedProducts @auth(level: PUBLIC) {
+query GetFeaturedProducts
+@auth(
+  level: USER_ANON
+  insecureReason: "Available to anon users through the app"
+) {
   featuredProducts {
     id
     featuredProductId
   }
 }
 
-query GetUserPreferences($userId: String!) @auth(level: PUBLIC) {
+query GetUserPreferences($userId: String!)
+@auth(level: USER, insecureReason: "Available to authorized users") {
   userPreferences(where: { userId: { eq: $userId } }) {
     favoriteProductId
   }

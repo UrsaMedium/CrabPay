@@ -16,7 +16,7 @@ class AuthBindingService implements AuthInnerInterface {
   }) => interface.createUser(email: email, password: password);
 
   @override
-  AuthUser? get currentUser => interface.currentUser;
+  Future<AuthUser?> getUser() => interface.getUser();
 
   @override
   Future<AuthUser> logIn({required String email, required String password}) =>
@@ -34,8 +34,11 @@ class AuthBindingService implements AuthInnerInterface {
   @override
   Future<void> sendPasswordReset({required String toEmail}) =>
       interface.sendPasswordReset(toEmail: toEmail);
+
+  @override
+  Future<AuthUser?> signInAnonymously() => interface.signInAnonymously();
 }
 
-String? appUserEmail() {
-  return AuthBindingService.fireBase().currentUser?.email;
-}
+// String? appUserEmail() {
+//   return AuthBindingService.fireBase().existingUser?.email;
+// }
