@@ -10,16 +10,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-class FieldAdminPanelView extends StatefulWidget {
+class UpdateFieldAdminPanelView extends StatefulWidget {
   static const routeName = 'update_field_admin_panel_view';
   final String? fieldId;
-  const FieldAdminPanelView({super.key, required this.fieldId});
+  const UpdateFieldAdminPanelView({super.key, required this.fieldId});
 
   @override
-  State<FieldAdminPanelView> createState() => _FieldAdminPanelViewState();
+  State<UpdateFieldAdminPanelView> createState() => _UpdateFieldAdminPanelViewState();
 }
 
-class _FieldAdminPanelViewState extends State<FieldAdminPanelView> {
+class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
   ProductField? _currentField;
   final TextEditingController _fieldName = TextEditingController();
   final TextEditingController _fieldOrder = TextEditingController();
@@ -56,7 +56,7 @@ class _FieldAdminPanelViewState extends State<FieldAdminPanelView> {
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/ask');
+                context.go('/');
               }
             },
             icon: Icon(Icons.arrow_back),

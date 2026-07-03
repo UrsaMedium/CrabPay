@@ -8,6 +8,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_outer_
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
+import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
 import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
@@ -173,7 +174,15 @@ final GoRouter _router = GoRouter(
       name: 'update_field_admin_panel_view',
       builder: (context, state) {
         final fieldId = state.pathParameters['fieldId'];
-        return FieldAdminPanelView(fieldId: fieldId);
+        return UpdateFieldAdminPanelView(fieldId: fieldId);
+      },
+    ),
+    GoRoute(
+      path: '/add_field_admin_panel_view/:productId',
+      name: 'add_field_admin_panel_view',
+      builder: (context, state) {
+        final productId = state.pathParameters['productId'];
+        return AddFieldAdminPanelView(productId: productId);
       },
     ),
     GoRoute(

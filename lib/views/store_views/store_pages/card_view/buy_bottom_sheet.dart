@@ -156,7 +156,12 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                       right: 3,
                       child: Row(
                         children: [
-                          Text('Field\'s order - ${field.order}  '),
+                          Text(
+                            'Field\'s order - ${field.order}',
+                            style: TextStyle(
+                              color: context.appColorScheme.errorContainer,
+                            ),
+                          ),
                           IconButton(
                             onPressed: () {
                               context.pushNamed(
@@ -223,41 +228,67 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                 ],
               ),
               Positioned(
-                top: 16,
+                top: 8,
                 right: 16,
-                child: ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(30),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      height: 44,
-                      width: 100,
-                      alignment: .center,
-                      padding: .only(left: 16, right: 16),
-                      decoration: BoxDecoration(
-                        color: precalculatedPrice == 0
-                            ? context.appColorScheme.surfaceContainerHigh
-                                  .withValues(alpha: .5)
-                            : context.appColorScheme.onPrimary.withValues(
-                                alpha: .5,
-                              ),
-                        borderRadius: BorderRadius.circular(30),
-                        border: BoxBorder.all(
-                          color: precalculatedPrice == 0
-                              ? context.appColorScheme.surfaceContainer
-                                    .withValues(alpha: .5)
-                              : context.appColorScheme.onPrimary,
+                child: Row(
+                  children: [
+                    if (context.read<AuthBloc>().state.currentUser?.isAdmin ??
+                        false)
+                      IconButton(
+                        onPressed: () {
+                          if (product != null) {
+                            context.pushNamed(
+                              'add_field_admin_panel_view',
+                              pathParameters: {'productId': product!.id},
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: 'Strange Error. Can\'t find product id',
+                            );
+                          }
+                        },
+                        icon: Icon(
+                          Icons.add,
+                          color: context.appColorScheme.errorContainer,
                         ),
                       ),
-                      child: Text(
-                        precalculatedPrice == 0
-                            ? '--'
-                            : '\$$precalculatedPrice',
-                        overflow: .clip,
-                        style: TextStyle(color: context.appColorScheme.primary),
+                    ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(30),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: Container(
+                          height: 44,
+                          width: 100,
+                          alignment: .center,
+                          padding: .only(left: 16, right: 16),
+                          decoration: BoxDecoration(
+                            color: precalculatedPrice == 0
+                                ? context.appColorScheme.surfaceContainerHigh
+                                      .withValues(alpha: .5)
+                                : context.appColorScheme.onPrimary.withValues(
+                                    alpha: .5,
+                                  ),
+                            borderRadius: BorderRadius.circular(30),
+                            border: BoxBorder.all(
+                              color: precalculatedPrice == 0
+                                  ? context.appColorScheme.surfaceContainer
+                                        .withValues(alpha: .5)
+                                  : context.appColorScheme.onPrimary,
+                            ),
+                          ),
+                          child: Text(
+                            precalculatedPrice == 0
+                                ? '--'
+                                : '\$$precalculatedPrice',
+                            overflow: .clip,
+                            style: TextStyle(
+                              color: context.appColorScheme.primary,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               Positioned(

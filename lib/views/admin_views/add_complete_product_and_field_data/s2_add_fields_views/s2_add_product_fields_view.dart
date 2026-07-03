@@ -102,7 +102,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
         return null;
       }
     }
-    if (imageChecker != 1) return null;
+    if (imageChecker != 1 || result.isEmpty) return null;
     return result;
   }
 
@@ -239,6 +239,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
 }
 
 class AField extends StatefulWidget {
+  final bool? dontUseRadio;
   final Function(ProductField) fieldIsImage;
   final Function(String, String) dataBridge;
   final Function(ProductField) deleteMe;
@@ -249,6 +250,7 @@ class AField extends StatefulWidget {
     required this.dataBridge,
     required this.deleteMe,
     required this.fieldIsImage,
+    this.dontUseRadio,
   });
 
   @override
@@ -260,14 +262,15 @@ class _AFieldState extends State<AField> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        InkWell(
-          onTap: () => widget.fieldIsImage(widget.field),
-          child: Icon(
-            widget.field.isPriceImage
-                ? Icons.radio_button_checked
-                : Icons.radio_button_off,
+        if (!(widget.dontUseRadio ?? false))
+          InkWell(
+            onTap: () => widget.fieldIsImage(widget.field),
+            child: Icon(
+              widget.field.isPriceImage
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off,
+            ),
           ),
-        ),
         Expanded(
           child: Stack(
             // key: ValueKey(field.fieldName),
