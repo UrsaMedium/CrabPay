@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
@@ -20,18 +19,20 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   List<Product>? _userPreferences;
   List<Product>? _featuredProducts;
-  late AuthUser currentUser;
+  // late AuthUser currentUser;
   Completer<void>? _refreshCompleter;
 
   @override
   void initState() {
-    currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    // currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     super.initState();
   }
 
   void _reLoader(BuildContext context) {
     context.read<DatabaseBloc>().add(
-      DatabaseEventInitialize(currentUser: currentUser),
+      DatabaseEventInitialize(
+        currentUser: context.read<AuthBloc>().state.currentUser ?? appTempUser,
+      ),
     );
     //
     if (_refreshCompleter != null) {

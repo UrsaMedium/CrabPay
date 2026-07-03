@@ -34,7 +34,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   List<String> functionDimentions = [];
   Product? product;
   ProductField? imageField;
-  late final AuthUser currentUser;
+  // late final AuthUser currentUser;
   int itemsCount = 0;
   bool everyFieldIsSatisfied = false;
   bool corectImageInput = false;
@@ -45,10 +45,11 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       (product) => product.id == widget.productId,
     );
     imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
-    currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+    // currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     context.read<CartBloc>().add(
       CartEventFetchProductCartItemAmount(
-        userId: currentUser.id,
+        userId:
+            context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
         productId: product!.id,
       ),
     );
@@ -113,7 +114,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   List<Widget> _fieldSlivers(List<ProductField> fields) {
     fields.sort((a, b) => a.order.compareTo(b.order));
-    final isAdmin = currentUser.isAdmin;
+    // final isAdmin =
+    //     context.read<AuthBloc>().state.currentUser?.isAdmin ?? false;
     List<Widget> result = [
       SliverToBoxAdapter(
         child: Padding(
@@ -139,7 +141,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     for (var field in fields) {
       result.add(
         SliverToBoxAdapter(
-          child: isAdmin
+          child: context.read<AuthBloc>().state.currentUser?.isAdmin ?? false
               ? Stack(
                   children: [
                     theAppWidgetBuilder(
@@ -150,20 +152,25 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                       priceImages: field.priceImages,
                       expectedData: field.expectedData,
                     ),
-                    if (isAdmin)
-                      Positioned(                        
-                        right: 3,
-                        child: IconButton(
-                          onPressed: () {
-                            context.pushNamed(
-                              'field_admin_panel_view',
-                              pathParameters: {'fieldId': field.id},
-                            );
-                          },
-                          icon: Icon(Icons.settings),
-                          color: context.appColorScheme.errorContainer,
-                        ),
+                    // if (context.read<AuthBloc>().state.currentUser?.isAdmin ?? false)
+                    Positioned(
+                      right: 3,
+                      child: Row(
+                        children: [
+                          Text('Field\'s order - ${field.order}  '),
+                          IconButton(
+                            onPressed: () {
+                              context.pushNamed(
+                                'field_admin_panel_view',
+                                pathParameters: {'fieldId': field.id},
+                              );
+                            },
+                            icon: Icon(Icons.settings),
+                            color: context.appColorScheme.errorContainer,
+                          ),
+                        ],
                       ),
+                    ),
                   ],
                 )
               : theAppWidgetBuilder(
@@ -300,7 +307,15 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                   if (itemsCount > 0) {
                                                     context.read<CartBloc>().add(
                                                       CartEventDeleteLastAddedProductCartItem(
-                                                        userId: currentUser.id,
+                                                        userId:
+                                                            context
+                                                                .read<
+                                                                  AuthBloc
+                                                                >()
+                                                                .state
+                                                                .currentUser
+                                                                ?.id ??
+                                                            appTempUser.id,
                                                         productId: product!.id,
                                                       ),
                                                     );
@@ -399,10 +414,20 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                         if (everyFieldIsSatisfied) {
                                           CartItem cartItem = CartItem(
                                             id: 'id',
-                                            userId: currentUser.id,
+                                            userId:
+                                                context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .currentUser
+                                                    ?.id ??
+                                                appTempUser.id,
                                             userName:
-                                                currentUser.email ??
-                                                'AnonUser-id:${currentUser.id}',
+                                                context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .currentUser
+                                                    ?.email ??
+                                                'AnonUser-id:${context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id}',
                                             productId: widget.productId,
                                             productName: product!.name,
                                             purchaseData: retrievedData,
@@ -414,7 +439,13 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                             context.read<CartBloc>().add(
                                               CartEventAddCartItem(
                                                 cartItem: cartItem,
-                                                userId: currentUser.id,
+                                                userId:
+                                                    context
+                                                        .read<AuthBloc>()
+                                                        .state
+                                                        .currentUser
+                                                        ?.id ??
+                                                    appTempUser.id,
                                               ),
                                             );
                                             Fluttertoast.showToast(

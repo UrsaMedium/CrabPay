@@ -10,8 +10,8 @@ class AskPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = context.read<AuthBloc>().state.currentUser;
-    return currentUser?.isAdmin ?? false
+    // final currentUser = context.read<AuthBloc>().state.currentUser;
+    return context.read<AuthBloc>().state.currentUser?.isAdmin ?? false
         ? Column(
             children: [
               SizedBox(height: MediaQuery.paddingOf(context).top),

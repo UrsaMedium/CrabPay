@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
@@ -22,27 +20,21 @@ class CartPageView extends StatefulWidget {
 class _CartPageViewState extends State<CartPageView> {
   List<CartItem>? cartItems;
   List<Product>? products;
-  late final AuthUser currentUser;
+  // late final AuthUser currentUser;
   bool isLoggedIn = false;
 
   @override
   void initState() {
     products = context.read<DatabaseBloc>().state.products;
-
-    if (context.read<AuthBloc>().state is AuthStateLoggedIn) {
-      currentUser = context.read<AuthBloc>().state.currentUser!;
-      isLoggedIn = true;
-    } else {
-      currentUser = appTempUser;
-      isLoggedIn = false;
-    }
-
     super.initState();
   }
 
   Future<void> detaFetching(BuildContext context) async {
     context.read<CartBloc>().add(
-      CartEventFetchCartItems(userId: currentUser.id),
+      CartEventFetchCartItems(
+        userId:
+            context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
+      ),
     );
   }
 
@@ -132,9 +124,8 @@ class _CartPageViewState extends State<CartPageView> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                               side: BorderSide(
-                                color: context
-                                    .appColorScheme
-                                    .surfaceContainerHigh,
+                                color:
+                                    context.appColorScheme.surfaceContainerHigh,
                                 width: 1,
                               ),
                             ),
@@ -177,10 +168,8 @@ class _CartPageViewState extends State<CartPageView> {
                                                 if (isLoggedIn) {
                                                   context.read<CartBloc>().add(
                                                     CartEventUserCheckoutItems(
-                                                      checkoutItems:
-                                                          cartItems!,
-                                                      status:
-                                                          'beingCheckedOut',
+                                                      checkoutItems: cartItems!,
+                                                      status: 'beingCheckedOut',
                                                     ),
                                                   );
                                                   detaFetching(context);
@@ -189,9 +178,8 @@ class _CartPageViewState extends State<CartPageView> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               context.appColorScheme.primary,
-                                          foregroundColor: context
-                                              .appColorScheme
-                                              .onPrimary,
+                                          foregroundColor:
+                                              context.appColorScheme.onPrimary,
                                           minimumSize: Size(
                                             double.maxFinite,
                                             50,

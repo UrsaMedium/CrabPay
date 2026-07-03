@@ -9,7 +9,6 @@ import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circ
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_event.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_state.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
@@ -31,7 +30,6 @@ class _HomeViewState extends State<HomeView> {
   late final PageController _pageController;
   bool _isSyncingByNavBarTap = false;
   int itemsCount = 0;
-  AuthUser? currentUser;
 
   @override
   void initState() {
@@ -71,14 +69,19 @@ class _HomeViewState extends State<HomeView> {
           showLoading(context);
         } else {
           hideLoading();
-          currentUser =
-              context.read<AuthBloc>().state.currentUser ?? appTempUser;
           if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
             context.read<DatabaseBloc>().add(
-              DatabaseEventInitialize(currentUser: currentUser!),
+              DatabaseEventInitialize(
+                currentUser:
+                    context.read<AuthBloc>().state.currentUser ?? appTempUser,
+              ),
             );
             context.read<CartBloc>().add(
-              CartEventFetchUserCartItemAmount(userId: currentUser!.id),
+              CartEventFetchUserCartItemAmount(
+                userId:
+                    context.read<AuthBloc>().state.currentUser?.id ??
+                    appTempUser.id,
+              ),
             );
           }
           itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;

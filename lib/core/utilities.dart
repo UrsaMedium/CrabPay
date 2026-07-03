@@ -68,10 +68,10 @@ Future<void> openProductCardCallBack(
   context.read<DatabaseBloc>().add(
     DatabaseEventFetchProductFields(productId: productId),
   );
-  final currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+  // final currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
   context.read<CartBloc>().add(
     CartEventFetchProductCartItemAmount(
-      userId: currentUser.id,
+      userId: context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
       productId: productId,
     ),
   );
@@ -87,7 +87,7 @@ Future<void> openProductCardCallBack(
   // refreshing cart counter
   if (context.mounted) {
     context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(userId: currentUser.id),
+      CartEventFetchUserCartItemAmount(userId: context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id),
     );
   }
 }
