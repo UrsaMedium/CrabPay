@@ -6,7 +6,6 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/buySheetShit/widget_factory.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -161,7 +160,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                           IconButton(
                             onPressed: () {
                               context.pushNamed(
-                                'field_admin_panel_view',
+                                'update_field_admin_panel_view',
                                 pathParameters: {'fieldId': field.id},
                               );
                             },

@@ -9,16 +9,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-class ProductAdminPanelView extends StatefulWidget {
-  static const routeName = 'product_admin_panel_view';
+class UpdateProductAdminPanelView extends StatefulWidget {
+  static const routeName = 'update_product_admin_panel_view';
   final String? productId;
-  const ProductAdminPanelView({super.key, required this.productId});
+  const UpdateProductAdminPanelView({super.key, required this.productId});
 
   @override
-  State<ProductAdminPanelView> createState() => _ProductAdminPanelViewState();
+  State<UpdateProductAdminPanelView> createState() => _UpdateProductAdminPanelViewState();
 }
 
-class _ProductAdminPanelViewState extends State<ProductAdminPanelView> {
+class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelView> {
   List<Product>? _products;
   List<DropdownMenuEntry<Product>>? _productDropDownMenuEntries;
   final TextEditingController _productDropDownMenuController =

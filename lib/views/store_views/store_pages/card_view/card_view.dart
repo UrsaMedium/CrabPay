@@ -77,7 +77,7 @@ class CardView extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             context.pushNamed(
-                              'product_admin_panel_view',
+                              'update_product_admin_panel_view',
                               pathParameters: {'productId': productId},
                             );
                           },

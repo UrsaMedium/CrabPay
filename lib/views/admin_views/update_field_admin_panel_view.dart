@@ -11,7 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class FieldAdminPanelView extends StatefulWidget {
-  static const routeName = 'field_admin_panel_view';
+  static const routeName = 'update_field_admin_panel_view';
   final String? fieldId;
   const FieldAdminPanelView({super.key, required this.fieldId});
 
