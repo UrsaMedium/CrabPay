@@ -113,6 +113,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   List<Widget> _fieldSlivers(List<ProductField> fields) {
     fields.sort((a, b) => a.order.compareTo(b.order));
+    final isAdmin = currentUser.isAdmin;
     List<Widget> result = [
       SliverToBoxAdapter(
         child: Padding(
@@ -138,14 +139,41 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     for (var field in fields) {
       result.add(
         SliverToBoxAdapter(
-          child: theAppWidgetBuilder(
-            collectedDataBridge: _onBottomSheetDataRetrieved,
-            context: context,
-            fieldName: field.fieldName,
-            handler: field.handler,
-            priceImages: field.priceImages,
-            expectedData: field.expectedData,
-          ),
+          child: isAdmin
+              ? Stack(
+                  children: [
+                    theAppWidgetBuilder(
+                      collectedDataBridge: _onBottomSheetDataRetrieved,
+                      context: context,
+                      fieldName: field.fieldName,
+                      handler: field.handler,
+                      priceImages: field.priceImages,
+                      expectedData: field.expectedData,
+                    ),
+                    if (isAdmin)
+                      Positioned(                        
+                        right: 3,
+                        child: IconButton(
+                          onPressed: () {
+                            context.pushNamed(
+                              'field_admin_panel_view',
+                              pathParameters: {'fieldId': field.id},
+                            );
+                          },
+                          icon: Icon(Icons.settings),
+                          color: context.appColorScheme.errorContainer,
+                        ),
+                      ),
+                  ],
+                )
+              : theAppWidgetBuilder(
+                  collectedDataBridge: _onBottomSheetDataRetrieved,
+                  context: context,
+                  fieldName: field.fieldName,
+                  handler: field.handler,
+                  priceImages: field.priceImages,
+                  expectedData: field.expectedData,
+                ),
         ),
       );
     }

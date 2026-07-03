@@ -85,4 +85,19 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<void> deleteUserPreference(String userId, String productId) =>
       dbHandler.deleteUserPreference(userId, productId);
+
+  @override
+  Future<void> updateProductField(
+    String fieldId,
+    int? order,
+    String? fieldName,
+    Map<String, double>? priceImages,
+    List<String>? expectedData,
+  ) => dbHandler.updateProductField(
+    fieldId,
+    order,
+    fieldName,
+    priceImages,
+    expectedData,
+  );
 }

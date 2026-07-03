@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
   late final PageController _pageController;
   bool _isSyncingByNavBarTap = false;
   int itemsCount = 0;
-  late final AuthUser currentUser;
+  AuthUser? currentUser;
 
   @override
   void initState() {
@@ -75,10 +75,10 @@ class _HomeViewState extends State<HomeView> {
               context.read<AuthBloc>().state.currentUser ?? appTempUser;
           if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
             context.read<DatabaseBloc>().add(
-              DatabaseEventInitialize(currentUser: currentUser),
+              DatabaseEventInitialize(currentUser: currentUser!),
             );
             context.read<CartBloc>().add(
-              CartEventFetchUserCartItemAmount(userId: currentUser.id),
+              CartEventFetchUserCartItemAmount(userId: currentUser!.id),
             );
           }
           itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;

@@ -48,7 +48,6 @@ class DataAndWidgetsPreperation {
 
     priceImageWidget = _everyPriceFunction(context);
     context.read<AdminBloc>().add(AdminEventPriceFillingDataIsPrepared());
-    print('1-----------------------');
   }
 
   Map<String, TextEditingController> _createTextEditingControllers() {

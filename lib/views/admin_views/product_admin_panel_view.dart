@@ -3,7 +3,7 @@ import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/dialogs/on_product_delete_dialog.dart';
+import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -118,7 +118,7 @@ class _ProductAdminPanelViewState extends State<ProductAdminPanelView> {
                                   Fluttertoast.showToast(msg: 'Please, wait');
                                 } else {
                                   final delete =
-                                      await showOnProductDelete(context) ??
+                                      await showOnDatabaseItemDelete(context) ??
                                       false;
                                   if (delete && context.mounted) {
                                     Fluttertoast.showToast(msg: 'Deleting');

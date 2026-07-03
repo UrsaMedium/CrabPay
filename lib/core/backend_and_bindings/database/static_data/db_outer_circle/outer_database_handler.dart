@@ -116,30 +116,15 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     String? description,
   ) async {
     try {
-      if (imageName != null) {
-        await retryer.retry(
-          () => CrabpayConnectorConnector.instance
-              .updateProduct(id: productId)
-              .imageUrl(imageName)
-              .execute(),
-        );
-      }
-      if (productName != null) {
-        await retryer.retry(
-          () => CrabpayConnectorConnector.instance
-              .updateProduct(id: productId)
-              .name(productName)
-              .execute(),
-        );
-      }
-      if (description != null) {
-        await retryer.retry(
-          () => CrabpayConnectorConnector.instance
-              .updateProduct(id: productId)
-              .description(description)
-              .execute(),
-        );
-      }
+      final mutation = CrabpayConnectorConnector.instance.updateProduct(
+        id: productId,
+      );
+
+      if (imageName != null) mutation.imageUrl(imageName);
+      if (productName != null) mutation.name(productName);
+      if (description != null) mutation.description(description);
+
+      await retryer.retry(() => mutation.execute());
     } catch (e) {
       rethrow;
     }
@@ -239,6 +224,34 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     } catch (e) {
       print('Failed to delete the field: $e');
       Fluttertoast.showToast(msg: 'Failed to delete the field: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateProductField(
+    String fieldId,
+    int? order,
+    String? fieldName,
+    Map<String, double>? priceImages,
+    List<String>? expectedData,
+  ) async {
+    try {
+      AnyValue? priceImagestoPush;
+      if (priceImages != null) {
+        priceImagestoPush = AnyValue(priceImages.cast<String, double>());
+      }
+
+      final mutation = CrabpayConnectorConnector.instance.updateProductField(
+        id: fieldId,
+      );
+      if (order != null) mutation.order(order);
+      if (fieldName != null) mutation.fieldName(fieldName);
+      if (priceImages != null) mutation.priceImages(priceImagestoPush);
+      if (expectedData != null) mutation.expectedData(expectedData);
+
+      await retryer.retry(() => mutation.execute());
+    } catch (e) {
       rethrow;
     }
   }

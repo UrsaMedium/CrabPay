@@ -44,7 +44,21 @@ class AskPageView extends StatelessWidget {
           )
         : Padding(
             padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-            child: Center(child: Text('Hey :)')),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  final user = context.read<AuthBloc>().state.currentUser;
+                  print('---');
+                  print('id - ${user?.id}');
+                  print('email - ${user?.email}');
+                  print('ver - ${user?.isEmailVerified}');
+                  print('anon - ${user?.isAnonymous}');
+                  print('admin - ${user?.isAdmin}');
+                  print('---');
+                },
+                child: Text('Hey :)'),
+              ),
+            ),
           );
   }
 }

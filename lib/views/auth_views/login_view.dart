@@ -56,7 +56,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthStateLoading) {showLoading(context);} else {hideLoading();}
+        // if (state is AuthStateLoading) {showLoading(context);} else {hideLoading();}
       },
       child: PopScope(
         canPop: false,

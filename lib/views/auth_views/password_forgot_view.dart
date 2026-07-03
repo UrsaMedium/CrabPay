@@ -40,7 +40,7 @@ class _PasswordForgotViewState extends State<PasswordForgotView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthStateLoading) {showLoading(context);} else {hideLoading();}
+        // if (state is AuthStateLoading) {showLoading(context);} else {hideLoading();}
       },
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

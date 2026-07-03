@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:crabpay/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show EmailAuthProvider, FirebaseAuth, FirebaseAuthException, User;
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseOuterInterface implements AuthInnerInterface {
   @override
@@ -59,6 +61,8 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   Future<AuthUser?> getUser() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
+
+      // final currentUsere = FirebaseAuth.instance.currentUser?.getIdToken(true);
       if (user != null) {
         final isAdmin = await _checkIfAdmin(user);
         return AuthUser.fromFirebase(user, isAdmin: isAdmin);
@@ -138,6 +142,17 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   Future<void> initialize() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await FirebaseAppCheck.instance.activate(
+      providerAndroid: kDebugMode
+          ? const AndroidDebugProvider()
+          : const AndroidPlayIntegrityProvider(),
+      providerApple: kDebugMode
+          ? const AppleDebugProvider()
+          : const AppleAppAttestProvider(),
+      providerWeb: kDebugMode
+          ? WebDebugProvider()
+          : ReCaptchaV3Provider('your-recaptcha-v3-site-key'),
     );
   }
 

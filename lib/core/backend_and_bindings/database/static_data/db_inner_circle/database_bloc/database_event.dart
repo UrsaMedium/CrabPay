@@ -71,6 +71,25 @@ class DatabaseEventDeleteProductField implements DatabaseEvent {
   DatabaseEventDeleteProductField({required this.productField});
 }
 
+class DatabaseEventUpdateProductField implements DatabaseEvent {
+  final ProductField oldField;
+  // String productId,
+  final int? order;
+  final String? fieldName;
+  // bool? isPriceImage,
+  // String handler,
+  final Map<String, double>? priceImages;
+  final List<String>? expectedData;
+
+  DatabaseEventUpdateProductField({
+    required this.oldField,
+    this.order,
+    this.fieldName,
+    this.priceImages,
+    this.expectedData,
+  });
+}
+
 // Currencies events
 // fetch All Currencies
 class DatabaseEventFetchAllCurrencies implements DatabaseEvent {}

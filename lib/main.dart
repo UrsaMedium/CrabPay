@@ -177,7 +177,7 @@ final GoRouter _router = GoRouter(
       path: '/field_admin_panel_view/:fieldId',
       name: 'field_admin_panel_view',
       builder: (context, state) {
-        final fieldId = state.pathParameters['productId'];
+        final fieldId = state.pathParameters['fieldId'];
         return FieldAdminPanelView(fieldId: fieldId);
       },
     ),

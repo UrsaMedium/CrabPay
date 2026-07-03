@@ -208,6 +208,48 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
+    on<DatabaseEventUpdateProductField>((event, emit) async {
+      print('---');
+      print('--- DatabaseEventUpdateProductField fired');
+      print('---');
+      try {
+        emit(state.copyWith(states: DatabaseStates.fieldsBeingLoaded));
+
+        for (var element in event.oldField.priceImages!.keys) {
+          print('$element --- ${event.oldField.priceImages![element]}');
+        }
+        print('---------------------');
+        Map<String, double>? priceImagesToPush;
+        if (event.priceImages != null) {
+          priceImagesToPush = {};
+          for (var nominalName in event.oldField.priceImages!.keys) {
+            if (event.priceImages![nominalName]! <= 0) {
+              priceImagesToPush[nominalName] =
+                  event.oldField.priceImages![nominalName]!;
+            } else {
+              priceImagesToPush[nominalName] = event.priceImages![nominalName]!;
+            }
+          }
+        }
+
+        for (var element in priceImagesToPush!.keys) {
+          print('$element --- ${priceImagesToPush[element]}');
+        }
+
+        await databaseHandler.updateProductField(
+          event.oldField.id,
+          event.order,
+          event.fieldName,
+          priceImagesToPush,
+          event.expectedData,
+        );
+        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
+        rethrow;
+      }
+    });
+
     // Currencies------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {

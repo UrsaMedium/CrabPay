@@ -1,16 +1,16 @@
 # Basic Usage
 
 ```dart
+CrabpayConnectorConnector.instance.GetAllProductsQuery().execute();
+CrabpayConnectorConnector.instance.GetProductFieldsQuery(getProductFieldsQueryVariables).execute();
+CrabpayConnectorConnector.instance.GetAllCurrenciesQuery().execute();
+CrabpayConnectorConnector.instance.GetCartItemsQuery(getCartItemsQueryVariables).execute();
+CrabpayConnectorConnector.instance.GetUserCartCount(getUserCartCountVariables).execute();
+CrabpayConnectorConnector.instance.GetProductCartCount(getProductCartCountVariables).execute();
+CrabpayConnectorConnector.instance.GetFeaturedProducts().execute();
+CrabpayConnectorConnector.instance.GetUserPreferences(getUserPreferencesVariables).execute();
 CrabpayConnectorConnector.instance.AddProduct(addProductVariables).execute();
 CrabpayConnectorConnector.instance.DeleteProduct(deleteProductVariables).execute();
-CrabpayConnectorConnector.instance.UpdateProduct(updateProductVariables).execute();
-CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).execute();
-CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariables).execute();
-CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
-CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
-CrabpayConnectorConnector.instance.productFieldUpdate(productFieldUpdateVariables).execute();
-CrabpayConnectorConnector.instance.currenciesUpdate(currenciesUpdateVariables).execute();
-CrabpayConnectorConnector.instance.deleteCartItem(deleteCartItemVariables).execute();
 
 ```
 
@@ -23,8 +23,8 @@ Optional fields can be discovered based on classes that have `Optional` object t
 This is an example of a mutation with an optional field:
 
 ```dart
-await CrabpayConnectorConnector.instance.UpdateCartItem({ ... })
-.userId(...)
+await CrabpayConnectorConnector.instance.UpdateProductField({ ... })
+.productId(...)
 .execute();
 ```
 

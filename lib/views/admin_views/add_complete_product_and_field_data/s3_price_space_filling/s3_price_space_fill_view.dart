@@ -18,11 +18,9 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
 
   @override
   void initState() {
-    print('s31-----------------------');
     context.read<AdminBloc>().add(
       AdminEventEntersPriceImageFilling(context: context),
     );
-    print('s32-----------------------');
     super.initState();
   }
 

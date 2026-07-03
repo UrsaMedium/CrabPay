@@ -246,3 +246,27 @@ mutation DeleteLastAddedProductCartItem($userId: String!, $productId: UUID!)
     params: [$userId, $productId]
   )
 }
+
+mutation UpdateProductField(
+  $id: UUID!,
+  $productId: UUID,
+  $order: Int,
+  $fieldName: String,
+  $isPriceImage: Boolean,
+  $handler: String,
+  $priceImages: Any,
+  $expectedData: [String!]
+) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
+  productField_update(
+    id: $id,
+    data: {
+      productId: $productId,
+      order: $order,
+      fieldName: $fieldName,
+      isPriceImage: $isPriceImage,
+      handler: $handler,
+      priceImages: $priceImages,
+      expectedData: $expectedData
+    }
+  )
+}

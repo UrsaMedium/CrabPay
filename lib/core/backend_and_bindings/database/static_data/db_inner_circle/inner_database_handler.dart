@@ -19,6 +19,16 @@ abstract class InnerDatabaseHandler {
   Future<void> fetchProductField(String id); // TODO
   Future<void> addProductField(ProductField field);
   Future<void> deleteProductField(ProductField field);
+  Future<void> updateProductField(
+    String fieldId,
+    // String productId,
+    int? order,
+    String? fieldName,
+    // bool? isPriceImage,
+    // String handler,
+    Map<String, double>? priceImages,
+    List<String>? expectedData,
+  );
   //currencies
   Future<List<Currencies>?> fetchAllCurencies();
   Future<void> addCurrencies(Currencies currencies);
