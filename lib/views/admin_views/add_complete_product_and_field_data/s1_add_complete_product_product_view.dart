@@ -28,7 +28,7 @@ class _AddCompleteProductProductViewState
   String? _description;
   String? _imageUrl;
   String? _productNameUI;
-  String? _currency;
+  // String? _currency;
   final TextEditingController _currencyController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -168,7 +168,7 @@ class _AddCompleteProductProductViewState
                             ),
                           ),
                         ),
-                        onSelected: (value) => _currency = value,
+                        // onSelected: (value) => _currency = value,
                         controller: _currencyController,
                         dropdownMenuEntries: currencies,
                       );

@@ -72,8 +72,7 @@ class CardView extends StatelessWidget {
                       icon: Icon(Icons.arrow_back),
                     ),
                     actions: [
-                      if (context.read<AuthBloc>().state.currentUser?.isAdmin ??
-                          false)
+                      if (context.read<AuthBloc>().state.currentUser.isAdmin)
                         IconButton(
                           onPressed: () {
                             context.pushNamed(
@@ -104,11 +103,10 @@ class CardView extends StatelessWidget {
                               iconSize: 32,
                               onPressed: () {
                                 if (!(context
-                                        .read<AuthBloc>()
-                                        .state
-                                        .currentUser
-                                        ?.isAnonymous ??
-                                    true)) {
+                                    .read<AuthBloc>()
+                                    .state
+                                    .currentUser
+                                    .isAnonymous)) {
                                   if (beingLoaded) {
                                     Fluttertoast.showToast(msg: 'Please, wait');
                                   } else {
@@ -116,26 +114,22 @@ class CardView extends StatelessWidget {
                                       context.read<DatabaseBloc>().add(
                                         DatabaseEventDeleteUserPreference(
                                           productId: productId,
-                                          userId:
-                                              context
-                                                  .read<AuthBloc>()
-                                                  .state
-                                                  .currentUser
-                                                  ?.id ??
-                                              appTempUser.id,
+                                          userId: context
+                                              .read<AuthBloc>()
+                                              .state
+                                              .currentUser
+                                              .id,
                                         ),
                                       );
                                     } else {
                                       context.read<DatabaseBloc>().add(
                                         DatabaseEventAddUserPreference(
                                           productId: productId,
-                                          userId:
-                                              context
-                                                  .read<AuthBloc>()
-                                                  .state
-                                                  .currentUser
-                                                  ?.id ??
-                                              appTempUser.id,
+                                          userId: context
+                                              .read<AuthBloc>()
+                                              .state
+                                              .currentUser
+                                              .id,
                                         ),
                                       );
                                     }

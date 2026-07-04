@@ -117,7 +117,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(state.copyWith(isStreaming: IsStreaming.no));
     });
 
-    on<CartEventFlushData>((event, emit) => emit(state.flushData()));
+    on<CartEventFlushData>((event, emit) {
+      emit(
+        state.copyWith(
+          allUserCartItems: null,
+          cartItemToPush: null,
+          cartItems: null,
+          cartItemsFromSignedOutUser: null,
+          isStreaming: null,
+          productCartItemAmount: null,
+          userCartItemAmount: null,
+          states: CartStates.empty,
+        ),
+      );
+    });
 
     on<CartEventFetchUserCartItemAmount>((event, emit) async {
       try {

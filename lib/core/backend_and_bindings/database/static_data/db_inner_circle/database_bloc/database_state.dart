@@ -7,6 +7,8 @@ enum DatabaseStates {
   initialization,
   initialized,
   notInitialized,
+  flushed,
+  fail,
   //
   productsBeingLoaded,
   productsFetched,

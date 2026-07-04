@@ -24,7 +24,7 @@ abstract class InnerDatabaseHandler {
     // String productId,
     int? order,
     String? fieldName,
-    // bool? isPriceImage,
+    bool? isPriceImage,
     // String handler,
     Map<String, double>? priceImages,
     List<String>? expectedData,

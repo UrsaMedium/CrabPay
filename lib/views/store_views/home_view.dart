@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_event.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_state.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
@@ -66,25 +67,22 @@ class _HomeViewState extends State<HomeView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthStateLoading) {
-          showLoading(context);
+          GlobalLoadingScreen().show();
         } else {
-          hideLoading();
-          if (context.read<DatabaseBloc>().state.products?.isEmpty ?? true) {
-            context.read<DatabaseBloc>().add(
-              DatabaseEventInitialize(
-                currentUser:
-                    context.read<AuthBloc>().state.currentUser ?? appTempUser,
-              ),
-            );
-            context.read<CartBloc>().add(
-              CartEventFetchUserCartItemAmount(
-                userId:
-                    context.read<AuthBloc>().state.currentUser?.id ??
-                    appTempUser.id,
-              ),
-            );
-          }
-          itemsCount = context.read<CartBloc>().state.userCartItemAmount ?? 0;
+          context.read<CartBloc>().add(CartEventFlushData());
+          context.read<DatabaseBloc>().add(DatabaseEventFlushData());
+          context.read<DatabaseBloc>().add(
+            DatabaseEventInitialize(
+              currentUser: context.read<AuthBloc>().state.currentUser,
+            ),
+          );
+          context.read<CartBloc>().add(
+            CartEventFetchCartItems(
+              userId: context.read<AuthBloc>().state.currentUser.id,
+            ),
+          );
+          // Navigator.of(context, rootNavigator: true).pop();
+          GlobalLoadingScreen().hide();
         }
       },
       child: Scaffold(

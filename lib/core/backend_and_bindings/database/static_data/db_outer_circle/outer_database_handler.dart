@@ -233,24 +233,42 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
     String fieldId,
     int? order,
     String? fieldName,
+    bool? isPriceImage,
     Map<String, double>? priceImages,
     List<String>? expectedData,
   ) async {
     try {
-      AnyValue? priceImagestoPush;
-      if (priceImages != null) {
-        priceImagestoPush = AnyValue(priceImages.cast<String, double>());
-      }
-
       final mutation = CrabpayConnectorConnector.instance.updateProductField(
         id: fieldId,
       );
-      if (order != null) mutation.order(order);
-      if (fieldName != null) mutation.fieldName(fieldName);
-      if (priceImages != null) mutation.priceImages(priceImagestoPush);
-      if (expectedData != null) mutation.expectedData(expectedData);
+      if (isPriceImage == null) {
+        AnyValue? priceImagesToPush;
+        if (priceImages != null) {
+          priceImagesToPush = AnyValue(priceImages.cast<String, double>());
+        }
 
-      await retryer.retry(() => mutation.execute());
+        if (order != null) mutation.order(order);
+        if (fieldName != null) mutation.fieldName(fieldName);
+        if (priceImages != null) mutation.priceImages(priceImagesToPush);
+        if (expectedData != null) mutation.expectedData(expectedData);
+
+        await retryer.retry(() => mutation.execute());
+      } else if (isPriceImage) {
+        if (priceImages != null) {
+          AnyValue? priceImagesToPush;
+          priceImagesToPush = AnyValue(priceImages.cast<String, double>());
+          retryer.retry(
+            () => mutation
+                .isPriceImage(true)
+                .priceImages(priceImagesToPush)
+                .execute(),
+          );
+        }
+      } else {
+        retryer.retry(
+          () => mutation.isPriceImage(false).priceImages(null).execute(),
+        );
+      }
     } catch (e) {
       rethrow;
     }

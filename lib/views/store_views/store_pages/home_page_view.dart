@@ -24,14 +24,13 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   void initState() {
-    // currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     super.initState();
   }
 
   void _reLoader(BuildContext context) {
     context.read<DatabaseBloc>().add(
       DatabaseEventInitialize(
-        currentUser: context.read<AuthBloc>().state.currentUser ?? appTempUser,
+        currentUser: context.read<AuthBloc>().state.currentUser,
       ),
     );
     //

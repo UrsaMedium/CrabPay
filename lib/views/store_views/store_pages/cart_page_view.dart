@@ -20,7 +20,6 @@ class CartPageView extends StatefulWidget {
 class _CartPageViewState extends State<CartPageView> {
   List<CartItem>? cartItems;
   List<Product>? products;
-  // late final AuthUser currentUser;
   bool isLoggedIn = false;
 
   @override
@@ -32,8 +31,7 @@ class _CartPageViewState extends State<CartPageView> {
   Future<void> detaFetching(BuildContext context) async {
     context.read<CartBloc>().add(
       CartEventFetchCartItems(
-        userId:
-            context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
+        userId: context.read<AuthBloc>().state.currentUser.id,
       ),
     );
   }

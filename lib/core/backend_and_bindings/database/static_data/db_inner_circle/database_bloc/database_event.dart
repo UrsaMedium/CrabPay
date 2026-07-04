@@ -14,6 +14,8 @@ class DatabaseEventInitialize implements DatabaseEvent {
   DatabaseEventInitialize({required this.currentUser});
 }
 
+class DatabaseEventFlushData implements DatabaseEvent {}
+
 // Product events
 // fetch all Poducts
 class DatabaseEventFetchAllProducts implements DatabaseEvent {}
@@ -76,7 +78,7 @@ class DatabaseEventUpdateProductField implements DatabaseEvent {
   // String productId,
   final int? order;
   final String? fieldName;
-  // bool? isPriceImage,
+  final bool? isPriceImage;
   // String handler,
   final Map<String, double>? priceImages;
   final List<String>? expectedData;
@@ -85,6 +87,7 @@ class DatabaseEventUpdateProductField implements DatabaseEvent {
     required this.oldField,
     this.order,
     this.fieldName,
+    this.isPriceImage,
     this.priceImages,
     this.expectedData,
   });

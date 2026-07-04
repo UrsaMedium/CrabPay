@@ -1,7 +1,11 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -39,20 +43,12 @@ class ProfileView extends StatelessWidget {
                                 color: context.appColorScheme.primary,
                               ),
                             ),
-                            // Text(
-                            //   appUserEmail() ??
-                            //       'If you see me. You are in limbo',
-                            //   textAlign: TextAlign.left,
-                            //   overflow: TextOverflow.ellipsis,
-                            // ),
                           ],
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          context.read<CartBloc>().add(CartEventFlushData());
-                          context.read<AuthBloc>().add(AuthEventLogOut());
-                          Navigator.of(context, rootNavigator: true).pop();
+                          context.read<AuthBloc>().add(AuthEventInitialize());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.appColorScheme.primary,

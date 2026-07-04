@@ -41,6 +41,25 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
+    on<DatabaseEventFlushData>((event, emit) {
+      try {
+        emit(
+          state.copyWith(
+            productFields: null,
+            userPreferences: null,
+            currencies: null,
+            featuredProducts: null,
+            products: null,
+            recentlyAddedProduct: null,
+            states: DatabaseStates.flushed,
+          ),
+        );
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.fail));
+        rethrow;
+      }
+    });
+
     // Products------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch all Poducts
     on<DatabaseEventFetchAllProducts>((event, emit) async {
@@ -240,6 +259,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           event.oldField.id,
           event.order,
           event.fieldName,
+          event.isPriceImage,
           priceImagesToPush,
           event.expectedData,
         );

@@ -46,9 +46,6 @@ class CartState {
     this.userCartItemAmount,
   });
 
-  CartState flushData() {
-    return CartState();
-  }
 
   CartState copyWith({
     List<CartItem>? cartItems,

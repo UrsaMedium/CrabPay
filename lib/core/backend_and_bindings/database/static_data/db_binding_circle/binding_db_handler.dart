@@ -91,12 +91,14 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
     String fieldId,
     int? order,
     String? fieldName,
+    bool? isPriceImage,
     Map<String, double>? priceImages,
     List<String>? expectedData,
   ) => dbHandler.updateProductField(
     fieldId,
     order,
     fieldName,
+    isPriceImage,
     priceImages,
     expectedData,
   );

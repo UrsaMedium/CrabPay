@@ -11,7 +11,7 @@ class AskPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final currentUser = context.read<AuthBloc>().state.currentUser;
-    return context.read<AuthBloc>().state.currentUser?.isAdmin ?? false
+    return context.read<AuthBloc>().state.currentUser.isAdmin
         ? Column(
             children: [
               SizedBox(height: MediaQuery.paddingOf(context).top),
@@ -49,11 +49,11 @@ class AskPageView extends StatelessWidget {
                 onPressed: () {
                   final user = context.read<AuthBloc>().state.currentUser;
                   print('---');
-                  print('id - ${user?.id}');
-                  print('email - ${user?.email}');
-                  print('ver - ${user?.isEmailVerified}');
-                  print('anon - ${user?.isAnonymous}');
-                  print('admin - ${user?.isAdmin}');
+                  print('id - ${user.id}');
+                  print('email - ${user.email}');
+                  print('ver - ${user.isEmailVerified}');
+                  print('anon - ${user.isAnonymous}');
+                  print('admin - ${user.isAdmin}');
                   print('---');
                 },
                 child: Text('Hey :)'),

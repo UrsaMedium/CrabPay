@@ -21,23 +21,23 @@ extension ContextExtensions on BuildContext {
 AuthUser appTempUser = LocalStorage.tempUser;
 
 //loading
-final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
-OverlayEntry? _overlayEntry;
+// final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
+// OverlayEntry? _overlayEntry;
 
-void showLoading(BuildContext context) {
-  _overlayEntry = OverlayEntry(
-    builder: (context) => Container(
-      color: context.appColorScheme.onPrimary,
-      child: const Center(child: CircularProgressIndicator()),
-    ),
-  );
-  Overlay.of(context).insert(_overlayEntry!);
-}
+// void showLoading(BuildContext context) {
+//   _overlayEntry = OverlayEntry(
+//     builder: (context) => Container(
+//       color: context.appColorScheme.onPrimary,
+//       child: const Center(child: CircularProgressIndicator()),
+//     ),
+//   );
+//   Overlay.of(context).insert(_overlayEntry!);
+// }
 
-void hideLoading() {
-  _overlayEntry?.remove();
-  _overlayEntry = null;
-}
+// void hideLoading() {
+//   _overlayEntry?.remove();
+//   _overlayEntry = null;
+// }
 
 void showScnackBarMessege(BuildContext context, String messege) {
   // ignore: avoid_print
@@ -71,7 +71,7 @@ Future<void> openProductCardCallBack(
   // final currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
   context.read<CartBloc>().add(
     CartEventFetchProductCartItemAmount(
-      userId: context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
+      userId: context.read<AuthBloc>().state.currentUser.id,
       productId: productId,
     ),
   );
@@ -87,7 +87,7 @@ Future<void> openProductCardCallBack(
   // refreshing cart counter
   if (context.mounted) {
     context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(userId: context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id),
+      CartEventFetchUserCartItemAmount(userId: context.read<AuthBloc>().state.currentUser.id),
     );
   }
 }

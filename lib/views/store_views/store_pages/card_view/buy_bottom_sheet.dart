@@ -33,7 +33,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
   List<String> functionDimentions = [];
   Product? product;
   ProductField? imageField;
-  // late final AuthUser currentUser;
   int itemsCount = 0;
   bool everyFieldIsSatisfied = false;
   bool corectImageInput = false;
@@ -44,11 +43,10 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
       (product) => product.id == widget.productId,
     );
     imageField = widget.productFields.firstWhere((field) => field.isPriceImage);
-    // currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
     context.read<CartBloc>().add(
       CartEventFetchProductCartItemAmount(
         userId:
-            context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id,
+            context.read<AuthBloc>().state.currentUser.id,
         productId: product!.id,
       ),
     );
@@ -64,8 +62,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
           final dataFromIamgeField = retrievedData[imageField!.fieldName];
           final imageCoefficient =
               imageField!.priceImages![imageField!.fieldName] ?? 0;
-          precalculatedPrice =
-              double.tryParse(dataFromIamgeField!) ?? 0 * imageCoefficient;
+          double fromField = double.tryParse(dataFromIamgeField ?? '0') ?? 0;
+          precalculatedPrice = fromField * imageCoefficient;
           if (precalculatedPrice > 0) {
             corectImageInput = true;
           } else {
@@ -113,8 +111,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
 
   List<Widget> _fieldSlivers(List<ProductField> fields) {
     fields.sort((a, b) => a.order.compareTo(b.order));
-    // final isAdmin =
-    //     context.read<AuthBloc>().state.currentUser?.isAdmin ?? false;
     List<Widget> result = [
       SliverToBoxAdapter(
         child: Padding(
@@ -140,7 +136,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
     for (var field in fields) {
       result.add(
         SliverToBoxAdapter(
-          child: context.read<AuthBloc>().state.currentUser?.isAdmin ?? false
+          child: context.read<AuthBloc>().state.currentUser.isAdmin
               ? Stack(
                   children: [
                     theAppWidgetBuilder(
@@ -151,7 +147,6 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                       priceImages: field.priceImages,
                       expectedData: field.expectedData,
                     ),
-                    // if (context.read<AuthBloc>().state.currentUser?.isAdmin ?? false)
                     Positioned(
                       right: 3,
                       child: Row(
@@ -232,25 +227,46 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                 right: 16,
                 child: Row(
                   children: [
-                    if (context.read<AuthBloc>().state.currentUser?.isAdmin ??
-                        false)
-                      IconButton(
-                        onPressed: () {
-                          if (product != null) {
-                            context.pushNamed(
-                              'add_field_admin_panel_view',
-                              pathParameters: {'productId': product!.id},
-                            );
-                          } else {
-                            Fluttertoast.showToast(
-                              msg: 'Strange Error. Can\'t find product id',
-                            );
-                          }
-                        },
-                        icon: Icon(
-                          Icons.add,
-                          color: context.appColorScheme.errorContainer,
-                        ),
+                    if (context.read<AuthBloc>().state.currentUser.isAdmin)
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (product != null) {
+                                context.pushNamed(
+                                  'reset_price_image_field_admin_panel_view',
+                                  pathParameters: {'productId': product!.id},
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: 'Strange Error. Can\'t find product id',
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.price_check_rounded,
+                              color: context.appColorScheme.errorContainer,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (product != null) {
+                                context.pushNamed(
+                                  'add_field_admin_panel_view',
+                                  pathParameters: {'productId': product!.id},
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: 'Strange Error. Can\'t find product id',
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: context.appColorScheme.errorContainer,
+                            ),
+                          ),
+                        ],
                       ),
                     ClipRRect(
                       borderRadius: BorderRadiusGeometry.circular(30),
@@ -344,8 +360,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                                 >()
                                                                 .state
                                                                 .currentUser
-                                                                ?.id ??
-                                                            appTempUser.id,
+                                                                .id,
                                                         productId: product!.id,
                                                       ),
                                                     );
@@ -449,15 +464,14 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                     .read<AuthBloc>()
                                                     .state
                                                     .currentUser
-                                                    ?.id ??
-                                                appTempUser.id,
+                                                    .id,
                                             userName:
                                                 context
                                                     .read<AuthBloc>()
                                                     .state
                                                     .currentUser
-                                                    ?.email ??
-                                                'AnonUser-id:${context.read<AuthBloc>().state.currentUser?.id ?? appTempUser.id}',
+                                                    .email ??
+                                                'AnonUser-id:${context.read<AuthBloc>().state.currentUser.id}',
                                             productId: widget.productId,
                                             productName: product!.name,
                                             purchaseData: retrievedData,
@@ -474,8 +488,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                         .read<AuthBloc>()
                                                         .state
                                                         .currentUser
-                                                        ?.id ??
-                                                    appTempUser.id,
+                                                        .id,
                                               ),
                                             );
                                             Fluttertoast.showToast(
