@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_state.dart';
 // import 'package:uuid/uuid.dart';
 // import 'package:uuid/v4.dart';
 

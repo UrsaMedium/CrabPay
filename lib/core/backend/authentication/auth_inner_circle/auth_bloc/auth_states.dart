@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 

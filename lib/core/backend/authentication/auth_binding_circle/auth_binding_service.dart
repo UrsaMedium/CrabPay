@@ -1,6 +1,6 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_inner_interface.dart';
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_outer_circle/firebase_outer_interface.dart';
 
 class AuthBindingService implements AuthInnerInterface {
   final AuthInnerInterface interface;

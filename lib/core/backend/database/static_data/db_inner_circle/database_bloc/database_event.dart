@@ -1,7 +1,7 @@
-import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:flutter/widgets.dart';
 
 @immutable
