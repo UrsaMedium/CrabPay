@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend_and_bindings/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend_and_bindings/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend_and_bindings/database/static_data/db_inner_circle/database_bloc/database_event.dart';
@@ -5,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class AskPageView extends StatelessWidget {
+class AskPageView extends StatefulWidget {
   const AskPageView({super.key});
 
+  @override
+  State<AskPageView> createState() => _AskPageViewState();
+}
+
+class _AskPageViewState extends State<AskPageView> {
+  AuthUser? user;
   @override
   Widget build(BuildContext context) {
     // final currentUser = context.read<AuthBloc>().state.currentUser;
@@ -42,23 +49,26 @@ class AskPageView extends StatelessWidget {
               ),
             ],
           )
-        : Padding(
-            padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  final user = context.read<AuthBloc>().state.currentUser;
-                  print('---');
-                  print('id - ${user.id}');
-                  print('email - ${user.email}');
-                  print('ver - ${user.isEmailVerified}');
-                  print('anon - ${user.isAnonymous}');
-                  print('admin - ${user.isAdmin}');
-                  print('---');
-                },
-                child: Text('Hey :)'),
+        : Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.paddingOf(context).top,
+                ),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      user = context.read<AuthBloc>().state.currentUser;
+                      setState(() {});
+                    },
+                    child: Text('Hey :)'),
+                  ),
+                ),
               ),
-            ),
+              Text(
+                'Id: ${user?.id}\nemail: ${user?.email}\nver: ${user?.isEmailVerified}\nanon: ${user?.isAnonymous}\nadmin: ${user?.isAdmin}',
+              ),
+            ],
           );
   }
 }

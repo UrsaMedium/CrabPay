@@ -52,6 +52,8 @@ dependencies:
   cached_network_image: ^3.4.1
   keyboard_detection: ^0.8.1
   firebase_app_check: ^0.4.5
+  url_launcher: ^6.3.2
+  http: ^1.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

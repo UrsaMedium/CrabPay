@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/pro
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend_and_bindings/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend_and_bindings/payment_service.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class _CartPageViewState extends State<CartPageView> {
   List<CartItem>? cartItems;
   List<Product>? products;
   bool isLoggedIn = false;
+  final PaymentService _paymentService = PaymentService();
 
   @override
   void initState() {
@@ -161,17 +163,44 @@ class _CartPageViewState extends State<CartPageView> {
                                       child: ElevatedButton(
                                         onPressed: total == 0
                                             ? null
-                                            : () {
+                                            : () async {
                                                 //TODO
-                                                if (isLoggedIn) {
-                                                  context.read<CartBloc>().add(
-                                                    CartEventUserCheckoutItems(
-                                                      checkoutItems: cartItems!,
-                                                      status: 'beingCheckedOut',
-                                                    ),
+                                                final String currentOrderId =
+                                                    'test_order_${DateTime.now().millisecondsSinceEpoch}';
+
+                                                final String? paaymentUrl =
+                                                    await _paymentService
+                                                        .createPayment(
+                                                          orderId:
+                                                              currentOrderId,
+                                                          amount: '30',
+                                                        );
+
+                                                if (paaymentUrl != null) {
+                                                  final bool success =
+                                                      await _paymentService
+                                                          .launchPaymentUrl(
+                                                            paaymentUrl,
+                                                          );
+                                                  if (!success) {
+                                                    print(
+                                                      'Cloud not open the browser to pay',
+                                                    );
+                                                  }
+                                                } else {
+                                                  print(
+                                                    'Server failed to return a payment link',
                                                   );
-                                                  detaFetching(context);
-                                                } else {}
+                                                }
+                                                // if (isLoggedIn) {
+                                                //   context.read<CartBloc>().add(
+                                                //     CartEventUserCheckoutItems(
+                                                //       checkoutItems: cartItems!,
+                                                //       status: 'beingCheckedOut',
+                                                //     ),
+                                                //   );
+                                                //   detaFetching(context);
+                                                // } else {}
                                               },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
