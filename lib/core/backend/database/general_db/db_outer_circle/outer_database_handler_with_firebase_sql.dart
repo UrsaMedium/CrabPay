@@ -1,49 +1,21 @@
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/generated/crabpay_connector.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retry/retry.dart';
 
-class OuterDatabaseHandler implements InnerDatabaseHandler {
+class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   final retryer = RetryOptions(
     maxAttempts: 3,
-    delayFactor: Duration(milliseconds: 500),
+    delayFactor: const Duration(milliseconds: 500),
   );
   // Product
   // fetch all products
   @override
   Future<List<Product>?> fetchAllProducts() async {
-    try {
-      final productFetrcher = await retryer.retry(
-        () =>
-            CrabpayConnectorConnector.instance.getAllProductsQuery().execute(),
-      );
-      List<Product> fetchedProducts = [];
-      for (var product in productFetrcher.data.products) {
-        fetchedProducts.add(
-          Product(
-            id: product.id,
-            name: product.name,
-            image: product.imageUrl,
-            description: product.description,
-            currencies: product.currencies,
-          ),
-        );
-      }
-      Fluttertoast.showToast(msg: 'Suck sus');
-      return fetchedProducts;
-    } catch (e) {
-      print('Failed to fetch: $e');
-      Fluttertoast.showToast(msg: 'Failed to fetch: $e');
-      return null;
-    }
-  }
-
-  @override
-  Future<List<Product>?> fetchAllProductsForAdmin() async {
     try {
       final productFetrcher = await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -131,13 +103,6 @@ class OuterDatabaseHandler implements InnerDatabaseHandler {
   }
 
   // Fields
-  // fetch a field
-  @override
-  Future<void> fetchProductField(String id) async {
-    // TODO: implement fetchProductFields
-    throw UnimplementedError();
-  }
-
   // fetch product fields
   @override
   Future<List<ProductField>?> fetchProductFields(String productId) async {

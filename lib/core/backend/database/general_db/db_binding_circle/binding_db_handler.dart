@@ -1,18 +1,16 @@
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_outer_circle/outer_database_handler.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_firebase_sql.dart';
 
 class BindingDatabaseHandler implements InnerDatabaseHandler {
   final InnerDatabaseHandler dbHandler;
   BindingDatabaseHandler({required this.dbHandler});
 
-  factory BindingDatabaseHandler.firebaseDb() =>
-      BindingDatabaseHandler(dbHandler: (OuterDatabaseHandler()));
-
-  @override
-  Future<List<Product>?> fetchAllProducts() => dbHandler.fetchAllProducts();
+  factory BindingDatabaseHandler.firebaseDb() => BindingDatabaseHandler(
+    dbHandler: (OuterDatabaseHandlerWithFirebaseSql()),
+  );
 
   // Product
   @override
@@ -26,9 +24,6 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   @override
   Future<List<ProductField>?> fetchProductFields(String productId) =>
       dbHandler.fetchProductFields(productId);
-
-  @override
-  Future<void> fetchProductField(String id) => dbHandler.fetchProductField(id);
 
   @override
   Future<void> addProductField(ProductField field) =>
@@ -51,8 +46,7 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
       dbHandler.deleteCurrencies(currencies);
 
   @override
-  Future<List<Product>?> fetchAllProductsForAdmin() =>
-      dbHandler.fetchAllProductsForAdmin();
+  Future<List<Product>?> fetchAllProducts() => dbHandler.fetchAllProducts();
 
   @override
   Future<void> updateProduct(

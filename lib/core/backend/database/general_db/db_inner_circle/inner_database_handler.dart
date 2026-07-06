@@ -1,11 +1,10 @@
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/currencies_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 
 abstract class InnerDatabaseHandler {
   //product
   Future<List<Product>?> fetchAllProducts();
-  Future<List<Product>?> fetchAllProductsForAdmin();
   Future<void> addProduct(Product product);
   Future<void> deleteProduct(Product product);
   Future<void> updateProduct(
@@ -16,7 +15,6 @@ abstract class InnerDatabaseHandler {
   );
   //fields
   Future<List<ProductField>?> fetchProductFields(String productId);
-  Future<void> fetchProductField(String id); // TODO
   Future<void> addProductField(ProductField field);
   Future<void> deleteProductField(ProductField field);
   Future<void> updateProductField(

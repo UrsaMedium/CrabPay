@@ -1,5 +1,5 @@
 import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
-import 'package:crabpay/core/backend/database/subscribtion_data/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 
 abstract class InnerCartHandler {
   Future<List<CartItem>> fetchCartItems(String userId);

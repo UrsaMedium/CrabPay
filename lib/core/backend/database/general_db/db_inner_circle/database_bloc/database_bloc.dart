@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/inner_database_handler.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 // import 'package:uuid/uuid.dart';
 // import 'package:uuid/v4.dart';
 
@@ -18,7 +18,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.initialization));
-        final products = await databaseHandler.fetchAllProductsForAdmin();
+        final products = await databaseHandler.fetchAllProducts();
         final featuredProducts = await databaseHandler
             .fetchAllFeaturedProducts();
         List<String> userPreferences = [];
@@ -64,31 +64,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // fetch all Poducts
     on<DatabaseEventFetchAllProducts>((event, emit) async {
       print('---');
-      print('--- DatabaseEventFetchAllProducts fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
-        final products = await databaseHandler.fetchAllProducts();
-        emit(
-          state.copyWith(
-            products: products,
-            states: DatabaseStates.productsFetched,
-          ),
-        );
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.productsNotFetched));
-        rethrow;
-      }
-    });
-
-    // instantly fetch all Poducts for admin
-    on<DatabaseEventFetchAllProductsForAdmin>((event, emit) async {
-      print('---');
       print('--- DatabaseEventFetchAllProductsForAdmin fired');
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
-        final products = await databaseHandler.fetchAllProductsForAdmin();
+        final products = await databaseHandler.fetchAllProducts();
         emit(
           state.copyWith(
             products: products,

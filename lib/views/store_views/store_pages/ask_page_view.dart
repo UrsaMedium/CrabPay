@@ -1,8 +1,8 @@
 import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend/postgresql_server/db_server.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/postgresql_server/schema.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +24,8 @@ class _AskPageViewState extends State<AskPageView> {
         SizedBox(height: MediaQuery.paddingOf(context).top),
         ElevatedButton(
           onPressed: () {
-            // postgresTestDB();
+            final createTables = PostgreSQLSchema();
+            createTables.creeateTable('');
           },
           child: Text('test db'),
         ),

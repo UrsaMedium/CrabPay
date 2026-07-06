@@ -1,7 +1,7 @@
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/static_data/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
