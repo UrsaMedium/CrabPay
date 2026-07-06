@@ -54,6 +54,7 @@ dependencies:
   firebase_app_check: ^0.4.5
   url_launcher: ^6.3.2
   http: ^1.6.0
+  postgres: ^3.5.12
 dev_dependencies:
   flutter_test:
     sdk: flutter
