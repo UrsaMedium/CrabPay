@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend/postgresql_server/db_server.dart';
+import 'package:crabpay/core/backend/postgresql_server/db_server_worm_hole.dart';
 
 class PostgreSQLSchema {
   Future<void> creeateTable(String tableToCreate) async {

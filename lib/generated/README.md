@@ -821,163 +821,6 @@ ref.execute();
 ```
 
 
-### productFieldUpdate
-#### Required Arguments
-```dart
-String productId = ...;
-int order = ...;
-String handler = ...;
-String fieldName = ...;
-bool isPriceImage = ...;
-CrabpayConnectorConnector.instance.productFieldUpdate(
-  productId: productId,
-  order: order,
-  handler: handler,
-  fieldName: fieldName,
-  isPriceImage: isPriceImage,
-).execute();
-```
-
-#### Optional Arguments
-We return a builder for each query. For productFieldUpdate, we created `productFieldUpdateBuilder`. For queries and mutations with optional parameters, we return a builder class.
-The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
-```dart
-class ProductFieldUpdateVariablesBuilder {
-  ...
- 
-  ProductFieldUpdateVariablesBuilder id(String? t) {
-   _id.value = t;
-   return this;
-  }
-  ProductFieldUpdateVariablesBuilder priceImages(AnyValue? t) {
-   _priceImages.value = t;
-   return this;
-  }
-  ProductFieldUpdateVariablesBuilder expectedData(List<String>? t) {
-   _expectedData.value = t;
-   return this;
-  }
-
-  ...
-}
-CrabpayConnectorConnector.instance.productFieldUpdate(
-  productId: productId,
-  order: order,
-  handler: handler,
-  fieldName: fieldName,
-  isPriceImage: isPriceImage,
-)
-.id(id)
-.priceImages(priceImages)
-.expectedData(expectedData)
-.execute();
-```
-
-#### Return Type
-`execute()` returns a `OperationResult<productFieldUpdateData, productFieldUpdateVariables>`
-```dart
-/// Result of an Operation Request (query/mutation).
-class OperationResult<Data, Variables> {
-  OperationResult(this.dataConnect, this.data, this.ref);
-  Data data;
-  OperationRef<Data, Variables> ref;
-  FirebaseDataConnect dataConnect;
-}
-
-final result = await CrabpayConnectorConnector.instance.productFieldUpdate(
-  productId: productId,
-  order: order,
-  handler: handler,
-  fieldName: fieldName,
-  isPriceImage: isPriceImage,
-);
-productFieldUpdateData data = result.data;
-final ref = result.ref;
-```
-
-#### Getting the Ref
-Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
-An example of how to use the `Ref` object is shown below:
-```dart
-String productId = ...;
-int order = ...;
-String handler = ...;
-String fieldName = ...;
-bool isPriceImage = ...;
-
-final ref = CrabpayConnectorConnector.instance.productFieldUpdate(
-  productId: productId,
-  order: order,
-  handler: handler,
-  fieldName: fieldName,
-  isPriceImage: isPriceImage,
-).ref();
-ref.execute();
-```
-
-
-### currenciesUpdate
-#### Required Arguments
-```dart
-String id = ...;
-String name = ...;
-String mainCurrency = ...;
-double rub = ...;
-double usd = ...;
-CrabpayConnectorConnector.instance.currenciesUpdate(
-  id: id,
-  name: name,
-  mainCurrency: mainCurrency,
-  rub: rub,
-  usd: usd,
-).execute();
-```
-
-
-
-#### Return Type
-`execute()` returns a `OperationResult<currenciesUpdateData, currenciesUpdateVariables>`
-```dart
-/// Result of an Operation Request (query/mutation).
-class OperationResult<Data, Variables> {
-  OperationResult(this.dataConnect, this.data, this.ref);
-  Data data;
-  OperationRef<Data, Variables> ref;
-  FirebaseDataConnect dataConnect;
-}
-
-final result = await CrabpayConnectorConnector.instance.currenciesUpdate(
-  id: id,
-  name: name,
-  mainCurrency: mainCurrency,
-  rub: rub,
-  usd: usd,
-);
-currenciesUpdateData data = result.data;
-final ref = result.ref;
-```
-
-#### Getting the Ref
-Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
-An example of how to use the `Ref` object is shown below:
-```dart
-String id = ...;
-String name = ...;
-String mainCurrency = ...;
-double rub = ...;
-double usd = ...;
-
-final ref = CrabpayConnectorConnector.instance.currenciesUpdate(
-  id: id,
-  name: name,
-  mainCurrency: mainCurrency,
-  rub: rub,
-  usd: usd,
-).ref();
-ref.execute();
-```
-
-
 ### deleteCartItem
 #### Required Arguments
 ```dart
@@ -1368,6 +1211,26 @@ class UpdateCartItemVariablesBuilder {
    _userName.value = t;
    return this;
   }
+  UpdateCartItemVariablesBuilder productId(String? t) {
+   _productId.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder productName(String? t) {
+   _productName.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder purchaseData(AnyValue? t) {
+   _purchaseData.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder currency(String? t) {
+   _currency.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder checkoutPrice(double? t) {
+   _checkoutPrice.value = t;
+   return this;
+  }
   UpdateCartItemVariablesBuilder status(String? t) {
    _status.value = t;
    return this;
@@ -1388,6 +1251,11 @@ CrabpayConnectorConnector.instance.updateCartItem(
 )
 .userId(userId)
 .userName(userName)
+.productId(productId)
+.productName(productName)
+.purchaseData(purchaseData)
+.currency(currency)
+.checkoutPrice(checkoutPrice)
 .status(status)
 .comment(comment)
 .statusChangedAt(statusChangedAt)

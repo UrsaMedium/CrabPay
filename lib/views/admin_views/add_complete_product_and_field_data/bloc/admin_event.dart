@@ -16,6 +16,15 @@ class AdminEventSubmitsProduct extends AdminEvent {
   const AdminEventSubmitsProduct({required this.appProduct});
 }
 
+class AdminEventPushProductEmidiatly extends AdminEvent {
+  final Product appProduct;
+  final BuildContext context;
+  const AdminEventPushProductEmidiatly({
+    required this.appProduct,
+    required this.context,
+  });
+}
+
 class AdminEventSubmitsFields extends AdminEvent {
   final List<ProductField> appProductFields;
   const AdminEventSubmitsFields({required this.appProductFields});

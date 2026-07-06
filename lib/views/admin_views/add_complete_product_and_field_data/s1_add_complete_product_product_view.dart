@@ -56,7 +56,7 @@ class _AddCompleteProductProductViewState
     // &&        _currency != null
     ) {
       return Product(
-        id: 'id',
+        id: '',
         name: _productNameUI!,
         image: _imageUrl!,
         description: _description!,
@@ -203,39 +203,71 @@ class _AddCompleteProductProductViewState
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: .end,
+                Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (GoRouter.of(context).canPop()) {
-                          context.pop();
-                        }
-                      },
-                      child: Text('Back'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Product? collectedAppProduct = _collectProduct();
-                        if (collectedAppProduct != null) {
-                          context.read<AdminBloc>().add(
-                            AdminEventSubmitsProduct(
-                              appProduct: collectedAppProduct,
-                            ),
-                          );
-                          context.push(
-                            '/add_complete_product_product_view/add_product_fields_view',
-                          );
-                        } else {
-                          Fluttertoast.showToast(msg: 'Not enough data');
-                        }
-                      },
-                      child: Text('Next'),
+                    Row(
+                      mainAxisAlignment: .end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (GoRouter.of(context).canPop()) {
+                              context.pop();
+                            }
+                          },
+                          child: Text('Back'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Product? collectedAppProduct = _collectProduct();
+                            if (collectedAppProduct != null) {
+                              context.read<AdminBloc>().add(
+                                AdminEventSubmitsProduct(
+                                  appProduct: collectedAppProduct,
+                                ),
+                              );
+                              context.push(
+                                '/add_complete_product_product_view/add_product_fields_view',
+                              );
+                            } else {
+                              Fluttertoast.showToast(msg: 'Not enough data');
+                            }
+                          },
+                          child: Text('Next'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Product collectedAppProduct = Product(
+                              id: '',
+                              name: 'PUBG mobile',
+                              image: 'pubg',
+                              description: 'Mock description',
+                              currencies: 'rubDefault',
+                            );
+                            context.read<AdminBloc>().add(
+                              AdminEventPushProductEmidiatly(
+                                context: context,
+                                appProduct: collectedAppProduct,
+                              ),
+                            );
+                            // Product? collectedAppProduct = _collectProduct();
+                            // if (collectedAppProduct != null) {
+                            //   context.read<AdminBloc>().add(
+                            //   AdminEventPushProductEmidiatly(
+                            //     context: context,
+                            //     appProduct: collectedAppProduct,
+                            //   ),
+                            // );
+                            // }
+                            context.pop();
+                          },
+                          child: Text('Add imediatly'),
+                        ),
+                      ],
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Product? collectedAppProduct = Product(
-                          id: '0',
+                          id: '',
                           name: 'Mock Name4',
                           image: 'lib/assets/images/gas-gas-gas.jpg',
                           description: 'Mock description',

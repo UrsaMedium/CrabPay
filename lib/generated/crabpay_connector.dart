@@ -17,10 +17,6 @@ part 'add_currencies.dart';
 
 part 'delete_currencies.dart';
 
-part 'product_field_update.dart';
-
-part 'currencies_update.dart';
-
 part 'delete_cart_item.dart';
 
 part 'add_cart_item.dart';
@@ -96,16 +92,6 @@ class CrabpayConnectorConnector {
   
   DeleteCurrenciesVariablesBuilder deleteCurrencies ({required String id, }) {
     return DeleteCurrenciesVariablesBuilder(dataConnect, id: id,);
-  }
-  
-  
-  ProductFieldUpdateVariablesBuilder productFieldUpdate ({required String productId, required int order, required String handler, required String fieldName, required bool isPriceImage, }) {
-    return ProductFieldUpdateVariablesBuilder(dataConnect, productId: productId,order: order,handler: handler,fieldName: fieldName,isPriceImage: isPriceImage,);
-  }
-  
-  
-  CurrenciesUpdateVariablesBuilder currenciesUpdate ({required String id, required String name, required String mainCurrency, required double rub, required double usd, }) {
-    return CurrenciesUpdateVariablesBuilder(dataConnect, id: id,name: name,mainCurrency: mainCurrency,rub: rub,usd: usd,);
   }
   
   

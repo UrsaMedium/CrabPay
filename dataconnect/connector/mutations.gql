@@ -82,43 +82,6 @@ mutation DeleteCurrencies($id: UUID!)
   currencies_delete(key: { id: $id })
 }
 
-mutation productFieldUpdate(
-  $id: UUID
-  $productId: UUID!
-  $order: Int!
-  $priceImages: Any
-  $expectedData: [String!]
-  $handler: String!
-  $fieldName: String!
-  $isPriceImage: Boolean!
-) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
-  productField_update(
-    id: $id
-    data: {
-      productId: $productId
-      order: $order
-      priceImages: $priceImages
-      expectedData: $expectedData
-      handler: $handler
-      fieldName: $fieldName
-      isPriceImage: $isPriceImage
-    }
-  )
-}
-
-mutation currenciesUpdate(
-  $id: UUID!
-  $name: String!
-  $mainCurrency: String!
-  $rub: Float!
-  $usd: Float!
-) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
-  currencies_update(
-    id: $id
-    data: { name: $name, mainCurrency: $mainCurrency, rub: $rub, usd: $usd }
-  )
-}
-
 mutation deleteCartItem($id: UUID!)
 @auth(
   level: USER_ANON
@@ -201,11 +164,11 @@ mutation UpdateCartItem(
   $id: UUID!
   $userId: String
   $userName: String
-  # $productId: UUID,
-  # $productName: String,
-  # $purchaseData: Any,
-  # $currency: String,
-  # $checkoutPrice: Float,
+  $productId: UUID
+  $productName: String
+  $purchaseData: Any
+  $currency: String
+  $checkoutPrice: Float
   $status: String
   $comment: String
   $statusChangedAt: Timestamp
@@ -215,11 +178,11 @@ mutation UpdateCartItem(
     data: {
       userId: $userId
       userName: $userName
-      # productId: $productId,
-      # productName: $productName,
-      # purchaseData: $purchaseData,
-      # currency: $currency,
-      # checkoutPrice: $checkoutPrice,
+      productId: $productId
+      productName: $productName
+      purchaseData: $purchaseData
+      currency: $currency
+      checkoutPrice: $checkoutPrice
       status: $status
       comment: $comment
       statusChangedAt: $statusChangedAt
@@ -248,24 +211,24 @@ mutation DeleteLastAddedProductCartItem($userId: String!, $productId: UUID!)
 }
 
 mutation UpdateProductField(
-  $id: UUID!,
-  $productId: UUID,
-  $order: Int,
-  $fieldName: String,
-  $isPriceImage: Boolean,
-  $handler: String,
-  $priceImages: Any,
+  $id: UUID!
+  $productId: UUID
+  $order: Int
+  $fieldName: String
+  $isPriceImage: Boolean
+  $handler: String
+  $priceImages: Any
   $expectedData: [String!]
 ) @auth(expr: "auth.token.admin == true", insecureReason: "Admin only") {
   productField_update(
-    id: $id,
+    id: $id
     data: {
-      productId: $productId,
-      order: $order,
-      fieldName: $fieldName,
-      isPriceImage: $isPriceImage,
-      handler: $handler,
-      priceImages: $priceImages,
+      productId: $productId
+      order: $order
+      fieldName: $fieldName
+      isPriceImage: $isPriceImage
+      handler: $handler
+      priceImages: $priceImages
       expectedData: $expectedData
     }
   )

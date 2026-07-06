@@ -4,6 +4,11 @@ class UpdateCartItemVariablesBuilder {
   String id;
   Optional<String> _userId = Optional.optional(nativeFromJson, nativeToJson);
   Optional<String> _userName = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<String> _productId = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<String> _productName = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<AnyValue> _purchaseData = Optional.optional(AnyValue.fromJson, defaultSerializer);
+  Optional<String> _currency = Optional.optional(nativeFromJson, nativeToJson);
+  Optional<double> _checkoutPrice = Optional.optional(nativeFromJson, nativeToJson);
   Optional<String> _status = Optional.optional(nativeFromJson, nativeToJson);
   Optional<String> _comment = Optional.optional(nativeFromJson, nativeToJson);
   Optional<Timestamp> _statusChangedAt = Optional.optional((json) => json['statusChangedAt'] = Timestamp.fromJson(json['statusChangedAt']), defaultSerializer);
@@ -14,6 +19,26 @@ class UpdateCartItemVariablesBuilder {
   }
   UpdateCartItemVariablesBuilder userName(String? t) {
    _userName.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder productId(String? t) {
+   _productId.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder productName(String? t) {
+   _productName.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder purchaseData(AnyValue? t) {
+   _purchaseData.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder currency(String? t) {
+   _currency.value = t;
+   return this;
+  }
+  UpdateCartItemVariablesBuilder checkoutPrice(double? t) {
+   _checkoutPrice.value = t;
    return this;
   }
   UpdateCartItemVariablesBuilder status(String? t) {
@@ -37,7 +62,7 @@ class UpdateCartItemVariablesBuilder {
   }
 
   MutationRef<UpdateCartItemData, UpdateCartItemVariables> ref() {
-    UpdateCartItemVariables vars= UpdateCartItemVariables(id: id,userId: _userId,userName: _userName,status: _status,comment: _comment,statusChangedAt: _statusChangedAt,);
+    UpdateCartItemVariables vars= UpdateCartItemVariables(id: id,userId: _userId,userName: _userName,productId: _productId,productName: _productName,purchaseData: _purchaseData,currency: _currency,checkoutPrice: _checkoutPrice,status: _status,comment: _comment,statusChangedAt: _statusChangedAt,);
     return _dataConnect.mutation("UpdateCartItem", dataDeserializer, varsSerializer, vars);
   }
 }
@@ -117,6 +142,11 @@ class UpdateCartItemVariables {
   final String id;
   late final Optional<String>userId;
   late final Optional<String>userName;
+  late final Optional<String>productId;
+  late final Optional<String>productName;
+  late final Optional<AnyValue>purchaseData;
+  late final Optional<String>currency;
+  late final Optional<double>checkoutPrice;
   late final Optional<String>status;
   late final Optional<String>comment;
   late final Optional<Timestamp>statusChangedAt;
@@ -133,6 +163,26 @@ class UpdateCartItemVariables {
   
     userName = Optional.optional(nativeFromJson, nativeToJson);
     userName.value = json['userName'] == null ? null : nativeFromJson<String>(json['userName']);
+  
+  
+    productId = Optional.optional(nativeFromJson, nativeToJson);
+    productId.value = json['productId'] == null ? null : nativeFromJson<String>(json['productId']);
+  
+  
+    productName = Optional.optional(nativeFromJson, nativeToJson);
+    productName.value = json['productName'] == null ? null : nativeFromJson<String>(json['productName']);
+  
+  
+    purchaseData = Optional.optional(AnyValue.fromJson, defaultSerializer);
+    purchaseData.value = json['purchaseData'] == null ? null : AnyValue.fromJson(json['purchaseData']);
+  
+  
+    currency = Optional.optional(nativeFromJson, nativeToJson);
+    currency.value = json['currency'] == null ? null : nativeFromJson<String>(json['currency']);
+  
+  
+    checkoutPrice = Optional.optional(nativeFromJson, nativeToJson);
+    checkoutPrice.value = json['checkoutPrice'] == null ? null : nativeFromJson<double>(json['checkoutPrice']);
   
   
     status = Optional.optional(nativeFromJson, nativeToJson);
@@ -160,13 +210,18 @@ class UpdateCartItemVariables {
     return id == otherTyped.id && 
     userId == otherTyped.userId && 
     userName == otherTyped.userName && 
+    productId == otherTyped.productId && 
+    productName == otherTyped.productName && 
+    purchaseData == otherTyped.purchaseData && 
+    currency == otherTyped.currency && 
+    checkoutPrice == otherTyped.checkoutPrice && 
     status == otherTyped.status && 
     comment == otherTyped.comment && 
     statusChangedAt == otherTyped.statusChangedAt;
     
   }
   @override
-  int get hashCode => Object.hashAll([id.hashCode, userId.hashCode, userName.hashCode, status.hashCode, comment.hashCode, statusChangedAt.hashCode]);
+  int get hashCode => Object.hashAll([id.hashCode, userId.hashCode, userName.hashCode, productId.hashCode, productName.hashCode, purchaseData.hashCode, currency.hashCode, checkoutPrice.hashCode, status.hashCode, comment.hashCode, statusChangedAt.hashCode]);
   
 
   Map<String, dynamic> toJson() {
@@ -177,6 +232,21 @@ class UpdateCartItemVariables {
     }
     if(userName.state == OptionalState.set) {
       json['userName'] = userName.toJson();
+    }
+    if(productId.state == OptionalState.set) {
+      json['productId'] = productId.toJson();
+    }
+    if(productName.state == OptionalState.set) {
+      json['productName'] = productName.toJson();
+    }
+    if(purchaseData.state == OptionalState.set) {
+      json['purchaseData'] = purchaseData.toJson();
+    }
+    if(currency.state == OptionalState.set) {
+      json['currency'] = currency.toJson();
+    }
+    if(checkoutPrice.state == OptionalState.set) {
+      json['checkoutPrice'] = checkoutPrice.toJson();
     }
     if(status.state == OptionalState.set) {
       json['status'] = status.toJson();
@@ -194,6 +264,11 @@ class UpdateCartItemVariables {
     required this.id,
     required this.userId,
     required this.userName,
+    required this.productId,
+    required this.productName,
+    required this.purchaseData,
+    required this.currency,
+    required this.checkoutPrice,
     required this.status,
     required this.comment,
     required this.statusChangedAt,

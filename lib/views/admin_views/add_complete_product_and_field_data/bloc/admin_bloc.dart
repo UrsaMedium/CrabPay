@@ -59,6 +59,17 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       );
     });
 
+    on<AdminEventPushProductEmidiatly>((event, emit) {
+      try {
+        event.context.read<DatabaseBloc>().add(
+          DatabaseEventAddProduct(product: event.appProduct),
+        );
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'eeeeeh');
+        rethrow;
+      }
+    });
+
     on<AdminEventPushesData>((event, emit) async {
       var uuid = Uuid();
       String theProductId = uuid.v4();

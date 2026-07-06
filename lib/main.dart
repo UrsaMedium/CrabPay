@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_databse_handler_with_custom_postgresql_server.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler.dart';
 import 'package:crabpay/core/global_loading_screen.dart';
@@ -43,7 +44,8 @@ Future<void> main() async {
     BlocProvider(
       create: (context) => AuthBloc(FirebaseOuterInterface()),
       child: BlocProvider(
-        create: (context) => DatabaseBloc(OuterDatabaseHandlerWithFirebaseSql()),
+        create: (context) =>
+            DatabaseBloc(OuterDatabseHandlerWithCustomPostgresqlServer()),
         child: BlocProvider(
           create: (context) => CartBloc(OuterCartHandler()),
           child: const CrabPayApp(),

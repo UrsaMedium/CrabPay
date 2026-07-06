@@ -8,9 +8,9 @@ CrabpayConnectorConnector.instance.AddProductField(addProductFieldVariables).exe
 CrabpayConnectorConnector.instance.DeleteProductField(deleteProductFieldVariables).execute();
 CrabpayConnectorConnector.instance.AddCurrencies(addCurrenciesVariables).execute();
 CrabpayConnectorConnector.instance.DeleteCurrencies(deleteCurrenciesVariables).execute();
-CrabpayConnectorConnector.instance.productFieldUpdate(productFieldUpdateVariables).execute();
-CrabpayConnectorConnector.instance.currenciesUpdate(currenciesUpdateVariables).execute();
 CrabpayConnectorConnector.instance.deleteCartItem(deleteCartItemVariables).execute();
+CrabpayConnectorConnector.instance.addCartItem(addCartItemVariables).execute();
+CrabpayConnectorConnector.instance.addFeaturedProduct(addFeaturedProductVariables).execute();
 
 ```
 
