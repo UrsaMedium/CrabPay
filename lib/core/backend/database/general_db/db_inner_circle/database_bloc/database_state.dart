@@ -4,13 +4,14 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:flutter/material.dart' show immutable;
 
 enum DatabaseStates {
-  initialization,
+  // initialization,
+  dbLoading,
   initialized,
   notInitialized,
   flushed,
   fail,
   //
-  productsBeingLoaded,
+  // productsBeingLoaded,
   productsFetched,
   productsNotFetched,
   productsAdded,
@@ -20,7 +21,7 @@ enum DatabaseStates {
   productsUpdated,
   productsNotUpdated,
   //
-  fieldsBeingLoaded,
+  // fieldsBeingLoaded,
   fieldsFetched,
   fieldsNotFetched,
   fieldsAdded,
@@ -30,7 +31,7 @@ enum DatabaseStates {
   fieldsUpdated,
   fieldsNotUpdated,
   //
-  currenciesBeingLoaded,
+  // currenciesBeingLoaded,
   currenciesFetched,
   currenciesNotFetched,
   currenciesAdded,
@@ -40,7 +41,7 @@ enum DatabaseStates {
   currenciesUpdated,
   currenciesNotUpdated,
   //
-  featuedProductsBeingLoaded,
+  // featuedProductsBeingLoaded,
   featuedProductsFetched,
   featuedProductsNotFetched,
   featuedProductsAdded,
@@ -50,7 +51,7 @@ enum DatabaseStates {
   featuedProductsUpdated,
   featuedProductsNotUpdated,
   //
-  userPreferencesBeingLoaded,
+  // userPreferencesBeingLoaded,
   userPreferencesFetched,
   userPreferencesNotFetched,
   userPreferencesAdded,
@@ -76,7 +77,7 @@ class DatabaseState {
     this.products,
     this.currencies,
     this.productFields,
-    this.states = DatabaseStates.initialization,
+    this.states = DatabaseStates.dbLoading,
     this.recentlyAddedProduct,
     this.featuredProducts,
     this.userPreferences,

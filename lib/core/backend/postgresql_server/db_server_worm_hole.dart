@@ -26,7 +26,7 @@ class DbServer {
 
   Future<Result> execute(
     String query, {
-    Map<String, Object>? parameters,
+    Map<String, Object?>? parameters,
   }) async {
     final pool = await _getPool;
 

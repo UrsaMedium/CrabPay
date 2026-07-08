@@ -89,7 +89,7 @@ class CardView extends StatelessWidget {
                           builder: (context, state) {
                             final bool beingLoaded =
                                 state.states ==
-                                DatabaseStates.userPreferencesBeingLoaded;
+                                DatabaseStates.dbLoading;
                             final userFavorites = context
                                 .read<DatabaseBloc>()
                                 .state
@@ -244,6 +244,7 @@ class CardView extends StatelessWidget {
                                       .surfaceContainerLow
                                       .withValues(alpha: .6),
                                   builder: (BuildContext context) {
+                                    print(productFields);
                                     return Wrap(
                                       children: [
                                         Container(

@@ -1,6 +1,7 @@
 import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_databse_handler_with_custom_postgresql_server.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_custom_postgres_server.dart';
 import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
@@ -13,6 +14,7 @@ import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4
 import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
+import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
@@ -47,7 +49,8 @@ Future<void> main() async {
         create: (context) =>
             DatabaseBloc(OuterDatabseHandlerWithCustomPostgresqlServer()),
         child: BlocProvider(
-          create: (context) => CartBloc(OuterCartHandler()),
+          create: (context) =>
+              CartBloc(OuterCartHandlerWithCustomPostgresServer()),
           child: const CrabPayApp(),
         ),
       ),
@@ -178,6 +181,14 @@ final GoRouter _router = GoRouter(
       builder: (context, state) {
         final fieldId = state.pathParameters['fieldId'];
         return UpdateFieldAdminPanelView(fieldId: fieldId);
+      },
+    ),
+    GoRoute(
+      path: '/update_price_images_field_admin_panel_view/:fieldId',
+      name: 'update_price_images_field_admin_panel_view',
+      builder: (context, state) {
+        final fieldId = state.pathParameters['fieldId'];
+        return UpdatePriceImagesFieldAdminPanelView(fieldId: fieldId);
       },
     ),
     GoRoute(

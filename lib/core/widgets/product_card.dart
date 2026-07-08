@@ -56,7 +56,7 @@ class ProductCard extends StatelessWidget {
                       clipBehavior: .antiAlias,
                       child: CachedNetworkImage(
                         imageUrl:
-                            'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                            'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                         width: double.infinity,
                         height: 200,
                         fit: .cover,

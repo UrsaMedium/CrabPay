@@ -26,7 +26,7 @@ class MutationUpdateProductField {
     print('Updating product field in db for id: $id');
 
     final List<String> updates = [];
-    final Map<String, Object> parameters = {'id': id};
+    final Map<String, Object?> parameters = {'id': id};
 
     if (productId != null) {
       updates.add('product_id = @productId');
@@ -45,6 +45,10 @@ class MutationUpdateProductField {
     if (isPriceImage != null) {
       updates.add('is_price_image = @isPriceImage');
       parameters['isPriceImage'] = isPriceImage!;
+      if (!isPriceImage!) {
+        updates.add('price_images = @priceImages');
+        parameters['priceImages'] = null;
+      }
     }
     if (handler != null) {
       updates.add('handler = @handler');

@@ -66,6 +66,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        // if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
         if (state is AuthStateLoading) {
           GlobalLoadingScreen().show();
         } else {

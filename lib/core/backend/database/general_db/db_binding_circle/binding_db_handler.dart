@@ -14,86 +14,96 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
 
   // Product
   @override
-  Future<void> addProduct(Product product) => dbHandler.addProduct(product);
+  Future<void> addProduct({required Product product}) =>
+      dbHandler.addProduct(product: product);
 
   @override
-  Future<void> deleteProduct(Product product) =>
-      dbHandler.deleteProduct(product);
+  Future<void> deleteProduct({required Product product}) =>
+      dbHandler.deleteProduct(product: product);
 
   // Fields
   @override
-  Future<List<ProductField>?> fetchProductFields(String productId) =>
-      dbHandler.fetchProductFields(productId);
+  Future<List<ProductField>?> fetchProductFields({required String productId}) =>
+      dbHandler.fetchProductFields(productId: productId);
 
   @override
-  Future<void> addProductField(ProductField field) =>
-      dbHandler.addProductField(field);
+  Future<void> addProductField({required ProductField field}) =>
+      dbHandler.addProductField(field: field);
 
   @override
-  Future<void> deleteProductField(ProductField field) =>
-      dbHandler.deleteProductField(field);
+  Future<void> deleteProductField({required ProductField field}) =>
+      dbHandler.deleteProductField(field: field);
   // Currencies
   @override
   Future<List<Currencies>?> fetchAllCurencies() =>
       dbHandler.fetchAllCurencies();
 
   @override
-  Future<void> addCurrencies(Currencies currencies) =>
-      dbHandler.addCurrencies(currencies);
+  Future<void> addCurrencies({required Currencies currencies}) =>
+      dbHandler.addCurrencies(currencies: currencies);
 
   @override
-  Future<void> deleteCurrencies(Currencies currencies) =>
-      dbHandler.deleteCurrencies(currencies);
+  Future<void> deleteCurrencies({required Currencies currencies}) =>
+      dbHandler.deleteCurrencies(currencies: currencies);
 
   @override
   Future<List<Product>?> fetchAllProducts() => dbHandler.fetchAllProducts();
 
   @override
-  Future<void> updateProduct(
-    String productId,
+  Future<void> updateProduct({
+    required String productId,
     String? imageName,
     String? productName,
     String? description,
-  ) => dbHandler.updateProduct(productId, imageName, productName, description);
+  }) => dbHandler.updateProduct(
+    productId: productId,
+    imageName: imageName,
+    productName: productName,
+    description: description,
+  );
 
   @override
   Future<List<String>> fetchAllFeaturedProducts() =>
       dbHandler.fetchAllFeaturedProducts();
 
   @override
-  Future<void> addFeaturedProduct(String productId) =>
-      dbHandler.addFeaturedProduct(productId);
+  Future<void> addFeaturedProduct({required String productId}) =>
+      dbHandler.addFeaturedProduct(productId: productId);
 
   @override
-  Future<void> addUserPreference(String userId, String productId) =>
-      dbHandler.addUserPreference(userId, productId);
+  Future<void> addUserPreference({
+    required String userId,
+    required String productId,
+  }) => dbHandler.addUserPreference(userId: userId, productId: productId);
 
   @override
-  Future<List<String>> fetchUserPreferences(String userId) =>
-      dbHandler.fetchUserPreferences(userId);
+  Future<List<String>> fetchUserPreferences({required String userId}) =>
+      dbHandler.fetchUserPreferences(userId: userId);
 
   @override
-  Future<void> deleteFeaturedProduct(String productId) =>
-      dbHandler.deleteFeaturedProduct(productId);
+  Future<void> deleteFeaturedProduct({required String productId}) =>
+      dbHandler.deleteFeaturedProduct(productId: productId);
 
   @override
-  Future<void> deleteUserPreference(String userId, String productId) =>
-      dbHandler.deleteUserPreference(userId, productId);
+  Future<void> deleteUserPreference({
+    required String userId,
+    required String productId,
+  }) => dbHandler.deleteUserPreference(userId: userId, productId: productId);
 
   @override
-  Future<void> updateProductField(
-    String fieldId,
+  Future<void> updateProductField({
+    required String fieldId,
     int? order,
     String? fieldName,
     bool? isPriceImage,
     Map<String, double>? priceImages,
     List<String>? expectedData,
-  ) => dbHandler.updateProductField(
-    fieldId,
-    order,
-    fieldName,
-    isPriceImage,
-    priceImages,
-    expectedData,
+  }) => dbHandler.updateProductField(
+    fieldId: fieldId,
+    order: order,
+    fieldName: fieldName,
+    isPriceImage: isPriceImage,
+    priceImages: priceImages,
+    expectedData: expectedData,
   );
 }

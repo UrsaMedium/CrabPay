@@ -29,7 +29,7 @@ class _AskPageViewState extends State<AskPageView> {
           },
           child: Text('test db'),
         ),
-        !context.read<AuthBloc>().state.currentUser.isAdmin
+        context.read<AuthBloc>().state.currentUser.isAdmin
             ? Column(
                 children: [
                   ElevatedButton(

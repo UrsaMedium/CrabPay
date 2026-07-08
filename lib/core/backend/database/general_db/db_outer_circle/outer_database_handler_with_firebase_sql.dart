@@ -46,7 +46,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // add Product
   @override
-  Future<void> addProduct(Product product) async {
+  Future<void> addProduct({required Product product}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -67,7 +67,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // delete Product
   @override
-  Future<void> deleteProduct(Product product) async {
+  Future<void> deleteProduct({required Product product}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -81,12 +81,12 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> updateProduct(
-    String productId,
+  Future<void> updateProduct({
+    required String productId,
     String? imageName,
     String? productName,
     String? description,
-  ) async {
+  }) async {
     try {
       final mutation = CrabpayConnectorConnector.instance.updateProduct(
         id: productId,
@@ -105,7 +105,9 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   // Fields
   // fetch product fields
   @override
-  Future<List<ProductField>?> fetchProductFields(String productId) async {
+  Future<List<ProductField>?> fetchProductFields({
+    required String productId,
+  }) async {
     try {
       final fetchedFields = await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -147,7 +149,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // add Product Field
   @override
-  Future<void> addProductField(ProductField field) async {
+  Future<void> addProductField({required ProductField field}) async {
     try {
       AnyValue? priceImages;
       if (field.priceImages != null) {
@@ -179,7 +181,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // delete a Field
   @override
-  Future<void> deleteProductField(ProductField field) async {
+  Future<void> deleteProductField({required ProductField field}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -194,14 +196,14 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> updateProductField(
-    String fieldId,
+  Future<void> updateProductField({
+    required String fieldId,
     int? order,
     String? fieldName,
     bool? isPriceImage,
     Map<String, double>? priceImages,
     List<String>? expectedData,
-  ) async {
+  }) async {
     try {
       final mutation = CrabpayConnectorConnector.instance.updateProductField(
         id: fieldId,
@@ -271,7 +273,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // add currencies
   @override
-  Future<void> addCurrencies(Currencies currencies) async {
+  Future<void> addCurrencies({required Currencies currencies}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -292,7 +294,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   // delete a curencies table
   @override
-  Future<void> deleteCurrencies(Currencies currencies) async {
+  Future<void> deleteCurrencies({required Currencies currencies}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -331,7 +333,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> addFeaturedProduct(String productId) async {
+  Future<void> addFeaturedProduct({required String productId}) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -346,7 +348,10 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> addUserPreference(String userId, String productId) async {
+  Future<void> addUserPreference({
+    required String userId,
+    required String productId,
+  }) async {
     try {
       await retryer.retry(
         () => CrabpayConnectorConnector.instance
@@ -361,7 +366,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<List<String>> fetchUserPreferences(String userId) async {
+  Future<List<String>> fetchUserPreferences({required String userId}) async {
     List<String> result = [];
     try {
       final fetchedUserPreferences = await retryer.retry(
@@ -382,7 +387,7 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> deleteFeaturedProduct(String productId) async {
+  Future<void> deleteFeaturedProduct({required String productId}) async {
     print(productId);
     try {
       retryer.retry(
@@ -398,7 +403,10 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
   }
 
   @override
-  Future<void> deleteUserPreference(String userId, String productId) async {
+  Future<void> deleteUserPreference({
+    required String userId,
+    required String productId,
+  }) async {
     try {
       retryer.retry(
         () => CrabpayConnectorConnector.instance

@@ -71,24 +71,40 @@ class DatabaseEventDeleteProductField implements DatabaseEvent {
   DatabaseEventDeleteProductField({required this.productField});
 }
 
-class DatabaseEventUpdateProductField implements DatabaseEvent {
-  final ProductField oldField;
-  // String productId,
+class DatabaseEventUpdateProductFieldUpdateNameAndOrder
+    implements DatabaseEvent {
+  final ProductField field;
   final int? order;
   final String? fieldName;
   final bool? isPriceImage;
-  // String handler,
-  final Map<String, double>? priceImages;
-  final List<String>? expectedData;
 
-  DatabaseEventUpdateProductField({
-    required this.oldField,
+  DatabaseEventUpdateProductFieldUpdateNameAndOrder({
+    required this.field,
     this.order,
     this.fieldName,
-    this.isPriceImage,
-    this.priceImages,
-    this.expectedData,
+    required this.isPriceImage,
   });
+}
+
+class DatabaseEventUpdateProductFieldSwapImageField implements DatabaseEvent {
+  final ProductField oldImageField;
+  final ProductField newImageField;
+  DatabaseEventUpdateProductFieldSwapImageField({
+    required this.oldImageField,
+    required this.newImageField,
+  });
+}
+
+class DatabaseEventUpdateProductFieldAppointNewIamgeField implements DatabaseEvent {
+  final ProductField newImageField;
+  DatabaseEventUpdateProductFieldAppointNewIamgeField({
+    required this.newImageField,
+  });
+}
+
+class DatabaseEventUpdateProductUpdatePriceImages implements DatabaseEvent {
+  final Map<String, double> priceImages;
+  DatabaseEventUpdateProductUpdatePriceImages({required this.priceImages});
 }
 
 // Currencies events

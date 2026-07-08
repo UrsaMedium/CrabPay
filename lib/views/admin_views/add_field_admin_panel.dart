@@ -237,7 +237,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                         },
                                         child:
                                             state.states !=
-                                                DatabaseStates.fieldsBeingLoaded
+                                                DatabaseStates.dbLoading
                                             ? Text('Push The Fields')
                                             : CircularProgressIndicator(),
                                       );

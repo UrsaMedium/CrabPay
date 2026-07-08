@@ -22,6 +22,7 @@ class _ResetPriceImageFieldAdminPanelViewState
     extends State<ResetPriceImageFieldAdminPanelView> {
   late final List<ProductField>? _productFields;
   ProductField? _groupValue;
+  late final ProductField? oldImageField;
 
   @override
   void initState() {
@@ -30,6 +31,9 @@ class _ResetPriceImageFieldAdminPanelViewState
       Fluttertoast.showToast(msg: 'Strange error. No fields detected');
       context.go('/');
     }
+    oldImageField = _productFields!
+        .where((element) => element.isPriceImage)
+        .firstOrNull;
     super.initState();
   }
 
@@ -59,6 +63,24 @@ class _ResetPriceImageFieldAdminPanelViewState
       );
     }
     return resultList;
+  }
+
+  void _execute({
+    required BuildContext context,
+    required ProductField newImageField,
+  }) {
+    oldImageField == null
+        ? context.read<DatabaseBloc>().add(
+            DatabaseEventUpdateProductFieldAppointNewIamgeField(
+              newImageField: newImageField,
+            ),
+          )
+        : context.read<DatabaseBloc>().add(
+            DatabaseEventUpdateProductFieldSwapImageField(
+              oldImageField: oldImageField!,
+              newImageField: newImageField,
+            ),
+          );
   }
 
   @override
@@ -99,77 +121,19 @@ class _ResetPriceImageFieldAdminPanelViewState
             ),
             BlocListener<DatabaseBloc, DatabaseState>(
               listener: (context, state) {
-                if (state.states != DatabaseStates.fieldsBeingLoaded) {
+                if (state.states == DatabaseStates.dbLoading) {
                   GlobalLoadingScreen().show();
+                } else {
+                  GlobalLoadingScreen().hide();
+                  context.go('/');
                 }
               },
               child: ElevatedButton(
-                onPressed: () {
-                  try {
-                    Fluttertoast.showToast(
-                      msg: _groupValue?.fieldName ?? 'Choose a field',
-                    );
-                    if (_groupValue != null) {
-                      if (_groupValue!.expectedData != null) {
-                        final haveImageField = _productFields!.any(
-                          (field) => field.isPriceImage,
-                        );
-                        if (haveImageField) {
-                          final imageField = _productFields.firstWhere(
-                            (field) => field.isPriceImage,
-                          );
-                          if (imageField.id != _groupValue!.id) {
-                            Fluttertoast.showToast(msg: 'LESGOOOOO');
-                            context.read<DatabaseBloc>().add(
-                              DatabaseEventUpdateProductField(
-                                oldField: imageField,
-                                isPriceImage: false,
-                              ),
-                            );
-                            Map<String, double> newPriceImages = {};
-                            for (var dataToBeExpected
-                                in _groupValue!.expectedData!) {
-                              newPriceImages[dataToBeExpected] = -1;
-                            }
-                            context.read<DatabaseBloc>().add(
-                              DatabaseEventUpdateProductField(
-                                oldField: _groupValue!,
-                                isPriceImage: true,
-                                priceImages: newPriceImages,
-                              ),
-                            );
-                          } else {
-                            Fluttertoast.showToast(
-                              msg: 'Huh, You Funny. GET OUT',
-                            );
-                          }
-                        } else {
-                          Fluttertoast.showToast(msg: 'LESGO');
-                          Map<String, double> newPriceImages = {};
-                          for (var dataToBeExpected
-                              in _groupValue!.expectedData!) {
-                            newPriceImages[dataToBeExpected] = -1;
-                          }
-                          context.read<DatabaseBloc>().add(
-                            DatabaseEventUpdateProductField(
-                              oldField: _groupValue!,
-                              isPriceImage: true,
-                              priceImages: newPriceImages,
-                            ),
-                          );
-                        }
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: 'This field has nothing to return',
-                        );
-                      }
-                    }
-                  } catch (e) {
-                    print('Error: ${e.toString()}');
-                    Fluttertoast.showToast(msg: 'Error: ${e.toString()}');
-                    GlobalLoadingScreen().hide();
-                  }
-                },
+                onPressed: _groupValue == null
+                    ? null
+                    : () {
+                        _execute(context: context, newImageField: _groupValue!);
+                      },
                 child: Text('Set new price image'),
               ),
             ),

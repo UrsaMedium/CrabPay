@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend/postgresql_server/db_server_worm_hole.dart'
 
 class MutationUpdateCartItem {
   final String id;
-  final String? userId;
+  final String userId;
   final String? userName;
   final String? productId;
   final String? productName;
@@ -17,7 +17,7 @@ class MutationUpdateCartItem {
 
   MutationUpdateCartItem({
     required this.id,
-    this.userId,
+    required this.userId,
     this.userName,
     this.productId,
     this.productName,
@@ -36,10 +36,9 @@ class MutationUpdateCartItem {
     final List<String> updates = [];
     final Map<String, Object> parameters = {'id': id};
 
-    if (userId != null) {
-      updates.add('user_id = @userId');
-      parameters['userId'] = userId!;
-    }
+    updates.add('user_id = @userId');
+    parameters['userId'] = userId;
+
     if (userName != null) {
       updates.add('user_name = @userName');
       parameters['userName'] = userName!;

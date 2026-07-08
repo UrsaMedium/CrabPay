@@ -8,8 +8,23 @@ class GlobalLoadingScreen {
 
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  void show() => isLoading.value = true;
-  void hide() => isLoading.value = false;
+  void show() {
+    print('loading is called');
+    if (isLoading.value) return;
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+      isLoading.value = true;
+    // });
+  }
+
+  void hide() {
+    print('hiding is called');
+    if (!isLoading.value) return;
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+      isLoading.value = false;
+    // });
+  }
 }
 
 class GlobalLoaderStack extends StatelessWidget {

@@ -23,7 +23,7 @@ class QuieryFetchProductFields {
       return result.map((row) {
         final columns = row.toColumnMap();
         Map<String, double>? parsedPriceImages;
-        if (columns['is_price_image']) {
+        if (columns['is_price_image'] && columns['price_images'] != null) {
           final rawMap = columns['price_images'] as Map<dynamic, dynamic>;
           parsedPriceImages = rawMap.map(
             (key, value) => MapEntry(key.toString(), (value as num).toDouble()),

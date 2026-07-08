@@ -21,7 +21,7 @@ class QueryGetCartItems {
         checkout_price, 
         status, 
         comment
-      FROM cart_items
+      FROM cart_item
       WHERE user_id = @userId
     ''';
 
@@ -45,7 +45,7 @@ class QueryGetCartItems {
           productName: row[4] as String,
           purchaseData: parsedPurchaseData,
           currency: row[6] as String,
-          checkoutPrice: (row[7] as num).toDouble(),
+          checkoutPrice: double.tryParse(row[7] as String) ?? 0,
           status: row[8] as String,
           comment: row[9] as String?,
         );

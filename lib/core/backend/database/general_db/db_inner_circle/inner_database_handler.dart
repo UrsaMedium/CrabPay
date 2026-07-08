@@ -5,38 +5,36 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 abstract class InnerDatabaseHandler {
   //product
   Future<List<Product>?> fetchAllProducts();
-  Future<void> addProduct(Product product);
-  Future<void> deleteProduct(Product product);
-  Future<void> updateProduct(
-    String productId,
+  Future<void> addProduct({required Product product});
+  Future<void> deleteProduct({required Product product});
+  Future<void> updateProduct({
+    required String productId,
     String? imageName,
     String? productName,
     String? description,
-  );
+  });
   //fields
-  Future<List<ProductField>?> fetchProductFields(String productId);
-  Future<void> addProductField(ProductField field);
-  Future<void> deleteProductField(ProductField field);
-  Future<void> updateProductField(
-    String fieldId,
-    // String productId,
+  Future<List<ProductField>?> fetchProductFields({required String productId});
+  Future<void> addProductField({required ProductField field});
+  Future<void> deleteProductField({required ProductField field});
+  Future<void> updateProductField({
+    required String fieldId,
     int? order,
     String? fieldName,
     bool? isPriceImage,
-    // String handler,
     Map<String, double>? priceImages,
     List<String>? expectedData,
-  );
+  });
   //currencies
   Future<List<Currencies>?> fetchAllCurencies();
-  Future<void> addCurrencies(Currencies currencies);
-  Future<void> deleteCurrencies(Currencies currencies);
+  Future<void> addCurrencies({required Currencies currencies});
+  Future<void> deleteCurrencies({required Currencies currencies});
   //featured products
   Future<List<String>> fetchAllFeaturedProducts();
-  Future<void> addFeaturedProduct(String productId);
-  Future<void> deleteFeaturedProduct(String productId);
+  Future<void> addFeaturedProduct({required String productId});
+  Future<void> deleteFeaturedProduct({required String productId});
   //user preferences
-  Future<List<String>> fetchUserPreferences(String userId);
-  Future<void> addUserPreference(String userId, String productId);
-  Future<void> deleteUserPreference(String userId, String productId);
+  Future<List<String>> fetchUserPreferences({required String userId});
+  Future<void> addUserPreference({required String userId, required String productId});
+  Future<void> deleteUserPreference({required String userId, required String productId});
 }

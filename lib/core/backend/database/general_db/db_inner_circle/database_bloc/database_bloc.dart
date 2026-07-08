@@ -17,14 +17,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventInitialize fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.initialization));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
         final featuredProducts = await databaseHandler
             .fetchAllFeaturedProducts();
         List<String> userPreferences = [];
         if (!event.currentUser.isAnonymous) {
           userPreferences = await databaseHandler.fetchUserPreferences(
-            event.currentUser.id,
+            userId: event.currentUser.id,
           );
         }
         emit(
@@ -67,7 +67,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventFetchAllProductsForAdmin fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
         emit(
           state.copyWith(
@@ -87,8 +87,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddProduct fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
-        await databaseHandler.addProduct(event.product);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.addProduct(product: event.product);
         emit(
           state.copyWith(
             recentlyAddedProduct: event.product,
@@ -112,8 +112,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteProduct fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
-        await databaseHandler.deleteProduct(event.product);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.deleteProduct(product: event.product);
         emit(state.copyWith(states: DatabaseStates.productsDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.productsNotDeleted));
@@ -127,12 +127,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventUpdateProduct fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.productsBeingLoaded));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.updateProduct(
-          event.productId,
-          event.imageName,
-          event.productName,
-          event.description,
+          productId: event.productId,
+          imageName: event.imageName,
+          productName: event.productName,
+          description: event.description,
         );
         emit(state.copyWith(states: DatabaseStates.productsUpdated));
       } catch (e) {
@@ -149,13 +149,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(
-          state.copyWith(
-            productFields: null,
-            states: DatabaseStates.fieldsBeingLoaded,
-          ),
+          state.copyWith(productFields: null, states: DatabaseStates.dbLoading),
         );
         final productFields = await databaseHandler.fetchProductFields(
-          event.productId,
+          productId: event.productId,
         );
         emit(
           state.copyWith(
@@ -183,8 +180,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddProductField fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.fieldsBeingLoaded));
-        await databaseHandler.addProductField(event.productField);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.addProductField(field: event.productField);
         emit(state.copyWith(states: DatabaseStates.fieldsAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.fieldsNotAdded));
@@ -198,8 +195,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteProductField fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.fieldsBeingLoaded));
-        await databaseHandler.deleteProductField(event.productField);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.deleteProductField(field: event.productField);
         emit(state.copyWith(states: DatabaseStates.fieldsDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.fieldsNotDeleted));
@@ -207,41 +204,65 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    on<DatabaseEventUpdateProductField>((event, emit) async {
+    on<DatabaseEventUpdateProductFieldUpdateNameAndOrder>((event, emit) async {
       print('---');
-      print('--- DatabaseEventUpdateProductField fired');
+      print('--- DatabaseEventUpdateProductFieldUpdateNameAndOrder fired');
       print('---');
+      emit(state.copyWith(states: DatabaseStates.dbLoading));
       try {
-        emit(state.copyWith(states: DatabaseStates.fieldsBeingLoaded));
-
-        for (var element in event.oldField.priceImages!.keys) {
-          print('$element --- ${event.oldField.priceImages![element]}');
-        }
-        print('---------------------');
-        Map<String, double>? priceImagesToPush;
-        if (event.priceImages != null) {
-          priceImagesToPush = {};
-          for (var nominalName in event.oldField.priceImages!.keys) {
-            if (event.priceImages![nominalName]! <= 0) {
-              priceImagesToPush[nominalName] =
-                  event.oldField.priceImages![nominalName]!;
-            } else {
-              priceImagesToPush[nominalName] = event.priceImages![nominalName]!;
-            }
-          }
-        }
-
-        for (var element in priceImagesToPush!.keys) {
-          print('$element --- ${priceImagesToPush[element]}');
-        }
-
         await databaseHandler.updateProductField(
-          event.oldField.id,
-          event.order,
-          event.fieldName,
-          event.isPriceImage,
-          priceImagesToPush,
-          event.expectedData,
+          fieldId: event.field.id,
+          order: event.order,
+          fieldName: event.fieldName,
+          isPriceImage: event.isPriceImage,
+          expectedData:
+              (event.field.handler == 'InputField' && event.fieldName != null)
+              ? [event.fieldName!]
+              : null,
+        );
+        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
+        rethrow;
+      }
+    });
+
+    on<DatabaseEventUpdateProductFieldSwapImageField>((event, emit) async {
+      print('---');
+      print('--- DatabaseEventUpdateProductFieldSwapImageField fired');
+      print('---');
+      emit(state.copyWith(states: DatabaseStates.dbLoading));
+      try {
+        await databaseHandler.updateProductField(
+          fieldId: event.oldImageField.id,
+          isPriceImage: false,
+          priceImages: null,
+        );
+        await databaseHandler.updateProductField(
+          fieldId: event.newImageField.id,
+          isPriceImage: true,
+          priceImages: null,
+        );
+        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
+      } catch (e) {
+        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
+        rethrow;
+      }
+    });
+
+    on<DatabaseEventUpdateProductFieldAppointNewIamgeField>((
+      event,
+      emit,
+    ) async {
+      print('---');
+      print('--- DatabaseEventUpdateProductFieldAppointNewIamgeField fired');
+      print('---');
+      emit(state.copyWith(states: DatabaseStates.dbLoading));
+      try {
+        await databaseHandler.updateProductField(
+          fieldId: event.newImageField.id,
+          isPriceImage: true,
+          priceImages: event.newImageField.priceImages,
         );
         emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
       } catch (e) {
@@ -257,7 +278,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventFetchAllCurrencies fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.currenciesBeingLoaded));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         final allCurrencies = await databaseHandler.fetchAllCurencies();
         emit(
           state.copyWith(
@@ -276,8 +297,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddCurrencies fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.currenciesBeingLoaded));
-        await databaseHandler.addCurrencies(event.currencies);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.addCurrencies(currencies: event.currencies);
         emit(state.copyWith(states: DatabaseStates.currenciesAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.currenciesNotAdded));
@@ -290,8 +311,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteCurrencies fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.currenciesBeingLoaded));
-        await databaseHandler.deleteCurrencies(event.currencies);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.deleteCurrencies(currencies: event.currencies);
         emit(state.copyWith(states: DatabaseStates.currenciesDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.currenciesNotDeleted));
@@ -306,7 +327,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventFetchAllFeaturedProducts fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         final featuredProducts = await databaseHandler
             .fetchAllFeaturedProducts();
         emit(
@@ -327,8 +348,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddFeaturedProduct fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
-        await databaseHandler.addFeaturedProduct(event.productId);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.addFeaturedProduct(productId: event.productId);
         emit(state.copyWith(states: DatabaseStates.featuedProductsAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.featuedProductsNotAdded));
@@ -341,8 +362,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteFeaturedProduct fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.featuedProductsBeingLoaded));
-        await databaseHandler.deleteFeaturedProduct(event.productId);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.deleteFeaturedProduct(productId: event.productId);
         emit(state.copyWith(states: DatabaseStates.featuedProductsDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.featuedProductsNotDeleted));
@@ -360,11 +381,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         emit(
           state.copyWith(
             userPreferences: null,
-            states: DatabaseStates.userPreferencesBeingLoaded,
+            states: DatabaseStates.dbLoading,
           ),
         );
         final userPreferences = await databaseHandler.fetchUserPreferences(
-          event.userId,
+          userId: event.userId,
         );
         emit(
           state.copyWith(
@@ -384,8 +405,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventAddUserPreference fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded));
-        await databaseHandler.addUserPreference(event.userId, event.productId);
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
+        await databaseHandler.addUserPreference(
+          userId: event.userId,
+          productId: event.productId,
+        );
         List<String> newPreference = state.userPreferences ?? [];
         newPreference.add(event.productId);
         emit(
@@ -405,10 +429,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventDeleteUserPreference fired');
       print('---');
       try {
-        emit(state.copyWith(states: DatabaseStates.userPreferencesBeingLoaded));
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.deleteUserPreference(
-          event.userId,
-          event.productId,
+          userId: event.userId,
+          productId: event.productId,
         );
         List<String> deletedPreference = state.userPreferences ?? [];
         deletedPreference.removeWhere(

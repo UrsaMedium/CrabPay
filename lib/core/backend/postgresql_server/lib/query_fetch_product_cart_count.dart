@@ -10,7 +10,7 @@ class QueryGetProductCartCount {
     // Mapping compound conditions and fields to proper snake_case PostgreSQL format
     final String query = '''
       SELECT product_cart_item_count 
-      FROM user_product_cart_item_counters 
+      FROM of_user_of_product_cart_item_counter 
       WHERE user_id = @userId AND product_id = @productId
     ''';
 

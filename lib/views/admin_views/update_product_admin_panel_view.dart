@@ -106,7 +106,7 @@ class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelVie
               child: BlocBuilder<DatabaseBloc, DatabaseState>(
                 builder: (context, state) {
                   final bool beingLoaded =
-                      state.states == DatabaseStates.productsBeingLoaded;
+                      state.states == DatabaseStates.dbLoading;
                   return Row(
                     children: [
                       Text(_selectedProduct != null ? 'Delete' : ''),
@@ -313,7 +313,7 @@ class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelVie
                             );
                           }
                         : null,
-                    child: state.states == DatabaseStates.productsBeingLoaded
+                    child: state.states == DatabaseStates.dbLoading
                         ? CircularProgressIndicator()
                         : Text('Push the changes'),
                   ),

@@ -6,7 +6,7 @@ class QueryGetUserCartCount {
 
     final String query = '''
       SELECT user_cart_item_count 
-      FROM user_cart_item_counters 
+      FROM of_user_cart_item_counter 
       WHERE user_id = @userId
     ''';
 

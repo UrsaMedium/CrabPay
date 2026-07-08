@@ -5,7 +5,6 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -16,14 +15,14 @@ class UpdateFieldAdminPanelView extends StatefulWidget {
   const UpdateFieldAdminPanelView({super.key, required this.fieldId});
 
   @override
-  State<UpdateFieldAdminPanelView> createState() => _UpdateFieldAdminPanelViewState();
+  State<UpdateFieldAdminPanelView> createState() =>
+      _UpdateFieldAdminPanelViewState();
 }
 
 class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
   ProductField? _currentField;
   final TextEditingController _fieldName = TextEditingController();
   final TextEditingController _fieldOrder = TextEditingController();
-  Map<String, TextEditingController>? _textEditingControllers;
 
   @override
   void initState() {
@@ -32,12 +31,6 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
         .state
         .productFields
         ?.firstWhere((element) => element.id == widget.fieldId);
-
-    if (_currentField != null) {
-      if (_currentField!.isPriceImage && _currentField!.priceImages != null) {
-        _textEditingControllers = _createTextEditingControllers();
-      }
-    }
     super.initState();
   }
 
@@ -69,7 +62,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                 child: BlocBuilder<DatabaseBloc, DatabaseState>(
                   builder: (context, state) {
                     final bool beingLoaded =
-                        state.states == DatabaseStates.fieldsBeingLoaded;
+                        state.states == DatabaseStates.dbLoading;
                     return Row(
                       children: [
                         Text('Delete'),
@@ -169,56 +162,39 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                         ),
                       ],
                     ),
-                    if (_currentField != null)
-                      if (_currentField!.isPriceImage &&
-                          _currentField!.priceImages != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: Container(
-                            color: context.appColorScheme.surfaceContainerHigh,
-                            child: Column(
-                              children: [
-                                Divider(thickness: 3),
-                                Text('Modify prices'),
-                                _everyPriceFunction(context),
-                              ],
-                            ),
-                          ),
-                        ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: BlocBuilder<DatabaseBloc, DatabaseState>(
                         builder: (context, state) {
                           return ElevatedButton(
                             onPressed: () {
-                              if (state.states !=
-                                  DatabaseStates.fieldsBeingLoaded) {
+                              if (state.states != DatabaseStates.dbLoading) {
                                 final order = int.tryParse(
                                   _fieldOrder.text.trim(),
                                 );
                                 final fieldName = _fieldName.text.trim() != ''
                                     ? _fieldName.text.trim()
                                     : null;
-                                Map<String, double>? priceImages;
-                                if (_currentField!.isPriceImage) {
-                                  priceImages = {};
-                                  for (var nominalName
-                                      in _textEditingControllers!.keys) {
-                                    priceImages[nominalName] =
-                                        double.tryParse(
-                                          _textEditingControllers![nominalName]
-                                                  ?.text ??
-                                              '-1',
-                                        ) ??
-                                        -1;
-                                  }
-                                }
+                                // Map<String, double>? priceImages;
+                                // if (_currentField!.isPriceImage) {
+                                //   priceImages = {};
+                                //   for (var nominalName
+                                //       in _textEditingControllers!.keys) {
+                                //     priceImages[nominalName] =
+                                //         double.tryParse(
+                                //           _textEditingControllers![nominalName]
+                                //                   ?.text ??
+                                //               '-1',
+                                //         ) ??
+                                //         -1;
+                                //   }
+                                // }
                                 context.read<DatabaseBloc>().add(
-                                  DatabaseEventUpdateProductField(
-                                    oldField: _currentField!,
+                                  DatabaseEventUpdateProductFieldUpdateNameAndOrder(
+                                    field: _currentField!,
                                     order: order,
                                     fieldName: fieldName,
-                                    priceImages: priceImages,
+                                    isPriceImage: _currentField!.isPriceImage,
                                   ),
                                 );
                                 Fluttertoast.showToast(
@@ -229,8 +205,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 Fluttertoast.showToast(msg: 'Failed');
                               }
                             },
-                            child:
-                                state.states != DatabaseStates.fieldsBeingLoaded
+                            child: state.states != DatabaseStates.dbLoading
                                 ? Text('Update The Field')
                                 : CircularProgressIndicator(),
                           );
@@ -241,86 +216,6 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                 )
               : Text('Some error - no field found'),
         ),
-      ),
-    );
-  }
-
-  Map<String, TextEditingController> _createTextEditingControllers() {
-    Map<String, TextEditingController> result = {};
-    for (var iamgePrice in _currentField!.expectedData!) {
-      TextEditingController newController = TextEditingController();
-      result[iamgePrice] = newController;
-    }
-    return result;
-  }
-
-  List<Widget> _priceRangeListWidgetGenerator() {
-    List<Widget> result = [];
-    for (var aPriceImage in _currentField!.expectedData!) {
-      result.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(aPriceImage),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 18, left: 8),
-                child: SizedBox(
-                  height: 36,
-                  width: 125,
-                  child: TextField(
-                    controller: _textEditingControllers![aPriceImage],
-                    onChanged: (value) {
-                      _currentField!.priceImages![aPriceImage] =
-                          double.tryParse(
-                            _textEditingControllers![aPriceImage]!.text,
-                          ) ??
-                          -1;
-                    },
-                    keyboardType: .number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                    ],
-                    cursorHeight: 24,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      contentPadding: .symmetric(vertical: 2, horizontal: 4),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    return result;
-  }
-
-  Widget _everyPriceFunction(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ExpansionTile(
-        childrenPadding: EdgeInsets.only(bottom: 4),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(30),
-        ),
-        collapsedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(30),
-        ),
-        backgroundColor: context.appColorScheme.onPrimaryFixed,
-        collapsedBackgroundColor: context.appColorScheme.onPrimaryFixedVariant,
-
-        title: Text(_currentField!.fieldName),
-        subtitle: Text('Fill the price options'),
-        children: _priceRangeListWidgetGenerator(),
       ),
     );
   }

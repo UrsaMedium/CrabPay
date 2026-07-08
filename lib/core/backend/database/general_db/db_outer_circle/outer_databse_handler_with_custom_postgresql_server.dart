@@ -42,7 +42,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // add Product
   @override
-  Future<void> addProduct(Product product) async {
+  Future<void> addProduct({required Product product}) async {
     try {
       if (Uuid.isValidUUID(fromString: product.id)) {
         await retryer.retry(
@@ -71,7 +71,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // delete Product
   @override
-  Future<void> deleteProduct(Product product) async {
+  Future<void> deleteProduct({required Product product}) async {
     try {
       await retryer.retry(
         () => MutationDeleteProduct(id: product.id).execute(),
@@ -83,12 +83,12 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //update product
   @override
-  Future<void> updateProduct(
-    String productId,
+  Future<void> updateProduct({
+    required String productId,
     String? imageName,
     String? productName,
     String? description,
-  ) async {
+  }) async {
     try {
       await retryer.retry(
         () => MutationUpdateProduct(
@@ -106,7 +106,9 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
   // Fields
   // fetch product fields
   @override
-  Future<List<ProductField>?> fetchProductFields(String productId) async {
+  Future<List<ProductField>?> fetchProductFields({
+    required String productId,
+  }) async {
     try {
       return await retryer.retry(
         () => QuieryFetchProductFields(productId: productId).execute(),
@@ -118,7 +120,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // add Product Field
   @override
-  Future<void> addProductField(ProductField field) async {
+  Future<void> addProductField({required ProductField field}) async {
     try {
       await retryer.retry(
         () => MutationAddProductField(
@@ -138,7 +140,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // delete a Field
   @override
-  Future<void> deleteProductField(ProductField field) async {
+  Future<void> deleteProductField({required ProductField field}) async {
     try {
       await retryer.retry(
         () => MutationDeleteProductField(id: field.id).execute(),
@@ -150,14 +152,14 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //update product field
   @override
-  Future<void> updateProductField(
-    String fieldId,
+  Future<void> updateProductField({
+    required String fieldId,
     int? order,
     String? fieldName,
     bool? isPriceImage,
     Map<String, double>? priceImages,
     List<String>? expectedData,
-  ) async {
+  }) async {
     try {
       await retryer.retry(
         () => MutationUpdateProductField(
@@ -187,7 +189,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // add currencies
   @override
-  Future<void> addCurrencies(Currencies currencies) async {
+  Future<void> addCurrencies({required Currencies currencies}) async {
     try {
       await retryer.retry(
         () => MutationAddCurrencies(
@@ -204,7 +206,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   // delete a curencies table
   @override
-  Future<void> deleteCurrencies(Currencies currencies) async {
+  Future<void> deleteCurrencies({required Currencies currencies}) async {
     try {
       await retryer.retry(
         () => MutationDeleteCurrencies(id: currencies.id).execute(),
@@ -227,7 +229,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //add featured product
   @override
-  Future<void> addFeaturedProduct(String productId) async {
+  Future<void> addFeaturedProduct({required String productId}) async {
     try {
       await retryer.retry(
         () =>
@@ -240,7 +242,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //delete featured product
   @override
-  Future<void> deleteFeaturedProduct(String productId) async {
+  Future<void> deleteFeaturedProduct({required String productId}) async {
     try {
       await retryer.retry(
         () => MutationDeleteFeaturedProduct(
@@ -255,7 +257,10 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
   //user preferences
   //add user preference
   @override
-  Future<void> addUserPreference(String userId, String productId) async {
+  Future<void> addUserPreference({
+    required String userId,
+    required String productId,
+  }) async {
     try {
       await retryer.retry(
         () => MutationAddUserPreference(
@@ -270,7 +275,7 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //fetch user preferences
   @override
-  Future<List<String>> fetchUserPreferences(String userId) async {
+  Future<List<String>> fetchUserPreferences({required String userId}) async {
     try {
       return await retryer.retry(
         () => QueryGetUserPreferences(userId: userId).execute(),
@@ -282,7 +287,10 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
 
   //delete user preference
   @override
-  Future<void> deleteUserPreference(String userId, String productId) async {
+  Future<void> deleteUserPreference({
+    required String userId,
+    required String productId,
+  }) async {
     try {
       await retryer.retry(
         () => MutationDeleteUserPreference(
