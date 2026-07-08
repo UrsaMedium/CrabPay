@@ -71,7 +71,7 @@ class _ResetPriceImageFieldAdminPanelViewState
   }) {
     context.read<DatabaseBloc>().add(
       DatabaseEventUpdateProductFieldSwapImageField(
-        oldImageField: oldImageField!,
+        oldImageField: oldImageField,
         newImageField: newImageField,
       ),
     );

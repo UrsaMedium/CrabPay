@@ -82,6 +82,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                     productField: _currentField!,
                                   ),
                                 );
+                                context.go('/');
                               } else {
                                 Fluttertoast.showToast(msg: 'Phew');
                               }
