@@ -71,33 +71,17 @@ class DatabaseEventDeleteProductField implements DatabaseEvent {
   DatabaseEventDeleteProductField({required this.productField});
 }
 
-class DatabaseEventUpdateProductFieldUpdateNameAndOrder
+class DatabaseEventUpdateProductField
     implements DatabaseEvent {
   final ProductField field;
-  final int? order;
-  final String? fieldName;
-  final bool? isPriceImage;
-
-  DatabaseEventUpdateProductFieldUpdateNameAndOrder({
-    required this.field,
-    this.order,
-    this.fieldName,
-    required this.isPriceImage,
-  });
+  DatabaseEventUpdateProductField({required this.field});
 }
 
 class DatabaseEventUpdateProductFieldSwapImageField implements DatabaseEvent {
-  final ProductField oldImageField;
+  final ProductField? oldImageField;
   final ProductField newImageField;
   DatabaseEventUpdateProductFieldSwapImageField({
-    required this.oldImageField,
-    required this.newImageField,
-  });
-}
-
-class DatabaseEventUpdateProductFieldAppointNewIamgeField implements DatabaseEvent {
-  final ProductField newImageField;
-  DatabaseEventUpdateProductFieldAppointNewIamgeField({
+    this.oldImageField,
     required this.newImageField,
   });
 }

@@ -160,10 +160,14 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                                   handler: _currentField!.handler,
                                   isPriceImage: true,
                                   priceImages: priceImages,
+                                  expectedData:
+                                      _currentField!.handler == 'InputField'
+                                      ? [_currentField!.fieldName]
+                                      : _currentField!.expectedData,
                                 );
                                 context.read<DatabaseBloc>().add(
-                                  DatabaseEventUpdateProductFieldAppointNewIamgeField(
-                                    newImageField: newImageField,
+                                  DatabaseEventUpdateProductField(
+                                    field: newImageField,
                                   ),
                                 );
                                 Fluttertoast.showToast(

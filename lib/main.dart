@@ -1,13 +1,11 @@
 import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_databse_handler_with_custom_postgresql_server.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_custom_postgres_server.dart';
 import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
-import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_firebase_sql.dart';
 import 'package:crabpay/core/backend/authentication/auth_outer_circle/firebase_outer_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';

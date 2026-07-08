@@ -69,18 +69,12 @@ class _ResetPriceImageFieldAdminPanelViewState
     required BuildContext context,
     required ProductField newImageField,
   }) {
-    oldImageField == null
-        ? context.read<DatabaseBloc>().add(
-            DatabaseEventUpdateProductFieldAppointNewIamgeField(
-              newImageField: newImageField,
-            ),
-          )
-        : context.read<DatabaseBloc>().add(
-            DatabaseEventUpdateProductFieldSwapImageField(
-              oldImageField: oldImageField!,
-              newImageField: newImageField,
-            ),
-          );
+    context.read<DatabaseBloc>().add(
+      DatabaseEventUpdateProductFieldSwapImageField(
+        oldImageField: oldImageField!,
+        newImageField: newImageField,
+      ),
+    );
   }
 
   @override

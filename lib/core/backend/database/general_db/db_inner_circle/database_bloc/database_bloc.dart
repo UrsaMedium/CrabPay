@@ -204,7 +204,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    on<DatabaseEventUpdateProductFieldUpdateNameAndOrder>((event, emit) async {
+    on<DatabaseEventUpdateProductField>((event, emit) async {
       print('---');
       print('--- DatabaseEventUpdateProductFieldUpdateNameAndOrder fired');
       print('---');
@@ -212,13 +212,19 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         await databaseHandler.updateProductField(
           fieldId: event.field.id,
-          order: event.order,
-          fieldName: event.fieldName,
-          isPriceImage: event.isPriceImage,
-          expectedData:
-              (event.field.handler == 'InputField' && event.fieldName != null)
-              ? [event.fieldName!]
-              : null,
+          order: event.field.order,
+          fieldName: event.field.fieldName,
+          isPriceImage: event.field.isPriceImage,
+          priceImages:
+              event.field.isPriceImage && event.field.handler == 'InputField'
+              ? {
+                  event.field.priceImages!.keys.first:
+                      event.field.priceImages!.values.first,
+                }
+              : event.field.priceImages,
+          expectedData: (event.field.handler == 'InputField')
+              ? [event.field.fieldName]
+              : event.field.expectedData,
         );
         emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
       } catch (e) {
@@ -233,36 +239,17 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       emit(state.copyWith(states: DatabaseStates.dbLoading));
       try {
-        await databaseHandler.updateProductField(
-          fieldId: event.oldImageField.id,
-          isPriceImage: false,
-          priceImages: null,
-        );
-        await databaseHandler.updateProductField(
-          fieldId: event.newImageField.id,
-          isPriceImage: true,
-          priceImages: null,
-        );
-        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
-        rethrow;
-      }
-    });
-
-    on<DatabaseEventUpdateProductFieldAppointNewIamgeField>((
-      event,
-      emit,
-    ) async {
-      print('---');
-      print('--- DatabaseEventUpdateProductFieldAppointNewIamgeField fired');
-      print('---');
-      emit(state.copyWith(states: DatabaseStates.dbLoading));
-      try {
+        if (event.oldImageField != null) {
+          await databaseHandler.updateProductField(
+            fieldId: event.oldImageField!.id,
+            isPriceImage: false,
+            priceImages: null,
+          );
+        }
         await databaseHandler.updateProductField(
           fieldId: event.newImageField.id,
           isPriceImage: true,
-          priceImages: event.newImageField.priceImages,
+          priceImages: null,
         );
         emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
       } catch (e) {

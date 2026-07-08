@@ -169,32 +169,39 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                           return ElevatedButton(
                             onPressed: () {
                               if (state.states != DatabaseStates.dbLoading) {
-                                final order = int.tryParse(
-                                  _fieldOrder.text.trim(),
-                                );
+                                final order =
+                                    int.tryParse(_fieldOrder.text.trim()) ??
+                                    _currentField!.order;
                                 final fieldName = _fieldName.text.trim() != ''
                                     ? _fieldName.text.trim()
-                                    : null;
-                                // Map<String, double>? priceImages;
-                                // if (_currentField!.isPriceImage) {
-                                //   priceImages = {};
-                                //   for (var nominalName
-                                //       in _textEditingControllers!.keys) {
-                                //     priceImages[nominalName] =
-                                //         double.tryParse(
-                                //           _textEditingControllers![nominalName]
-                                //                   ?.text ??
-                                //               '-1',
-                                //         ) ??
-                                //         -1;
-                                //   }
-                                // }
+                                    : _currentField!.fieldName;
+
+                                final newField = ProductField(
+                                  id: _currentField!.id,
+                                  productId: _currentField!.productId,
+                                  order: order,
+                                  fieldName: fieldName,
+                                  handler: _currentField!.handler,
+                                  isPriceImage: _currentField!.isPriceImage,
+                                  priceImages:
+                                      _currentField!.handler == 'InputField' &&
+                                          _currentField!.isPriceImage &&
+                                          _fieldName.text.trim() != ''
+                                      ? {
+                                          fieldName: _currentField!
+                                              .priceImages!
+                                              .values
+                                              .first,
+                                        }
+                                      : _currentField!.priceImages,
+                                  expectedData:
+                                      _currentField!.handler == 'InputField'
+                                      ? [_currentField!.fieldName]
+                                      : _currentField!.expectedData,
+                                );
                                 context.read<DatabaseBloc>().add(
-                                  DatabaseEventUpdateProductFieldUpdateNameAndOrder(
-                                    field: _currentField!,
-                                    order: order,
-                                    fieldName: fieldName,
-                                    isPriceImage: _currentField!.isPriceImage,
+                                  DatabaseEventUpdateProductField(
+                                    field: newField,
                                   ),
                                 );
                                 Fluttertoast.showToast(
