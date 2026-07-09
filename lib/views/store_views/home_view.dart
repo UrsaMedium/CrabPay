@@ -70,18 +70,18 @@ class _HomeViewState extends State<HomeView> {
         if (state is AuthStateLoading) {
           GlobalLoadingScreen().show();
         } else {
-          context.read<CartBloc>().add(CartEventFlushData());
-          context.read<DatabaseBloc>().add(DatabaseEventFlushData());
-          context.read<DatabaseBloc>().add(
-            DatabaseEventInitialize(
-              currentUser: context.read<AuthBloc>().state.currentUser,
-            ),
-          );
-          context.read<CartBloc>().add(
-            CartEventFetchCartItems(
-              userId: context.read<AuthBloc>().state.currentUser.id,
-            ),
-          );
+          // context.read<CartBloc>().add(CartEventFlushData());
+          // context.read<DatabaseBloc>().add(DatabaseEventFlushData());
+          // context.read<DatabaseBloc>().add(
+          //   DatabaseEventInitialize(
+          //     currentUser: context.read<AuthBloc>().state.currentUser,
+          //   ),
+          // );
+          // context.read<CartBloc>().add(
+          //   CartEventFetchCartItems(
+          //     userId: context.read<AuthBloc>().state.currentUser.id,
+          //   ),
+          // );
           // Navigator.of(context, rootNavigator: true).pop();
           GlobalLoadingScreen().hide();
         }

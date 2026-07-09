@@ -110,7 +110,7 @@ class OuterCartHandler implements InnerCartHandler {
   }
 
   @override
-  Future<void> updateCartItem(List<CartItem> cartItems, AuthUser? user) async {
+  Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user) async {
     try {
       if (user == null) {
         for (var item in cartItems) {

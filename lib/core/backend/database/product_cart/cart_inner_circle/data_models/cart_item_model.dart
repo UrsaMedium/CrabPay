@@ -24,14 +24,14 @@ class CartItem {
   });
 
   factory CartItem.intial() => CartItem(
-    id: 'id',
-    userId: 'userId',
-    userName: 'userName',
-    productId: 'productId',
-    productName: 'productName',
+    id: '',
+    userId: '',
+    userName: '',
+    productId: '',
+    productName: '',
     purchaseData: {},
-    currency: 'currency',
+    currency: '',
     checkoutPrice: 0,
-    status: 'status',
+    status: '',
   );
 }

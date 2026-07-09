@@ -101,7 +101,7 @@ class OuterCartHandlerWithCustomPostgresServer implements InnerCartHandler {
   }
 
   @override
-  Future<void> updateCartItem(List<CartItem> cartItems, AuthUser? user) async {
+  Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user) async {
     try {
       for (var item in cartItems) {
         await retryer.retry(

@@ -50,17 +50,8 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   Future<List<Product>?> fetchAllProducts() => dbHandler.fetchAllProducts();
 
   @override
-  Future<void> updateProduct({
-    required String productId,
-    String? imageName,
-    String? productName,
-    String? description,
-  }) => dbHandler.updateProduct(
-    productId: productId,
-    imageName: imageName,
-    productName: productName,
-    description: description,
-  );
+  Future<void> updateProduct({required Product product}) =>
+      dbHandler.updateProduct(product: product);
 
   @override
   Future<List<String>> fetchAllFeaturedProducts() =>
@@ -91,19 +82,15 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   }) => dbHandler.deleteUserPreference(userId: userId, productId: productId);
 
   @override
-  Future<void> updateProductField({
-    required String fieldId,
-    int? order,
-    String? fieldName,
-    bool? isPriceImage,
-    Map<String, double>? priceImages,
-    List<String>? expectedData,
-  }) => dbHandler.updateProductField(
-    fieldId: fieldId,
-    order: order,
-    fieldName: fieldName,
-    isPriceImage: isPriceImage,
-    priceImages: priceImages,
-    expectedData: expectedData,
+  Future<void> updateProductField({required ProductField field}) =>
+      dbHandler.updateProductField(field: field);
+
+  @override
+  Future<void> updateProductFieldSwapImageField({
+    required ProductField oldImageField,
+    required ProductField newImageField,
+  }) => dbHandler.updateProductFieldSwapImageField(
+    oldImageField: oldImageField,
+    newImageField: newImageField,
   );
 }

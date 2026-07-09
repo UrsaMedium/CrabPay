@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 
 class FirebaseOuterInterface implements AuthInnerInterface {
   @override
-  Future<AuthUser> createUser({
+  Future<AppAuthUser> createUser({
     required String email,
     required String password,
   }) async {
@@ -58,14 +58,14 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   }
 
   @override
-  Future<AuthUser?> getUser() async {
+  Future<AppAuthUser?> getUser() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
 
       // final currentUsere = FirebaseAuth.instance.currentUser?.getIdToken(true);
       if (user != null) {
         final isAdmin = await _checkIfAdmin(user);
-        return AuthUser.fromFirebase(user, isAdmin: true); //TODO
+        return AppAuthUser.fromFirebase(user, isAdmin: true); //TODO
       } else {
         return null;
       }
@@ -75,12 +75,12 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   }
 
   @override
-  Future<AuthUser?> signInAnonymously() async {
+  Future<AppAuthUser?> signInAnonymously() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
       final anonUser = FirebaseAuth.instance.currentUser;
       if (anonUser != null) {
-        return AuthUser.fromFirebase(anonUser, isAdmin: true); //TODO
+        return AppAuthUser.fromFirebase(anonUser, isAdmin: true); //TODO
       } else {
         return null;
       }
@@ -90,7 +90,7 @@ class FirebaseOuterInterface implements AuthInnerInterface {
   }
 
   @override
-  Future<AuthUser> logIn({
+  Future<AppAuthUser> logIn({
     required String email,
     required String password,
   }) async {

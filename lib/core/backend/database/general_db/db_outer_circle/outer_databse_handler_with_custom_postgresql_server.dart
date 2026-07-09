@@ -84,23 +84,20 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
   //update product
   @override
   Future<void> updateProduct({
-    required String productId,
-    String? imageName,
-    String? productName,
-    String? description,
+    required Product product
   }) async {
-    try {
-      await retryer.retry(
-        () => MutationUpdateProduct(
-          id: productId,
-          imageUrl: imageName,
-          name: productName,
-          description: description,
-        ).execute(),
-      );
-    } catch (e) {
-      rethrow;
-    }
+    // try {
+    //   await retryer.retry(
+    //     () => MutationUpdateProduct(
+    //       id: productId,
+    //       imageUrl: imageName,
+    //       name: productName,
+    //       description: description,
+    //     ).execute(),
+    //   );
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   // Fields
@@ -153,27 +150,22 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
   //update product field
   @override
   Future<void> updateProductField({
-    required String fieldId,
-    int? order,
-    String? fieldName,
-    bool? isPriceImage,
-    Map<String, double>? priceImages,
-    List<String>? expectedData,
+    required ProductField field
   }) async {
-    try {
-      await retryer.retry(
-        () => MutationUpdateProductField(
-          id: fieldId,
-          order: order,
-          fieldName: fieldName,
-          isPriceImage: isPriceImage,
-          priceImages: priceImages,
-          expectedData: expectedData,
-        ).execute(),
-      );
-    } catch (e) {
-      rethrow;
-    }
+    // try {
+    //   await retryer.retry(
+    //     () => MutationUpdateProductField(
+    //       id: fieldId,
+    //       order: order,
+    //       fieldName: fieldName,
+    //       isPriceImage: isPriceImage,
+    //       priceImages: priceImages,
+    //       expectedData: expectedData,
+    //     ).execute(),
+    //   );
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   // Currencies
@@ -301,5 +293,11 @@ class OuterDatabseHandlerWithCustomPostgresqlServer
     } catch (e) {
       rethrow;
     }
+  }
+  
+  @override
+  Future<void> updateProductFieldSwapImageField({required ProductField oldImageField, required ProductField newImageField}) {
+    // TODO: implement updateProductFieldSwapImageField
+    throw UnimplementedError();
   }
 }

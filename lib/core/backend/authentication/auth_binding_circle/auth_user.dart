@@ -1,14 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 @immutable
-class AuthUser {
+class AppAuthUser {
   final String id;
   final String? email;
   final bool isEmailVerified;
   final bool isAnonymous;
   final bool isAdmin;
-  const AuthUser({
+  const AppAuthUser({
     required this.id,
     this.email,
     required this.isEmailVerified,
@@ -16,10 +17,24 @@ class AuthUser {
     required this.isAdmin,
   });
 
-  factory AuthUser.fromFirebase(User user, {required bool isAdmin}) => AuthUser(
+  factory AppAuthUser.fromFirebase(
+    firebase.User user, {
+    required bool isAdmin,
+  }) => AppAuthUser(
     id: user.uid,
     email: user.email,
     isEmailVerified: user.emailVerified,
+    isAnonymous: user.isAnonymous,
+    isAdmin: isAdmin,
+  );
+
+  factory AppAuthUser.fromSupabase(
+    supabase.User user, {
+    required bool isAdmin,
+  }) => AppAuthUser(
+    id: user.id,
+    email: user.email,
+    isEmailVerified: true,
     isAnonymous: user.isAnonymous,
     isAdmin: isAdmin,
   );

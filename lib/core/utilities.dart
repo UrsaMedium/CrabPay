@@ -16,7 +16,7 @@ extension ContextExtensions on BuildContext {
 }
 
 //local storage
-AuthUser appTempUser = LocalStorage.tempUser;
+AppAuthUser appTempUser = AppLocalStorage.tempUser;
 
 
 Future<void> openProductCardCallBack(

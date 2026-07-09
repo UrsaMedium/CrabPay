@@ -15,10 +15,12 @@ class UpdateProductAdminPanelView extends StatefulWidget {
   const UpdateProductAdminPanelView({super.key, required this.productId});
 
   @override
-  State<UpdateProductAdminPanelView> createState() => _UpdateProductAdminPanelViewState();
+  State<UpdateProductAdminPanelView> createState() =>
+      _UpdateProductAdminPanelViewState();
 }
 
-class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelView> {
+class _UpdateProductAdminPanelViewState
+    extends State<UpdateProductAdminPanelView> {
   List<Product>? _products;
   List<DropdownMenuEntry<Product>>? _productDropDownMenuEntries;
   final TextEditingController _productDropDownMenuController =
@@ -299,16 +301,22 @@ class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelVie
                     onPressed: _selectedProduct != null
                         ? () {
                             _ignoreStates = false;
+                            final updatedProduct = Product(
+                              id: _selectedProduct!.id,
+                              name: _productName == ''
+                                  ? _selectedProduct!.name
+                                  : _productName,
+                              image: _imageName == ''
+                                  ? _selectedProduct!.image
+                                  : _imageName,
+                              description: _descriptionText == ''
+                                  ? _selectedProduct!.description
+                                  : _descriptionText,
+                              currencies: '',
+                            );
                             context.read<DatabaseBloc>().add(
                               DatabaseEventUpdateProduct(
-                                productId: _selectedProduct!.id,
-                                imageName: _imageName == '' ? null : _imageName,
-                                productName: _productName == ''
-                                    ? null
-                                    : _productName,
-                                description: _descriptionText == ''
-                                    ? null
-                                    : _descriptionText,
+                                product: updatedProduct,
                               ),
                             );
                           }

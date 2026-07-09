@@ -10,16 +10,16 @@ class AuthBindingService implements AuthInnerInterface {
       AuthBindingService(interface: (FirebaseOuterInterface()));
 
   @override
-  Future<AuthUser> createUser({
+  Future<AppAuthUser> createUser({
     required String email,
     required String password,
   }) => interface.createUser(email: email, password: password);
 
   @override
-  Future<AuthUser?> getUser() => interface.getUser();
+  Future<AppAuthUser?> getUser() => interface.getUser();
 
   @override
-  Future<AuthUser> logIn({required String email, required String password}) =>
+  Future<AppAuthUser> logIn({required String email, required String password}) =>
       interface.logIn(email: email, password: password);
 
   @override
@@ -36,7 +36,7 @@ class AuthBindingService implements AuthInnerInterface {
       interface.sendPasswordReset(toEmail: toEmail);
 
   @override
-  Future<AuthUser?> signInAnonymously() => interface.signInAnonymously();
+  Future<AppAuthUser?> signInAnonymously() => interface.signInAnonymously();
 }
 
 // String? appUserEmail() {

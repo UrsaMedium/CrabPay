@@ -9,6 +9,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   StreamSubscription? _streamSubscription;
   CartBloc(InnerCartHandler cartHandler) : super(const CartState()) {
     on<CartEventFetchCartItems>((event, emit) async {
+      print('----');
+      print('CartEventFetchCartItems fired');
+      print('----');
       try {
         emit(state.copyWith(states: CartStates.getting));
         final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
@@ -32,6 +35,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventAddCartItem>((event, emit) async {
+      print('----');
+      print('CartEventAddCartItem fired');
+      print('----');
       try {
         emit(
           state.copyWith(
@@ -48,6 +54,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteCartItem>((event, emit) async {
+      print('----');
+      print('CartEventDeleteCartItem fired');
+      print('----');
       try {
         emit(state.copyWith(states: CartStates.deleting));
         await cartHandler.deleteCartItem(event.cartItem.id);
@@ -67,6 +76,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteCartItemById>((event, emit) async {
+      print('----');
+      print('CartEventDeleteCartItemById fired');
+      print('----');
       try {
         emit(state.copyWith(states: CartStates.deleting));
         await cartHandler.deleteCartItem(event.cartItemId);
@@ -86,6 +98,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventUserCheckoutItems>((event, emit) async {
+      print('----');
+      print('CartEventUserCheckoutItems fired');
+      print('----');
       try {
         await cartHandler.updateCartItem(event.checkoutItems, null);
       } catch (e) {
@@ -94,6 +109,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventStartCartItemsStream>((event, emit) {
+      print('----');
+      print('CartEventStartCartItemsStream fired');
+      print('----');
       emit(state.copyWith(isStreaming: IsStreaming.yes));
       _streamSubscription?.cancel();
       _streamSubscription = cartHandler.cartItemsStream(event.userId).listen((
@@ -104,6 +122,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventOnChangeStreamed>((event, emit) {
+      print('----');
+      print('CartEventOnChangeStreamed fired');
+      print('----');
       emit(
         state.copyWith(
           cartItems: event.cartItems,
@@ -113,11 +134,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventCloseStream>((event, emit) {
+      print('----');
+      print('CartEventCloseStream fired');
+      print('----');
       _streamSubscription?.cancel();
       emit(state.copyWith(isStreaming: IsStreaming.no));
     });
 
     on<CartEventFlushData>((event, emit) {
+      print('----');
+      print('CartEventFlushData fired');
+      print('----');
       emit(
         state.copyWith(
           allUserCartItems: null,
@@ -133,6 +160,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventFetchUserCartItemAmount>((event, emit) async {
+      print('----');
+      print('CartEventFetchUserCartItemAmount fired');
+      print('----');
       try {
         final userCartItemAmount = await cartHandler.getUserCartItemAmount(
           event.userId,
@@ -150,6 +180,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventFetchProductCartItemAmount>((event, emit) async {
+      print('----');
+      print('CartEventFetchProductCartItemAmount fired');
+      print('----');
       try {
         final productCartItemAmount = await cartHandler
             .getProductCartItemAmount(event.userId, event.productId);
@@ -168,6 +201,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteLastAddedProductCartItem>((event, emit) async {
+      print('----');
+      print('CartEventDeleteLastAddedProductCartItem fired');
+      print('----');
       try {
         final didDelete = await cartHandler.deletedLastAddedProductCartItem(
           event.userId,

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
@@ -128,12 +129,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.updateProduct(
-          productId: event.productId,
-          imageName: event.imageName,
-          productName: event.productName,
-          description: event.description,
-        );
+        await databaseHandler.updateProduct(product: event.product);
         emit(state.copyWith(states: DatabaseStates.productsUpdated));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.productsNotUpdated));
@@ -206,26 +202,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
     on<DatabaseEventUpdateProductField>((event, emit) async {
       print('---');
-      print('--- DatabaseEventUpdateProductFieldUpdateNameAndOrder fired');
+      print('--- DatabaseEventUpdateProductField fired');
       print('---');
       emit(state.copyWith(states: DatabaseStates.dbLoading));
       try {
-        await databaseHandler.updateProductField(
-          fieldId: event.field.id,
-          order: event.field.order,
-          fieldName: event.field.fieldName,
-          isPriceImage: event.field.isPriceImage,
-          priceImages:
-              event.field.isPriceImage && event.field.handler == 'InputField'
-              ? {
-                  event.field.priceImages!.keys.first:
-                      event.field.priceImages!.values.first,
-                }
-              : event.field.priceImages,
-          expectedData: (event.field.handler == 'InputField')
-              ? [event.field.fieldName]
-              : event.field.expectedData,
-        );
+        await databaseHandler.updateProductField(field: event.field);
         emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
@@ -240,17 +221,29 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       emit(state.copyWith(states: DatabaseStates.dbLoading));
       try {
         if (event.oldImageField != null) {
-          await databaseHandler.updateProductField(
-            fieldId: event.oldImageField!.id,
+          final oldChangedField = ProductField(
+            id: event.oldImageField!.id,
+            productId: event.oldImageField!.productId,
+            order: event.oldImageField!.order,
+            fieldName: event.oldImageField!.fieldName,
+            handler: event.oldImageField!.handler,
             isPriceImage: false,
+            expectedData: event.oldImageField!.expectedData,
             priceImages: null,
           );
+          await databaseHandler.updateProductField(field: oldChangedField);
         }
-        await databaseHandler.updateProductField(
-          fieldId: event.newImageField.id,
+        final newChangedField = ProductField(
+          id: event.newImageField.id,
+          productId: event.newImageField.productId,
+          order: event.newImageField.order,
+          fieldName: event.newImageField.fieldName,
+          handler: event.newImageField.handler,
           isPriceImage: true,
+          expectedData: event.newImageField.expectedData,
           priceImages: null,
         );
+        await databaseHandler.updateProductField(field: newChangedField);
         emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));

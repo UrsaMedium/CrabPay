@@ -14,10 +14,10 @@ class Product {
   });
 
   factory Product.intial() => Product(
-    id: 'null',
-    name: 'name',
-    image: 'lib/assets/images/gas-gas-gas.jpg',
-    description: 'description',
+    id: '',
+    name: '',
+    image: '',
+    description: '',
     currencies: '',
   );
 }

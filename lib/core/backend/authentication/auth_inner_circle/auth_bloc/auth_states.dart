@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 abstract class AuthState {
   final Exception? bloodyAuthException;
-  final AuthUser currentUser;
+  final AppAuthUser currentUser;
   const AuthState({
     this.bloodyAuthException,
     required this.currentUser,

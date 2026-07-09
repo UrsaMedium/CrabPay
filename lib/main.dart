@@ -1,6 +1,10 @@
+import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_interface.dart';
+import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_databse_handler_with_custom_postgresql_server.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_custom_postgres_server.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
+import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
 import 'package:crabpay/core/global_loading_screen.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
@@ -33,22 +37,27 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await LocalStorage.init();
+  await Supabase.initialize(
+    url: supabaseAccessConf['url']!,
+    publishableKey: supabaseAccessConf['publishableKey']!,
+  );
+  await AppLocalStorage.init();
 
   runApp(
     BlocProvider(
-      create: (context) => AuthBloc(FirebaseOuterInterface()),
+      create: (context) => AuthBloc(SupabaseOuterInterface()),
       child: BlocProvider(
         create: (context) =>
-            DatabaseBloc(OuterDatabseHandlerWithCustomPostgresqlServer()),
+            DatabaseBloc(OuterDatabaseHandlerWithSupabase()),
         child: BlocProvider(
           create: (context) =>
-              CartBloc(OuterCartHandlerWithCustomPostgresServer()),
+              CartBloc(OuterCartHandlerWithSupabase()),
           child: const CrabPayApp(),
         ),
       ),

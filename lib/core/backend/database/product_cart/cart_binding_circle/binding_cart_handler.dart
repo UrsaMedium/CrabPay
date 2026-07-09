@@ -27,7 +27,7 @@ class BindingCartHandler implements InnerCartHandler {
       cartHandler.cartItemsStream(userId);
 
   @override
-  Future<void> updateCartItem(List<CartItem> cartItems, AuthUser? user) =>
+  Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user) =>
       cartHandler.updateCartItem(cartItems, user);
 
   @override

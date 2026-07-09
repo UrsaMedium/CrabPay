@@ -7,23 +7,15 @@ abstract class InnerDatabaseHandler {
   Future<List<Product>?> fetchAllProducts();
   Future<void> addProduct({required Product product});
   Future<void> deleteProduct({required Product product});
-  Future<void> updateProduct({
-    required String productId,
-    String? imageName,
-    String? productName,
-    String? description,
-  });
+  Future<void> updateProduct({required Product product});
   //fields
   Future<List<ProductField>?> fetchProductFields({required String productId});
   Future<void> addProductField({required ProductField field});
   Future<void> deleteProductField({required ProductField field});
-  Future<void> updateProductField({
-    required String fieldId,
-    int? order,
-    String? fieldName,
-    bool? isPriceImage,
-    Map<String, double>? priceImages,
-    List<String>? expectedData,
+  Future<void> updateProductField({required ProductField field});
+  Future<void> updateProductFieldSwapImageField({
+    required ProductField oldImageField,
+    required ProductField newImageField,
   });
   //currencies
   Future<List<Currencies>?> fetchAllCurencies();
@@ -35,6 +27,12 @@ abstract class InnerDatabaseHandler {
   Future<void> deleteFeaturedProduct({required String productId});
   //user preferences
   Future<List<String>> fetchUserPreferences({required String userId});
-  Future<void> addUserPreference({required String userId, required String productId});
-  Future<void> deleteUserPreference({required String userId, required String productId});
+  Future<void> addUserPreference({
+    required String userId,
+    required String productId,
+  });
+  Future<void> deleteUserPreference({
+    required String userId,
+    required String productId,
+  });
 }

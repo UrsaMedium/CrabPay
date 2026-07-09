@@ -11,11 +11,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventInitialize>((event, emit) async {
       try {
         emit(AuthStateLoading(currentUser: appTempUser));
-        try {
-          await interface.logOut();
-        } catch (e) {
-          // TODO
-        }
+        // try {
+        //   await interface.logOut();
+        // } catch (e) {
+        //   // TODO
+        // }
         await interface.initialize();
         final user = await interface.getUser();
 

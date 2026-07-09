@@ -15,7 +15,7 @@ class AskPageView extends StatefulWidget {
 }
 
 class _AskPageViewState extends State<AskPageView> {
-  AuthUser? user;
+  AppAuthUser? user;
   @override
   Widget build(BuildContext context) {
     // final currentUser = context.read<AuthBloc>().state.currentUser;

@@ -10,7 +10,7 @@ abstract class DatabaseEvent {
 }
 
 class DatabaseEventInitialize implements DatabaseEvent {
-  final AuthUser currentUser;
+  final AppAuthUser currentUser;
   DatabaseEventInitialize({required this.currentUser});
 }
 
@@ -34,16 +34,8 @@ class DatabaseEventDeleteProduct implements DatabaseEvent {
 
 // modify product
 class DatabaseEventUpdateProduct implements DatabaseEvent {
-  final String productId;
-  final String? imageName;
-  final String? productName;
-  final String? description;
-  DatabaseEventUpdateProduct({
-    this.imageName,
-    this.productName,
-    this.description,
-    required this.productId,
-  });
+  final Product product;
+  DatabaseEventUpdateProduct({required this.product});
 }
 
 // Fields events
@@ -71,8 +63,7 @@ class DatabaseEventDeleteProductField implements DatabaseEvent {
   DatabaseEventDeleteProductField({required this.productField});
 }
 
-class DatabaseEventUpdateProductField
-    implements DatabaseEvent {
+class DatabaseEventUpdateProductField implements DatabaseEvent {
   final ProductField field;
   DatabaseEventUpdateProductField({required this.field});
 }
@@ -84,11 +75,6 @@ class DatabaseEventUpdateProductFieldSwapImageField implements DatabaseEvent {
     this.oldImageField,
     required this.newImageField,
   });
-}
-
-class DatabaseEventUpdateProductUpdatePriceImages implements DatabaseEvent {
-  final Map<String, double> priceImages;
-  DatabaseEventUpdateProductUpdatePriceImages({required this.priceImages});
 }
 
 // Currencies events

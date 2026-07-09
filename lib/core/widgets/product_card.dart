@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCard extends StatelessWidget {
   final Function(BuildContext, String, String, String) openProductCardCallBack;
@@ -30,13 +34,20 @@ class ProductCard extends StatelessWidget {
         ),
         color: context.appColorScheme.surfaceContainer,
         child: GestureDetector(
-          onTap: () {
-            openProductCardCallBack(
+          onTap: () async {
+            await openProductCardCallBack(
               context,
               product.id,
               additionalSuffix,
               index,
             );
+            if (context.mounted) {
+              context.read<CartBloc>().add(
+                CartEventFetchUserCartItemAmount(
+                  userId: context.read<AuthBloc>().state.currentUser.id,
+                ),
+              );
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(1.0),

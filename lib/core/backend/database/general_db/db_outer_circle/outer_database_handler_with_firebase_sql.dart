@@ -82,24 +82,21 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   @override
   Future<void> updateProduct({
-    required String productId,
-    String? imageName,
-    String? productName,
-    String? description,
+    required Product product
   }) async {
-    try {
-      final mutation = CrabpayConnectorConnector.instance.updateProduct(
-        id: productId,
-      );
+    // try {
+    //   final mutation = CrabpayConnectorConnector.instance.updateProduct(
+    //     id: productId,
+    //   );
 
-      if (imageName != null) mutation.imageUrl(imageName);
-      if (productName != null) mutation.name(productName);
-      if (description != null) mutation.description(description);
+    //   if (imageName != null) mutation.imageUrl(imageName);
+    //   if (productName != null) mutation.name(productName);
+    //   if (description != null) mutation.description(description);
 
-      await retryer.retry(() => mutation.execute());
-    } catch (e) {
-      rethrow;
-    }
+    //   await retryer.retry(() => mutation.execute());
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   // Fields
@@ -197,48 +194,43 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
 
   @override
   Future<void> updateProductField({
-    required String fieldId,
-    int? order,
-    String? fieldName,
-    bool? isPriceImage,
-    Map<String, double>? priceImages,
-    List<String>? expectedData,
+    required ProductField field
   }) async {
-    try {
-      final mutation = CrabpayConnectorConnector.instance.updateProductField(
-        id: fieldId,
-      );
-      if (isPriceImage == null) {
-        AnyValue? priceImagesToPush;
-        if (priceImages != null) {
-          priceImagesToPush = AnyValue(priceImages.cast<String, double>());
-        }
+    // try {
+    //   final mutation = CrabpayConnectorConnector.instance.updateProductField(
+    //     id: fieldId,
+    //   );
+    //   if (isPriceImage == null) {
+    //     AnyValue? priceImagesToPush;
+    //     if (priceImages != null) {
+    //       priceImagesToPush = AnyValue(priceImages.cast<String, double>());
+    //     }
 
-        if (order != null) mutation.order(order);
-        if (fieldName != null) mutation.fieldName(fieldName);
-        if (priceImages != null) mutation.priceImages(priceImagesToPush);
-        if (expectedData != null) mutation.expectedData(expectedData);
+    //     if (order != null) mutation.order(order);
+    //     if (fieldName != null) mutation.fieldName(fieldName);
+    //     if (priceImages != null) mutation.priceImages(priceImagesToPush);
+    //     if (expectedData != null) mutation.expectedData(expectedData);
 
-        await retryer.retry(() => mutation.execute());
-      } else if (isPriceImage) {
-        if (priceImages != null) {
-          AnyValue? priceImagesToPush;
-          priceImagesToPush = AnyValue(priceImages.cast<String, double>());
-          retryer.retry(
-            () => mutation
-                .isPriceImage(true)
-                .priceImages(priceImagesToPush)
-                .execute(),
-          );
-        }
-      } else {
-        retryer.retry(
-          () => mutation.isPriceImage(false).priceImages(null).execute(),
-        );
-      }
-    } catch (e) {
-      rethrow;
-    }
+    //     await retryer.retry(() => mutation.execute());
+    //   } else if (isPriceImage) {
+    //     if (priceImages != null) {
+    //       AnyValue? priceImagesToPush;
+    //       priceImagesToPush = AnyValue(priceImages.cast<String, double>());
+    //       retryer.retry(
+    //         () => mutation
+    //             .isPriceImage(true)
+    //             .priceImages(priceImagesToPush)
+    //             .execute(),
+    //       );
+    //     }
+    //   } else {
+    //     retryer.retry(
+    //       () => mutation.isPriceImage(false).priceImages(null).execute(),
+    //     );
+    //   }
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   // Currencies
@@ -418,5 +410,11 @@ class OuterDatabaseHandlerWithFirebaseSql implements InnerDatabaseHandler {
       Fluttertoast.showToast(msg: 'Failed to delete User Preference');
       rethrow;
     }
+  }
+  
+  @override
+  Future<void> updateProductFieldSwapImageField({required ProductField oldImageField, required ProductField newImageField}) {
+    // TODO: implement updateProductFieldSwapImageField
+    throw UnimplementedError();
   }
 }
