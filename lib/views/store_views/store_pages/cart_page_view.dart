@@ -10,6 +10,8 @@ import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartPageView extends StatefulWidget {
   const CartPageView({super.key});
@@ -19,15 +21,22 @@ class CartPageView extends StatefulWidget {
 }
 
 class _CartPageViewState extends State<CartPageView> {
-  List<CartItem>? cartItems;
-  List<Product>? products;
-  bool isLoggedIn = false;
-  final PaymentService _paymentService = PaymentService();
+  List<CartItem>? _cartItems;
+  List<String> _cartItemIds = [];
+  List<Product>? _products;
+  final PaymentOuterHandler _paymentService = PaymentOuterHandler();
+  bool _isLoadingLink = false;
 
   @override
   void initState() {
-    products = context.read<DatabaseBloc>().state.products;
+    _products = context.read<DatabaseBloc>().state.products;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _paymentService.disposeListener();
+    super.dispose();
   }
 
   Future<void> detaFetching(BuildContext context) async {
@@ -36,6 +45,35 @@ class _CartPageViewState extends State<CartPageView> {
         userId: context.read<AuthBloc>().state.currentUser.id,
       ),
     );
+  }
+
+  Future<void> _onPaymentCall({required double totalAmount}) async {
+    setState(() {
+      _isLoadingLink = true;
+    });
+
+    try {
+      if (_cartItems != null) {
+        final String paymentUrl = await _paymentService.createPaymentLink(
+          cartItemIds: _cartItemIds,
+          totalAmount: totalAmount,
+        );
+        final Uri url = Uri.parse(paymentUrl);
+        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+          throw Exception('Failed to launch $paymentUrl');
+        }
+      } else {
+        Fluttertoast.showToast(msg: 'Nothing to pay for');
+        print('no cart tiems');
+        return;
+      }
+    } catch (e) {
+      print('--- Payment error: $e');
+    } finally {
+      setState(() {
+        _isLoadingLink = false;
+      });
+    }
   }
 
   @override
@@ -47,13 +85,16 @@ class _CartPageViewState extends State<CartPageView> {
         Scaffold(
           body: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
-              cartItems = context.read<CartBloc>().state.cartItems;
+              final allCartItems = context.read<CartBloc>().state.cartItems;
               bool cartItemsNotEmpty = false;
               double total = 0;
-              if (cartItems != null) {
-                if (cartItems!.isNotEmpty) {
-                  cartItemsNotEmpty = true;
-                  for (var item in cartItems!) {
+
+              if (allCartItems?.isNotEmpty ?? false) {
+                cartItemsNotEmpty = true;
+                _cartItems = [];
+                for (var item in allCartItems!) {
+                  if (item.status != 'paid') {
+                    _cartItems!.add(item);
                     total = total + item.checkoutPrice;
                   }
                 }
@@ -93,7 +134,7 @@ class _CartPageViewState extends State<CartPageView> {
                                 : ListView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    itemCount: cartItems!.length,
+                                    itemCount: _cartItems!.length,
                                     padding: .only(
                                       top: 8,
                                       bottom:
@@ -104,9 +145,9 @@ class _CartPageViewState extends State<CartPageView> {
                                     itemExtent: 86,
                                     itemBuilder: (context, index) {
                                       return CaertItemBuilder(
-                                        cartItems: cartItems!,
+                                        cartItems: _cartItems!,
                                         index: index,
-                                        products: products!,
+                                        products: _products!,
                                       );
                                     },
                                   ),
@@ -160,67 +201,84 @@ class _CartPageViewState extends State<CartPageView> {
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0,
                                       ),
-                                      child: ElevatedButton(
-                                        onPressed: total == 0
-                                            ? null
-                                            : () async {
-                                                //TODO
-                                                final String currentOrderId =
-                                                    'test_order_${DateTime.now().millisecondsSinceEpoch}';
+                                      child: StreamBuilder<String>(
+                                        stream: _paymentService
+                                            .listenToPaymentStatus(
+                                              _cartItemIds,
+                                            ),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData &&
+                                              snapshot.data == 'paid') {
+                                            context.read<CartBloc>().add(
+                                              CartEventFetchCartItems(
+                                                userId: context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .currentUser
+                                                    .id,
+                                              ),
+                                            );
+                                            print('--- Paid successfuly');
+                                          } else if (snapshot.hasData &&
+                                              snapshot.data == 'failed') {
+                                            context.read<CartBloc>().add(
+                                              CartEventFetchCartItems(
+                                                userId: context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .currentUser
+                                                    .id,
+                                              ),
+                                            );
+                                            Fluttertoast.showToast(
+                                              msg: 'Payment fail :(',
+                                            );
+                                            print('-- payment is failed');
+                                          }
 
-                                                final String? paaymentUrl =
-                                                    await _paymentService
-                                                        .createPayment(
-                                                          orderId:
-                                                              currentOrderId,
-                                                          amount: '30',
-                                                        );
-
-                                                if (paaymentUrl != null) {
-                                                  final bool success =
-                                                      await _paymentService
-                                                          .launchPaymentUrl(
-                                                            paaymentUrl,
+                                          return ElevatedButton(
+                                            onPressed: total == 0
+                                                ? null
+                                                : () async {
+                                                    _cartItemIds = [];
+                                                    double totalAmount = 0;
+                                                    for (var item
+                                                        in _cartItems!) {
+                                                      _cartItemIds.add(item.id);
+                                                      totalAmount +=
+                                                          item.checkoutPrice;
+                                                    }
+                                                    _isLoadingLink
+                                                        ? null
+                                                        : _onPaymentCall(
+                                                            totalAmount:
+                                                                totalAmount,
                                                           );
-                                                  if (!success) {
-                                                    print(
-                                                      'Cloud not open the browser to pay',
-                                                    );
-                                                  }
-                                                } else {
-                                                  print(
-                                                    'Server failed to return a payment link',
-                                                  );
-                                                }
-                                                // if (isLoggedIn) {
-                                                //   context.read<CartBloc>().add(
-                                                //     CartEventUserCheckoutItems(
-                                                //       checkoutItems: cartItems!,
-                                                //       status: 'beingCheckedOut',
-                                                //     ),
-                                                //   );
-                                                //   detaFetching(context);
-                                                // } else {}
-                                              },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              context.appColorScheme.primary,
-                                          foregroundColor:
-                                              context.appColorScheme.onPrimary,
-                                          minimumSize: Size(
-                                            double.maxFinite,
-                                            50,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          isLoggedIn
-                                              ? 'Checkout'
-                                              : 'Sign In & Checkout',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
+                                                  },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: context
+                                                  .appColorScheme
+                                                  .primary,
+                                              foregroundColor: context
+                                                  .appColorScheme
+                                                  .onPrimary,
+                                              minimumSize: Size(
+                                                double.maxFinite,
+                                                50,
+                                              ),
+                                            ),
+                                            child: _isLoadingLink
+                                                ? CircularProgressIndicator()
+                                                : Text(
+                                                    'Checkout',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ],

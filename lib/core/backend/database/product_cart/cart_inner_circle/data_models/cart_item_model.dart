@@ -9,6 +9,7 @@ class CartItem {
   final double checkoutPrice;
   final String status;
   final String? comment;
+  final String? paymentId;
 
   CartItem({
     required this.id,
@@ -21,6 +22,7 @@ class CartItem {
     required this.checkoutPrice,
     required this.status,
     this.comment,
+    this.paymentId
   });
 
   factory CartItem.intial() => CartItem(

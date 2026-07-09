@@ -1,44 +1,76 @@
 import 'dart:convert';
-
+import 'package:crabpay/core/backend/pyament_services/payment_server_conf.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class PaymentService {
-  final String baseUrl = 'https://regred-rainbowbridge.ru/api/payments';
+class PaymentOuterHandler {
+  // Your VPS domain that routes through Nginx to your Node.js script
+  final String _vpsPaymentUrl = linkToThePaymentServer;
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<String?> createPayment({
-    required String orderId,
-    required String amount,
+  /// 1. Trigger Payment & Get the YooKassa Link
+  /// Sends the cart items and total amount to your VPS to generate a checkout session.
+  Future<String> createPaymentLink({
+    required List<String> cartItemIds,
+    required double totalAmount,
   }) async {
     try {
-      final url = Uri.parse('$baseUrl/create');
-
       final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'orderId': orderId, 'amount': amount}),
+        Uri.parse(_vpsPaymentUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Using the exact payload structure your rewritten Node script expects
+        body: jsonEncode({
+          'amount': totalAmount.toStringAsFixed(2),
+          'cartItemIds': cartItemIds,
+        }),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data['paymentUrl'] as String?;
+        // Returns the YooKassa checkout URL
+        return data['paymentUrl']; 
       } else {
-        print('Server Error: ${response.statusCode} - ${response.body}');
-        return null;
+        throw Exception('VPS returned an error: ${response.body}');
       }
     } catch (e) {
-      print('Network Error occurred: $e');
-      rethrow;
+      throw Exception('Failed to generate payment link: $e');
     }
   }
 
-  Future<bool> launchPaymentUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      return true;
-    } else {
-      print('Cloud not launch payment URL: $urlString');
-      return false;
-    }
+  /// 2. Listen for Database Transitions (Terminal States Only)
+  /// Yields a result ONLY when the status officially resolves to 'paid' or 'failed'.
+  Stream<String> listenToPaymentStatus(List<String> cartItemIds) {
+    // Safety check to prevent crashing if an empty cart is passed
+    if (cartItemIds.isEmpty) return const Stream.empty();
+
+    // Because all items in this checkout session update simultaneously in the database,
+    // watching just one item is enough to know when the entire payment succeeds or fails.
+    final targetId = cartItemIds.first;
+
+    return _supabase
+        .from('cartItem') 
+        .stream(primaryKey: ['id'])
+        .eq('id', targetId)
+        .map((List<Map<String, dynamic>> data) {
+          
+          if (data.isNotEmpty) {
+            return data.first['status'] as String? ?? 'unknown'; 
+          }
+          
+          return 'unknown'; 
+        })
+        // .distinct() prevents the stream from firing multiple times if the database 
+        // triggers an update but the 'status' string itself hasn't actually changed.
+        .distinct()
+        // .where() is the filter: The stream will stay completely silent and ignore 
+        // 'waiting for the payment'. It ONLY pushes data to your UI when it hits a final state.
+        .where((status) => status == 'paid' || status == 'failed');
+  }
+  
+  /// 3. Cleanup function to close the listener when the user leaves the checkout screen
+  void disposeListener() {
+    _supabase.removeAllChannels();
   }
 }
