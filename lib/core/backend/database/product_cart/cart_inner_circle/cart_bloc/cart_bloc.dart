@@ -229,5 +229,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         rethrow;
       }
     });
+
+ 
   }
 }

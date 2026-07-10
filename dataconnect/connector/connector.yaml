@@ -1,6 +1,0 @@
-connectorId: "crabpay-connector"
-serviceId: "crabpay-service"
-generate:
-  dartSdk:
-    outputDir: "../../lib/generated"
-    package: "crabpay_connector"

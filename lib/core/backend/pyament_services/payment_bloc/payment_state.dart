@@ -1,29 +1,13 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
-import 'package:flutter/foundation.dart';
+abstract class PaymentState {}
 
-enum PaymentStates { noEvents, loading, failed }
+class PaymentStateSilence extends PaymentState {}
 
-@immutable
-class PaymentState {
-  final List<String>? providers;
-  final List<CartItem>? cartItems;
-  final PaymentStates states;
+class PaymentStateLoading extends PaymentState {}
 
-  const PaymentState({
-    this.providers,
-    this.cartItems,
-    this.states = PaymentStates.noEvents,
-  });
+class PaymentStateUserAtProvider extends PaymentState {}
 
-  PaymentState copyWith({
-    List<String>? providers,
-    List<CartItem>? cartItems,
-    PaymentStates? states,
-  }) {
-    return PaymentState(
-      providers: providers ?? this.providers,
-      cartItems: cartItems ?? this.cartItems,
-      states: states ?? this.states,
-    );
-  }
-}
+class PaymentStateListening extends PaymentState {}
+
+class PaymentStatePaid extends PaymentState {}
+
+class PaymentStateFailure extends PaymentState {}

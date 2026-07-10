@@ -1,6 +1,0 @@
-extend type ProductField {
-  """
-  ✨ Implicit foreign key field based on `ProductField`.`product`. It must match the value of `Product`.`id`. See `@ref` for how to customize it.
-  """
-  productId: UUID! @fdc_generated(from: "ProductField.product", purpose: IMPLICIT_REF_FIELD)
-}

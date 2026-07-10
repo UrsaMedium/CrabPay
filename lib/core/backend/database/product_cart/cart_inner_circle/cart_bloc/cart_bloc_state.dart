@@ -46,7 +46,6 @@ class CartState {
     this.userCartItemAmount,
   });
 
-
   CartState copyWith({
     List<CartItem>? cartItems,
     List<CartItem>? allUserCartItems,

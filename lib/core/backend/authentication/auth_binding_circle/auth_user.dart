@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
@@ -16,17 +15,6 @@ class AppAuthUser {
     required this.isAnonymous,
     required this.isAdmin,
   });
-
-  factory AppAuthUser.fromFirebase(
-    firebase.User user, {
-    required bool isAdmin,
-  }) => AppAuthUser(
-    id: user.uid,
-    email: user.email,
-    isEmailVerified: user.emailVerified,
-    isAnonymous: user.isAnonymous,
-    isAdmin: isAdmin,
-  );
 
   factory AppAuthUser.fromSupabase(
     supabase.User user, {

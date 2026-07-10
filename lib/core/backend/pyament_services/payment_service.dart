@@ -17,9 +17,7 @@ class PaymentOuterHandler {
     try {
       final response = await http.post(
         Uri.parse(_vpsPaymentUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         // Using the exact payload structure your rewritten Node script expects
         body: jsonEncode({
           'amount': totalAmount.toStringAsFixed(2),
@@ -30,7 +28,7 @@ class PaymentOuterHandler {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         // Returns the YooKassa checkout URL
-        return data['paymentUrl']; 
+        return data['paymentUrl'];
       } else {
         throw Exception('VPS returned an error: ${response.body}');
       }
@@ -50,27 +48,41 @@ class PaymentOuterHandler {
     final targetId = cartItemIds.first;
 
     return _supabase
-        .from('cartItem') 
+        .from('cartItem')
         .stream(primaryKey: ['id'])
         .eq('id', targetId)
         .map((List<Map<String, dynamic>> data) {
-          
           if (data.isNotEmpty) {
-            return data.first['status'] as String? ?? 'unknown'; 
+            return data.first['status'] as String? ?? 'unknown';
           }
-          
-          return 'unknown'; 
+
+          return 'unknown';
         })
-        // .distinct() prevents the stream from firing multiple times if the database 
+        // .distinct() prevents the stream from firing multiple times if the database
         // triggers an update but the 'status' string itself hasn't actually changed.
         .distinct()
-        // .where() is the filter: The stream will stay completely silent and ignore 
+        // .where() is the filter: The stream will stay completely silent and ignore
         // 'waiting for the payment'. It ONLY pushes data to your UI when it hits a final state.
         .where((status) => status == 'paid' || status == 'failed');
   }
-  
+
   /// 3. Cleanup function to close the listener when the user leaves the checkout screen
   void disposeListener() {
     _supabase.removeAllChannels();
+  }
+
+  Future<String> paymentStatus(String anItem) async {
+    try {
+      final response = await _supabase
+          .from(
+            'cartItem',
+          ) // Use 'cartItem' or 'cart_item' depending on your current schema
+          .select('status')
+          .eq('id', anItem)
+          .single();
+      return response['status'] as String;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

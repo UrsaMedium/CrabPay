@@ -4,14 +4,20 @@ abstract class PaymentEvent {
   const PaymentEvent();
 }
 
-class PaymentEventPay implements PaymentEvent {
+class PaymentEventPay extends PaymentEvent {
   final String provider;
   final List<CartItem> cartItems;
   PaymentEventPay({required this.provider, required this.cartItems});
 }
 
-class PaymentEventLaunchLink implements PaymentEvent {}
+class PaymentEventListen extends PaymentEvent {
+  final List<CartItem> cartItems;
+  PaymentEventListen({required this.cartItems});
+}
 
-class PaymentEventListenToStatus implements PaymentEvent {}
+class PaymentEventOnAppBackToLive extends PaymentEvent {
+  final List<String> cartItemIds;
+  PaymentEventOnAppBackToLive({required this.cartItemIds});
+}
 
-class PaymentEventSetStatus implements PaymentEvent {}
+class PaymentEventSilence extends PaymentEvent {}

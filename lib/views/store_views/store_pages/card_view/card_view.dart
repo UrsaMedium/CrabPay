@@ -161,7 +161,7 @@ class CardView extends StatelessWidget {
                             SliverToBoxAdapter(
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    'http://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                                    'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                                 width: double.infinity,
                                 height: 400,
                                 fit: .cover,

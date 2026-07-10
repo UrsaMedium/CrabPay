@@ -2,14 +2,14 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_firebase_sql.dart';
+import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
 
 class BindingDatabaseHandler implements InnerDatabaseHandler {
   final InnerDatabaseHandler dbHandler;
   BindingDatabaseHandler({required this.dbHandler});
 
   factory BindingDatabaseHandler.firebaseDb() => BindingDatabaseHandler(
-    dbHandler: (OuterDatabaseHandlerWithFirebaseSql()),
+    dbHandler: (OuterDatabaseHandlerWithSupabase()),
   );
 
   // Product

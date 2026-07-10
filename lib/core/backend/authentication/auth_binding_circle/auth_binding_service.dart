@@ -1,13 +1,13 @@
 import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
-import 'package:crabpay/core/backend/authentication/auth_outer_circle/firebase_outer_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_interface.dart';
 
 class AuthBindingService implements AuthInnerInterface {
   final AuthInnerInterface interface;
   AuthBindingService({required this.interface});
 
   factory AuthBindingService.fireBase() =>
-      AuthBindingService(interface: (FirebaseOuterInterface()));
+      AuthBindingService(interface: (SupabaseOuterInterface()));
 
   @override
   Future<AppAuthUser> createUser({
