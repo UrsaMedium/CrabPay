@@ -1,6 +1,7 @@
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_event.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_state.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
+import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,17 +24,31 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           cartItemIds: cartItemIds,
           totalAmount: totalAmount,
         );
+        AppLocalStorage.savePaymentLink(paymentUrl);
         final Uri url = Uri.parse(paymentUrl);
         if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
           throw Exception('Failed to launch $paymentUrl');
         }
-      } catch (e) {
         emit(PaymentStateUserAtProvider());
+      } catch (e) {
         print('--- Payment error: $e');
         rethrow;
-      } finally {
-        emit(PaymentStateFailure());
-        print('--- Returned from the link');
+      }
+    });
+
+    on<PaymentEventReturnToProvider>((event, emit) async {
+      print('----');
+      print('PaymentEventReturnToProvider fired');
+      print('----');
+      try {
+        final Uri url = Uri.parse(event.link);
+        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+          throw Exception('Failed to launch ${event.link}');
+        }
+        emit(PaymentStateUserAtProvider());
+      } catch (e) {
+        print('--- Payment error: $e');
+        rethrow;
       }
     });
 
@@ -77,12 +92,15 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       print('PaymentEventOnAppBackToLive fired');
       print('----');
       emit(PaymentStateListening());
-
+      if (event.cartItemIds.isEmpty) {
+        emit(PaymentStateSilence());
+      }
       try {
         paymentHandler.disposeListener();
         final status = await paymentHandler.paymentStatus(
           event.cartItemIds.first,
         );
+        print(status);
         if (status != 'waiting for the payment') {
           await emit.forEach<String>(
             paymentHandler.listenToPaymentStatus(event.cartItemIds),

@@ -45,8 +45,6 @@ app.*.map.json
 /android/app/release
 
 # Specific files i don't want to add
-/lib/firebase_options.dart
-/lib/core/backend/postgresql_server/access_config.dart
 /lib/core/backend/supabase/supabase_conf.dart
 /lib/core/backend/pyament_services/payment_server_conf.dart
 android/app/google-services.json

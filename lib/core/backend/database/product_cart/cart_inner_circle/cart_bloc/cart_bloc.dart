@@ -63,8 +63,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         final reducedListOfItmes = state.cartItems
             ?.where((item) => item.id != event.cartItem.id)
             .toList();
+        final amount = await cartHandler.getUserCartItemAmount(event.userId);
         emit(
           state.copyWith(
+            userCartItemAmount: amount,
             cartItems: reducedListOfItmes,
             states: CartStates.deleted,
           ),
@@ -229,7 +231,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         rethrow;
       }
     });
-
- 
   }
 }

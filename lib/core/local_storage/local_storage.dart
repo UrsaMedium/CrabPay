@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 class AppLocalStorage {
   static late final SharedPreferences _preferences;
   static AppAuthUser? _tempUser;
-  static List<String>? _cartItemIdsOnPayment;
 
   static Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
@@ -22,7 +21,9 @@ class AppLocalStorage {
     if (!_preferences.containsKey('cartItemIdsOnPayment')) {
       await _preferences.setStringList('cartItemIdsOnPayment', []);
     }
-    _cartItemIdsOnPayment = _preferences.getStringList('cartItemIdsOnPayment');
+    if (!_preferences.containsKey('paymentLink')) {
+      await _preferences.setString('paymentLink', '');
+    }
   }
 
   static AppAuthUser get tempUser {
@@ -34,6 +35,14 @@ class AppLocalStorage {
   }
 
   static List<String>? getCartItemIdsOnPayment() {
-    return _cartItemIdsOnPayment;
+    return _preferences.getStringList('cartItemIdsOnPayment');
+  }
+
+  static Future<void> savePaymentLink(String link) async {
+    await _preferences.setString('paymentLink', link);
+  }
+
+  static String? getPaymentLink() {
+    return _preferences.getString('paymentLink');
   }
 }

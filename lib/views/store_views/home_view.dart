@@ -1,4 +1,7 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -67,18 +70,23 @@ class _HomeViewState extends State<HomeView> {
         if (state is AuthStateLoading) {
           GlobalLoadingScreen().show();
         } else {
-          // context.read<CartBloc>().add(CartEventFlushData());
-          // context.read<DatabaseBloc>().add(DatabaseEventFlushData());
-          // context.read<DatabaseBloc>().add(
-          //   DatabaseEventInitialize(
-          //     currentUser: context.read<AuthBloc>().state.currentUser,
-          //   ),
-          // );
-          // context.read<CartBloc>().add(
-          //   CartEventFetchCartItems(
-          //     userId: context.read<AuthBloc>().state.currentUser.id,
-          //   ),
-          // );
+          context.read<CartBloc>().add(CartEventFlushData());
+          context.read<DatabaseBloc>().add(DatabaseEventFlushData());
+          context.read<DatabaseBloc>().add(
+            DatabaseEventInitialize(
+              currentUser: context.read<AuthBloc>().state.currentUser,
+            ),
+          );
+          context.read<CartBloc>().add(
+            CartEventFetchCartItems(
+              userId: context.read<AuthBloc>().state.currentUser.id,
+            ),
+          );
+          context.read<CartBloc>().add(
+            CartEventFetchUserCartItemAmount(
+              userId: context.read<AuthBloc>().state.currentUser.id,
+            ),
+          );
           // Navigator.of(context, rootNavigator: true).pop();
           GlobalLoadingScreen().hide();
         }
@@ -202,20 +210,29 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     BlocBuilder<CartBloc, CartState>(
                       builder: (context, state) {
-                        itemsCount = state.userCartItemAmount ?? 0;
                         return NavigationDestination(
                           icon: Badge(
                             backgroundColor: context.appColorScheme.error,
                             textColor: context.appColorScheme.onError,
-                            label: Text(itemsCount.toString()),
-                            isLabelVisible: itemsCount > 0,
+                            label: Text(
+                              (itemsCount = state.userCartItemAmount ?? 0)
+                                  .toString(),
+                            ),
+                            isLabelVisible:
+                                (itemsCount = state.userCartItemAmount ?? 0) >
+                                0,
                             child: Icon(Icons.shopping_cart_checkout_outlined),
                           ),
                           selectedIcon: Badge(
                             backgroundColor: context.appColorScheme.error,
                             textColor: context.appColorScheme.onError,
-                            label: Text(itemsCount.toString()),
-                            isLabelVisible: itemsCount > 0,
+                            label: Text(
+                              (itemsCount = state.userCartItemAmount ?? 0)
+                                  .toString(),
+                            ),
+                            isLabelVisible:
+                                (itemsCount = state.userCartItemAmount ?? 0) >
+                                0,
                             child: Icon(Icons.shopping_cart_rounded),
                           ),
                           label: 'Cart',

@@ -6,9 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   connectivity_plus
   dynamic_color
-  firebase_app_check
-  firebase_auth
-  firebase_core
   url_launcher_windows
 )
 

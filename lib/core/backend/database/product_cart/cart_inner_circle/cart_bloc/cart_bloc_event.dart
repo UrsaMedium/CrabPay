@@ -16,8 +16,9 @@ class CartEventFetchCartItems extends CartEvent {
 }
 
 class CartEventDeleteCartItem extends CartEvent {
+  final String userId;
   final CartItem cartItem;
-  const CartEventDeleteCartItem({required this.cartItem});
+  const CartEventDeleteCartItem({required this.cartItem, required this.userId});
 }
 
 class CartEventDeleteCartItemById extends CartEvent {
@@ -83,4 +84,3 @@ class CartEventDeleteLastAddedProductCartItem extends CartEvent {
     required this.productId,
   });
 }
-

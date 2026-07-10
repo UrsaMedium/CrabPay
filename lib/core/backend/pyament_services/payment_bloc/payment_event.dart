@@ -10,6 +10,11 @@ class PaymentEventPay extends PaymentEvent {
   PaymentEventPay({required this.provider, required this.cartItems});
 }
 
+class PaymentEventReturnToProvider extends PaymentEvent {
+  final String link;
+  PaymentEventReturnToProvider({required this.link});
+}
+
 class PaymentEventListen extends PaymentEvent {
   final List<CartItem> cartItems;
   PaymentEventListen({required this.cartItems});
