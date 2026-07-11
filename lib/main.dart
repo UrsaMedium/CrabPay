@@ -16,6 +16,8 @@ import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
+import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
+import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
@@ -25,11 +27,9 @@ import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view/cart_page_view.dart';
 import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
-import 'package:crabpay/views/auth_views/password_forgot_view.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/views/auth_views/register_view.dart';
-import 'package:crabpay/views/auth_views/login_view.dart';
 import 'package:crabpay/views/store_views/home_view.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -212,7 +212,8 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/login_view',
       name: 'login_view',
-      builder: (BuildContext context, GoRouterState state) => const LoginView(),
+      builder: (BuildContext context, GoRouterState state) =>
+          const LoginViewDriver(),
       routes: <RouteBase>[
         GoRoute(
           path: 'register_view',
@@ -222,7 +223,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'password-forgot_view',
           builder: (BuildContext context, GoRouterState state) =>
-              const PasswordForgotView(),
+              const PasswordForgotViewDriver(),
         ),
       ],
     ),

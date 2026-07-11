@@ -42,7 +42,7 @@ class ProfileView extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          context.read<AuthBloc>().add(AuthEventInitialize());
+                          context.read<AuthBloc>().add(AuthEventLogOut());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.appColorScheme.primary,
