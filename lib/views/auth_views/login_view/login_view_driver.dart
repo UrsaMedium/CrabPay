@@ -65,7 +65,9 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
               }
 
               void onBackButtonPressed() {
-                context.pop();
+                if (GoRouter.of(context).canPop()) {
+                  context.pop();
+                }
               }
 
               void onCorrectingCredentials() {
@@ -89,7 +91,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
               return MaterialLoginView(
                 emailController: _emailController,
                 passwordController: _passwordController,
-                isSubmitting: viewState.isSubmited,
+                isSubmitting: viewState.isSubmitting,
                 onForgotPassword: onForgotPasswordPressed,
                 onSignIn: onSignInPressed,
                 onSignUp: onSignUpPressed,
@@ -109,12 +111,12 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
 class LoginViewState {
   final String? emailError;
   final String? passwordError;
-  final bool isSubmited;
+  final bool isSubmitting;
 
   const LoginViewState({
     this.emailError,
     this.passwordError,
-    this.isSubmited = false,
+    this.isSubmitting = false,
   });
 }
 
@@ -138,7 +140,7 @@ class LoginViewCubit extends Cubit<LoginViewState> {
     if (emailErr != null || passwordErr != null) {
       emit(LoginViewState(emailError: emailErr, passwordError: passwordErr));
     } else {
-      emit(const LoginViewState(isSubmited: true));
+      emit(const LoginViewState(isSubmitting: true));
       onValid(email, password);
     }
   }
@@ -148,7 +150,7 @@ class LoginViewCubit extends Cubit<LoginViewState> {
       const LoginViewState(
         emailError: null,
         passwordError: null,
-        isSubmited: false,
+        isSubmitting: false,
       ),
     );
   }

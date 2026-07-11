@@ -49,7 +49,9 @@ class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {
             }
 
             void onBackButtonPressed() {
-              context.pop();
+              if (GoRouter.of(context).canPop()) {
+                context.pop();
+              }
             }
 
             void onCorrectingCredentials() {
