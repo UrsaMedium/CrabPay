@@ -22,7 +22,7 @@ import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view
 import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/cart_page_view.dart';
+import 'package:crabpay/views/store_views/store_pages/cart_page_view/cart_page_view.dart';
 import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view.dart';

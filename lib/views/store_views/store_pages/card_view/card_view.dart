@@ -88,8 +88,7 @@ class CardView extends StatelessWidget {
                         child: BlocBuilder<DatabaseBloc, DatabaseState>(
                           builder: (context, state) {
                             final bool beingLoaded =
-                                state.states ==
-                                DatabaseStates.dbLoading;
+                                state.states == DatabaseStates.dbLoading;
                             final userFavorites = context
                                 .read<DatabaseBloc>()
                                 .state
@@ -165,20 +164,21 @@ class CardView extends StatelessWidget {
                                 width: double.infinity,
                                 height: 400,
                                 fit: .cover,
-                                errorWidget: (context, error, stackTrace) =>
-                                    Container(
-                                      color: context
-                                          .appColorScheme
-                                          .onInverseSurface,
-                                      alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        color: context
-                                            .appColorScheme
-                                            .inversePrimary,
-                                        size: 48,
-                                      ),
+                                errorWidget: (context, error, stackTrace) {
+                                  print(error.toString());
+                                  print(stackTrace.toString());
+                                  return Container(
+                                    color:
+                                        context.appColorScheme.onInverseSurface,
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      color:
+                                          context.appColorScheme.inversePrimary,
+                                      size: 48,
                                     ),
+                                  );
+                                },
                                 placeholder: (context, url) => Container(
                                   color:
                                       context.appColorScheme.onInverseSurface,

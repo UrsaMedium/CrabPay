@@ -205,7 +205,10 @@ class _CartPageViewState extends State<CartPageView> {
                               child: AbsorbPointer(
                                 absorbing: isPaimentStateActive,
                                 child: Card(
-                                  elevation: 3,
+                                  elevation: 7,
+                                  shadowColor: Colors.black.withValues(
+                                    alpha: .3,
+                                  ),
                                   clipBehavior: Clip.antiAlias,
                                   color: context.appColorScheme.surfaceContainer
                                       .withValues(alpha: .5),
@@ -443,10 +446,16 @@ class CartItemBuilder extends StatelessWidget {
                               Container(
                                 color: context.appColorScheme.onInverseSurface,
                                 alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.broken_image,
-                                  color: context.appColorScheme.inversePrimary,
-                                  size: 48,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.broken_image,
+                                      color:
+                                          context.appColorScheme.inversePrimary,
+                                      size: 48,
+                                    ),
+                                    Text('$error'),
+                                  ],
                                 ),
                               ),
                           placeholder: (context, url) => Container(
