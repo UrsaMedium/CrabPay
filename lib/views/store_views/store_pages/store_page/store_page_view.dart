@@ -3,7 +3,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/core/widgets/product_card.dart';
+import 'package:crabpay/core/widgets/product_card/product_card.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +81,7 @@ class StorePageViewState extends State<StorePageView> {
                   itemCount: _isFilteredListEmpty()
                       ? _products?.length ?? 0
                       : _filteredProductList!.length,
-                  itemBuilder: (context, index) => ProductCard(
+                  itemBuilder: (context, index) => ProductCardDriver(
                     product: _isFilteredListEmpty()
                         ? _products![index]
                         : _filteredProductList![index],

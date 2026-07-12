@@ -43,7 +43,7 @@ class MaterialProductView extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              onPressed: () {},
+              onPressed: onBackButtonPressed,
               icon: Icon(Icons.arrow_back_rounded),
             ),
             actions: [

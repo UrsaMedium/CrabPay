@@ -5,7 +5,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/core/widgets/product_card.dart';
+import 'package:crabpay/core/widgets/product_card/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -105,7 +105,7 @@ class _HomePageViewState extends State<HomePageView> {
                 return _featuredProducts != null
                     ? SliverList.builder(
                         itemCount: _featuredProducts!.length,
-                        itemBuilder: (context, index) => ProductCard(
+                        itemBuilder: (context, index) => ProductCardDriver(
                           product: _featuredProducts![index],
                           additionalSuffix: 'featuredProduct',
                           openProductCardCallBack: openProductCardCallBack,
@@ -211,7 +211,7 @@ class _HomePageViewState extends State<HomePageView> {
                 return _userPreferences != null
                     ? SliverList.builder(
                         itemCount: _userPreferences!.length,
-                        itemBuilder: (context, index) => ProductCard(
+                        itemBuilder: (context, index) => ProductCardDriver(
                           product: _userPreferences![index],
                           additionalSuffix: 'userPreferences',
                           openProductCardCallBack: openProductCardCallBack,

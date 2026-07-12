@@ -7,17 +7,60 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCardDriver extends StatelessWidget {
   final Function(BuildContext, String, String, String) openProductCardCallBack;
   final Product product; //also tag identoty
   final String additionalSuffix; //tag identoty
   final String index; //tag identoty
-  const ProductCard({
+  const ProductCardDriver({
     super.key,
-    required this.product,
     required this.openProductCardCallBack,
+    required this.product,
     required this.additionalSuffix,
     required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    void onProductCardPressed() async {
+      await openProductCardCallBack(
+        context,
+        product.id,
+        additionalSuffix,
+        index,
+      );
+      if (context.mounted) {
+        context.read<CartBloc>().add(
+          CartEventFetchUserCartItemAmount(
+            userId: context.read<AuthBloc>().state.currentUser.id,
+          ),
+        );
+      }
+    }
+
+    return MaterialProductCard(
+      imageUrl: product.image,
+      productName: product.name,
+      description: product.description,
+      onProductCardPressed: onProductCardPressed,
+      tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+    );
+  }
+}
+
+class MaterialProductCard extends StatelessWidget {
+  final VoidCallback onProductCardPressed;
+  final String tag;
+  final String imageUrl;
+  final String productName;
+  final String description;
+  const MaterialProductCard({
+    super.key,
+    required this.onProductCardPressed,
+    required this.imageUrl,
+    required this.productName,
+    required this.description,
+    required this.tag,
   });
 
   @override
@@ -34,30 +77,15 @@ class ProductCard extends StatelessWidget {
         ),
         color: context.appColorScheme.surfaceContainer,
         child: GestureDetector(
-          onTap: () async {
-            await openProductCardCallBack(
-              context,
-              product.id,
-              additionalSuffix,
-              index,
-            );
-            if (context.mounted) {
-              context.read<CartBloc>().add(
-                CartEventFetchUserCartItemAmount(
-                  userId: context.read<AuthBloc>().state.currentUser.id,
-                ),
-              );
-            }
-          },
+          onTap: onProductCardPressed,
           child: Padding(
             padding: const EdgeInsets.all(1.0),
             child: SizedBox(
               height: 200,
               child: Hero(
-                tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+                tag: tag,
                 createRectTween: (begin, end) =>
                     MaterialRectArcTween(begin: begin, end: end),
-
                 child: Stack(
                   children: [
                     ClipRRect(
@@ -67,7 +95,7 @@ class ProductCard extends StatelessWidget {
                       clipBehavior: .antiAlias,
                       child: CachedNetworkImage(
                         imageUrl:
-                            'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                            'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                         width: double.infinity,
                         height: 200,
                         fit: .cover,
@@ -99,7 +127,7 @@ class ProductCard extends StatelessWidget {
                         child: Material(
                           type: .transparency,
                           child: Text(
-                            product.name,
+                            productName,
                             style: TextStyle(
                               fontSize: 16,
                               color: context.appColorScheme.onPrimaryContainer,

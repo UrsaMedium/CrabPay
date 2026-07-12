@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/buy_bottom_sheet/buy_bottom_sheet.dart';
 import 'package:crabpay/views/store_views/store_pages/card_view/product_view/material_product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
