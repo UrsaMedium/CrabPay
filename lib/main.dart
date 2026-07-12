@@ -21,8 +21,8 @@ import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_vi
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
 import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/views/store_views/store_pages/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/card_view/card_view.dart';
 import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
 import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
 import 'package:crabpay/views/store_views/store_pages/cart_page_view/cart_page_view.dart';
@@ -117,7 +117,7 @@ final GoRouter _router = GoRouter(
         final index = state.pathParameters['index'] ?? '0';
         return CustomTransitionPage(
           key: state.pageKey,
-          child: CardView(
+          child: ProductViewDriver(
             productId: productId,
             additionalSuffix: additionalSuffix,
             index: index,
