@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthInnerInterface _interface;
@@ -21,44 +20,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           add(AuthEventOnStreamUserChanged(user));
         });
 
-        // final currentUser = await _interface.getUser();
-        // add(AuthEventOnStreamUserChanged(currentUser ?? AppAuthUser.emty));
-        //on first app open
-        // if (user == null || user.isEmpty) {
-        //   try {
-        //     final anonUser = await _interface.signInAnonymously();
-        //     if (anonUser == null) {
-        //       throw Exception('Server returned null for anonymous sign in.');
-        //     }
-        //     emit(AuthStateLoggedOut(currentUser: anonUser));
-        //   } catch (e) {
-        //     emit(
-        //       AuthStateLoggedOut(
-        //         currentUser: state.currentUser,
-        //         bloodyAuthException: e is Exception
-        //             ? e
-        //             : Exception(e.toString()),
-        //         reason: 'Failed to initialize anonymous guest session: $e',
-        //       ),
-        //     );
-        //   }
-        //   return;
-        // }
-
-        //if the app is still used by anonymous user
-        // if (user.isAnonymous) {
-        //   emit(AuthStateLoggedOut(currentUser: user));
-        //   return;
-        // }
-
-        //if user have not verified their email
-        // if (!user.isEmailVerified) {
-        //   emit(AuthStateLoggedIn(currentUser: user));
-        //   return;
-        // }
-
-        //if alright
-        // emit(AuthStateLoggedIn(currentUser: user));
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(

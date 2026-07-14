@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCardDriver extends StatelessWidget {
-  final Function(BuildContext, String, String, String) openProductCardCallBack;
+  final OnOpenProductCardCallBack openProductCardCallBack;
   final Product product; //also tag identoty
   final String additionalSuffix; //tag identoty
-  final String index; //tag identoty
+  final int index; //tag identoty
   const ProductCardDriver({
     super.key,
     required this.openProductCardCallBack,
@@ -24,10 +24,10 @@ class ProductCardDriver extends StatelessWidget {
   Widget build(BuildContext context) {
     void onProductCardPressed() async {
       await openProductCardCallBack(
-        context,
-        product.id,
-        additionalSuffix,
-        index,
+        context: context,
+        productId: product.id,
+        additionalSuffix: additionalSuffix,
+        index: index,
       );
       if (context.mounted) {
         context.read<CartBloc>().add(

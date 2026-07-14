@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
@@ -29,19 +30,32 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
-        final featuredProducts = await databaseHandler
+        final featuredProductIds = await databaseHandler
             .fetchAllFeaturedProducts();
-        List<String> userPreferences = [];
+        List<String> userPreferenceProductIds = [];
         if (!event.currentUser.isAnonymous) {
-          userPreferences = await databaseHandler.fetchUserPreferences(
+          userPreferenceProductIds = await databaseHandler.fetchUserPreferences(
             userId: event.currentUser.id,
+          );
+        }
+
+        List<Product> featuredProducts = [];
+        for (var productId in featuredProductIds) {
+          featuredProducts.add(
+            products!.firstWhere((product) => product.id == productId),
+          );
+        }
+        List<Product> userPreferenceProducts = [];
+        for (var productId in userPreferenceProductIds) {
+          userPreferenceProducts.add(
+            products!.firstWhere((product) => product.id == productId),
           );
         }
         emit(
           state.copyWith(
             products: products,
             featuredProducts: featuredProducts,
-            userPreferences: userPreferences,
+            userPreferences: userPreferenceProducts,
           ),
         );
         emit(state.copyWith(states: DatabaseStates.initialized));
@@ -317,8 +331,15 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
-        final featuredProducts = await databaseHandler
+        final featuredProductIds = await databaseHandler
             .fetchAllFeaturedProducts();
+        List<Product> featuredProducts = [];
+        for (var productId in featuredProductIds) {
+          featuredProducts.add(
+            state.products!.firstWhere((product) => product.id == productId),
+          );
+        }
+
         emit(
           state.copyWith(
             featuredProducts: featuredProducts,
@@ -338,7 +359,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.addFeaturedProduct(productId: event.productId);
+        await databaseHandler.addFeaturedProduct(productId: event.product.id);
         emit(state.copyWith(states: DatabaseStates.featuedProductsAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.featuedProductsNotAdded));
@@ -352,7 +373,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.deleteFeaturedProduct(productId: event.productId);
+        await databaseHandler.deleteFeaturedProduct(
+          productId: event.product.id,
+        );
         emit(state.copyWith(states: DatabaseStates.featuedProductsDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.featuedProductsNotDeleted));
@@ -373,12 +396,18 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             states: DatabaseStates.dbLoading,
           ),
         );
-        final userPreferences = await databaseHandler.fetchUserPreferences(
+        final userPreferenceIds = await databaseHandler.fetchUserPreferences(
           userId: event.userId,
         );
+        List<Product> userPreferenceProducts = [];
+        for (var productId in userPreferenceIds) {
+          userPreferenceProducts.add(
+            state.products!.firstWhere((product) => product.id == productId),
+          );
+        }
         emit(
           state.copyWith(
-            userPreferences: userPreferences,
+            userPreferences: userPreferenceProducts,
             states: DatabaseStates.userPreferencesFetched,
           ),
         );
@@ -397,10 +426,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.addUserPreference(
           userId: event.userId,
-          productId: event.productId,
+          productId: event.product.id,
         );
-        List<String> newPreference = state.userPreferences ?? [];
-        newPreference.add(event.productId);
+        List<Product> newPreference = state.userPreferences ?? [];
+        newPreference.add(event.product);
         emit(
           state.copyWith(
             userPreferences: newPreference,
@@ -421,11 +450,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.deleteUserPreference(
           userId: event.userId,
-          productId: event.productId,
+          productId: event.product.id,
         );
-        List<String> deletedPreference = state.userPreferences ?? [];
+        List<Product> deletedPreference = state.userPreferences ?? [];
         deletedPreference.removeWhere(
-          (productId) => productId == event.productId,
+          (product) => product.id == event.product.id,
         );
         emit(
           state.copyWith(

@@ -2,7 +2,6 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/material_product_view.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +43,13 @@ class ProductViewDriver extends StatelessWidget {
               ?.where((aProduct) => aProduct.id == productId)
               .firstOrNull;
 
+          if (theProduct == null) {
+            context.go('/');
+          }
+
           final isBeingLoaded = dbState.states == DatabaseStates.dbLoading;
           final userFavorites = dbState.userPreferences ?? [];
-          final isFavorite = userFavorites.contains(productId);
+          final isFavorite = userFavorites.contains(theProduct);
           final productFields = dbState.productFields;
           final heroTag = 'card-hero-$productId-$additionalSuffix-$index';
 
@@ -77,7 +80,7 @@ class ProductViewDriver extends StatelessWidget {
             if (isFavorite) {
               context.read<DatabaseBloc>().add(
                 DatabaseEventDeleteUserPreference(
-                  productId: productId,
+                  product: theProduct!,
                   userId: userId,
                 ),
               );
@@ -85,7 +88,7 @@ class ProductViewDriver extends StatelessWidget {
               context.read<DatabaseBloc>().add(
                 DatabaseEventAddUserPreference(
                   userId: userId,
-                  productId: productId,
+                  product: theProduct!,
                 ),
               );
             }

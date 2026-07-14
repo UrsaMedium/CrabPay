@@ -116,9 +116,9 @@ class _ResetPriceImageFieldAdminPanelViewState
             BlocListener<DatabaseBloc, DatabaseState>(
               listener: (context, state) {
                 if (state.states == DatabaseStates.dbLoading) {
-                  GlobalLoadingScreen().show();
+                  // GlobalLoadingScreen().show();
                 } else {
-                  GlobalLoadingScreen().hide();
+                  // GlobalLoadingScreen().hide();
                   context.go('/');
                 }
               },

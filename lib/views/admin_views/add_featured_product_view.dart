@@ -18,7 +18,7 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
   final TextEditingController _suggestionInputController =
       TextEditingController();
   List<Product>? products;
-  String? _productId;
+  Product? _product;
 
   @override
   void initState() {
@@ -32,11 +32,11 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
     super.dispose();
   }
 
-  List<DropdownMenuEntry<String>> _products(BuildContext context) {
-    List<DropdownMenuEntry<String>> result = [];
+  List<DropdownMenuEntry<Product>> _products(BuildContext context) {
+    List<DropdownMenuEntry<Product>> result = [];
     List<Product> products = context.read<DatabaseBloc>().state.products!;
     for (var product in products) {
-      result.add(DropdownMenuEntry(value: product.id, label: product.name));
+      result.add(DropdownMenuEntry(value: product, label: product.name));
     }
     return result;
   }
@@ -64,11 +64,11 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
         ),
         body: Column(
           children: [
-            DropdownMenu<String>(
+            DropdownMenu<Product>(
               dropdownMenuEntries: _products(context),
               controller: _suggestionInputController,
               onSelected: (value) => setState(() {
-                _productId = value;
+                _product = value;
               }),
               expandedInsets: EdgeInsets.zero,
               inputDecorationTheme: InputDecorationTheme(
@@ -84,9 +84,9 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (_productId != null) {
+                if (_product != null) {
                   context.read<DatabaseBloc>().add(
-                    DatabaseEventAddFeaturedProduct(productId: _productId!),
+                    DatabaseEventAddFeaturedProduct(product: _product!),
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {
@@ -97,9 +97,9 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (_productId != null) {
+                if (_product != null) {
                   context.read<DatabaseBloc>().add(
-                    DatabaseEventDeleteFeaturedProduct(productId: _productId!),
+                    DatabaseEventDeleteFeaturedProduct(product: _product!),
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {

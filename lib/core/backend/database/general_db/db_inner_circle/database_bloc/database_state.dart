@@ -69,8 +69,8 @@ class DatabaseState {
   final List<Currencies>? currencies;
   final List<ProductField>? productFields;
   final DatabaseStates states;
-  final List<String>? featuredProducts;
-  final List<String>? userPreferences;
+  final List<Product>? featuredProducts;
+  final List<Product>? userPreferences;
   final Product? recentlyAddedProduct;
 
   const DatabaseState({
@@ -89,8 +89,8 @@ class DatabaseState {
     List<ProductField>? productFields,
     DatabaseStates? states,
     Product? recentlyAddedProduct,
-    List<String>? featuredProducts,
-    List<String>? userPreferences,
+    List<Product>? featuredProducts,
+    List<Product>? userPreferences,
   }) {
     return DatabaseState(
       products: products ?? this.products,

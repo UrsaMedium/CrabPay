@@ -17,13 +17,21 @@ extension ContextExtensions on BuildContext {
 //local storage
 final AppAuthUser appTempUser = AppLocalStorage.tempUser;
 
-Future<void> openProductCardCallBack(
-  BuildContext context,
-  String productId,
-  String additionalSuffix,
-  String index,
-) async {
-  print('pushed $productId + $additionalSuffix');
+typedef OnOpenProductCardCallBack =
+    Future<void> Function({
+      required BuildContext context,
+      required String productId,
+      required String additionalSuffix,
+      required int index,
+    });
+
+Future<void> openProductCardCallBack({
+  required BuildContext context,
+  required String productId,
+  required String additionalSuffix,
+  required int index,
+}) async {
+  print('pushed $productId + $additionalSuffix + $index');
   //data prefetching
   context.read<DatabaseBloc>().add(
     DatabaseEventFetchProductFields(productId: productId),
@@ -41,7 +49,7 @@ Future<void> openProductCardCallBack(
     pathParameters: {
       'productId': productId,
       'additionalSuffix': additionalSuffix,
-      'index': index,
+      'index': '$index',
     },
   );
   // refreshing cart counter

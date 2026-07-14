@@ -6,24 +6,20 @@ class GlobalLoadingScreen {
   factory GlobalLoadingScreen() => _instance;
   GlobalLoadingScreen._internal();
 
-  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
 
   void show() {
     print('loading is called');
-    if (isLoading.value) return;
+    if (_isLoading.value) return;
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-      isLoading.value = true;
-    // });
+      _isLoading.value = true;
   }
 
   void hide() {
     print('hiding is called');
-    if (!isLoading.value) return;
+    if (!_isLoading.value) return;
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-      isLoading.value = false;
-    // });
+      _isLoading.value = false;
   }
 }
 
@@ -38,7 +34,7 @@ class GlobalLoaderStack extends StatelessWidget {
       children: [
         child,
         ValueListenableBuilder(
-          valueListenable: GlobalLoadingScreen().isLoading,
+          valueListenable: GlobalLoadingScreen()._isLoading,
           builder: (context, loading, _) {
             if (!loading) return const SizedBox.shrink();
 

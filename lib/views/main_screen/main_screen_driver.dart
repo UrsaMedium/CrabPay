@@ -1,10 +1,10 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page_view/cart_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/home_page_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/ask_page/ask_page_view.dart';
 import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
 import 'package:crabpay/views/main_screen/sub/profile_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +55,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   }
 
   final List<Widget> _pages = const [
-    HomePageView(),
+    HomePageDriver(),
     StorePageView(),
     AskPageView(),
     CartPageView(),
@@ -95,7 +95,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
       isScrollControlled: true,
       backgroundColor: context.appColorScheme.surfaceContainerHighest
           .withValues(alpha: .5),
-      builder: (BuildContext sheetContext) => ProfileView(),
+      builder: (BuildContext sheetContext) => ProfileViewDriver(),
     );
   }
 

@@ -1,5 +1,3 @@
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
@@ -7,23 +5,25 @@ import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_d
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_auth_interface.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page_view/cart_page_view.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_view.dart';
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/ask_page/ask_page_view.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/home_page_view.dart';
 import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/ask_page_view.dart';
 import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
 import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
@@ -95,7 +95,7 @@ final GoRouter _router = GoRouter(
           routes: [
             GoRoute(
               path: '/',
-              builder: (context, state) => const HomePageView(),
+              builder: (context, state) => const HomePageDriver(),
             ),
           ],
         ),

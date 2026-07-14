@@ -98,14 +98,14 @@ class DatabaseEventDeleteCurrencies implements DatabaseEvent {
 class DatabaseEventFetchAllFeaturedProducts implements DatabaseEvent {}
 
 class DatabaseEventAddFeaturedProduct implements DatabaseEvent {
-  final String productId;
-  DatabaseEventAddFeaturedProduct({required this.productId});
+  final Product product;
+  DatabaseEventAddFeaturedProduct({required this.product});
 }
 
 //delete featured product
 class DatabaseEventDeleteFeaturedProduct implements DatabaseEvent {
-  final String productId;
-  DatabaseEventDeleteFeaturedProduct({required this.productId});
+  final Product product;
+  DatabaseEventDeleteFeaturedProduct({required this.product});
 }
 
 //user preferences
@@ -118,19 +118,16 @@ class DatabaseEventFetchUserPreferences implements DatabaseEvent {
 // add user preferences
 class DatabaseEventAddUserPreference implements DatabaseEvent {
   final String userId;
-  final String productId;
-  DatabaseEventAddUserPreference({
-    required this.userId,
-    required this.productId,
-  });
+  final Product product;
+  DatabaseEventAddUserPreference({required this.userId, required this.product});
 }
 
 //delete user preference
 class DatabaseEventDeleteUserPreference implements DatabaseEvent {
-  final String productId;
+  final Product product;
   final String userId;
   DatabaseEventDeleteUserPreference({
-    required this.productId,
+    required this.product,
     required this.userId,
   });
 }

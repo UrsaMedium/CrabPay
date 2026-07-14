@@ -87,7 +87,7 @@ class StorePageViewState extends State<StorePageView> {
                         : _filteredProductList![index],
                     additionalSuffix: 'store',
                     openProductCardCallBack: openProductCardCallBack,
-                    index: '$index',
+                    index: index,
                   ),
                 );
               },

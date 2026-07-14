@@ -1,11 +1,39 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+class ProfileViewDriver extends StatefulWidget {
+  const ProfileViewDriver({super.key});
+
+  @override
+  State<ProfileViewDriver> createState() => _ProfileViewDriverState();
+}
+
+class _ProfileViewDriverState extends State<ProfileViewDriver> {
+  void _onSignOutPressed(BuildContext context) {
+    context.read<AuthBloc>().add(AuthEventLogOut());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialProfileView(
+      user: context.read<AuthBloc>().state.currentUser,
+      onSignOutPressed: () => _onSignOutPressed(context),
+    );
+  }
+}
+
+class MaterialProfileView extends StatelessWidget {
+  final VoidCallback onSignOutPressed;
+  final AppAuthUser user;
+  const MaterialProfileView({
+    super.key,
+    required this.user,
+    required this.onSignOutPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +52,7 @@ class ProfileView extends StatelessWidget {
             ),
           ),
           child: ClipRRect(
-            borderRadius: .only(
+            borderRadius: const .only(
               topLeft: Radius.circular(28),
               topRight: Radius.circular(28),
             ),
@@ -36,7 +64,7 @@ class ProfileView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         Row(
                           children: [
                             Expanded(
@@ -51,13 +79,12 @@ class ProfileView extends StatelessWidget {
                                       color: context.appColorScheme.primary,
                                     ),
                                   ),
+                                  Text('${user.email}'),
                                 ],
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                context.read<AuthBloc>().add(AuthEventLogOut());
-                              },
+                              onPressed: onSignOutPressed,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: context.appColorScheme.primary,
                                 foregroundColor:
