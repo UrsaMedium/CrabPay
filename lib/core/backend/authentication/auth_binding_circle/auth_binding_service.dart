@@ -1,13 +1,13 @@
-import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
-import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_auth_interface.dart';
 
 class AuthBindingService implements AuthInnerInterface {
   final AuthInnerInterface interface;
   AuthBindingService({required this.interface});
 
   factory AuthBindingService.fireBase() =>
-      AuthBindingService(interface: (SupabaseOuterInterface()));
+      AuthBindingService(interface: (SupabaseOuterAuthInterface()));
 
   @override
   Future<AppAuthUser> createUser({
@@ -19,8 +19,10 @@ class AuthBindingService implements AuthInnerInterface {
   Future<AppAuthUser?> getUser() => interface.getUser();
 
   @override
-  Future<AppAuthUser> logIn({required String email, required String password}) =>
-      interface.logIn(email: email, password: password);
+  Future<AppAuthUser> logIn({
+    required String email,
+    required String password,
+  }) => interface.logIn(email: email, password: password);
 
   @override
   Future<void> logOut() => interface.logOut();
@@ -37,8 +39,7 @@ class AuthBindingService implements AuthInnerInterface {
 
   @override
   Future<AppAuthUser?> signInAnonymously() => interface.signInAnonymously();
-}
 
-// String? appUserEmail() {
-//   return AuthBindingService.fireBase().existingUser?.email;
-// }
+  @override
+  Stream<AppAuthUser> get userStream => interface.userStream;
+}

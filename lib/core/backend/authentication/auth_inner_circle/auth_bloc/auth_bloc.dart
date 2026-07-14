@@ -1,55 +1,68 @@
+import 'dart:async';
+
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
-import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(AuthInnerInterface interface)
-    : super(AuthStateLoggedOut(currentUser: appTempUser)) {
+  final AuthInnerInterface _interface;
+  StreamSubscription<AppAuthUser>? _userSubscription;
+  AuthBloc(this._interface) : super(const AuthStateLoading()) {
     // when the app is launched the initialization is emited
     on<AuthEventInitialize>((event, emit) async {
       try {
-        emit(AuthStateLoading(currentUser: appTempUser));
-        // try {
-        //   await interface.logOut();
-        // } catch (e) {
-        //   // TODO
-        // }
-        await interface.initialize();
-        final user = await interface.getUser();
+        emit(AuthStateLoading());
+        await _interface.initialize();
+        await _userSubscription?.cancel();
 
+        _userSubscription = _interface.userStream.listen((user) {
+          add(AuthEventOnStreamUserChanged(user));
+        });
+
+        // final currentUser = await _interface.getUser();
+        // add(AuthEventOnStreamUserChanged(currentUser ?? AppAuthUser.emty));
         //on first app open
-        if (user == null) {
-          try {
-            final anonUser = await interface.signInAnonymously();
-            if (anonUser == null) throw Exception();
-            emit(AuthStateLoggedOut(currentUser: anonUser));
-          } catch (_) {
-            final localUser = appTempUser;
-            emit(AuthStateLoggedOut(currentUser: localUser));
-          }
-          return;
-        }
+        // if (user == null || user.isEmpty) {
+        //   try {
+        //     final anonUser = await _interface.signInAnonymously();
+        //     if (anonUser == null) {
+        //       throw Exception('Server returned null for anonymous sign in.');
+        //     }
+        //     emit(AuthStateLoggedOut(currentUser: anonUser));
+        //   } catch (e) {
+        //     emit(
+        //       AuthStateLoggedOut(
+        //         currentUser: state.currentUser,
+        //         bloodyAuthException: e is Exception
+        //             ? e
+        //             : Exception(e.toString()),
+        //         reason: 'Failed to initialize anonymous guest session: $e',
+        //       ),
+        //     );
+        //   }
+        //   return;
+        // }
 
         //if the app is still used by anonymous user
-        if (user.isAnonymous) {
-          emit(AuthStateLoggedOut(currentUser: user));
-          return;
-        }
+        // if (user.isAnonymous) {
+        //   emit(AuthStateLoggedOut(currentUser: user));
+        //   return;
+        // }
 
         //if user have not verified their email
-        if (!user.isEmailVerified) {
-          emit(AuthStateLoggedIn(currentUser: user));
-          return;
-        }
+        // if (!user.isEmailVerified) {
+        //   emit(AuthStateLoggedIn(currentUser: user));
+        //   return;
+        // }
 
         //if alright
-        emit(AuthStateLoggedIn(currentUser: user));
+        // emit(AuthStateLoggedIn(currentUser: user));
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
-            currentUser: appTempUser,
+            currentUser: state.currentUser,
             bloodyAuthException: e,
             reason: 'Bloody Authentication Failure: ${e.toString()}',
           ),
@@ -57,22 +70,48 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
+    on<AuthEventOnStreamUserChanged>((event, emit) async {
+      final user = event.user;
+
+      if (user.isEmpty) {
+        try {
+          final anonUser = await _interface.signInAnonymously();
+          if (anonUser != null && anonUser.isNotEmpty) {
+            emit(
+              AuthStateLoggedOut(currentUser: anonUser, reason: 'Anon session'),
+            );
+          } else {
+            throw Exception('Server returned empty anon user');
+          }
+        } catch (e) {
+          emit(
+            AuthStateLoggedOut(
+              currentUser: AppAuthUser.empty,
+              bloodyAuthException: e is Exception ? e : Exception(e.toString()),
+              reason: 'Faild to initiate anon user ',
+            ),
+          );
+        }
+        return;
+      }
+
+      if (user.isAnonymous) {
+        emit(AuthStateLoggedOut(currentUser: user, reason: 'Anon session'));
+        return;
+      }
+
+      emit(AuthStateLoggedIn(currentUser: user));
+    });
+
     // when a user wants to log out
     on<AuthEventLogOut>((event, emit) async {
-      emit(AuthStateLoading(currentUser: appTempUser));
+      emit(AuthStateLoading());
       try {
-        await interface.logOut();
-        emit(
-          AuthStateLoggedOut(
-            currentUser: appTempUser,
-            bloodyAuthException: null,
-            reason: 'User Is Loged Out',
-          ),
-        );
+        await _interface.logOut();
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
-            currentUser: appTempUser,
+            currentUser: state.currentUser,
             bloodyAuthException: e,
             reason: 'Some Exception. Log Out Failure: ${e.toString()}',
           ),
@@ -82,20 +121,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // when an user asks to reset their password
     on<AuthEventForgotPassword>((event, emit) async {
-      emit(AuthStateLoading(currentUser: appTempUser));
+      emit(AuthStateLoading());
       try {
-        await interface.sendPasswordReset(toEmail: event.email);
-        emit(
-          AuthStateLoggedOut(
-            currentUser: appTempUser,
-            bloodyAuthException: null,
-            reason: 'Password Reset Email Is Sent',
-          ),
-        );
+        await _interface.sendPasswordReset(toEmail: event.email);
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
-            currentUser: appTempUser,
+            currentUser: state.currentUser,
             bloodyAuthException: e,
             reason:
                 'Some Exception.  Password Reset Emai Is Not Sent: ${e.toString()}',
@@ -106,54 +138,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // user tries to register
     on<AuthEventRegister>((event, emit) async {
-      emit(AuthStateLoading(currentUser: appTempUser));
+      emit(AuthStateLoading());
       try {
-        await interface.createUser(
+        await _interface.createUser(
           email: event.email,
           password: event.password,
         );
-        await interface.sendEmailVerification();
-        final user = await interface.getUser();
-        if (user != null) {
-          emit(AuthStateLoggedIn(currentUser: user));
-        } else {
-          emit(
-            AuthStateLoggedOut(
-              currentUser: appTempUser,
-              bloodyAuthException: null,
-              reason:
-                  'Even though the user registered, there is no user isntance: myysteriously there is no exception',
-            ),
-          );
-        }
+        await _interface.sendEmailVerification();
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
-            currentUser: appTempUser,
+            currentUser: state.currentUser,
             bloodyAuthException: e,
-            reason: 'Register Failur: ${e.toString()}',
+            reason: 'Register Failure: ${e.toString()}',
           ),
         );
       }
     });
 
     on<AuthEventLogIn>((event, emit) async {
-      emit(AuthStateLoading(currentUser: appTempUser));
+      emit(AuthStateLoading());
       try {
-        final user = await interface.logIn(
-          email: event.email,
-          password: event.password,
-        );
-        emit(AuthStateLoggedIn(currentUser: user));
+        await _interface.logIn(email: event.email, password: event.password);
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
-            currentUser: appTempUser,
+            currentUser: state.currentUser,
             bloodyAuthException: e,
             reason: 'Log In Failure: ${e.toString()}',
           ),
         );
       }
     });
+  }
+  @override
+  Future<void> close() {
+    _userSubscription?.cancel();
+    return super.close();
   }
 }

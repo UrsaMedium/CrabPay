@@ -3,8 +3,8 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/core/widgets/product_card/product_card.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page/store_search_bar.dart';
+import 'package:crabpay/views/widgets/product_card.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_search_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 

@@ -1,8 +1,14 @@
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:flutter/material.dart';
 
 @immutable
 abstract class AuthEvent {
   const AuthEvent();
+}
+
+class AuthEventOnStreamUserChanged extends AuthEvent {
+  final AppAuthUser user;
+  const AuthEventOnStreamUserChanged(this.user);
 }
 
 class AuthEventInitialize extends AuthEvent {

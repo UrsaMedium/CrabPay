@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +17,7 @@ class AppLocalStorage {
       isEmailVerified: false,
       isAnonymous: true,
       isAdmin: false,
+      isLimbo: true,
     );
     if (!_preferences.containsKey('cartItemIdsOnPayment')) {
       await _preferences.setStringList('cartItemIdsOnPayment', []);

@@ -1,5 +1,4 @@
-import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
-import 'package:equatable/equatable.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
@@ -8,23 +7,19 @@ abstract class AuthState {
   final AppAuthUser currentUser;
   const AuthState({
     this.bloodyAuthException,
-    required this.currentUser,
+    this.currentUser = AppAuthUser.empty,
   });
 }
 
 class AuthStateLoading extends AuthState {
-  const AuthStateLoading({
-    required super.currentUser,
-  });
+  const AuthStateLoading();
 }
 
 class AuthStateLoggedIn extends AuthState {
-  const AuthStateLoggedIn({
-    required super.currentUser,
-  });
+  const AuthStateLoggedIn({required super.currentUser});
 }
 
-class AuthStateLoggedOut extends AuthState with EquatableMixin {
+class AuthStateLoggedOut extends AuthState {
   final String? reason;
   const AuthStateLoggedOut({
     required super.currentUser,
@@ -32,7 +27,4 @@ class AuthStateLoggedOut extends AuthState with EquatableMixin {
     String? loadingText,
     this.reason,
   });
-
-  @override
-  List<Object?> get props => [bloodyAuthException, reason];
 }

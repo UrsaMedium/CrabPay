@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
@@ -7,8 +11,13 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 // import 'package:uuid/v4.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc(InnerDatabaseHandler databaseHandler)
-    : super(const DatabaseState()) {
+  final AuthInnerInterface _authInterface;
+  late final StreamSubscription<AppAuthUser> _authSubscription;
+  DatabaseBloc({
+    required InnerDatabaseHandler databaseHandler,
+    required AuthInnerInterface authInnerface,
+  }) : _authInterface = authInnerface,
+       super(const DatabaseState()) {
     //
     // final _uuid = Uuid();
 
@@ -429,5 +438,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         rethrow;
       }
     });
+
+    _authSubscription = _authInterface.userStream.listen((user) {
+      add(DatabaseEventFlushData());
+      add(DatabaseEventInitialize(currentUser: user));
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
   }
 }

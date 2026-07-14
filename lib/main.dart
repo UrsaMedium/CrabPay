@@ -1,43 +1,46 @@
-import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_interface.dart';
-import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
-import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
-import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
-import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
-import 'package:crabpay/core/global_loading_screen.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
-import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
-import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
-import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
-import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
-import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
-import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
-import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
-import 'package:crabpay/views/store_views/store_pages/bloc/bloc_for_page_scrolling/home_pages_bloc.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_auth_interface.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
-import 'package:crabpay/views/store_views/store_pages/card_view/product_view/product_view_driver.dart';
-import 'package:crabpay/views/store_views/store_pages/store_page/store_page_view.dart';
-import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
-import 'package:crabpay/views/store_views/store_pages/home_page_view.dart';
-import 'package:crabpay/views/store_views/store_pages/cart_page_view/cart_page_view.dart';
-import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
-import 'package:crabpay/views/store_views/store_pages/ask_page_view.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
+import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page_view/cart_page_view.dart';
+import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_view.dart';
+import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
+import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
+import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/home_page_view.dart';
+import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
+import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/ask_page_view.dart';
+import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
+import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
+import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
+import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
+import 'package:crabpay/views/main_screen/main_screen_driver.dart';
+import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
+import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
-import 'package:crabpay/views/store_views/home_view.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
     url: supabaseAccessConf['url']!,
     publishableKey: supabaseAccessConf['publishableKey']!,
@@ -45,17 +48,36 @@ Future<void> main() async {
   await AppLocalStorage.init();
 
   runApp(
-    BlocProvider(
-      create: (context) => AuthBloc(SupabaseOuterInterface()),
-      child: BlocProvider(
-        create: (context) => DatabaseBloc(OuterDatabaseHandlerWithSupabase()),
-        child: BlocProvider(
-          create: (context) => CartBloc(OuterCartHandlerWithSupabase()),
-          child: BlocProvider(
-            create: (context) => PaymentBloc(PaymentOuterHandler()),
-            child: const CrabPayApp(),
-          ),
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthInnerInterface>(
+          create: (context) => SupabaseOuterAuthInterface(),
         ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) =>
+                AuthBloc(context.read<AuthInnerInterface>())
+                  ..add(const AuthEventInitialize()),
+          ),
+          BlocProvider<DatabaseBloc>(
+            create: (context) => DatabaseBloc(
+              databaseHandler: OuterDatabaseHandlerWithSupabase(),
+              authInnerface: context.read<AuthInnerInterface>(),
+            ),
+          ),
+          BlocProvider<CartBloc>(
+            create: (context) => CartBloc(
+              cartHandler: OuterCartHandlerWithSupabase(),
+              authInterface: context.read<AuthInnerInterface>(),
+            ),
+          ),
+          BlocProvider<PaymentBloc>(
+            create: (context) => PaymentBloc(PaymentOuterHandler()),
+          ),
+        ],
+        child: const CrabPayApp(),
       ),
     ),
   );
@@ -66,10 +88,7 @@ final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return BlocProvider(
-          create: (context) => HomeViewBloc(),
-          child: HomeView(navigationShell: navigationShell),
-        );
+        return MainScreenDriver(navigationShell: navigationShell);
       },
       branches: <StatefulShellBranch>[
         StatefulShellBranch(

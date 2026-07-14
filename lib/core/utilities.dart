@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -10,14 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-
 extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;
 }
 
 //local storage
-AppAuthUser appTempUser = AppLocalStorage.tempUser;
-
+final AppAuthUser appTempUser = AppLocalStorage.tempUser;
 
 Future<void> openProductCardCallBack(
   BuildContext context,
@@ -49,7 +47,9 @@ Future<void> openProductCardCallBack(
   // refreshing cart counter
   if (context.mounted) {
     context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(userId: context.read<AuthBloc>().state.currentUser.id),
+      CartEventFetchUserCartItemAmount(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
@@ -7,7 +9,14 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inn
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   StreamSubscription? _streamSubscription;
-  CartBloc(InnerCartHandler cartHandler) : super(const CartState()) {
+  final AuthInnerInterface _authInterface;
+  late final StreamSubscription<AppAuthUser> _authSubscription;
+
+  CartBloc({
+    required InnerCartHandler cartHandler,
+    required AuthInnerInterface authInterface,
+  }) : _authInterface = authInterface,
+       super(const CartState()) {
     on<CartEventFetchCartItems>((event, emit) async {
       print('----');
       print('CartEventFetchCartItems fired');
@@ -231,5 +240,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         rethrow;
       }
     });
+
+    _authSubscription = _authInterface.userStream.listen((user) {
+      add(CartEventFlushData());
+      add(CartEventFetchCartItems(userId: user.id));
+      add(CartEventFetchUserCartItemAmount(userId: user.id));
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
   }
 }

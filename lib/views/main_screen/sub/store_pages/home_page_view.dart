@@ -5,9 +5,11 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/core/widgets/product_card/product_card.dart';
+import 'package:crabpay/views/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -19,7 +21,6 @@ class HomePageView extends StatefulWidget {
 class _HomePageViewState extends State<HomePageView> {
   List<Product>? _userPreferences;
   List<Product>? _featuredProducts;
-  // late AuthUser currentUser;
   Completer<void>? _refreshCompleter;
 
   @override

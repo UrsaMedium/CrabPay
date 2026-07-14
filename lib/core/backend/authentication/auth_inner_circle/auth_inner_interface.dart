@@ -1,4 +1,4 @@
-import 'package:crabpay/core/backend/authentication/auth_binding_circle/auth_user.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 
 abstract class AuthInnerInterface {
   Future<void> initialize();
@@ -12,4 +12,5 @@ abstract class AuthInnerInterface {
   Future<void> logOut();
   Future<void> sendEmailVerification();
   Future<void> sendPasswordReset({required String toEmail});
+  Stream<AppAuthUser> get userStream;
 }
