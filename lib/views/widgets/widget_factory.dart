@@ -3,67 +3,20 @@ import 'package:flutter/material.dart';
 
 final double blurLevel = 50;
 
-AlignmentGeometry widgetPropertyAlignment(String? alignment) {
-  switch (alignment) {
-    case 'topLeft':
-      return Alignment.topLeft;
-    case 'topCenter':
-      return Alignment.topCenter;
-    case 'topRight':
-      return Alignment.topRight;
-    case 'centerLeft':
-      return Alignment.centerLeft;
-    case 'center':
-      return Alignment.center;
-    case 'centerRight':
-      return Alignment.centerRight;
-    case 'bottomLeft':
-      return Alignment.bottomLeft;
-    case 'bottomCenter':
-      return Alignment.bottomCenter;
-    case 'bottomRight':
-      return Alignment.bottomRight;
-    default:
-      return Alignment.center;
-  }
-}
-
-Color widgetPropertyColor(BuildContext context, String? color) {
-  switch (color) {
-    case 'surface':
-      return context.appColorScheme.surface;
-    default:
-      return context.appColorScheme.onSurface;
-  }
-}
-
-// InkWell(
-//           onTap: () => radioReacts(widget.priceImages![each].toString()),
-//           child: Row(
-//             children: [
-//               Expanded(
-//                 child: ListTile(
-//                   title: Text(each),
-//                   leading: Radio<String>(value: each),
-//                 ),
-//               ),
-//               if (widget.priceImages != null)
-//                 Text(widget.priceImages![each].toString()),
-//             ],
-//           ),
-//         ),
-//       );
+//radio ---------------------------------------------------------------------------------------------------------------------
 class RadioConstructor extends StatefulWidget {
   final Function(String, String) collectedDataBridge;
   final List<String> expectedData;
   final String feildName;
   final Map<String, double>? priceImages;
+  final bool isCupertino;
   const RadioConstructor({
     super.key,
     required this.expectedData,
     required this.feildName,
     required this.collectedDataBridge,
     this.priceImages,
+    required this.isCupertino,
   });
 
   @override
@@ -138,10 +91,7 @@ class _RadioConstructorState extends State<RadioConstructor> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    widget.feildName,
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  child: Text(widget.feildName, style: TextStyle(fontSize: 16)),
                 ),
               ),
             ),
@@ -159,15 +109,18 @@ class _RadioConstructorState extends State<RadioConstructor> {
   }
 }
 
+//dropdown menu ---------------------------------------------------------------------------------------------------------------------
 class DropdownMenuConstructor extends StatefulWidget {
   final Function(String, String) collectedDataBridge;
   final List<String> expectedData;
   final String fieldName;
+  final bool isCupertino;
   const DropdownMenuConstructor({
     super.key,
     required this.expectedData,
     required this.fieldName,
     required this.collectedDataBridge,
+    required this.isCupertino,
   });
 
   @override
@@ -195,7 +148,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
       color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
-        
+
         side: BorderSide(
           color: context.appColorScheme.primary.withValues(alpha: .3),
         ),
@@ -213,10 +166,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.fieldName,
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
               ),
             ),
           ),
@@ -248,17 +198,20 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
   }
 }
 
+//inputField ---------------------------------------------------------------------------------------------------------------------
 class InputFieldConstructor extends StatefulWidget {
   final Function(String, String) collectedDataBridge;
   final BuildContext context;
   final String fieldName;
   final List<String> expectedData;
+  final bool isCupertino;
   const InputFieldConstructor({
     super.key,
     required this.context,
     required this.fieldName,
     required this.expectedData,
     required this.collectedDataBridge,
+    required this.isCupertino,
   });
 
   @override
@@ -293,10 +246,7 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  widget.fieldName,
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: Text(widget.fieldName, style: TextStyle(fontSize: 16)),
               ),
             ),
           ),
@@ -325,6 +275,7 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
   }
 }
 
+//appbuilder ---------------------------------------------------------------------------------------------------------------------
 Widget theAppWidgetBuilder({
   required Function(String, String) collectedDataBridge,
   required BuildContext context,
@@ -332,6 +283,7 @@ Widget theAppWidgetBuilder({
   required String handler,
   Map<String, double>? priceImages,
   List<String>? expectedData,
+  required bool isCupertino,
 }) {
   Map<String, double> pricing = {};
   if (priceImages != null) {
@@ -341,29 +293,13 @@ Widget theAppWidgetBuilder({
   }
 
   switch (handler) {
-    // case 'Text': // you need to pass: text, alignment, color, fontsize, fontwight
-    //   return Padding(
-    //     padding: const EdgeInsets.only(top: 8.0, left: 16),
-    //     child: Container(
-    //       alignment: widgetPropertyAlignment(pricing['alignment']),
-    //       child: Text(
-    //         pricing['text']!,
-    //         style: TextStyle(
-    //           color: widgetPropertyColor(context, pricing['color']),
-    //           fontSize: double.tryParse(pricing['fontSize']!) ?? 14,
-    //           fontWeight: FontWeight(
-    //             int.tryParse(pricing['fontWeight']!) ?? 400,
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   );
     case 'InputField': // pass the name of entered data
       return InputFieldConstructor(
         collectedDataBridge: collectedDataBridge,
         context: context,
         fieldName: fieldName,
         expectedData: expectedData ?? ['User data'],
+        isCupertino: isCupertino,
       );
     case 'RadioList': // pass map of option name : option
       return RadioConstructor(
@@ -371,17 +307,14 @@ Widget theAppWidgetBuilder({
         collectedDataBridge: collectedDataBridge,
         expectedData: expectedData ?? ['error'],
         feildName: fieldName,
+        isCupertino: isCupertino,
       );
     case 'DropdownList': // pass map of option name : option
       return DropdownMenuConstructor(
         collectedDataBridge: collectedDataBridge,
         expectedData: expectedData ?? ['error'],
         fieldName: fieldName,
-      );
-    case 'Divider':
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: Divider(),
+        isCupertino: isCupertino,
       );
     default:
       return Text('ERROR');

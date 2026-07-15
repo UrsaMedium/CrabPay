@@ -282,6 +282,7 @@ class _AFieldState extends State<AField> {
                 handler: widget.field.handler,
                 priceImages: null,
                 expectedData: widget.field.expectedData,
+                isCupertino: false,
               ),
               Padding(
                 padding: const EdgeInsets.all(2.0),

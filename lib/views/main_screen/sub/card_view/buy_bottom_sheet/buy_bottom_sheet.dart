@@ -422,6 +422,7 @@ class MaterialBuyBottomSheet extends StatelessWidget {
                       handler: field.handler,
                       priceImages: field.priceImages,
                       expectedData: field.expectedData,
+                      isCupertino: false,
                     ),
                     Positioned(
                       right: 3,
@@ -466,6 +467,7 @@ class MaterialBuyBottomSheet extends StatelessWidget {
                   handler: field.handler,
                   priceImages: field.priceImages,
                   expectedData: field.expectedData,
+                  isCupertino: false,
                 ),
         ),
       );
