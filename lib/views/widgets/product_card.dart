@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -23,6 +25,15 @@ class ProductCardDriver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onProductCardPressed() async {
+      context.read<DatabaseBloc>().add(
+        DatabaseEventFetchProductFields(productId: product.id),
+      );
+      context.read<CartBloc>().add(
+        CartEventFetchProductCartItemAmount(
+          userId: context.read<AuthBloc>().state.currentUser.id,
+          productId: product.id,
+        ),
+      );
       await openProductCardCallBack(
         context: context,
         productId: product.id,

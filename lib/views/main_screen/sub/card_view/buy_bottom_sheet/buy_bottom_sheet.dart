@@ -1,206 +1,44 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/widgets/widget_factory.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
-class BuyBottomSheet extends StatefulWidget {
-  final String productId;
+class MaterialBuyBottomSheet extends StatelessWidget {
+  final Product product;
   final List<ProductField> productFields;
-  const BuyBottomSheet({
+  final double precalculatedPrice;
+  final bool haveImageField;
+  final int itemsCount;
+  final bool isEveryFieldSatisfied;
+  final bool isAdmin;
+  final VoidCallback onResetImageFieldPressed;
+  final VoidCallback onAddFieldPressed;
+  final VoidCallback onDeleteLastAddedItem;
+  final VoidCallback onCartIconPressed;
+  final VoidCallback onAddCartItemPressed;
+  final Function(String, String) onUserInput;
+  const MaterialBuyBottomSheet({
     super.key,
-    required this.productId,
+    required this.product,
     required this.productFields,
+    required this.precalculatedPrice,
+    required this.itemsCount,
+    required this.isEveryFieldSatisfied,
+    required this.isAdmin,
+    required this.onResetImageFieldPressed,
+    required this.onAddFieldPressed,
+    required this.onDeleteLastAddedItem,
+    required this.onCartIconPressed,
+    required this.onAddCartItemPressed,
+    required this.onUserInput,
+    required this.haveImageField,
   });
-
-  @override
-  State<BuyBottomSheet> createState() => _BuyBottomSheetState();
-}
-
-class _BuyBottomSheetState extends State<BuyBottomSheet> {
-  Map<String, String> retrievedData = {};
-  double precalculatedPrice = 0;
-  List<String> functionDimentions = [];
-  Product? product;
-  ProductField? imageField;
-  int itemsCount = 0;
-  bool everyFieldIsSatisfied = false;
-  bool corectImageInput = false;
-
-  @override
-  void initState() {
-    product = context.read<DatabaseBloc>().state.products?.firstWhere(
-      (product) => product.id == widget.productId,
-    );
-    final placeHolder = ProductField.intial();
-    imageField = widget.productFields.firstWhere(
-      (field) => field.isPriceImage,
-      orElse: () => placeHolder,
-    );
-    if (imageField!.id == placeHolder.id) imageField = null;
-    context.read<CartBloc>().add(
-      CartEventFetchProductCartItemAmount(
-        userId: context.read<AuthBloc>().state.currentUser.id,
-        productId: product!.id,
-      ),
-    );
-    itemsCount = context.read<CartBloc>().state.productCartItemAmount ?? 0;
-    super.initState();
-  }
-
-  void _onBottomSheetDataRetrieved(String fieldName, String dataReceived) {
-    setState(() {
-      retrievedData[fieldName] = dataReceived;
-      if (imageField?.priceImages != null) {
-        if (imageField!.handler == 'InputField') {
-          final dataFromIamgeField = retrievedData[imageField!.fieldName];
-          final imageCoefficient =
-              imageField!.priceImages![imageField!.fieldName] ?? 0;
-          double fromField = double.tryParse(dataFromIamgeField ?? '0') ?? 0;
-          precalculatedPrice = fromField * imageCoefficient;
-          if (precalculatedPrice > 0) {
-            corectImageInput = true;
-          } else {
-            corectImageInput = false;
-          }
-        } else {
-          corectImageInput = true;
-          double retrievedPrice = 0;
-          final dataFromIamgeField = retrievedData[imageField!.fieldName];
-          retrievedPrice = imageField!.priceImages![dataFromIamgeField] ?? 0;
-          precalculatedPrice = retrievedPrice;
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'Ouch');
-      }
-
-      everyFieldIsSatisfied =
-          (retrievedData.length == widget.productFields.length);
-      if (everyFieldIsSatisfied) {
-        for (var retrievedField in retrievedData.keys) {
-          if (retrievedData[retrievedField]!.isEmpty) {
-            everyFieldIsSatisfied = false;
-            break;
-          }
-        }
-      }
-      if (!corectImageInput) everyFieldIsSatisfied = false;
-
-      //TODO internal testing
-      if (everyFieldIsSatisfied) {
-        for (var originalField in widget.productFields) {
-          if (!retrievedData.containsKey(originalField.fieldName)) {
-            everyFieldIsSatisfied = false;
-            Fluttertoast.showToast(
-              msg:
-                  'Retrieved field ${originalField.fieldName} is not among retrieved from input fields',
-            );
-            break;
-          }
-        }
-      }
-      //TODO internal testing
-    });
-  }
-
-  List<Widget> _fieldSlivers(List<ProductField> fields) {
-    fields.sort((a, b) => a.order.compareTo(b.order));
-    List<Widget> result = [
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 32.0,
-            top: 16,
-            bottom: 8,
-            right: 128,
-          ),
-          child: SizedBox(
-            child: Text(
-              product?.name ?? 'error',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .w700,
-                color: context.appColorScheme.primary,
-              ),
-            ),
-          ),
-        ),
-      ),
-    ];
-    for (var field in fields) {
-      result.add(
-        SliverToBoxAdapter(
-          child: context.read<AuthBloc>().state.currentUser.isAdmin
-              ? Stack(
-                  children: [
-                    theAppWidgetBuilder(
-                      collectedDataBridge: _onBottomSheetDataRetrieved,
-                      context: context,
-                      fieldName: field.fieldName,
-                      handler: field.handler,
-                      priceImages: field.priceImages,
-                      expectedData: field.expectedData,
-                    ),
-                    Positioned(
-                      right: 3,
-                      child: Row(
-                        children: [
-                          if (field.isPriceImage)
-                            IconButton(
-                              onPressed: () {
-                                context.pushNamed(
-                                  'update_price_images_field_admin_panel_view',
-                                  pathParameters: {'fieldId': field.id},
-                                );
-                              },
-                              icon: Icon(Icons.price_change_rounded),
-                              color: context.appColorScheme.errorContainer,
-                            ),
-                          Text(
-                            'Field\'s order - ${field.order}',
-                            style: TextStyle(
-                              color: context.appColorScheme.errorContainer,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              context.pushNamed(
-                                'update_field_admin_panel_view',
-                                pathParameters: {'fieldId': field.id},
-                              );
-                            },
-                            icon: Icon(Icons.settings),
-                            color: context.appColorScheme.errorContainer,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              : theAppWidgetBuilder(
-                  collectedDataBridge: _onBottomSheetDataRetrieved,
-                  context: context,
-                  fieldName: field.fieldName,
-                  handler: field.handler,
-                  priceImages: field.priceImages,
-                  expectedData: field.expectedData,
-                ),
-        ),
-      );
-    }
-    result.add(SliverToBoxAdapter(child: SizedBox(height: 66)));
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +87,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                     CustomScrollView(
                                       shrinkWrap: true,
                                       slivers: _fieldSlivers(
-                                        widget.productFields,
+                                        fields: productFields,
+                                        context: context,
                                       ),
                                     ),
                                   ],
@@ -263,29 +102,12 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                           right: 16,
                           child: Row(
                             children: [
-                              if (context
-                                  .read<AuthBloc>()
-                                  .state
-                                  .currentUser
-                                  .isAdmin)
+                              if (isAdmin)
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: () {
-                                        if (product != null) {
-                                          context.pushNamed(
-                                            'reset_price_image_field_admin_panel_view',
-                                            pathParameters: {
-                                              'productId': product!.id,
-                                            },
-                                          );
-                                        } else {
-                                          Fluttertoast.showToast(
-                                            msg:
-                                                'Strange Error. Can\'t find product id',
-                                          );
-                                        }
-                                      },
+                                      onPressed: () =>
+                                          onResetImageFieldPressed(),
                                       icon: Icon(
                                         Icons.price_check_rounded,
                                         color: context
@@ -294,21 +116,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () {
-                                        if (product != null) {
-                                          context.pushNamed(
-                                            'add_field_admin_panel_view',
-                                            pathParameters: {
-                                              'productId': product!.id,
-                                            },
-                                          );
-                                        } else {
-                                          Fluttertoast.showToast(
-                                            msg:
-                                                'Strange Error. Can\'t find product id',
-                                          );
-                                        }
-                                      },
+                                      onPressed: () => onAddFieldPressed(),
                                       icon: Icon(
                                         Icons.add,
                                         color: context
@@ -413,36 +221,8 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                   child: Row(
                                                     children: [
                                                       IconButton(
-                                                        onPressed: () {
-                                                          try {
-                                                            if (itemsCount >
-                                                                0) {
-                                                              context.read<CartBloc>().add(
-                                                                CartEventDeleteLastAddedProductCartItem(
-                                                                  userId: context
-                                                                      .read<
-                                                                        AuthBloc
-                                                                      >()
-                                                                      .state
-                                                                      .currentUser
-                                                                      .id,
-                                                                  productId:
-                                                                      product!
-                                                                          .id,
-                                                                ),
-                                                              );
-                                                              itemsCount--;
-                                                            }
-                                                          } catch (e) {
-                                                            Fluttertoast.showToast(
-                                                              msg:
-                                                                  'Failed to delete',
-                                                            );
-                                                            print(
-                                                              'Failed to delete last cart item::: $e',
-                                                            );
-                                                          }
-                                                        },
+                                                        onPressed: () =>
+                                                            onDeleteLastAddedItem(),
                                                         icon: Icon(
                                                           Icons
                                                               .exposure_minus_1_rounded,
@@ -454,7 +234,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                       VerticalDivider(width: 4),
                                                       IconButton(
                                                         onPressed: () =>
-                                                            context.go('/cart'),
+                                                            onCartIconPressed(),
                                                         icon: Badge(
                                                           backgroundColor:
                                                               context
@@ -532,83 +312,11 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                 sigmaY: 10.0,
                                               ),
                                               child: ElevatedButton(
-                                                onPressed:
-                                                    imageField?.priceImages ==
-                                                        null
-                                                    ? null
-                                                    : () {
-                                                        if (everyFieldIsSatisfied) {
-                                                          CartItem
-                                                          cartItem = CartItem(
-                                                            id: 'id',
-                                                            userId: context
-                                                                .read<
-                                                                  AuthBloc
-                                                                >()
-                                                                .state
-                                                                .currentUser
-                                                                .id,
-                                                            userName:
-                                                                context
-                                                                    .read<
-                                                                      AuthBloc
-                                                                    >()
-                                                                    .state
-                                                                    .currentUser
-                                                                    .email ??
-                                                                'AnonUser-id:${context.read<AuthBloc>().state.currentUser.id}',
-                                                            productId: widget
-                                                                .productId,
-                                                            productName:
-                                                                product!.name,
-                                                            purchaseData:
-                                                                retrievedData,
-                                                            currency:
-                                                                'rubDefoult',
-                                                            checkoutPrice:
-                                                                precalculatedPrice,
-                                                            status: 'created',
-                                                          );
-                                                          try {
-                                                            context.read<CartBloc>().add(
-                                                              CartEventAddCartItem(
-                                                                cartItem:
-                                                                    cartItem,
-                                                                userId: context
-                                                                    .read<
-                                                                      AuthBloc
-                                                                    >()
-                                                                    .state
-                                                                    .currentUser
-                                                                    .id,
-                                                              ),
-                                                            );
-                                                            Fluttertoast.showToast(
-                                                              msg:
-                                                                  'It\'s in your cart now',
-                                                            );
-                                                            itemsCount++;
-                                                          } on Exception catch (
-                                                            e
-                                                          ) {
-                                                            Fluttertoast.showToast(
-                                                              msg:
-                                                                  'Failed to add to your cart',
-                                                            );
-                                                            print(
-                                                              'Failed to add to your cart: $e',
-                                                            );
-                                                          }
-                                                        } else {
-                                                          Fluttertoast.showToast(
-                                                            msg:
-                                                                'Every field must be filled',
-                                                          );
-                                                        }
-                                                      },
+                                                onPressed: () =>
+                                                    onAddCartItemPressed(),
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
-                                                      everyFieldIsSatisfied
+                                                      isEveryFieldSatisfied
                                                       ? context
                                                             .appColorScheme
                                                             .primary
@@ -622,7 +330,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                               alpha: 0.5,
                                                             ),
                                                   foregroundColor:
-                                                      everyFieldIsSatisfied
+                                                      isEveryFieldSatisfied
                                                       ? context
                                                             .appColorScheme
                                                             .onPrimary
@@ -634,7 +342,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                     45,
                                                   ),
                                                   side: BorderSide(
-                                                    color: everyFieldIsSatisfied
+                                                    color: isEveryFieldSatisfied
                                                         ? context
                                                               .appColorScheme
                                                               .primary
@@ -656,7 +364,7 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                                                   ),
                                                 ),
                                                 child: Text(
-                                                  everyFieldIsSatisfied
+                                                  isEveryFieldSatisfied
                                                       ? 'Add To Cart'
                                                       : 'Fill The Fields',
                                                   style: TextStyle(
@@ -681,19 +389,109 @@ class _BuyBottomSheetState extends State<BuyBottomSheet> {
                   ),
                 ),
               ),
-              if (imageField?.priceImages == null)
+              if (!haveImageField)
                 Container(
                   color: context.appColorScheme.errorContainer.withValues(
                     alpha: .7,
                   ),
-                  child: Text(
-                    'Critical Error, No iamge field\nReport to admin about it\nimagefield: ${imageField != null}\nprice images: ${imageField?.priceImages}',
-                  ),
+                  child: Text('Critical Error, ImageField issue}'),
                 ),
             ],
           ),
         ),
       ],
     );
+  }
+
+  List<Widget> _fieldSlivers({
+    required List<ProductField> fields,
+    required BuildContext context,
+  }) {
+    fields.sort((a, b) => a.order.compareTo(b.order));
+    List<Widget> result = [
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 32.0,
+            top: 16,
+            bottom: 8,
+            right: 128,
+          ),
+          child: SizedBox(
+            child: Text(
+              product.name,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: .w700,
+                color: context.appColorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
+    for (var field in fields) {
+      result.add(
+        SliverToBoxAdapter(
+          child: isAdmin
+              ? Stack(
+                  children: [
+                    theAppWidgetBuilder(
+                      collectedDataBridge: onUserInput,
+                      context: context,
+                      fieldName: field.fieldName,
+                      handler: field.handler,
+                      priceImages: field.priceImages,
+                      expectedData: field.expectedData,
+                    ),
+                    Positioned(
+                      right: 3,
+                      child: Row(
+                        children: [
+                          if (field.isPriceImage)
+                            IconButton(
+                              onPressed: () {
+                                context.pushNamed(
+                                  'update_price_images_field_admin_panel_view',
+                                  pathParameters: {'fieldId': field.id},
+                                );
+                              },
+                              icon: Icon(Icons.price_change_rounded),
+                              color: context.appColorScheme.errorContainer,
+                            ),
+                          Text(
+                            'Field\'s order - ${field.order}',
+                            style: TextStyle(
+                              color: context.appColorScheme.errorContainer,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              context.pushNamed(
+                                'update_field_admin_panel_view',
+                                pathParameters: {'fieldId': field.id},
+                              );
+                            },
+                            icon: Icon(Icons.settings),
+                            color: context.appColorScheme.errorContainer,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : theAppWidgetBuilder(
+                  collectedDataBridge: onUserInput,
+                  context: context,
+                  fieldName: field.fieldName,
+                  handler: field.handler,
+                  priceImages: field.priceImages,
+                  expectedData: field.expectedData,
+                ),
+        ),
+      );
+    }
+    result.add(SliverToBoxAdapter(child: SizedBox(height: 66)));
+    return result;
   }
 }
