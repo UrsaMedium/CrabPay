@@ -14,10 +14,10 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_view.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/ask_page/ask_page_view.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
@@ -103,7 +103,7 @@ final GoRouter _router = GoRouter(
           routes: [
             GoRoute(
               path: '/store',
-              builder: (context, state) => StorePageView(),
+              builder: (context, state) => StorePageDriver(),
             ),
           ],
         ),
@@ -119,7 +119,7 @@ final GoRouter _router = GoRouter(
           routes: [
             GoRoute(
               path: '/cart',
-              builder: (context, state) => const CartPageView(),
+              builder: (context, state) => const CartPageDriver(),
             ),
           ],
         ),

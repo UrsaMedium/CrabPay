@@ -94,6 +94,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(PaymentStateListening());
       if (event.cartItemIds.isEmpty) {
         emit(PaymentStateSilence());
+        return;
       }
       try {
         paymentHandler.disposeListener();

@@ -38,7 +38,7 @@ class _HomePageDriverState extends State<HomePageDriver> {
           previous.states == DatabaseStates.dbLoading &&
           current.states != DatabaseStates.dbLoading,
       listener: (context, dbState) {
-        if (_refreshCompleter != null && !_refreshCompleter!.isCompleted) {
+        if (!(_refreshCompleter?.isCompleted ?? true)) {
           _refreshCompleter!.complete();
         }
       },
