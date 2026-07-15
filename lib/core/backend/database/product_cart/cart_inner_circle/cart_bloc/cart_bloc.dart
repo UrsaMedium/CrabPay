@@ -22,7 +22,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('CartEventFetchCartItems fired');
       print('----');
       try {
-        emit(state.copyWith(states: CartStates.getting));
+        emit(state.copyWith(states: CartStates.loading));
         final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
         List<CartItem> cartItems = [];
         for (var cartItem in allUserCartItems) {
@@ -51,11 +51,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(
           state.copyWith(
             cartItemToPush: event.cartItem,
-            states: CartStates.adding,
+            states: CartStates.loading,
           ),
         );
         await cartHandler.addCartItem(event.cartItem);
-        emit(state.copyWith(states: CartStates.added));
+        final updatedProductAmount = await cartHandler.getProductCartItemAmount(
+          event.userId,
+          event.cartItem.productId,
+        );
+        final updatedUserAmount = await cartHandler.getUserCartItemAmount(
+          event.userId,
+        );
+        final updatedCartItems = await cartHandler.fetchCartItems(event.userId);
+        emit(
+          state.copyWith(
+            cartItems: updatedCartItems,
+            allUserCartItems: updatedCartItems,
+            productCartItemAmount: updatedProductAmount,
+            userCartItemAmount: updatedUserAmount,
+            states: CartStates.added,
+          ),
+        );
       } catch (e) {
         emit(state.copyWith(states: CartStates.failedToAdd));
         rethrow;
@@ -67,7 +83,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('CartEventDeleteCartItem fired');
       print('----');
       try {
-        emit(state.copyWith(states: CartStates.deleting));
+        emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItem.id);
         final reducedListOfItmes = state.cartItems
             ?.where((item) => item.id != event.cartItem.id)
@@ -91,7 +107,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('CartEventDeleteCartItemById fired');
       print('----');
       try {
-        emit(state.copyWith(states: CartStates.deleting));
+        emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItemId);
         final reducedListOfItmes = state.cartItems
             ?.where((item) => item.id != event.cartItemId)
@@ -174,6 +190,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('----');
       print('CartEventFetchUserCartItemAmount fired');
       print('----');
+      emit(state.copyWith(states: CartStates.loading));
       try {
         final userCartItemAmount = await cartHandler.getUserCartItemAmount(
           event.userId,
@@ -195,6 +212,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('CartEventFetchProductCartItemAmount fired');
       print('----');
       try {
+        emit(state.copyWith(states: CartStates.loading));
         final productCartItemAmount = await cartHandler
             .getProductCartItemAmount(event.userId, event.productId);
         emit(
@@ -216,13 +234,28 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('CartEventDeleteLastAddedProductCartItem fired');
       print('----');
       try {
-        final didDelete = await cartHandler.deletedLastAddedProductCartItem(
+        emit(state.copyWith(states: CartStates.loading));
+        final didDelete = await cartHandler.deleteLastAddedProductCartItem(
           event.userId,
           event.productId,
         );
         if (didDelete) {
+          final updatedProductAmount = await cartHandler
+              .getProductCartItemAmount(event.userId, event.productId);
+          final updatedUserAmount = await cartHandler.getUserCartItemAmount(
+            event.userId,
+          );
+          final updatedCartItems = await cartHandler.fetchCartItems(
+            event.userId,
+          );
           emit(
-            state.copyWith(states: CartStates.deletedLastAddedProductCartItem),
+            state.copyWith(
+              cartItems: updatedCartItems,
+              allUserCartItems: updatedCartItems,
+              productCartItemAmount: updatedProductAmount,
+              userCartItemAmount: updatedUserAmount,
+              states: CartStates.deletedLastAddedProductCartItem,
+            ),
           );
         } else {
           emit(

@@ -1,9 +1,6 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/views/widgets/widget_factory.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +20,7 @@ class MaterialBuyBottomSheet extends StatelessWidget {
   final VoidCallback onCartIconPressed;
   final VoidCallback onAddCartItemPressed;
   final Function(String, String) onUserInput;
+  final bool isCartLoading;
   const MaterialBuyBottomSheet({
     super.key,
     required this.product,
@@ -38,6 +36,7 @@ class MaterialBuyBottomSheet extends StatelessWidget {
     required this.onAddCartItemPressed,
     required this.onUserInput,
     required this.haveImageField,
+    required this.isCartLoading,
   });
 
   @override
@@ -175,213 +174,193 @@ class MaterialBuyBottomSheet extends StatelessWidget {
                           bottom: 14,
                           left: 16,
                           right: 16,
-                          child: BlocBuilder<CartBloc, CartState>(
-                            builder: (context, state) {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    width: double.maxFinite,
-                                    child: Row(
-                                      children: [
-                                        if (itemsCount > 0)
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 8,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 50,
+                                width: double.maxFinite,
+                                child: Row(
+                                  children: [
+                                    if (itemsCount > 0)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 8,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: .circular(30),
+                                          child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                              sigmaX: 5,
+                                              sigmaY: 5,
                                             ),
-                                            child: ClipRRect(
-                                              borderRadius: .circular(30),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                  sigmaX: 5,
-                                                  sigmaY: 5,
+                                            child: Container(
+                                              height: 45,
+                                              alignment: .center,
+                                              padding: .only(
+                                                left: 16,
+                                                right: 16,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: context
+                                                    .appColorScheme
+                                                    .primary
+                                                    .withValues(alpha: .5),
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                border: BoxBorder.all(
+                                                  color: context
+                                                      .appColorScheme
+                                                      .outline,
                                                 ),
-                                                child: Container(
-                                                  height: 45,
-                                                  alignment: .center,
-                                                  padding: .only(
-                                                    left: 16,
-                                                    right: 16,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: context
-                                                        .appColorScheme
-                                                        .primary
-                                                        .withValues(alpha: .5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                    border: BoxBorder.all(
-                                                      color: context
-                                                          .appColorScheme
-                                                          .outline,
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () =>
-                                                            onDeleteLastAddedItem(),
-                                                        icon: Icon(
-                                                          Icons
-                                                              .exposure_minus_1_rounded,
-                                                          color: context
-                                                              .appColorScheme
-                                                              .onPrimary,
-                                                        ),
-                                                      ),
-                                                      VerticalDivider(width: 4),
-                                                      IconButton(
-                                                        onPressed: () =>
-                                                            onCartIconPressed(),
-                                                        icon: Badge(
-                                                          backgroundColor:
-                                                              context
-                                                                  .appColorScheme
-                                                                  .onError,
-                                                          textColor: context
-                                                              .appColorScheme
-                                                              .error,
-                                                          label: AnimatedSwitcher(
-                                                            duration:
-                                                                const Duration(
-                                                                  milliseconds:
-                                                                      250,
-                                                                ),
-                                                            transitionBuilder:
-                                                                (
-                                                                  Widget child,
-                                                                  Animation<
-                                                                    double
-                                                                  >
-                                                                  animation,
-                                                                ) {
-                                                                  return FadeTransition(
-                                                                    opacity:
-                                                                        animation,
-                                                                    child: SlideTransition(
-                                                                      position:
-                                                                          Tween<Offset>(
-                                                                            begin: const Offset(
-                                                                              2,
-                                                                              0.0,
-                                                                            ),
-                                                                            end:
-                                                                                Offset.zero,
-                                                                          ).animate(
-                                                                            animation,
-                                                                          ),
-                                                                      child:
-                                                                          child,
-                                                                    ),
-                                                                  );
-                                                                },
-                                                            child: Text(
-                                                              '$itemsCount',
-                                                              key:
-                                                                  ValueKey<int>(
-                                                                    itemsCount,
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          isLabelVisible:
-                                                              itemsCount > 0,
-                                                          child: Icon(
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  isCartLoading
+                                                      ? CircularProgressIndicator()
+                                                      : IconButton(
+                                                          onPressed: () =>
+                                                              onDeleteLastAddedItem(),
+                                                          icon: Icon(
+                                                            Icons
+                                                                .exposure_minus_1_rounded,
                                                             color: context
                                                                 .appColorScheme
                                                                 .onPrimary,
-                                                            Icons
-                                                                .shopping_cart_checkout_rounded,
-                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                  VerticalDivider(width: 4),
+                                                  IconButton(
+                                                    onPressed: () =>
+                                                        onCartIconPressed(),
+                                                    icon: Badge(
+                                                      backgroundColor: context
+                                                          .appColorScheme
+                                                          .onError,
+                                                      textColor: context
+                                                          .appColorScheme
+                                                          .error,
+                                                      label: AnimatedSwitcher(
+                                                        duration:
+                                                            const Duration(
+                                                              milliseconds: 250,
+                                                            ),
+                                                        transitionBuilder:
+                                                            (
+                                                              Widget child,
+                                                              Animation<double>
+                                                              animation,
+                                                            ) {
+                                                              return FadeTransition(
+                                                                opacity:
+                                                                    animation,
+                                                                child: SlideTransition(
+                                                                  position: Tween<Offset>(
+                                                                    begin:
+                                                                        const Offset(
+                                                                          2,
+                                                                          0.0,
+                                                                        ),
+                                                                    end: Offset
+                                                                        .zero,
+                                                                  ).animate(animation),
+                                                                  child: child,
+                                                                ),
+                                                              );
+                                                            },
+                                                        child: Text(
+                                                          '$itemsCount',
+                                                          key: ValueKey<int>(
+                                                            itemsCount,
                                                           ),
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        Flexible(
-                                          child: ClipRRect(
-                                            borderRadius: .circular(30),
-                                            child: BackdropFilter(
-                                              filter: ImageFilter.blur(
-                                                sigmaX: 10.0,
-                                                sigmaY: 10.0,
-                                              ),
-                                              child: ElevatedButton(
-                                                onPressed: () =>
-                                                    onAddCartItemPressed(),
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      isEveryFieldSatisfied
-                                                      ? context
+                                                      isLabelVisible:
+                                                          itemsCount > 0,
+                                                      child: Icon(
+                                                        color: context
                                                             .appColorScheme
-                                                            .primary
-                                                            .withValues(
-                                                              alpha: .5,
-                                                            )
-                                                      : context
-                                                            .appColorScheme
-                                                            .onPrimary
-                                                            .withValues(
-                                                              alpha: 0.5,
-                                                            ),
-                                                  foregroundColor:
-                                                      isEveryFieldSatisfied
-                                                      ? context
-                                                            .appColorScheme
-                                                            .onPrimary
-                                                      : context
-                                                            .appColorScheme
-                                                            .primary,
-                                                  minimumSize: Size(
-                                                    double.maxFinite,
-                                                    45,
+                                                            .onPrimary,
+                                                        Icons
+                                                            .shopping_cart_checkout_rounded,
+                                                        size: 30,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  side: BorderSide(
-                                                    color: isEveryFieldSatisfied
-                                                        ? context
-                                                              .appColorScheme
-                                                              .primary
-                                                              .withValues(
-                                                                alpha: .5,
-                                                              )
-                                                        : context
-                                                              .appColorScheme
-                                                              .onPrimary
-                                                              .withValues(
-                                                                alpha: 0.5,
-                                                              ),
-                                                  ),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          30,
-                                                        ),
-                                                  ),
-                                                ),
-                                                child: Text(
-                                                  isEveryFieldSatisfied
-                                                      ? 'Add To Cart'
-                                                      : 'Fill The Fields',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
+                                                ],
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ],
+                                      ),
+                                    Flexible(
+                                      child: ClipRRect(
+                                        borderRadius: .circular(30),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                            sigmaX: 10.0,
+                                            sigmaY: 10.0,
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () =>
+                                                onAddCartItemPressed(),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  isEveryFieldSatisfied
+                                                  ? context
+                                                        .appColorScheme
+                                                        .primary
+                                                        .withValues(alpha: .5)
+                                                  : context
+                                                        .appColorScheme
+                                                        .onPrimary
+                                                        .withValues(alpha: 0.5),
+                                              foregroundColor:
+                                                  isEveryFieldSatisfied
+                                                  ? context
+                                                        .appColorScheme
+                                                        .onPrimary
+                                                  : context
+                                                        .appColorScheme
+                                                        .primary,
+                                              minimumSize: Size(
+                                                double.maxFinite,
+                                                45,
+                                              ),
+                                              side: BorderSide(
+                                                color: isEveryFieldSatisfied
+                                                    ? context
+                                                          .appColorScheme
+                                                          .primary
+                                                          .withValues(alpha: .5)
+                                                    : context
+                                                          .appColorScheme
+                                                          .onPrimary
+                                                          .withValues(
+                                                            alpha: 0.5,
+                                                          ),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              isEveryFieldSatisfied
+                                                  ? 'Add To Cart'
+                                                  : 'Fill The Fields',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

@@ -263,7 +263,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   @override
-  Future<bool> deletedLastAddedProductCartItem(
+  Future<bool> deleteLastAddedProductCartItem(
     String userId,
     String productId,
   ) async {
@@ -272,7 +272,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         document: gql(r'''
           query($uId: String!, $pId: UUID!) {
             cartItemCollection(
-              filter: { userId: { eq: $uId }, productId: { eq: $pId } }, 
+              filter: { userId: { eq: $uId }, productId: { eq: $pId }, status: { eq: "created" }}, 
               orderBy: [{ createdAt: DescNullsLast }], 
               first: 1
             ) {
@@ -281,6 +281,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           }
         '''),
         variables: {'uId': userId, 'pId': productId},
+        fetchPolicy: FetchPolicy.networkOnly,
       );
 
       final fetchResult = await retryer.retry(

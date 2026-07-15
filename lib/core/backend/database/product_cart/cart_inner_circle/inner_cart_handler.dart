@@ -9,5 +9,5 @@ abstract class InnerCartHandler {
   Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user);
   Future<int> getProductCartItemAmount(String userId, String productId);
   Future<int> getUserCartItemAmount(String userId);
-  Future<bool> deletedLastAddedProductCartItem(String userId, String productId);
+  Future<bool> deleteLastAddedProductCartItem(String userId, String productId);
 }

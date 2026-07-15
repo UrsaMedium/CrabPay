@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +25,12 @@ class BuyBottomSheetDriver extends StatefulWidget {
 }
 
 class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
-  late int itemCounter;
   late final ProductField? imageField;
-  bool intialStateSet = false;
   @override
   void initState() {
     imageField = widget.productFields
         .where((field) => field.isPriceImage)
         .firstOrNull;
-    itemCounter = context.read<CartBloc>().state.productCartItemAmount ?? 0;
     super.initState();
   }
 
@@ -50,18 +48,18 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
     );
   }
 
-  void _onDeleteLastAddedItem(BuildContext context) {
+  void _onDeleteLastAddedItem(BuildContext context, int itemCount) {
     try {
-      if (itemCounter > 0) {
+      if (itemCount > 0) {
         context.read<CartBloc>().add(
           CartEventDeleteLastAddedProductCartItem(
             userId: context.read<AuthBloc>().state.currentUser.id,
             productId: widget.product.id,
           ),
         );
-        setState(() {
-          itemCounter--;
-        });
+        // setState(() {
+        //   itemCounter--;
+        // });
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to delete');
@@ -72,7 +70,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
   void _onAddCartItemPressed(BuildContext context) {
     if (context.read<BuyBottomSheetCubit>().state.isEveryFieldSatisfied) {
       CartItem cartItem = CartItem(
-        id: 'id',
+        id: '',
         userId: context.read<AuthBloc>().state.currentUser.id,
         userName:
             context.read<AuthBloc>().state.currentUser.email ??
@@ -95,9 +93,9 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
           ),
         );
         Fluttertoast.showToast(msg: 'It\'s in your cart now');
-        setState(() {
-          itemCounter++;
-        });
+        // setState(() {
+        //   itemCounter++;
+        // });
       } on Exception catch (e) {
         Fluttertoast.showToast(msg: 'Failed to add to your cart');
         print('Failed to add to your cart: $e');
@@ -126,28 +124,53 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => BuyBottomSheetCubit(),
-      child: BlocBuilder<BuyBottomSheetCubit, BuyBottomSheetState>(
-        builder: (context, viewState) {
-          return MaterialBuyBottomSheet(
-            haveImageField: imageField != null,
-            isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
-            isEveryFieldSatisfied: viewState.isEveryFieldSatisfied,
-            itemsCount: itemCounter,
-            onAddCartItemPressed: () => _onAddCartItemPressed(context),
-            onAddFieldPressed: _onAddFieldPressed,
-            onCartIconPressed: () => _onCartIconPressed(context),
-            onDeleteLastAddedItem: () => _onDeleteLastAddedItem(context),
-            onResetImageFieldPressed: () => _onResetImageFieldPressed(),
-            onUserInput: (p0, p1) =>
-                _onUserInput(context: context, fieldName: p0, dataReceived: p1),
-            precalculatedPrice: viewState.precalculatedPrice,
-            product: widget.product,
-            productFields: widget.productFields,
-          );
-        },
-      ),
+    final int itemCounter = context.select<CartBloc, int>(
+      (bloc) => bloc.state.productCartItemAmount ?? 0,
+    );
+    return BlocBuilder<CartBloc, CartState>(
+      buildWhen: (previous, current) =>
+          previous.states == CartStates.loading &&
+          (current.states == CartStates.deleted ||
+              current.states == CartStates.added ||
+              current.states == CartStates.failedToAdd ||
+              current.states ==
+                  CartStates.failedToDeleteLastAddedProductCartItem),
+      builder: (context, state) {
+        bool isCartLoading = false;
+        if (state.states == CartStates.loading) {
+          isCartLoading = true;
+        } else {
+          isCartLoading = false;
+        }
+        return BlocProvider(
+          create: (_) => BuyBottomSheetCubit(),
+          child: BlocBuilder<BuyBottomSheetCubit, BuyBottomSheetState>(
+            builder: (context, viewState) {
+              return MaterialBuyBottomSheet(
+                haveImageField: imageField != null,
+                isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
+                isEveryFieldSatisfied: viewState.isEveryFieldSatisfied,
+                itemsCount: itemCounter,
+                onAddCartItemPressed: () => _onAddCartItemPressed(context),
+                onAddFieldPressed: _onAddFieldPressed,
+                onCartIconPressed: () => _onCartIconPressed(context),
+                onDeleteLastAddedItem: () =>
+                    _onDeleteLastAddedItem(context, itemCounter),
+                onResetImageFieldPressed: () => _onResetImageFieldPressed(),
+                onUserInput: (p0, p1) => _onUserInput(
+                  context: context,
+                  fieldName: p0,
+                  dataReceived: p1,
+                ),
+                precalculatedPrice: viewState.precalculatedPrice,
+                product: widget.product,
+                productFields: widget.productFields,
+                isCartLoading: isCartLoading,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

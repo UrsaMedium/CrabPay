@@ -39,8 +39,8 @@ class BindingCartHandler implements InnerCartHandler {
       cartHandler.getUserCartItemAmount(userId);
 
   @override
-  Future<bool> deletedLastAddedProductCartItem(
+  Future<bool> deleteLastAddedProductCartItem(
     String userId,
     String productId,
-  ) => cartHandler.deletedLastAddedProductCartItem(userId, productId);
+  ) => cartHandler.deleteLastAddedProductCartItem(userId, productId);
 }
