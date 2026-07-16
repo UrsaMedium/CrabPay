@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,13 @@ class MaterialSupportPageView extends StatelessWidget {
   final List<ChatMessage> messages;
   final TextEditingController textEditingController;
   final VoidCallback onSendPressed;
+  final AppAuthUser currentUser;
   const MaterialSupportPageView({
     super.key,
     required this.messages,
     required this.textEditingController,
     required this.onSendPressed,
+    required this.currentUser,
   });
 
   @override
@@ -23,7 +26,37 @@ class MaterialSupportPageView extends StatelessWidget {
             ListView.builder(
               itemCount: messages.length,
               itemBuilder: (context, index) {
-                return Text(messages[index].content);
+                final isMe = messages[index].senderId == currentUser.id;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 2.0,
+                    horizontal: 8,
+                  ),
+                  child: Align(
+                    alignment: isMe
+                        ? AlignmentGeometry.centerRight
+                        : AlignmentGeometry.centerLeft,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(30),
+                      ),
+
+                      color: context.appColorScheme.primary,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          messages[index].content,
+                          style: TextStyle(
+                            color: context.appColorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
             Positioned(
@@ -56,7 +89,10 @@ class MaterialSupportPageView extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0),
-                    child: IconButton(onPressed: onSendPressed, icon: Icon(Icons.send)),
+                    child: IconButton(
+                      onPressed: onSendPressed,
+                      icon: Icon(Icons.send),
+                    ),
                   ),
                 ],
               ),

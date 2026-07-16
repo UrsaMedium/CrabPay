@@ -29,6 +29,7 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
       builder: (context, chatState) {
         List<ChatMessage> messages = chatState.messages ?? [];
         return MaterialSupportPageView(
+          currentUser: context.read<AuthBloc>().state.currentUser,
           messages: messages,
           textEditingController: _textEditingController,
           onSendPressed: () {

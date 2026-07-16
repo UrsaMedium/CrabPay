@@ -46,6 +46,11 @@ class MaterialMainScreenView extends StatelessWidget {
         actions: [
           if (isAdmin)
             IconButton(onPressed: onAdminPressed, icon: Icon(Icons.settings)),
+          if (isLoggedIn)
+            IconButton(
+              onPressed: onCasesPressed,
+              icon: Icon(Icons.cases_rounded),
+            ),
           isLoggedIn
               ? IconButton(
                   onPressed: onProfileIconPressed,

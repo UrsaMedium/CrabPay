@@ -143,7 +143,9 @@ class MaterialCartPageView extends StatelessWidget {
                                       horizontal: 16.0,
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: onBuyPressed,
+                                      onPressed: cartItems.isEmpty
+                                          ? null
+                                          : onBuyPressed, //TODO
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             context.appColorScheme.primary,

@@ -85,18 +85,22 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     }
   }
 
-  void _onProfileIconPressed() {
-    showModalBottomSheet(
-      useRootNavigator: false,
-      showDragHandle: false,
-      useSafeArea: false,
-      context: context,
-      enableDrag: true,
-      isScrollControlled: true,
-      backgroundColor: context.appColorScheme.surfaceContainerHighest
-          .withValues(alpha: .5),
-      builder: (BuildContext sheetContext) => ProfileViewDriver(),
-    );
+  void _onProfileIconPressed(bool isLoggedIn, BuildContext context) {
+    if (isLoggedIn) {
+      showModalBottomSheet(
+        useRootNavigator: false,
+        showDragHandle: false,
+        useSafeArea: false,
+        context: context,
+        enableDrag: true,
+        isScrollControlled: true,
+        backgroundColor: context.appColorScheme.surfaceContainerHighest
+            .withValues(alpha: .5),
+        builder: (BuildContext sheetContext) => ProfileViewDriver(),
+      );
+    } else {
+      context.push('/login_view');
+    }
   }
 
   void _onCasesPressed(BuildContext context) {
@@ -105,6 +109,11 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   void _onAdminPressed(BuildContext context) {
     context.push('/admin_tools_view');
+  }
+
+  bool _isLoggedIn(AuthState authState) {
+    return !(authState.currentUser.email == null ||
+        authState.currentUser.isAnonymous);
   }
 
   @override
@@ -129,13 +138,12 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 itemsCount: itemsCount,
                 onPageSelected: (index) => _onPageSelected(index, cubit),
                 onPageSwiped: (index) => _onPageSwiped(index, cubit),
-                onProfileIconPressed: _onProfileIconPressed,
+                onProfileIconPressed: () =>
+                    _onProfileIconPressed(_isLoggedIn(authState), context),
                 pageController: _pageController,
                 pageIndex: viewState.page,
                 pages: _pages,
-                isLoggedIn:
-                    !(authState.currentUser.email == null ||
-                        authState.currentUser.isAnonymous),
+                isLoggedIn: _isLoggedIn(authState),
                 onCasesPressed: () => _onCasesPressed(context),
                 onAdminPressed: () => _onAdminPressed(context),
                 isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,

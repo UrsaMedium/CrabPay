@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileViewDriver extends StatefulWidget {
   const ProfileViewDriver({super.key});
@@ -15,6 +16,9 @@ class ProfileViewDriver extends StatefulWidget {
 class _ProfileViewDriverState extends State<ProfileViewDriver> {
   void _onSignOutPressed(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventLogOut());
+    if (context.canPop()) {
+      context.pop();
+    }
   }
 
   @override
