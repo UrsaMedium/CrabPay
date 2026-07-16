@@ -74,7 +74,7 @@ class MaterialCartPageView extends StatelessWidget {
                                   shrinkWrap: true,
                                   itemExtent: 86,
                                   itemBuilder: (context, index) {
-                                    return CartItemBuilder(
+                                    return CartItemForCartPageBuilder(
                                       onACartItemDelete: onACartItemDelete,
                                       isBeingDeleted:
                                           cartItems[index].id ==
@@ -206,12 +206,12 @@ class MaterialCartPageView extends StatelessWidget {
   }
 }
 
-class CartItemBuilder extends StatelessWidget {
+class CartItemForCartPageBuilder extends StatelessWidget {
   final Function(CartItem) onACartItemDelete;
   final Product product;
   final CartItem cartItem;
   final bool isBeingDeleted;
-  const CartItemBuilder({
+  const CartItemForCartPageBuilder({
     super.key,
     required this.onACartItemDelete,
     required this.product,

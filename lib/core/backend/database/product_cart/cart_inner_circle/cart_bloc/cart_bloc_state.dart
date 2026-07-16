@@ -26,26 +26,27 @@ enum IsStreaming { yes, no }
 @immutable
 class CartState {
   final IsStreaming isStreaming;
-  final List<CartItem>? cartItems;
+  final List<CartItem>? cartItemsToBuy;
+  final List<CartItem>? cartItemsProccessed;
   final List<CartItem>? allUserCartItems;
-  final List<CartItem>? cartItemsFromSignedOutUser;
   final CartItem? cartItemToPush;
   final CartStates states;
   final int? productCartItemAmount;
   final int? userCartItemAmount;
   const CartState({
-    this.cartItems,
+    this.cartItemsToBuy,
     this.states = CartStates.empty,
     this.cartItemToPush,
     this.isStreaming = IsStreaming.no,
-    this.cartItemsFromSignedOutUser,
     this.allUserCartItems,
     this.productCartItemAmount,
     this.userCartItemAmount,
+    this.cartItemsProccessed,
   });
 
   CartState copyWith({
-    List<CartItem>? cartItems,
+    List<CartItem>? cartItemsToBuy,
+    List<CartItem>? cartItemsProccessed,
     List<CartItem>? allUserCartItems,
     List<CartItem>? cartItemsFromSignedOutUser,
     CartStates? states,
@@ -55,10 +56,9 @@ class CartState {
     int? userCartItemAmount,
   }) {
     return CartState(
-      cartItems: cartItems ?? this.cartItems,
+      cartItemsToBuy: cartItemsToBuy ?? this.cartItemsToBuy,
+      cartItemsProccessed: cartItemsProccessed ?? this.cartItemsProccessed,
       allUserCartItems: allUserCartItems ?? this.allUserCartItems,
-      cartItemsFromSignedOutUser:
-          cartItemsFromSignedOutUser ?? this.cartItemsFromSignedOutUser,
       cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
       isStreaming: isStreaming ?? this.isStreaming,

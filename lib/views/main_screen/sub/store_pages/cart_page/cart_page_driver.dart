@@ -69,13 +69,13 @@ class _CartPageDriverState extends State<CartPageDriver> {
     }
   }
 
-  List<CartItem> _filterItemsToBuy({required List<CartItem> allCartItems}) {
-    return allCartItems
-        .where(
-          (item) => !['paid', 'delivered', 'canceled'].contains(item.status),
-        )
-        .toList();
-  }
+  // List<CartItem> _filterItemsToBuy({required List<CartItem> allCartItems}) {
+  //   return allCartItems
+  //       .where(
+  //         (item) => !['paid', 'delivered', 'canceled'].contains(item.status),
+  //       )
+  //       .toList();
+  // }
 
   double _countTotal() {
     return _cartItems?.fold(0, (sum, item) => sum! + item.checkoutPrice) ?? 0;
@@ -145,10 +145,13 @@ class _CartPageDriverState extends State<CartPageDriver> {
             _products = context.select<DatabaseBloc, List<Product>>(
               (bloc) => bloc.state.products ?? [],
             );
-            _cartItems = _filterItemsToBuy(
-              allCartItems: context.select<CartBloc, List<CartItem>>(
-                (bloc) => bloc.state.cartItems ?? [],
-              ),
+            // _cartItems = _filterItemsToBuy(
+            //   allCartItems: context.select<CartBloc, List<CartItem>>(
+            //     (bloc) => bloc.state.cartItemsToBuy ?? [],
+            //   ),
+            // );
+            _cartItems = context.select<CartBloc, List<CartItem>>(
+              (bloc) => bloc.state.cartItemsToBuy ?? [],
             );
 
             final total = _countTotal();

@@ -8,7 +8,7 @@ class BindingDatabaseHandler implements InnerDatabaseHandler {
   final InnerDatabaseHandler dbHandler;
   BindingDatabaseHandler({required this.dbHandler});
 
-  factory BindingDatabaseHandler.firebaseDb() => BindingDatabaseHandler(
+  factory BindingDatabaseHandler.dbService() => BindingDatabaseHandler(
     dbHandler: (OuterDatabaseHandlerWithSupabase()),
   );
 

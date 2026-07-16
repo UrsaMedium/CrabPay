@@ -4,9 +4,9 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/ask_page/ask_page_view.dart';
 import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
 import 'package:crabpay/views/main_screen/sub/profile_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +57,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   final List<Widget> _pages = const [
     HomePageDriver(),
     StorePageDriver(),
-    AskPageView(),
+    SupportPageDriver(),
     CartPageDriver(),
   ];
 
@@ -99,6 +99,14 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     );
   }
 
+  void _onCasesPressed(BuildContext context) {
+    context.push('/cases_view');
+  }
+
+  void _onAdminPressed(BuildContext context) {
+    context.push('/admin_tools_view');
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -128,6 +136,9 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 isLoggedIn:
                     !(authState.currentUser.email == null ||
                         authState.currentUser.isAnonymous),
+                onCasesPressed: () => _onCasesPressed(context),
+                onAdminPressed: () => _onAdminPressed(context),
+                isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
               );
             },
           ),

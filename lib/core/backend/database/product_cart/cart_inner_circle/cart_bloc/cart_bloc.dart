@@ -24,16 +24,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         emit(state.copyWith(states: CartStates.loading));
         final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
-        List<CartItem> cartItems = [];
+        List<CartItem> cartItemsToBuy = [];
+        List<CartItem> cartItemsProccessed = [];
         for (var cartItem in allUserCartItems) {
-          if (cartItem.status == 'created') {
-            cartItems.add(cartItem);
+          if (cartItem.status == 'created' || cartItem.status == 'failed') {
+            cartItemsToBuy.add(cartItem);
+          } else {
+            cartItemsProccessed.add(cartItem);
           }
         }
         emit(
           state.copyWith(
-            cartItems: allUserCartItems,
+            cartItemsToBuy: cartItemsToBuy,
             allUserCartItems: allUserCartItems,
+            cartItemsProccessed: cartItemsProccessed,
             states: CartStates.got,
           ),
         );
@@ -59,16 +63,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           event.userId,
           event.cartItem.productId,
         );
-        final updatedUserAmount = await cartHandler.getUserCartItemAmount(
-          event.userId,
-        );
-        final updatedCartItems = await cartHandler.fetchCartItems(event.userId);
+        // final updatedUserAmount = await cartHandler.getUserCartItemAmount(
+        //   event.userId,
+        // );
+        // final updatedCartItems = await cartHandler.fetchCartItems(event.userId);
         emit(
           state.copyWith(
-            cartItems: updatedCartItems,
-            allUserCartItems: updatedCartItems,
+            // cartItems: updatedCartItems,
+            // allUserCartItems: updatedCartItems,
             productCartItemAmount: updatedProductAmount,
-            userCartItemAmount: updatedUserAmount,
+            // userCartItemAmount: updatedUserAmount,
             states: CartStates.added,
           ),
         );
@@ -85,14 +89,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItem.id);
-        final reducedListOfItmes = state.cartItems
+        final reducedListOfItmes = state.cartItemsToBuy
             ?.where((item) => item.id != event.cartItem.id)
             .toList();
         final amount = await cartHandler.getUserCartItemAmount(event.userId);
         emit(
           state.copyWith(
             userCartItemAmount: amount,
-            cartItems: reducedListOfItmes,
+            cartItemsToBuy: reducedListOfItmes,
             states: CartStates.deleted,
           ),
         );
@@ -109,12 +113,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItemId);
-        final reducedListOfItmes = state.cartItems
+        final reducedListOfItmes = state.cartItemsToBuy
             ?.where((item) => item.id != event.cartItemId)
             .toList();
         emit(
           state.copyWith(
-            cartItems: reducedListOfItmes,
+            cartItemsToBuy: reducedListOfItmes,
             states: CartStates.deleted,
           ),
         );
@@ -154,7 +158,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       print('----');
       emit(
         state.copyWith(
-          cartItems: event.cartItems,
+          cartItemsToBuy: event.cartItems,
           states: CartStates.streamEvent,
         ),
       );
@@ -176,7 +180,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         state.copyWith(
           allUserCartItems: null,
           cartItemToPush: null,
-          cartItems: null,
+          cartItemsToBuy: null,
           cartItemsFromSignedOutUser: null,
           isStreaming: null,
           productCartItemAmount: null,
@@ -242,18 +246,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         if (didDelete) {
           final updatedProductAmount = await cartHandler
               .getProductCartItemAmount(event.userId, event.productId);
-          final updatedUserAmount = await cartHandler.getUserCartItemAmount(
-            event.userId,
-          );
-          final updatedCartItems = await cartHandler.fetchCartItems(
-            event.userId,
-          );
+          // final updatedUserAmount = await cartHandler.getUserCartItemAmount(
+          //   event.userId,
+          // );
+          // final updatedCartItems = await cartHandler.fetchCartItems(
+          //   event.userId,
+          // );
           emit(
             state.copyWith(
-              cartItems: updatedCartItems,
-              allUserCartItems: updatedCartItems,
+              // cartItems: updatedCartItems,
+              // allUserCartItems: updatedCartItems,
               productCartItemAmount: updatedProductAmount,
-              userCartItemAmount: updatedUserAmount,
+              // userCartItemAmount: updatedUserAmount,
               states: CartStates.deletedLastAddedProductCartItem,
             ),
           );

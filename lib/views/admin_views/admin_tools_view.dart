@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class AskPageView extends StatefulWidget {
-  const AskPageView({super.key});
+class AdminToolsView extends StatefulWidget {
+  const AdminToolsView({super.key});
 
   @override
-  State<AskPageView> createState() => _AskPageViewState();
+  State<AdminToolsView> createState() => _AdminToolsViewState();
 }
 
-class _AskPageViewState extends State<AskPageView> {
+class _AdminToolsViewState extends State<AdminToolsView> {
   AppAuthUser? user;
   @override
   Widget build(BuildContext context) {

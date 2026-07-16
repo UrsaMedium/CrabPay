@@ -1,3 +1,6 @@
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
+import 'package:crabpay/core/backend/chat_service/chat_outer_circle/outer_chat_handler.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
@@ -14,11 +17,12 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
+import 'package:crabpay/views/main_screen/sub/cases_view.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/ask_page/ask_page_view.dart';
+import 'package:crabpay/views/admin_views/admin_tools_view.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
@@ -30,6 +34,7 @@ import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
 import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
 import 'package:crabpay/views/main_screen/main_screen_driver.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -53,6 +58,9 @@ Future<void> main() async {
         RepositoryProvider<AuthInnerInterface>(
           create: (context) => SupabaseOuterAuthInterface(),
         ),
+        RepositoryProvider<InnerChatHandler>(
+          create: (context) => OuterChatHandlerWithSupabase(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -60,6 +68,12 @@ Future<void> main() async {
             create: (context) =>
                 AuthBloc(context.read<AuthInnerInterface>())
                   ..add(const AuthEventInitialize()),
+          ),
+          BlocProvider<ChatBloc>(
+            create: (context) => ChatBloc(
+              chatHandler: OuterChatHandlerWithSupabase(),
+              authInterface: context.read<AuthInnerInterface>(),
+            ),
           ),
           BlocProvider<DatabaseBloc>(
             create: (context) => DatabaseBloc(
@@ -110,8 +124,8 @@ final GoRouter _router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/ask',
-              builder: (context, state) => const AskPageView(),
+              path: '/support',
+              builder: (context, state) => const SupportPageDriver(),
             ),
           ],
         ),
@@ -183,6 +197,14 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/deleting_view',
       builder: (context, state) => DeleteInstancesFromDbView(),
+    ),
+    GoRoute(
+      path: '/cases_view',
+      builder: (context, state) => CasesViewDriver(),
+    ),
+    GoRoute(
+      path: '/admin_tools_view',
+      builder: (context, state) => AdminToolsView(),
     ),
     GoRoute(
       path: '/update_product_admin_panel_view/:productId',

@@ -1,16 +1,18 @@
 import 'package:crabpay/core/utilities.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 class MaterialMainScreenView extends StatelessWidget {
   final int itemsCount;
   final int pageIndex;
   final VoidCallback onProfileIconPressed;
+  final VoidCallback onCasesPressed;
+  final VoidCallback onAdminPressed;
   final Function(int) onPageSelected;
   final Function(int) onPageSwiped;
   final PageController pageController;
   final List<Widget> pages;
   final bool isLoggedIn;
+  final bool isAdmin;
   const MaterialMainScreenView({
     super.key,
     required this.onProfileIconPressed,
@@ -21,6 +23,9 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onPageSwiped,
     required this.pages,
     required this.isLoggedIn,
+    required this.onCasesPressed,
+    required this.onAdminPressed,
+    required this.isAdmin,
   });
   @override
   Widget build(BuildContext context) {
@@ -39,15 +44,15 @@ class MaterialMainScreenView extends StatelessWidget {
         ),
         title: Text('Crab Pay'),
         actions: [
+          if (isAdmin)
+            IconButton(onPressed: onAdminPressed, icon: Icon(Icons.settings)),
           isLoggedIn
               ? IconButton(
                   onPressed: onProfileIconPressed,
                   icon: Icon(Icons.account_circle_rounded),
                 )
               : IconButton(
-                  onPressed: () {
-                    context.push('login_view');
-                  },
+                  onPressed: onProfileIconPressed,
                   icon: Icon(Icons.account_circle_outlined),
                 ),
         ],
