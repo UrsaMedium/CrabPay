@@ -63,7 +63,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
           .eq('thread_id', threadId)
           .neq('sender_id', currentUserId);
     } catch (e) {
-      debugPrint('⚠️ Failed to mark messages as read: $e');
+      debugPrint('Failed to mark messages as read: $e');
       rethrow;
     }
   }
@@ -111,4 +111,30 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
               .toList();
         });
   }
+
+  @override
+  Future<List<SupportThread>> getAllThreads() async {
+    try {
+      final fetchedAllThreads = await retryer.retry(() {
+        return _client.from('support_threads').select();
+      });
+      List<SupportThread> allThreads = [];
+      for (var thread in fetchedAllThreads) {
+        allThreads.add(
+          SupportThread(
+            id: thread['id'] as String,
+            userId: thread['user_id'] as String,
+            status: thread['status'] as String,
+          ),
+        );
+      }
+      return allThreads;
+    } catch (e) {
+      debugPrint('Failed to fetch all threads: $e');
+      Fluttertoast.showToast(msg: 'Failed to fetch all threads');
+      rethrow;
+    }
+  }
 }
+
+      // await _client.auth.refreshSession();

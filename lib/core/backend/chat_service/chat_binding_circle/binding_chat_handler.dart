@@ -33,4 +33,7 @@ class BindingChatHandler implements InnerChatHandler {
   @override
   Stream<List<ChatMessage>> subscribeToMessages({required String threadId}) =>
       chatHandler.subscribeToMessages(threadId: threadId);
+
+  @override
+  Future<List<SupportThread>> getAllThreads() => chatHandler.getAllThreads();
 }

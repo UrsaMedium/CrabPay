@@ -35,6 +35,7 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
           onSendPressed: () {
             context.read<ChatBloc>().add(
               ChatEventSendMessage(
+                threadId: context.read<ChatBloc>().state.activeThread!.id,
                 content: _textEditingController.text,
                 senderId: context.read<AuthBloc>().state.currentUser.id,
               ),

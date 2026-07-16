@@ -18,68 +18,74 @@ class _AdminToolsViewState extends State<AdminToolsView> {
   @override
   Widget build(BuildContext context) {
     // final currentUser = context.read<AuthBloc>().state.currentUser;
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.paddingOf(context).top),
-        ElevatedButton(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
           onPressed: () {
-            // final createTables = PostgreSQLSchema();
-            // createTables.creeateTable('');
+            if (context.canPop()) {
+              context.pop();
+            }
           },
-          child: Text('test db'),
+          icon: Icon(Icons.arrow_back_rounded),
         ),
-        context.read<AuthBloc>().state.currentUser.isAdmin
-            ? Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<DatabaseBloc>().add(
-                        DatabaseEventFetchAllProducts(),
-                      );
-                    },
-                    child: Text('fetch data'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.paddingOf(context).top),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<DatabaseBloc>().add(
+                      DatabaseEventFetchAllProducts(),
+                    );
+                  },
+                  child: Text('fetch data'),
+                ),
+                ElevatedButton(
+                  onPressed: () =>
+                      context.push('/add_complete_product_product_view'),
+                  child: Text('Add complete product'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.push('/deleting_view'),
+                  child: Text('Delete instances from DB'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.push('/add_featured_product_view'),
+                  child: Text('Add Featured Product'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.push('/admin_tools_view/choose_thread_view'),
+                  child: Text('Answer to users'),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.paddingOf(context).top,
                   ),
-                  ElevatedButton(
-                    onPressed: () =>
-                        context.push('/add_complete_product_product_view'),
-                    child: Text('Add complete product'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => context.push('/deleting_view'),
-                    child: Text('Delete instances from DB'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => context.push('/product_field_update_view'),
-                    child: Text('Update Product Field'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => context.push('/add_featured_product_view'),
-                    child: Text('Add Featured Product'),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.paddingOf(context).top,
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        user = context.read<AuthBloc>().state.currentUser;
+                        setState(() {});
+                      },
+                      child: Text('Hey :)'),
                     ),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          user = context.read<AuthBloc>().state.currentUser;
-                          setState(() {});
-                        },
-                        child: Text('Hey :)'),
-                      ),
-                    ),
                   ),
-                  Text(
-                    'Id: ${user?.id}\nemail: ${user?.email}\nver: ${user?.isEmailVerified}\nanon: ${user?.isAnonymous}\nadmin: ${user?.isAdmin}',
-                  ),
-                ],
-              ),
-      ],
+                ),
+                Text(
+                  'Id: ${user?.id}\nemail: ${user?.email}\nver: ${user?.isEmailVerified}\nanon: ${user?.isAnonymous}\nadmin: ${user?.isAdmin}\nlimbo: ${user?.isLimbo}',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -14,6 +14,8 @@ import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bl
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/views/admin_views/admin_support_chat/admin_support_chat.dart';
+import 'package:crabpay/views/admin_views/admin_support_chat/choose_thread.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
@@ -205,6 +207,22 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/admin_tools_view',
       builder: (context, state) => AdminToolsView(),
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'choose_thread_view',
+          builder: (context, state) => ChooseThreadView(),
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'admin_support_chat_view/:threadId',
+              name: 'admin_support_chat_view',
+              builder: (context, state) {
+                final threadId = state.pathParameters['threadId'];
+                return AdminSupportChatView(threadId: threadId);
+              },
+            ),
+          ],
+        ),
+      ],
     ),
     GoRoute(
       path: '/update_product_admin_panel_view/:productId',

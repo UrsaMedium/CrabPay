@@ -9,6 +9,7 @@ enum ChatStates {
   messagesUpdated,
   messageSent,
   messageSendFailed,
+  fetchedAllThreads,
   flushed,
   error,
 }
@@ -16,6 +17,7 @@ enum ChatStates {
 class ChatState extends Equatable {
   final ChatStates status;
   final SupportThread? activeThread;
+  final List<SupportThread>? allThreads;
   final List<ChatMessage>? messages;
   final String? errorMessage;
 
@@ -24,6 +26,7 @@ class ChatState extends Equatable {
     this.activeThread,
     this.messages,
     this.errorMessage,
+    this.allThreads,
   });
 
   ChatState copyWith({
@@ -31,15 +34,23 @@ class ChatState extends Equatable {
     SupportThread? activeThread,
     List<ChatMessage>? messages,
     String? errorMessage,
+    List<SupportThread>? allThreads,
   }) {
     return ChatState(
       status: status ?? this.status,
       activeThread: activeThread ?? this.activeThread,
       messages: messages ?? this.messages,
       errorMessage: errorMessage ?? this.errorMessage,
+      allThreads: allThreads ?? this.allThreads,
     );
   }
 
   @override
-  List<Object?> get props => [status, activeThread, messages, errorMessage];
+  List<Object?> get props => [
+    status,
+    activeThread,
+    messages,
+    errorMessage,
+    allThreads,
+  ];
 }

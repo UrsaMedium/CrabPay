@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ChatEvent extends Equatable {
@@ -35,12 +36,19 @@ class ChatEventMessagesUpdated extends ChatEvent {
 class ChatEventSendMessage extends ChatEvent {
   final String content;
   final String senderId;
-  const ChatEventSendMessage({required this.content, required this.senderId});
+  final String threadId;
+  const ChatEventSendMessage({
+    required this.content,
+    required this.senderId,
+    required this.threadId,
+  });
 
   @override
-  List<Object?> get props => [content, senderId];
+  List<Object?> get props => [content, senderId, threadId];
 }
 
 class ChatEventMarkAsRead extends ChatEvent {}
 
 class ChatEventFlushData extends ChatEvent {}
+
+class ChatEventFetchAllThreads extends ChatEvent {}

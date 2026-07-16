@@ -88,12 +88,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       print('---');
       print('--- ChatEventSendMessage fired');
       print('---');
-      final currentThread = state.activeThread;
-      if (currentThread == null) return;
+      // final currentThread = state.activeThread;
+      // if (currentThread == null) return;
 
       try {
         await _chatHandler.sendMessage(
-          threadId: currentThread.id,
+          threadId: event.threadId,
           senderId: event.senderId,
           content: event.content,
         );
@@ -105,6 +105,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             errorMessage: 'Failed to send message',
           ),
         );
+        rethrow;
+      }
+    });
+
+    // Fetch all threads ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    on<ChatEventFetchAllThreads>((event, emit) async {
+      emit(state.copyWith(status: ChatStates.loading));
+      try {
+        final allThreads = await _chatHandler.getAllThreads();
+        if (allThreads.isEmpty) {
+          emit(state.copyWith(status: ChatStates.error, allThreads: null));
+        } else {
+          emit(
+            state.copyWith(
+              status: ChatStates.fetchedAllThreads,
+              allThreads: allThreads,
+            ),
+          );
+        }
+      } catch (e) {
+        emit(state.copyWith(status: ChatStates.error));
         rethrow;
       }
     });

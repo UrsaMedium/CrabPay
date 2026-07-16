@@ -1,24 +1,102 @@
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class MaterialSupportPageView extends StatelessWidget {
+class AdminSupportChatView extends StatefulWidget {
+  static const routeName = 'admin_support_chat_view';
+  final String? threadId;
+  const AdminSupportChatView({super.key, this.threadId});
+
+  @override
+  State<AdminSupportChatView> createState() => _AdminSupportChatViewState();
+}
+
+class _AdminSupportChatViewState extends State<AdminSupportChatView> {
+  late final TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    if (widget.threadId != null) {
+      context.read<ChatBloc>().add(
+        ChatEventSubscribeToMessages(threadId: widget.threadId!),
+      );
+    } else {
+      context.pop();
+    }
+    super.initState();
+  }
+
+  void _onBackPressed(BuildContext context) {
+    context.read<ChatBloc>().add(
+      ChatEventSubscribeToMessages(
+        threadId: context.read<ChatBloc>().state.activeThread!.id,
+      ),
+    );
+    context.pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, chatState) {
+        List<ChatMessage> messages = chatState.messages ?? [];
+        return MaterialAdminSupportPageView(
+          onBackPressed: () => _onBackPressed(context),
+          currentUser: context.read<AuthBloc>().state.currentUser,
+          messages: messages,
+          textEditingController: _textEditingController,
+          onSendPressed: () {
+            context.read<ChatBloc>().add(
+              ChatEventSendMessage(
+                content: _textEditingController.text,
+                senderId: context.read<AuthBloc>().state.currentUser.id,
+                threadId: widget.threadId!,
+              ),
+            );
+            _textEditingController.clear();
+          },
+        );
+      },
+    );
+  }
+}
+
+class MaterialAdminSupportPageView extends StatelessWidget {
   final List<ChatMessage> messages;
   final TextEditingController textEditingController;
   final VoidCallback onSendPressed;
+  final VoidCallback onBackPressed;
   final AppAuthUser currentUser;
-  const MaterialSupportPageView({
+  const MaterialAdminSupportPageView({
     super.key,
     required this.messages,
     required this.textEditingController,
     required this.onSendPressed,
     required this.currentUser,
+    required this.onBackPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            }
+          },
+          icon: Icon(Icons.arrow_back_rounded),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.only(left: 4, right: 4),
         child: Stack(
