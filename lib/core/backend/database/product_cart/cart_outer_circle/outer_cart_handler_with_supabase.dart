@@ -1,9 +1,11 @@
-import 'dart:convert'; // REQUIRED FOR THE JSON ENCODE FIX
+import 'dart:convert';
 import 'dart:async';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_graphql_client.dart';
+import 'package:crabpay/main.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,7 +24,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       if (result.hasException) {
         debugPrint(
-          '🚨 Supabase Cart GraphQL Error: ${result.exception.toString()}',
+          'Supabase Cart GraphQL Error: ${result.exception.toString()}',
         );
         throw Exception(result.exception.toString());
       }
@@ -31,37 +33,56 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   List<CartItem> _dataCasting(List<dynamic> edges) {
-    return edges.map((edge) {
-      final item = edge['node'];
-      final dynamic rawPurchaseData = item['purchaseData'] ?? {};
-
-      // Safely handles both Stringified JSON and mapped JSON from the server
-      final Map<String, dynamic> decodedPurchaseData = rawPurchaseData is String
-          ? jsonDecode(rawPurchaseData)
-          : Map<String, dynamic>.from(rawPurchaseData);
-
-      final Map<String, String> finalPurchaseData = decodedPurchaseData.map(
-        (k, v) => MapEntry(k, v.toString()),
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Data casting',
+        category: 'Cart Items',
+        data: {'edges': edges},
       );
+      return edges.map((edge) {
+        final item = edge['node'];
+        final dynamic rawPurchaseData = item['purchaseData'] ?? {};
 
-      return CartItem(
-        id: item['id'],
-        userId: item['userId'],
-        userName: item['userName'],
-        productId: item['productId'],
-        productName: item['productName'],
-        purchaseData: finalPurchaseData,
-        currency: item['currency'],
-        checkoutPrice: (item['checkoutPrice'] as num).toDouble(),
-        status: item['status'],
-        comment: item['comment'],
+        // Safely handles both Stringified JSON and mapped JSON from the server
+        final Map<String, dynamic> decodedPurchaseData =
+            rawPurchaseData is String
+            ? jsonDecode(rawPurchaseData)
+            : Map<String, dynamic>.from(rawPurchaseData);
+
+        final Map<String, String> finalPurchaseData = decodedPurchaseData.map(
+          (k, v) => MapEntry(k, v.toString()),
+        );
+
+        return CartItem(
+          id: item['id'],
+          userId: item['userId'],
+          userName: item['userName'],
+          productId: item['productId'],
+          productName: item['productName'],
+          purchaseData: finalPurchaseData,
+          currency: item['currency'],
+          checkoutPrice: (item['checkoutPrice'] as num).toDouble(),
+          status: item['status'],
+          comment: item['comment'],
+        );
+      }).toList();
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed datacasting',
+        stackTrace: StackTrace.fromString(e.toString()),
       );
-    }).toList();
+      rethrow;
+    }
   }
 
   @override
   Future<List<CartItem>> fetchCartItems(String userId) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching cart items',
+        category: 'Cart Items',
+        data: {'userId': userId},
+      );
       final QueryOptions options = QueryOptions(
         document: gql(r'''
           query($userId: String!) {
@@ -82,6 +103,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
       return _dataCasting(nodes);
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       Fluttertoast.showToast(msg: 'Failed to fetch cart items');
       rethrow;
     }
@@ -90,6 +115,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   @override
   Future<void> deleteCartItem(String cartItemId) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Deleting na item',
+        category: 'Cart Items',
+        data: {'cartItemId': cartItemId},
+      );
       final MutationOptions options = MutationOptions(
         document: gql(r'''
           mutation($id: UUID!) { deleteFromcartItemCollection(filter: { id: { eq: $id } }) { affectedCount } }
@@ -98,6 +128,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       );
       await _mutateAndCheck(options);
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to delete cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       Fluttertoast.showToast(msg: 'Failed to delete the cart item');
       rethrow;
     }
@@ -130,6 +164,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       );
       await _mutateAndCheck(options);
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to add cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       Fluttertoast.showToast(msg: 'Failed to add the cart item');
       rethrow;
     }
@@ -137,23 +175,37 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
   @override
   Stream<List<CartItem>> cartItemsStream(String userId) {
-    final SubscriptionOptions options = SubscriptionOptions(
-      document: gql(r'''
-        subscription($userId: String!) {
-          cartItemCollection(filter: { userId: { eq: $userId } }) {
-            edges {
-              node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
-            }
-          }
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Cart item streming',
+        category: 'Cart Items',
+        data: {'userId': userId},
+      );
+      final SubscriptionOptions options = SubscriptionOptions(
+        document: gql(r'''
+    subscription($userId: String!) {
+      cartItemCollection(filter: { userId: { eq: $userId } }) {
+        edges {
+          node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
         }
-      '''),
-      variables: {'userId': userId},
-    );
+      }
+    }
+  '''),
+        variables: {'userId': userId},
+      );
 
-    return _client.subscribe(options).map((result) {
-      final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
-      return _dataCasting(nodes);
-    });
+      return _client.subscribe(options).map((result) {
+        final nodes =
+            result.data?['cartItemCollection']['edges'] as List? ?? [];
+        return _dataCasting(nodes);
+      });
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to start stream of cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      rethrow;
+    }
   }
 
   @override
@@ -162,6 +214,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     AppAuthUser? user,
   ) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Updating cart item',
+        category: 'Cart Items',
+        data: {'user': user, 'cartItems': cartItems},
+      );
       if (user == null) {
         for (var item in cartItems) {
           final MutationOptions options = MutationOptions(
@@ -183,6 +240,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         }
       }
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to update cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       rethrow;
     }
   }
@@ -190,6 +251,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   @override
   Future<int> getProductCartItemAmount(String userId, String productId) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Getting Product Cart Item Amount',
+        category: 'Cart Items',
+        data: {'userId': userId, 'productId': productId},
+      );
       final QueryOptions options = QueryOptions(
         document: gql(r'''
           query($uId: String!, $pId: UUID!) {
@@ -204,10 +270,9 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       final result = await retryer.retry(() => _client.query(options));
 
-      // 🚨 STOP SILENT FAILURES ON QUERIES
       if (result.hasException) {
         debugPrint(
-          '🚨 GraphQL Query Error (Product Cart Count): ${result.exception.toString()}',
+          'GraphQL Query Error (Product Cart Count): ${result.exception.toString()}',
         );
         throw Exception(result.exception.toString());
       }
@@ -221,6 +286,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       return nodes.first['node']['productCartItemCount'] ?? 0;
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to get product cart items amount',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       rethrow;
     }
   }
@@ -228,6 +297,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   @override
   Future<int> getUserCartItemAmount(String userId) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Getting User Cart Item Amount',
+        category: 'Cart Items',
+        data: {'userId': userId},
+      );
       final QueryOptions options = QueryOptions(
         document: gql(r'''
           query($uId: String!) {
@@ -242,10 +316,9 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       final result = await retryer.retry(() => _client.query(options));
 
-      // 🚨 STOP SILENT FAILURES ON QUERIES
       if (result.hasException) {
         debugPrint(
-          '🚨 GraphQL Query Error (User Cart Count): ${result.exception.toString()}',
+          ' GraphQL Query Error (User Cart Count): ${result.exception.toString()}',
         );
         throw Exception(result.exception.toString());
       }
@@ -258,6 +331,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       return nodes.first['node']['userCartItemCount'] ?? 0;
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to get amount of cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       rethrow;
     }
   }
@@ -268,6 +345,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     String productId,
   ) async {
     try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Deleting Last Added Product Cart Item',
+        category: 'Cart Items',
+        data: {'userId': userId, 'productId': productId},
+      );
       final QueryOptions fetchOptions = QueryOptions(
         document: gql(r'''
           query($uId: String!, $pId: UUID!) {
@@ -310,6 +392,10 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       return rowsDeleted > 0;
     } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to delete last added cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
       rethrow;
     }
   }

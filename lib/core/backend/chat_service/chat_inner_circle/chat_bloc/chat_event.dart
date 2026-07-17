@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ChatEvent extends Equatable {

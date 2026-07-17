@@ -2,6 +2,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -57,8 +58,21 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                   child: Text('Add Featured Product'),
                 ),
                 ElevatedButton(
-                  onPressed: () => context.push('/admin_tools_view/choose_thread_view'),
+                  onPressed: () =>
+                      context.push('/admin_tools_view/choose_thread_view'),
                   child: Text('Answer to users'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final loggerService = OuterLoggerHandler();
+                    loggerService.logBreadcrumb(
+                      message: 'User tapped the test crash button',
+                      category: 'test',
+                    );
+
+                    throw Exception('GlitchTip Integration Test Crash!');
+                  },
+                  child: Text('Test logger'),
                 ),
               ],
             ),

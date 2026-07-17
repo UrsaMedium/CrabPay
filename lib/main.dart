@@ -1,6 +1,8 @@
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
 import 'package:crabpay/core/backend/chat_service/chat_outer_circle/outer_chat_handler.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
@@ -39,20 +41,46 @@ import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
+final getIt = GetIt.instance;
+
+void setupDependencies() {
+  getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
+}
+
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  SentryWidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
     url: supabaseAccessConf['url']!,
     publishableKey: supabaseAccessConf['publishableKey']!,
   );
   await AppLocalStorage.init();
+  setupDependencies();
+  await getIt<InnerLoggerHandler>().init();
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    getIt<InnerLoggerHandler>().recordException(
+      error: details,
+      stackTrace: details.stack ?? StackTrace.empty,
+    );
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    getIt<InnerLoggerHandler>().recordException(
+      error: error,
+      stackTrace: stack,
+    );
+    return true;
+  };
 
   runApp(
     MultiRepositoryProvider(

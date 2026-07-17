@@ -48,3 +48,4 @@ app.*.map.json
 /lib/core/backend/supabase/supabase_conf.dart
 /lib/core/backend/pyament_services/payment_server_conf.dart
 android/app/google-services.json
+sentry.properties
