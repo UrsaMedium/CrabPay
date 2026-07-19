@@ -112,9 +112,12 @@ class _MaterialStoreSearchBarViewState
               padding: const EdgeInsets.only(left: 24),
               child: Row(
                 children: [
-                  Text(
-                    _isUserInputEmpty() ? 'Search' : widget.controller.text,
-                    style: const TextStyle(fontWeight: .w500),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 2.0),
+                    child: Text(
+                      _isUserInputEmpty() ? 'Search' : widget.controller.text,
+                      style: const TextStyle(fontWeight: .w500),
+                    ),
                   ),
                   IconButton(
                     onPressed: _isUserInputEmpty()

@@ -27,7 +27,7 @@ class MaterialSupportPageView extends StatelessWidget {
               reverse: true,
               itemCount: messages.length,
               padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top + 48,
+                top: MediaQuery.paddingOf(context).top + 48 + 68,
                 bottom: MediaQuery.paddingOf(context).bottom + 64,
               ),
               itemBuilder: (context, index) {
@@ -36,6 +36,46 @@ class MaterialSupportPageView extends StatelessWidget {
                   author: currentUser,
                 );
               },
+            ),
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 48,
+              left: 0,
+              right: 0,
+              child: ClipRRect(
+                borderRadius: .circular(30),
+                child: BackdropFilter(
+                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: context.appColorScheme.surfaceContainer.withValues(
+                        alpha: .8,
+                      ),
+                      borderRadius: .circular(30),
+                    ),
+                    height: 64,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 64.0,
+                              vertical: 8,
+                            ),
+                            child: Text(
+                              textAlign: .center,
+                              'Contact our support team for assistance',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
             Positioned(
               bottom: MediaQuery.paddingOf(context).bottom + 8,

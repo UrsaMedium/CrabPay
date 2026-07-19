@@ -34,7 +34,9 @@ class MaterialStorePageView extends StatelessWidget {
                 bottom: MediaQuery.paddingOf(context).bottom,
               ),
               itemExtent: 224,
-              itemCount: products.length,
+              itemCount: filterdProductList.isEmpty
+                  ? products.length
+                  : filterdProductList.length,
               itemBuilder: (context, index) => ProductCardDriver(
                 product: filterdProductList.isEmpty
                     ? products[index]

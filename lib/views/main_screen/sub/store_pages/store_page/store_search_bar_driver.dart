@@ -87,7 +87,6 @@ class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDri
       data: {'query': query},
     );
     _keyBoardEventCanBeTriggered = false;
-    _universalController.clear();
     setState(() {
       _isSearchOpen = false;
     });
