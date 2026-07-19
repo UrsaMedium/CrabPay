@@ -5,8 +5,10 @@ import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_ha
 import 'package:crabpay/main.dart';
 import 'package:crabpay/views/auth_views/login_view/material_login_view.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginViewDriver extends StatefulWidget {
@@ -61,6 +63,18 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
             );
             if (authState is AuthStateLoggedIn) {
               context.go('/');
+            }
+            if (authState is AuthStateLoggedOut) {
+              if (authState.bloodyAuthException != null) {
+                Fluttertoast.showToast(
+                  msg: 'Wrong credentials. Please try again.',
+                  toastLength: Toast.LENGTH_LONG,
+                );
+                context.read<LoginViewCubit>().setErrors(
+                  emailError: 'Invalid email or password',
+                  passwordError: 'Invalid email or password',
+                );
+              }
             }
           },
           child: BlocBuilder<LoginViewCubit, LoginViewState>(
@@ -175,6 +189,16 @@ class LoginViewCubit extends Cubit<LoginViewState> {
       emit(const LoginViewState(isSubmitting: true));
       onValid(email, password);
     }
+  }
+
+  void setErrors({String? emailError, String? passwordError}) {
+    emit(
+      LoginViewState(
+        emailError: emailError,
+        passwordError: passwordError,
+        isSubmitting: false,
+      ),
+    );
   }
 
   void clearErrors() {

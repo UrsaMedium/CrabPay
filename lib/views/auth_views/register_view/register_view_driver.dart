@@ -6,6 +6,7 @@ import 'package:crabpay/main.dart';
 import 'package:crabpay/views/auth_views/register_view/material_register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterViewDriver extends StatefulWidget {
@@ -48,6 +49,17 @@ class _RegisterViewDriverState extends State<RegisterViewDriver> {
           );
           if (authState is AuthStateLoggedIn) {
             context.go('/');
+          }
+          if (authState is AuthStateLoggedOut) {
+            Fluttertoast.showToast(
+              msg:
+                  'Registration failed: ${authState.bloodyAuthException.toString()}',
+              toastLength: Toast.LENGTH_LONG,
+            );
+            context.read<RegisterViewCubit>().setErrors(
+              emailError: 'Invalid email or password',
+              passwordError: 'Invalid email or password',
+            );
           }
         },
         child: BlocBuilder<RegisterViewCubit, RegisterViewState>(
@@ -139,6 +151,16 @@ class RegisterViewCubit extends Cubit<RegisterViewState> {
       emit(const RegisterViewState(isSubmitting: true));
       onValid(email, password);
     }
+  }
+
+  void setErrors({String? emailError, String? passwordError}) {
+    emit(
+      RegisterViewState(
+        emailError: emailError,
+        passwordError: passwordError,
+        isSubmitting: false,
+      ),
+    );
   }
 
   void clearErrors() {

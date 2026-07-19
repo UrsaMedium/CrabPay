@@ -57,12 +57,12 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
 
       throw NoUserSignInException();
     } on AuthException catch (e) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'failed exe: createUser',
-        stackTrace: StackTrace.fromString(e.toString()),
-      );
+      // getIt<InnerLoggerHandler>().recordException(
+      //   error: 'failed exe: createUser',
+      //   stackTrace: StackTrace.fromString(e.toString()),
+      // );
       debugPrint('Supabase AuthException: ${e.message}');
-      throw _handleAuthException(e);
+      rethrow;
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'failed exe: createUser',
@@ -137,20 +137,13 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         }
       }
       throw NoUserSignInException();
-    } on AuthException catch (e) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'failed exe: logIn',
-        stackTrace: StackTrace.fromString(e.toString()),
-      );
-      debugPrint('Supabase Login Exception: ${e.message}');
-      throw _handleAuthException(e);
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'failed exe: logIn',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      debugPrint('Generic Login Error: $e');
-      throw GenericAuthException();
+      debugPrint('Login Error: $e');
+      rethrow;
     }
   }
 

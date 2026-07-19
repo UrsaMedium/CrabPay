@@ -19,7 +19,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _userSubscription = _interface.userStream.listen((user) {
           add(AuthEventOnStreamUserChanged(user));
         });
-
       } on Exception catch (e) {
         emit(
           AuthStateLoggedOut(
@@ -121,14 +120,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthStateLoading());
       try {
         await _interface.logIn(email: event.email, password: event.password);
-      } on Exception catch (e) {
+      } catch (e) {
         emit(
           AuthStateLoggedOut(
             currentUser: state.currentUser,
-            bloodyAuthException: e,
+            bloodyAuthException: e is Exception ? e : Exception(e.toString()),
             reason: 'Log In Failure: ${e.toString()}',
           ),
         );
+        rethrow;
       }
     });
   }
