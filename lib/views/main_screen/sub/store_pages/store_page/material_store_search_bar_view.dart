@@ -98,7 +98,7 @@ class _MaterialStoreSearchBarViewState
     return ClipRRect(
       borderRadius: .circular(30),
       child: BackdropFilter(
-        filter: .blur(sigmaX: 8, sigmaY: 8),
+        filter: .blur(sigmaX: 12, sigmaY: 12),
         child: GestureDetector(
           onTap: widget.onOpenSearch,
           child: Container(

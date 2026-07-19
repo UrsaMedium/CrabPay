@@ -98,7 +98,7 @@ class MaterialProductCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(1.0),
             child: SizedBox(
-              height: 200,
+              height: 148,
               child: Hero(
                 tag: tag,
                 createRectTween: (begin, end) =>

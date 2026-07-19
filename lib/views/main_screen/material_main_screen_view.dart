@@ -41,10 +41,11 @@ class MaterialMainScreenView extends StatelessWidget {
             children: pages,
           ),
           Positioned(
-            top: MediaQuery.paddingOf(context).top-8,
+            top: MediaQuery.paddingOf(context).top - 8,
             left: 0,
             right: 0,
             child: Card(
+              shadowColor: Colors.transparent,
               color: context.appColorScheme.secondaryContainer.withValues(
                 alpha: .8,
               ),
@@ -58,7 +59,7 @@ class MaterialMainScreenView extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: .circular(30),
                 child: BackdropFilter(
-                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  filter: .blur(sigmaX: 12, sigmaY: 8),
                   child: Row(
                     children: [
                       Padding(

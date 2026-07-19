@@ -34,9 +34,9 @@ class MaterialHomePageView extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Align(
-                alignment: .centerLeft,
+                alignment: .centerRight,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 12, left: 8, bottom: 8),
+                  padding: const EdgeInsets.only(top: 12, right: 32, bottom: 8),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -75,11 +75,11 @@ class MaterialHomePageView extends StatelessWidget {
             userPreferences.isNotEmpty
                 ? SliverToBoxAdapter(
                     child: Align(
-                      alignment: .centerLeft,
+                      alignment: .centerRight,
                       child: Padding(
                         padding: const EdgeInsets.only(
                           top: 8,
-                          left: 8,
+                          right: 32,
                           bottom: 8,
                         ),
                         child: Container(
