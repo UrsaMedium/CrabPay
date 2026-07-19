@@ -24,37 +24,16 @@ class MaterialSupportPageView extends StatelessWidget {
         child: Stack(
           children: [
             ListView.builder(
+              reverse: true,
               itemCount: messages.length,
+              padding: EdgeInsets.only(
+                top: MediaQuery.paddingOf(context).top + 8,
+                bottom: MediaQuery.paddingOf(context).bottom + 64,
+              ),
               itemBuilder: (context, index) {
-                final isMe = messages[index].senderId == currentUser.id;
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 2.0,
-                    horizontal: 8,
-                  ),
-                  child: Align(
-                    alignment: isMe
-                        ? AlignmentGeometry.centerRight
-                        : AlignmentGeometry.centerLeft,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(30),
-                      ),
-                      color: context.appColorScheme.primary,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 8,
-                        ),
-                        child: Text(
-                          messages[index].content,
-                          style: TextStyle(
-                            color: context.appColorScheme.onPrimary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                return ChatBubble(
+                  message: messages[messages.length - 1 - index],
+                  author: currentUser,
                 );
               },
             ),
@@ -67,19 +46,22 @@ class MaterialSupportPageView extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       controller: textEditingController,
-                      keyboardType: .multiline,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       decoration: InputDecoration(
+                        fillColor: context.appColorScheme.primaryContainer
+                            .withValues(alpha: 0.6),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: context.appColorScheme.primaryFixed,
+                            color: context.appColorScheme.outlineVariant,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          borderRadius: .circular(30),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: context.appColorScheme.primaryFixed,
+                            color: context.appColorScheme.outline,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          borderRadius: .circular(30),
                         ),
                         hint: Text('Type your question...'),
                         filled: true,
@@ -97,6 +79,51 @@ class MaterialSupportPageView extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  final ChatMessage message;
+  final AppAuthUser author;
+  const ChatBubble({super.key, required this.message, required this.author});
+
+  bool isMe() {
+    return message.senderId == author.id;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: 4.0,
+        right: isMe() ? 8 : 64,
+        left: isMe() ? 64 : 8,
+      ),
+      child: Align(
+        alignment: isMe()
+            ? AlignmentGeometry.centerRight
+            : AlignmentGeometry.centerLeft,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(30),
+          ),
+          color: isMe()
+              ? context.appColorScheme.primary
+              : context.appColorScheme.secondary,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
+            child: Text(
+              message.content,
+              style: TextStyle(
+                color: isMe()
+                    ? context.appColorScheme.onPrimary
+                    : context.appColorScheme.onSecondary,
+              ),
+            ),
+          ),
         ),
       ),
     );
