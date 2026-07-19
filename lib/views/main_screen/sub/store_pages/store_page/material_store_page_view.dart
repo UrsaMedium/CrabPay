@@ -25,11 +25,12 @@ class MaterialStorePageView extends StatelessWidget {
       body: Stack(
         children: [
           RefreshIndicator(
+            edgeOffset: MediaQuery.paddingOf(context).top + 40,
             onRefresh: reFresher,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: .only(
-                top: MediaQuery.paddingOf(context).top,
+                top: MediaQuery.paddingOf(context).top + 48,
                 bottom: MediaQuery.paddingOf(context).bottom,
               ),
               itemExtent: 224,
@@ -44,7 +45,7 @@ class MaterialStorePageView extends StatelessWidget {
               ),
             ),
           ),
-          StoreSearchBarDriver(
+          MaterialStoreSearchBarDriver(
             products: products,
             openProductCardCallBack: openProductCardCallBack,
             onSearchSubmitedCallBack: onSearchSubmitedCallBack,

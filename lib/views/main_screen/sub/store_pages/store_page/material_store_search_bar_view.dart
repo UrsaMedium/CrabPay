@@ -67,7 +67,7 @@ class _MaterialStoreSearchBarViewState
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.paddingOf(context).top + 16,
+      top: MediaQuery.paddingOf(context).top + 56,
       right: 32,
       child: ClipRRect(
         borderRadius: .circular(30),

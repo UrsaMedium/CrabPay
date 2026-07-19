@@ -32,51 +32,74 @@ class MaterialMainScreenView extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: context.appColorScheme.surfaceContainerLowest
-            .withValues(alpha: .8),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: context.appColorScheme.surfaceBright,
-            width: 1,
+      body: Stack(
+        children: [
+          PageView(
+            physics: const CustomFasterPageScrollPhysics(),
+            controller: pageController,
+            onPageChanged: onPageSwiped,
+            children: pages,
           ),
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
-        ),
-        title: Text('Crab Pay'),
-        actions: [
-          if (isAdmin)
-            IconButton(onPressed: onAdminPressed, icon: Icon(Icons.settings)),
-          if (isLoggedIn)
-            IconButton(
-              onPressed: onCasesPressed,
-              icon: Icon(Icons.cases_rounded),
-            ),
-          isLoggedIn
-              ? IconButton(
-                  onPressed: onProfileIconPressed,
-                  icon: Icon(Icons.account_circle_rounded),
-                )
-              : IconButton(
-                  onPressed: onProfileIconPressed,
-                  icon: Icon(Icons.account_circle_outlined),
+          Positioned(
+            top: MediaQuery.paddingOf(context).top-8,
+            left: 0,
+            right: 0,
+            child: Card(
+              color: context.appColorScheme.secondaryContainer.withValues(
+                alpha: .8,
+              ),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: context.appColorScheme.onSecondaryContainer,
+                  width: 1,
                 ),
+                borderRadius: .circular(30),
+              ),
+              child: ClipRRect(
+                borderRadius: .circular(30),
+                child: BackdropFilter(
+                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          '🦀 Crab Pay',
+                          style: TextStyle(
+                            color: context.appColorScheme.primary,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      Spacer(flex: 1),
+                      if (isAdmin)
+                        IconButton(
+                          onPressed: onAdminPressed,
+                          icon: Icon(Icons.settings),
+                        ),
+                      if (isLoggedIn)
+                        IconButton(
+                          onPressed: onCasesPressed,
+                          icon: Icon(Icons.cases_rounded),
+                        ),
+                      isLoggedIn
+                          ? IconButton(
+                              onPressed: onProfileIconPressed,
+                              icon: Icon(Icons.account_circle_rounded),
+                            )
+                          : IconButton(
+                              onPressed: onProfileIconPressed,
+                              icon: Icon(Icons.account_circle_outlined),
+                            ),
+                      SizedBox(width: 8),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadiusGeometry.only(
-            bottomLeft: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-          ),
-          child: BackdropFilter(
-            filter: .blur(sigmaX: 8, sigmaY: 8),
-            child: Container(),
-          ),
-        ),
-      ),
-      body: PageView(
-        physics: const CustomFasterPageScrollPhysics(),
-        controller: pageController,
-        onPageChanged: onPageSwiped,
-        children: pages,
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
@@ -86,7 +109,7 @@ class MaterialMainScreenView extends StatelessWidget {
             selectedIndex: pageIndex,
             onDestinationSelected: onPageSelected,
             backgroundColor: context.appColorScheme.surfaceContainer.withValues(
-              alpha: .8,
+              alpha: .95,
             ),
             destinations: [
               NavigationDestination(

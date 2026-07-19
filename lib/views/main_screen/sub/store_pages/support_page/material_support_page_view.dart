@@ -27,7 +27,7 @@ class MaterialSupportPageView extends StatelessWidget {
               reverse: true,
               itemCount: messages.length,
               padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top + 8,
+                top: MediaQuery.paddingOf(context).top + 48,
                 bottom: MediaQuery.paddingOf(context).bottom + 64,
               ),
               itemBuilder: (context, index) {
@@ -44,27 +44,33 @@ class MaterialSupportPageView extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: textEditingController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        fillColor: context.appColorScheme.primaryContainer
-                            .withValues(alpha: 0.6),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: context.appColorScheme.outlineVariant,
+                    child: ClipRRect(
+                      borderRadius: .circular(30),
+                      child: BackdropFilter(
+                        filter: .blur(sigmaX: 5, sigmaY: 5),
+                        child: TextField(
+                          controller: textEditingController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            fillColor: context.appColorScheme.primaryContainer
+                                .withValues(alpha: 0.6),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: context.appColorScheme.outlineVariant,
+                              ),
+                              borderRadius: .circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: context.appColorScheme.outline,
+                              ),
+                              borderRadius: .circular(30),
+                            ),
+                            hint: Text('Type your question...'),
+                            filled: true,
                           ),
-                          borderRadius: .circular(30),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: context.appColorScheme.outline,
-                          ),
-                          borderRadius: .circular(30),
-                        ),
-                        hint: Text('Type your question...'),
-                        filled: true,
                       ),
                     ),
                   ),

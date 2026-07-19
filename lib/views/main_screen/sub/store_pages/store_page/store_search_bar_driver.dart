@@ -7,11 +7,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
 
-class StoreSearchBarDriver extends StatefulWidget {
+class MaterialStoreSearchBarDriver extends StatefulWidget {
   final List<Product> products;
   final OnOpenProductCardCallBack openProductCardCallBack;
   final Function(List<Product>) onSearchSubmitedCallBack;
-  const StoreSearchBarDriver({
+  const MaterialStoreSearchBarDriver({
     super.key,
     required this.products,
     required this.openProductCardCallBack,
@@ -19,10 +19,10 @@ class StoreSearchBarDriver extends StatefulWidget {
   });
 
   @override
-  State<StoreSearchBarDriver> createState() => _StoreSearchBarDriverState();
+  State<MaterialStoreSearchBarDriver> createState() => _MaterialStoreSearchBarDriverState();
 }
 
-class _StoreSearchBarDriverState extends State<StoreSearchBarDriver> {
+class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDriver> {
   late KeyboardDetectionController _keyboardDetectionController;
   late final TextEditingController _universalController;
   KeyboardState _keyboardState = KeyboardState.hidden;

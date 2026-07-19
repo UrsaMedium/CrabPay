@@ -20,7 +20,7 @@ class MaterialHomePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      edgeOffset: MediaQuery.paddingOf(context).top,
+      edgeOffset: MediaQuery.paddingOf(context).top + 40,
       onRefresh: reFresher,
       child: Scaffold(
         body: CustomScrollView(
@@ -29,7 +29,7 @@ class MaterialHomePageView extends StatelessWidget {
           slivers: [
             SliverPadding(
               padding: EdgeInsetsGeometry.only(
-                top: MediaQuery.paddingOf(context).top,
+                top: MediaQuery.paddingOf(context).top + 48,
               ),
             ),
             SliverToBoxAdapter(

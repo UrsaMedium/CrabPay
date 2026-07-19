@@ -7,7 +7,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/main.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_view.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/store_page/material_store_page_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
