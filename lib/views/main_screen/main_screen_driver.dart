@@ -1,6 +1,8 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
@@ -27,6 +29,9 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver initState',
+    );
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
@@ -36,6 +41,9 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void dispose() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver dispose',
+    );
     _pageController.dispose();
     super.dispose();
   }
@@ -62,12 +70,20 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   ];
 
   void _onPageSwiped(int index, MainScreenCubit cubit) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onPageSwiped',
+      data: {'index': index},
+    );
     if (_isSyncingByNavBarTap) return;
     widget.navigationShell.goBranch(index);
     cubit.onPageSwipe(index);
   }
 
   void _onPageSelected(int index, MainScreenCubit cubit) async {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onPageSelected',
+      data: {'index': index},
+    );
     if (index == widget.navigationShell.currentIndex) {
       widget.navigationShell.goBranch(index, initialLocation: true);
       return;
@@ -86,6 +102,10 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   }
 
   void _onProfileIconPressed(bool isLoggedIn, BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onProfileIconPressed',
+      data: {'isLoggedIn': isLoggedIn},
+    );
     if (isLoggedIn) {
       showModalBottomSheet(
         useRootNavigator: false,
@@ -104,10 +124,16 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   }
 
   void _onCasesPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onCasesPressed',
+    );
     context.push('/cases_view');
   }
 
   void _onAdminPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onAdminPressed',
+    );
     context.push('/admin_tools_view');
   }
 

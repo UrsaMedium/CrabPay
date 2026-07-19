@@ -348,6 +348,9 @@ class CrabPayApp extends StatelessWidget {
             );
           }
           final overlayKey = GlobalKey<OverlayState>();
+          getIt<InnerLoggerHandler>().logBreadcrumb(
+            message: 'CrabPayApp build',
+          );
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'CrabPay Demo',

@@ -2,7 +2,9 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +33,10 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
         .state
         .productFields
         ?.firstWhere((element) => element.id == widget.fieldId);
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message:
+          'UpdateFieldAdminPanelView: initState: _currentField: $_currentField',
+    );
     super.initState();
   }
 
@@ -39,6 +45,10 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message:
+              'UpdateFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
+        );
         if (didPop) return;
         !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
       },
@@ -46,6 +56,9 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'UpdateFieldAdminPanelView: onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
@@ -69,6 +82,13 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                         IconButton(
                           iconSize: 32,
                           onPressed: () async {
+                            getIt<InnerLoggerHandler>().logBreadcrumb(
+                              message: 'UpdateFieldAdminPanelView: onDeleteButtonPressed',
+                              data: {
+                                'currentField': _currentField,
+                                'beingLoaded': beingLoaded,
+                              },
+                            );
                             if (beingLoaded) {
                               Fluttertoast.showToast(msg: 'Please, wait');
                             } else {
@@ -169,6 +189,13 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                         builder: (context, state) {
                           return ElevatedButton(
                             onPressed: () {
+                              getIt<InnerLoggerHandler>().logBreadcrumb(
+                                message: 'UpdateFieldAdminPanelView: onUpdateButtonPressed',
+                                data: {
+                                  'currentField': _currentField,
+                                  'beingLoaded': state.states == DatabaseStates.dbLoading,
+                                },
+                              );
                               if (state.states != DatabaseStates.dbLoading) {
                                 final order =
                                     int.tryParse(_fieldOrder.text.trim()) ??

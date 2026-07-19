@@ -2,6 +2,8 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,6 +35,10 @@ class _ResetPriceImageFieldAdminPanelViewState
     oldImageField = _productFields!
         .where((element) => element.isPriceImage)
         .firstOrNull;
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message:
+          'ResetPriceImageFieldAdminPanelView: initState: oldImageField: $oldImageField',
+    );
     super.initState();
   }
 
@@ -81,6 +87,10 @@ class _ResetPriceImageFieldAdminPanelViewState
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message:
+              'ResetPriceImageFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
+        );
         if (didPop) return;
         !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
       },
@@ -88,6 +98,10 @@ class _ResetPriceImageFieldAdminPanelViewState
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message:
+                    'ResetPriceImageFieldAdminPanelView: onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
@@ -114,6 +128,11 @@ class _ResetPriceImageFieldAdminPanelViewState
             ),
             BlocListener<DatabaseBloc, DatabaseState>(
               listener: (context, state) {
+                getIt<InnerLoggerHandler>().logBreadcrumb(
+                  message:
+                      'ResetPriceImageFieldAdminPanelView: BlocListener: DatabaseState changed',
+                  data: {'state': state.states.toString()},
+                );
                 if (state.states == DatabaseStates.dbLoading) {
                   // GlobalLoadingScreen().show();
                 } else {
@@ -125,6 +144,11 @@ class _ResetPriceImageFieldAdminPanelViewState
                 onPressed: _groupValue == null
                     ? null
                     : () {
+                        getIt<InnerLoggerHandler>().logBreadcrumb(
+                          message:
+                              'ResetPriceImageFieldAdminPanelView: onPressed',
+                          data: {'newImageField': _groupValue},
+                        );
                         _execute(context: context, newImageField: _groupValue!);
                       },
                 child: Text('Set new price image'),

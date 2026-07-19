@@ -2,6 +2,8 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
@@ -60,6 +62,10 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
     });
 
     on<AdminEventPushProductEmidiatly>((event, emit) {
+      getIt<OuterLoggerHandler>().logBreadcrumb(
+        message: 'AdminEventPushProductEmidiatly: pushing product',
+        data: {'product': event.appProduct, 'state': state},
+      );
       try {
         event.context.read<DatabaseBloc>().add(
           DatabaseEventAddProduct(product: event.appProduct),
@@ -100,8 +106,16 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
             DatabaseEventAddProductField(productField: fieldToPush),
           );
         }
+        getIt<OuterLoggerHandler>().logBreadcrumb(
+          message: 'AdminEventPushesData: pushed product and fields',
+          data: {'product': productToPush, 'fields': state.appProductFields},
+        );
         event.context.go('/');
       } catch (e) {
+        getIt<OuterLoggerHandler>().logBreadcrumb(
+          message: 'AdminEventPushesData: error pushing product and fields',
+          data: {'error': e.toString()},
+        );
         Fluttertoast.showToast(msg: 'BOO');
       }
     });

@@ -2,6 +2,8 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/material_product_view.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,10 @@ class ProductViewDriver extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message: 'ProductViewDriver onPopInvokedWithResult',
+          data: {'didPop': didPop, 'result': result},
+        );
         if (didPop) {
           return;
         }
@@ -44,6 +50,10 @@ class ProductViewDriver extends StatelessWidget {
               .firstOrNull;
 
           if (theProduct == null) {
+            getIt<InnerLoggerHandler>().logBreadcrumb(
+              message: 'ProductViewDriver product not found',
+              data: {'productId': productId},
+            );
             context.go('/');
           }
 
@@ -54,6 +64,9 @@ class ProductViewDriver extends StatelessWidget {
           final heroTag = 'card-hero-$productId-$additionalSuffix-$index';
 
           void onBackButtonPressed() {
+            getIt<InnerLoggerHandler>().logBreadcrumb(
+              message: 'ProductViewDriver onBackButtonPressed',
+            );
             if (GoRouter.of(context).canPop()) {
               context.pop();
             } else {
@@ -62,6 +75,9 @@ class ProductViewDriver extends StatelessWidget {
           }
 
           void onAdminProductPanelPressed() {
+            getIt<InnerLoggerHandler>().logBreadcrumb(
+              message: 'ProductViewDriver onAdminProductPanelPressed',
+            );
             context.pushNamed(
               'update_product_admin_panel_view',
               pathParameters: {'productId': productId},
@@ -69,6 +85,14 @@ class ProductViewDriver extends StatelessWidget {
           }
 
           void onFavoritePressed() {
+            getIt<InnerLoggerHandler>().logBreadcrumb(
+              message: 'ProductViewDriver onFavoritePressed',
+              data: {
+                'isAnonymous': isAnonymous,
+                'isBeingLoaded': isBeingLoaded,
+                'isFavorite': isFavorite,
+              },
+            );
             if (isAnonymous) {
               Fluttertoast.showToast(msg: 'Sign In');
               return;
@@ -113,6 +137,11 @@ class ProductViewDriver extends StatelessWidget {
                 },
               );
             } else {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message:
+                    'ProductViewDriver onBuyBottomSheetCalled productFields is null',
+                data: {'productFields': productFields, 'productId': productId},
+              );
               Fluttertoast.showToast(msg: 'No Fields! Error');
               context.read<DatabaseBloc>().add(
                 DatabaseEventFetchProductFields(productId: productId),

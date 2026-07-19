@@ -3,6 +3,8 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/ch
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/material_support_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,9 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
 
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'SupportPageDriver initState',
+    );
     _textEditingController = TextEditingController();
     super.initState();
   }

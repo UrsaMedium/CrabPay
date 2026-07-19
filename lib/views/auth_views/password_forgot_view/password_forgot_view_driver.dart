@@ -1,6 +1,8 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view/material_password_forgot_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,9 @@ class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {
 
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'PasswordForgotViewDriver initState',
+    );
     _emailControler = TextEditingController();
     super.initState();
   }
@@ -35,11 +40,19 @@ class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {
       create: (_) => PasswordForgotViewCubit(),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, authState) {
+          getIt<InnerLoggerHandler>().logBreadcrumb(
+            message: 'PasswordForgotViewDriver AuthState change',
+            data: {'authState': authState},
+          );
           //TODO a state to know that the reset password email has benn sent
         },
         child: BlocBuilder<PasswordForgotViewCubit, PasswordForgotViewState>(
           builder: (context, viewState) {
             void onSendResetLinkPressed() {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'PasswordForgotViewDriver onSendResetLinkPressed',
+                data: {'email': _emailControler.text},
+              );
               context.read<PasswordForgotViewCubit>().validateAndSubmit(
                 email: _emailControler.text,
                 onValid: (email) => context.read<AuthBloc>().add(
@@ -49,12 +62,18 @@ class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {
             }
 
             void onBackButtonPressed() {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'PasswordForgotViewDriver onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               }
             }
 
             void onCorrectingCredentials() {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'PasswordForgotViewDriver onCorrectingCredentials',
+              );
               context.read<PasswordForgotViewCubit>().clearErrors();
             }
 

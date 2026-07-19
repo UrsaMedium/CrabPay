@@ -5,6 +5,8 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +30,9 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
   late final ProductField? imageField;
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver initState',
+    );
     imageField = widget.productFields
         .where((field) => field.isPriceImage)
         .firstOrNull;
@@ -35,6 +40,9 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
   }
 
   void _onResetImageFieldPressed() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onResetImageFieldPressed',
+    );
     context.pushNamed(
       'reset_price_image_field_admin_panel_view',
       pathParameters: {'productId': widget.product.id},
@@ -42,6 +50,9 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
   }
 
   void _onAddFieldPressed() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onAddFieldPressed',
+    );
     context.pushNamed(
       'add_field_admin_panel_view',
       pathParameters: {'productId': widget.product.id},
@@ -49,6 +60,10 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
   }
 
   void _onDeleteLastAddedItem(BuildContext context, int itemCount) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onDeleteLastAddedItem',
+      data: {'itemCount': itemCount},
+    );
     try {
       if (itemCount > 0) {
         context.read<CartBloc>().add(
@@ -57,17 +72,21 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
             productId: widget.product.id,
           ),
         );
-        // setState(() {
-        //   itemCounter--;
-        // });
       }
     } catch (e) {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'BuyBottomSheetDriver _onDeleteLastAddedItem failed',
+        data: {'itemCount': itemCount, 'error': e},
+      );
       Fluttertoast.showToast(msg: 'Failed to delete');
       print('Failed to delete last cart item::: $e');
     }
   }
 
   void _onAddCartItemPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onAddCartItemPressed',
+    );
     if (context.read<BuyBottomSheetCubit>().state.isEveryFieldSatisfied) {
       CartItem cartItem = CartItem(
         id: '',
@@ -101,11 +120,18 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
         print('Failed to add to your cart: $e');
       }
     } else {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message:
+            'BuyBottomSheetDriver _onAddCartItemPressed fields not satisfied',
+      );
       Fluttertoast.showToast(msg: 'Every field must be filled');
     }
   }
 
-  void _onCartIconPressed(BuildContext cuntext) {
+  void _onCartIconPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onCartIconPressed',
+    );
     context.go('/cart');
   }
 
@@ -114,6 +140,10 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
     required String fieldName,
     required String dataReceived,
   }) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'BuyBottomSheetDriver _onUserInput',
+      data: {'fieldName': fieldName, 'dataReceived': dataReceived},
+    );
     context.read<BuyBottomSheetCubit>()._onBottomSheetDataRetrieved(
       fieldName: fieldName,
       dataReceived: dataReceived,

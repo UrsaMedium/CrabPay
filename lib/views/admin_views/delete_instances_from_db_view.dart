@@ -4,7 +4,9 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +37,9 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
   @override
   void initState() {
     context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'DeleteInstancesFromDbView initState',
+    );
     super.initState();
   }
 
@@ -59,6 +64,10 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message: 'DeleteInstancesFromDbView onPopInvokedWithResult',
+          data: {'didPop': didPop, 'result': result},
+        );
         if (didPop) {
           return;
         }
@@ -68,6 +77,9 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'DeleteInstancesFromDbView onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
@@ -112,6 +124,13 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                       ),
                       IconButton(
                         onPressed: () {
+                          getIt<InnerLoggerHandler>().logBreadcrumb(
+                            message:
+                                'DeleteInstancesFromDbView onDeleteButtonPressed',
+                            data: {
+                              'choosenProduct': _choosenProduct?.toString(),
+                            },
+                          );
                           _choosenProduct != null
                               ? context.read<DatabaseBloc>().add(
                                   DatabaseEventDeleteProduct(
@@ -151,6 +170,11 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                       ),
                       IconButton(
                         onPressed: () {
+                          getIt<InnerLoggerHandler>().logBreadcrumb(
+                            message:
+                                'DeleteInstancesFromDbView onDeleteCartItemButtonPressed',
+                            data: {'cartItemId': _cartItemControler.text},
+                          );
                           context.read<CartBloc>().add(
                             CartEventDeleteCartItemById(
                               cartItemId: _cartItemControler.text,

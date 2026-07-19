@@ -1,7 +1,9 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +25,9 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
   @override
   void initState() {
     products = context.read<DatabaseBloc>().state.products;
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'AddFeaturedProductView initState: products: $products',
+    );
     super.initState();
   }
 
@@ -46,6 +51,10 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message: 'AddFeaturedProductView onPopInvokedWithResult',
+          data: {'didPop': didPop, 'result': result},
+        );
         if (didPop) return;
         !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
       },
@@ -53,6 +62,9 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'AddFeaturedProductView onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
@@ -84,6 +96,10 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ),
             ElevatedButton(
               onPressed: () {
+                getIt<InnerLoggerHandler>().logBreadcrumb(
+                  message: 'AddFeaturedProductView: onPressed: Add Featured Product button pressed',
+                  data: {'product': _product},
+                );
                 if (_product != null) {
                   context.read<DatabaseBloc>().add(
                     DatabaseEventAddFeaturedProduct(product: _product!),

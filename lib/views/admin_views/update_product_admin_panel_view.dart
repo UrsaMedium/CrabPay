@@ -2,7 +2,9 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +38,9 @@ class _UpdateProductAdminPanelViewState
 
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'UpdateProductAdminPanelView initState',
+    );
     _products = context.read<DatabaseBloc>().state.products;
     if (widget.productId != null && _products != null) {
       _selectedProduct = _products!.firstWhere(
@@ -57,6 +62,9 @@ class _UpdateProductAdminPanelViewState
   }
 
   void _resetPage() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'UpdateProductAdminPanelView _resetPage',
+    );
     _productDropDownMenuController.clear();
     _imageNameController.clear();
     _productNameController.clear();
@@ -86,6 +94,10 @@ class _UpdateProductAdminPanelViewState
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message: 'UpdateProductAdminPanelView onPopInvokedWithResult',
+          data: {'didPop': didPop, 'result': result},
+        );
         if (didPop) return;
         !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
       },
@@ -93,6 +105,9 @@ class _UpdateProductAdminPanelViewState
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
+              getIt<InnerLoggerHandler>().logBreadcrumb(
+                message: 'UpdateProductAdminPanelView onBackButtonPressed',
+              );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
@@ -116,6 +131,11 @@ class _UpdateProductAdminPanelViewState
                         iconSize: 32,
                         onPressed: _selectedProduct != null
                             ? () async {
+                                getIt<InnerLoggerHandler>().logBreadcrumb(
+                                  message:
+                                      'UpdateProductAdminPanelView onDeleteButtonPressed',
+                                  data: {'selectedProduct': _selectedProduct},
+                                );
                                 if (beingLoaded) {
                                   Fluttertoast.showToast(msg: 'Please, wait');
                                 } else {
@@ -294,12 +314,22 @@ class _UpdateProductAdminPanelViewState
                           ],
                         ),
                       )
-                    : Text('Choose aproduct to madify'),
+                    : Text('Choose aproduct to modify'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: _selectedProduct != null
                         ? () {
+                            getIt<InnerLoggerHandler>().logBreadcrumb(
+                              message:
+                                  'UpdateProductAdminPanelView onPushChangesButtonPressed',
+                              data: {
+                                'selectedProduct': _selectedProduct,
+                                'productName': _productName,
+                                'imageName': _imageName,
+                                'descriptionText': _descriptionText,
+                              },
+                            );
                             _ignoreStates = false;
                             final updatedProduct = Product(
                               id: _selectedProduct!.id,

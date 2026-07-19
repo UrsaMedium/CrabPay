@@ -32,7 +32,6 @@ class ChooseThreadView extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          // crossAxisAlignment: .stretch,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -64,14 +63,3 @@ class ChooseThreadView extends StatelessWidget {
     );
   }
 }
-
-
-// return ElevatedButton(
-//                     onPressed: () {
-//                       context.pushNamed(
-//                         '/admin_tools_view/choose_thread_view/admin_support_chat_view',
-//                         pathParameters: {'productId': allThreads[index].id},
-//                       );
-//                     },
-//                     child: Text('Add complete product'),
-//                   );

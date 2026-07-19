@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
+import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,9 @@ class _AdminToolsViewState extends State<AdminToolsView> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
+            getIt<OuterLoggerHandler>().logBreadcrumb(
+              message: 'AdminToolsView onBackButtonPressed',
+            );
             if (context.canPop()) {
               context.pop();
             }
@@ -38,6 +42,9 @@ class _AdminToolsViewState extends State<AdminToolsView> {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    getIt<OuterLoggerHandler>().logBreadcrumb(
+                      message: 'AdminToolsView fetch data button pressed',
+                    );
                     context.read<DatabaseBloc>().add(
                       DatabaseEventFetchAllProducts(),
                     );

@@ -4,10 +4,12 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_event.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_state.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/material_cart_page_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
 
   @override
   void initState() {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver initState',
+    );
     context.read<CartBloc>().add(
       CartEventFetchCartItems(
         userId: context.read<AuthBloc>().state.currentUser.id,
@@ -48,6 +53,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
   }
 
   void _onUserLeave({required BuildContext context}) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver _onUserLeave',
+    );
     print('--- User has left the app');
     if (context.read<PaymentBloc>().state is PaymentStateListening) {
       final cartItemIds = _cartItems?.map((e) => e.id).toList() ?? [];
@@ -60,6 +68,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
   }
 
   void _onUserReturn({required BuildContext context}) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver _onUserReturn',
+    );
     print('--- User has returned to the app');
     final cartItemIds = AppLocalStorage.getCartItemIdsOnPayment();
     if (cartItemIds != null) {
@@ -85,6 +96,10 @@ class _CartPageDriverState extends State<CartPageDriver> {
     required BuildContext context,
     required CartItem cartItem,
   }) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver _onACartItemDelete',
+      data: {'cartItemId': cartItem.id},
+    );
     context.read<CartBloc>().add(
       CartEventDeleteCartItem(
         cartItem: cartItem,
@@ -95,6 +110,10 @@ class _CartPageDriverState extends State<CartPageDriver> {
   }
 
   void _onBuyPressed(BuildContext context, double total) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver _onBuyPressed',
+      data: {'total': total},
+    );
     if (total != 0 || (_cartItems?.isNotEmpty ?? false)) {
       context.read<PaymentBloc>().add(
         PaymentEventPay(provider: 'YooPay', cartItems: _cartItems!),
@@ -105,6 +124,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
   }
 
   void _onPaymentLinkPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CartPageDriver _onPaymentLinkPressed',
+    );
     final paymentLink = AppLocalStorage.getPaymentLink();
     if (paymentLink != null) {
       context.read<PaymentBloc>().add(

@@ -3,7 +3,9 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +19,9 @@ class CasesViewDriver extends StatefulWidget {
 
 class _CasesViewDriverState extends State<CasesViewDriver> {
   void _onBackButtonPressed(BuildContext context) {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'CasesViewDriver _onBackButtonPressed',
+    );
     if (context.canPop()) {
       context.pop();
     }
