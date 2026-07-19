@@ -1,7 +1,9 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/main.dart';
@@ -120,10 +122,10 @@ class _UpdateProductAdminPanelViewState
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: BlocBuilder<DatabaseBloc, DatabaseState>(
+              child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                 builder: (context, state) {
                   final bool beingLoaded =
-                      state.states == DatabaseStates.dbLoading;
+                      state.states == DatabaseStatesAdmin.dbLoading;
                   return Row(
                     children: [
                       Text(_selectedProduct != null ? 'Delete' : ''),
@@ -144,8 +146,8 @@ class _UpdateProductAdminPanelViewState
                                       false;
                                   if (delete && context.mounted) {
                                     Fluttertoast.showToast(msg: 'Deleting');
-                                    context.read<DatabaseBloc>().add(
-                                      DatabaseEventDeleteProduct(
+                                    context.read<DatabaseBlocAdmin>().add(
+                                      DatabaseEventDeleteProductAdmin(
                                         product: _selectedProduct!,
                                       ),
                                     );
@@ -171,17 +173,17 @@ class _UpdateProductAdminPanelViewState
             ),
           ],
         ),
-        body: BlocBuilder<DatabaseBloc, DatabaseState>(
+        body: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
           builder: (context, state) {
             if (!_ignoreStates) {
-              if (state.states == DatabaseStates.productsNotUpdated) {
+              if (state.states == DatabaseStatesAdmin.productsNotUpdated) {
                 _ignoreStates = true;
                 Fluttertoast.showToast(msg: 'Failed to update');
-              } else if (state.states == DatabaseStates.productsUpdated) {
+              } else if (state.states == DatabaseStatesAdmin.productsUpdated) {
                 context.read<DatabaseBloc>().add(
                   DatabaseEventFetchAllProducts(),
                 );
-              } else if (state.states == DatabaseStates.productsFetched) {
+              } else if (state.states == DatabaseStatesAdmin.productsFetched) {
                 _ignoreStates = true;
                 _resetPage();
               }
@@ -344,14 +346,14 @@ class _UpdateProductAdminPanelViewState
                                   : _descriptionText,
                               currencies: '',
                             );
-                            context.read<DatabaseBloc>().add(
-                              DatabaseEventUpdateProduct(
+                            context.read<DatabaseBlocAdmin>().add(
+                              DatabaseEventUpdateProductAdmin(
                                 product: updatedProduct,
                               ),
                             );
                           }
                         : null,
-                    child: state.states == DatabaseStates.dbLoading
+                    child: state.states == DatabaseStatesAdmin.dbLoading
                         ? CircularProgressIndicator()
                         : Text('Push the changes'),
                   ),

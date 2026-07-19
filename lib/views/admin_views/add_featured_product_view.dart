@@ -1,6 +1,7 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/main.dart';
@@ -97,12 +98,13 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ElevatedButton(
               onPressed: () {
                 getIt<InnerLoggerHandler>().logBreadcrumb(
-                  message: 'AddFeaturedProductView: onPressed: Add Featured Product button pressed',
+                  message:
+                      'AddFeaturedProductView: onPressed: Add Featured Product button pressed',
                   data: {'product': _product},
                 );
                 if (_product != null) {
-                  context.read<DatabaseBloc>().add(
-                    DatabaseEventAddFeaturedProduct(product: _product!),
+                  context.read<DatabaseBlocAdmin>().add(
+                    DatabaseEventAddFeaturedProductAdmin(product: _product!),
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {
@@ -114,8 +116,8 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ElevatedButton(
               onPressed: () {
                 if (_product != null) {
-                  context.read<DatabaseBloc>().add(
-                    DatabaseEventDeleteFeaturedProduct(product: _product!),
+                  context.read<DatabaseBlocAdmin>().add(
+                    DatabaseEventDeleteFeaturedProductAdmin(product: _product!),
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {

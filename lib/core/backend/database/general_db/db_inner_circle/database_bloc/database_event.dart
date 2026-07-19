@@ -20,23 +20,6 @@ class DatabaseEventFlushData implements DatabaseEvent {}
 // fetch all Poducts
 class DatabaseEventFetchAllProducts implements DatabaseEvent {}
 
-// add Product
-class DatabaseEventAddProduct implements DatabaseEvent {
-  final Product product;
-  DatabaseEventAddProduct({required this.product});
-}
-
-// delete Product
-class DatabaseEventDeleteProduct implements DatabaseEvent {
-  final Product product;
-  DatabaseEventDeleteProduct({required this.product});
-}
-
-// modify product
-class DatabaseEventUpdateProduct implements DatabaseEvent {
-  final Product product;
-  DatabaseEventUpdateProduct({required this.product});
-}
 
 // Fields events
 // fetch Product Fields
@@ -51,62 +34,13 @@ class DatabaseEventFetchProductField implements DatabaseEvent {
   DatabaseEventFetchProductField({required this.productFieldId});
 }
 
-// add Product Field
-class DatabaseEventAddProductField implements DatabaseEvent {
-  final ProductField productField;
-  DatabaseEventAddProductField({required this.productField});
-}
-
-// delete Product Field
-class DatabaseEventDeleteProductField implements DatabaseEvent {
-  final ProductField productField;
-  DatabaseEventDeleteProductField({required this.productField});
-}
-
-class DatabaseEventUpdateProductField implements DatabaseEvent {
-  final ProductField field;
-  DatabaseEventUpdateProductField({required this.field});
-}
-
-class DatabaseEventUpdateProductFieldSwapImageField implements DatabaseEvent {
-  final ProductField? oldImageField;
-  final ProductField newImageField;
-  DatabaseEventUpdateProductFieldSwapImageField({
-    this.oldImageField,
-    required this.newImageField,
-  });
-}
-
 // Currencies events
 // fetch All Currencies
 class DatabaseEventFetchAllCurrencies implements DatabaseEvent {}
 
-// add Currencies
-class DatabaseEventAddCurrencies implements DatabaseEvent {
-  final Currencies currencies;
-  DatabaseEventAddCurrencies({required this.currencies});
-}
-
-// delet Currencies
-class DatabaseEventDeleteCurrencies implements DatabaseEvent {
-  final Currencies currencies;
-  DatabaseEventDeleteCurrencies({required this.currencies});
-}
-
 //Featured products
 //fetch all featured products
 class DatabaseEventFetchAllFeaturedProducts implements DatabaseEvent {}
-
-class DatabaseEventAddFeaturedProduct implements DatabaseEvent {
-  final Product product;
-  DatabaseEventAddFeaturedProduct({required this.product});
-}
-
-//delete featured product
-class DatabaseEventDeleteFeaturedProduct implements DatabaseEvent {
-  final Product product;
-  DatabaseEventDeleteFeaturedProduct({required this.product});
-}
 
 //user preferences
 // fetch user preferences

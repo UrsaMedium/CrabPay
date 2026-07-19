@@ -1,7 +1,8 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/main.dart';
@@ -204,7 +205,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                                  child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                                     builder: (context, state) {
                                       return ElevatedButton(
                                         onPressed: () {
@@ -235,11 +236,14 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                                       expectedData:
                                                           field.expectedData,
                                                     );
-                                                context.read<DatabaseBloc>().add(
-                                                  DatabaseEventAddProductField(
-                                                    productField: fieldToPush,
-                                                  ),
-                                                );
+                                                context
+                                                    .read<DatabaseBlocAdmin>()
+                                                    .add(
+                                                      DatabaseEventAddProductFieldAdmin(
+                                                        productField:
+                                                            fieldToPush,
+                                                      ),
+                                                    );
                                               }
                                               context.go('/');
                                             } catch (e) {
@@ -256,7 +260,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                         },
                                         child:
                                             state.states !=
-                                                DatabaseStates.dbLoading
+                                                DatabaseStatesAdmin.dbLoading
                                             ? Text('Push The Fields')
                                             : CircularProgressIndicator(),
                                       );

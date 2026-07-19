@@ -1,7 +1,8 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/main.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +75,8 @@ class _ResetPriceImageFieldAdminPanelViewState
     required BuildContext context,
     required ProductField newImageField,
   }) {
-    context.read<DatabaseBloc>().add(
-      DatabaseEventUpdateProductFieldSwapImageField(
+    context.read<DatabaseBlocAdmin>().add(
+      DatabaseEventUpdateProductFieldSwapImageFieldAdmin(
         oldImageField: oldImageField,
         newImageField: newImageField,
       ),
@@ -126,14 +127,14 @@ class _ResetPriceImageFieldAdminPanelViewState
                 child: Column(children: _choices()),
               ),
             ),
-            BlocListener<DatabaseBloc, DatabaseState>(
+            BlocListener<DatabaseBlocAdmin, DatabaseStateAdmin>(
               listener: (context, state) {
                 getIt<InnerLoggerHandler>().logBreadcrumb(
                   message:
                       'ResetPriceImageFieldAdminPanelView: BlocListener: DatabaseState changed',
                   data: {'state': state.states.toString()},
                 );
-                if (state.states == DatabaseStates.dbLoading) {
+                if (state.states == DatabaseStatesAdmin.dbLoading) {
                   // GlobalLoadingScreen().show();
                 } else {
                   // GlobalLoadingScreen().hide();

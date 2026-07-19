@@ -1,3 +1,7 @@
+import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_outer_circle/admin_outer_chat_handler.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_outer_database_handler/admin_outer_database_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
 import 'package:crabpay/core/backend/chat_service/chat_outer_circle/outer_chat_handler.dart';
@@ -105,9 +109,21 @@ Future<void> main() async {
               authInterface: context.read<AuthInnerInterface>(),
             ),
           ),
+          BlocProvider<ChatBlocAdmin>(
+            create: (context) => ChatBlocAdmin(
+              chatHandlerAdmin: AdminOuterChatHandlerWithSupabase(),
+              authInterface: context.read<AuthInnerInterface>(),
+            ),
+          ),
           BlocProvider<DatabaseBloc>(
             create: (context) => DatabaseBloc(
               databaseHandler: OuterDatabaseHandlerWithSupabase(),
+              authInnerface: context.read<AuthInnerInterface>(),
+            ),
+          ),
+          BlocProvider<DatabaseBlocAdmin>(
+            create: (context) => DatabaseBlocAdmin(
+              databaseHandlerAdmin: AdminOuterDatabaseHandlerWithSupabase(),
               authInnerface: context.read<AuthInnerInterface>(),
             ),
           ),

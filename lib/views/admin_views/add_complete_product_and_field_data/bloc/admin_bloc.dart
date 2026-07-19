@@ -1,7 +1,7 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:crabpay/main.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
@@ -67,8 +67,8 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         data: {'product': event.appProduct, 'state': state},
       );
       try {
-        event.context.read<DatabaseBloc>().add(
-          DatabaseEventAddProduct(product: event.appProduct),
+        event.context.read<DatabaseBlocAdmin>().add(
+          DatabaseEventAddProductAdmin(product: event.appProduct),
         );
       } catch (e) {
         Fluttertoast.showToast(msg: 'eeeeeh');
@@ -87,8 +87,8 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         currencies: state.appProduct!.currencies,
       );
       try {
-        event.context.read<DatabaseBloc>().add(
-          DatabaseEventAddProduct(product: productToPush),
+        event.context.read<DatabaseBlocAdmin>().add(
+          DatabaseEventAddProductAdmin(product: productToPush),
         );
 
         for (var field in state.appProductFields!) {
@@ -102,8 +102,8 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
             priceImages: field.priceImages,
             expectedData: field.expectedData,
           );
-          event.context.read<DatabaseBloc>().add(
-            DatabaseEventAddProductField(productField: fieldToPush),
+          event.context.read<DatabaseBlocAdmin>().add(
+            DatabaseEventAddProductFieldAdmin(productField: fieldToPush),
           );
         }
         getIt<OuterLoggerHandler>().logBreadcrumb(

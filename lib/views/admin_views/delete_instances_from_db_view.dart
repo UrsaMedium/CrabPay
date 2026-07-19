@@ -1,7 +1,9 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
@@ -99,28 +101,30 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                   Row(
                     children: [
                       Flexible(
-                        child: BlocBuilder<DatabaseBloc, DatabaseState>(
-                          builder: (context, state) {
-                            return DropdownMenu<Product>(
-                              dropdownMenuEntries: _productDropDownMenuEntries,
-                              controller: _productControler,
-                              onSelected: (value) => setState(() {
-                                _choosenProduct = value!;
-                              }),
-                              expandedInsets: EdgeInsets.zero,
-                              inputDecorationTheme: InputDecorationTheme(
-                                filled: true,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide(
-                                    color: context.appColorScheme.primary,
-                                    width: 1,
+                        child:
+                            BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
+                              builder: (context, state) {
+                                return DropdownMenu<Product>(
+                                  dropdownMenuEntries:
+                                      _productDropDownMenuEntries,
+                                  controller: _productControler,
+                                  onSelected: (value) => setState(() {
+                                    _choosenProduct = value!;
+                                  }),
+                                  expandedInsets: EdgeInsets.zero,
+                                  inputDecorationTheme: InputDecorationTheme(
+                                    filled: true,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide: BorderSide(
+                                        color: context.appColorScheme.primary,
+                                        width: 1,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                                );
+                              },
+                            ),
                       ),
                       IconButton(
                         onPressed: () {
@@ -132,8 +136,8 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                             },
                           );
                           _choosenProduct != null
-                              ? context.read<DatabaseBloc>().add(
-                                  DatabaseEventDeleteProduct(
+                              ? context.read<DatabaseBlocAdmin>().add(
+                                  DatabaseEventDeleteProductAdmin(
                                     product: _choosenProduct!,
                                   ),
                                 )

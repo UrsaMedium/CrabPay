@@ -1,7 +1,8 @@
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
+import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/main.dart';
@@ -72,10 +73,10 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
             if (_currentField != null)
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
-                child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                   builder: (context, state) {
                     final bool beingLoaded =
-                        state.states == DatabaseStates.dbLoading;
+                        state.states == DatabaseStatesAdmin.dbLoading;
                     return Row(
                       children: [
                         Text('Delete'),
@@ -83,7 +84,8 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                           iconSize: 32,
                           onPressed: () async {
                             getIt<InnerLoggerHandler>().logBreadcrumb(
-                              message: 'UpdateFieldAdminPanelView: onDeleteButtonPressed',
+                              message:
+                                  'UpdateFieldAdminPanelView: onDeleteButtonPressed',
                               data: {
                                 'currentField': _currentField,
                                 'beingLoaded': beingLoaded,
@@ -97,8 +99,8 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                   false;
                               if (delete && context.mounted) {
                                 Fluttertoast.showToast(msg: 'Deleting');
-                                context.read<DatabaseBloc>().add(
-                                  DatabaseEventDeleteProductField(
+                                context.read<DatabaseBlocAdmin>().add(
+                                  DatabaseEventDeleteProductFieldAdmin(
                                     productField: _currentField!,
                                   ),
                                 );
@@ -185,18 +187,22 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: BlocBuilder<DatabaseBloc, DatabaseState>(
+                      child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                         builder: (context, state) {
                           return ElevatedButton(
                             onPressed: () {
                               getIt<InnerLoggerHandler>().logBreadcrumb(
-                                message: 'UpdateFieldAdminPanelView: onUpdateButtonPressed',
+                                message:
+                                    'UpdateFieldAdminPanelView: onUpdateButtonPressed',
                                 data: {
                                   'currentField': _currentField,
-                                  'beingLoaded': state.states == DatabaseStates.dbLoading,
+                                  'beingLoaded':
+                                      state.states ==
+                                      DatabaseStatesAdmin.dbLoading,
                                 },
                               );
-                              if (state.states != DatabaseStates.dbLoading) {
+                              if (state.states !=
+                                  DatabaseStatesAdmin.dbLoading) {
                                 final order =
                                     int.tryParse(_fieldOrder.text.trim()) ??
                                     _currentField!.order;
@@ -227,8 +233,8 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                       ? [_currentField!.fieldName]
                                       : _currentField!.expectedData,
                                 );
-                                context.read<DatabaseBloc>().add(
-                                  DatabaseEventUpdateProductField(
+                                context.read<DatabaseBlocAdmin>().add(
+                                  DatabaseEventUpdateProductFieldAdmin(
                                     field: newField,
                                   ),
                                 );
@@ -240,7 +246,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 Fluttertoast.showToast(msg: 'Failed');
                               }
                             },
-                            child: state.states != DatabaseStates.dbLoading
+                            child: state.states != DatabaseStatesAdmin.dbLoading
                                 ? Text('Update The Field')
                                 : CircularProgressIndicator(),
                           );

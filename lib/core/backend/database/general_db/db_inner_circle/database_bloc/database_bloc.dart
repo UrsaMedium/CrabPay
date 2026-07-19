@@ -74,7 +74,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             currencies: null,
             featuredProducts: null,
             products: null,
-            recentlyAddedProduct: null,
             states: DatabaseStates.flushed,
           ),
         );
@@ -101,61 +100,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         );
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.productsNotFetched));
-        rethrow;
-      }
-    });
-
-    // add Product
-    on<DatabaseEventAddProduct>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddProduct fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.addProduct(product: event.product);
-        emit(
-          state.copyWith(
-            recentlyAddedProduct: event.product,
-            states: DatabaseStates.productsAdded,
-          ),
-        );
-      } catch (e) {
-        emit(
-          state.copyWith(
-            recentlyAddedProduct: null,
-            states: DatabaseStates.productsNotAdded,
-          ),
-        );
-        rethrow;
-      }
-    });
-
-    // delete Product
-    on<DatabaseEventDeleteProduct>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteProduct fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.deleteProduct(product: event.product);
-        emit(state.copyWith(states: DatabaseStates.productsDeleted));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.productsNotDeleted));
-        rethrow;
-      }
-    });
-
-    // update a product
-    on<DatabaseEventUpdateProduct>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProduct fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.updateProduct(product: event.product);
-        emit(state.copyWith(states: DatabaseStates.productsUpdated));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.productsNotUpdated));
         rethrow;
       }
     });
@@ -193,87 +137,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       // TODO
     });
 
-    // add Product Field
-    on<DatabaseEventAddProductField>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddProductField fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.addProductField(field: event.productField);
-        emit(state.copyWith(states: DatabaseStates.fieldsAdded));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.fieldsNotAdded));
-        rethrow;
-      }
-    });
-
-    // delete Product Field
-    on<DatabaseEventDeleteProductField>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteProductField fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.deleteProductField(field: event.productField);
-        emit(state.copyWith(states: DatabaseStates.fieldsDeleted));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.fieldsNotDeleted));
-        rethrow;
-      }
-    });
-
-    on<DatabaseEventUpdateProductField>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProductField fired');
-      print('---');
-      emit(state.copyWith(states: DatabaseStates.dbLoading));
-      try {
-        await databaseHandler.updateProductField(field: event.field);
-        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
-        rethrow;
-      }
-    });
-
-    on<DatabaseEventUpdateProductFieldSwapImageField>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProductFieldSwapImageField fired');
-      print('---');
-      emit(state.copyWith(states: DatabaseStates.dbLoading));
-      try {
-        if (event.oldImageField != null) {
-          final oldChangedField = ProductField(
-            id: event.oldImageField!.id,
-            productId: event.oldImageField!.productId,
-            order: event.oldImageField!.order,
-            fieldName: event.oldImageField!.fieldName,
-            handler: event.oldImageField!.handler,
-            isPriceImage: false,
-            expectedData: event.oldImageField!.expectedData,
-            priceImages: null,
-          );
-          await databaseHandler.updateProductField(field: oldChangedField);
-        }
-        final newChangedField = ProductField(
-          id: event.newImageField.id,
-          productId: event.newImageField.productId,
-          order: event.newImageField.order,
-          fieldName: event.newImageField.fieldName,
-          handler: event.newImageField.handler,
-          isPriceImage: true,
-          expectedData: event.newImageField.expectedData,
-          priceImages: null,
-        );
-        await databaseHandler.updateProductField(field: newChangedField);
-        emit(state.copyWith(states: DatabaseStates.fieldsUpdated));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.fieldsNotUpdated));
-        rethrow;
-      }
-    });
-
     // Currencies------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {
@@ -291,34 +154,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         );
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.currenciesNotFetched));
-        rethrow;
-      }
-    });
-    // add Currencies
-    on<DatabaseEventAddCurrencies>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddCurrencies fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.addCurrencies(currencies: event.currencies);
-        emit(state.copyWith(states: DatabaseStates.currenciesAdded));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.currenciesNotAdded));
-        rethrow;
-      }
-    });
-    // delet Currencies
-    on<DatabaseEventDeleteCurrencies>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteCurrencies fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.deleteCurrencies(currencies: event.currencies);
-        emit(state.copyWith(states: DatabaseStates.currenciesDeleted));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.currenciesNotDeleted));
         rethrow;
       }
     });
@@ -348,37 +183,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         );
       } catch (e) {
         emit(state.copyWith(states: DatabaseStates.featuedProductsNotFetched));
-        rethrow;
-      }
-    });
-
-    //add featured product
-    on<DatabaseEventAddFeaturedProduct>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddFeaturedProduct fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.addFeaturedProduct(productId: event.product.id);
-        emit(state.copyWith(states: DatabaseStates.featuedProductsAdded));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.featuedProductsNotAdded));
-        rethrow;
-      }
-    });
-
-    on<DatabaseEventDeleteFeaturedProduct>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteFeaturedProduct fired');
-      print('---');
-      try {
-        emit(state.copyWith(states: DatabaseStates.dbLoading));
-        await databaseHandler.deleteFeaturedProduct(
-          productId: event.product.id,
-        );
-        emit(state.copyWith(states: DatabaseStates.featuedProductsDeleted));
-      } catch (e) {
-        emit(state.copyWith(states: DatabaseStates.featuedProductsNotDeleted));
         rethrow;
       }
     });
