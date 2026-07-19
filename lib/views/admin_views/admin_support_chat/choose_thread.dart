@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
@@ -17,6 +18,11 @@ class ChooseThreadView extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
+            context.read<ChatBloc>().add(
+              ChatEventInitializeThread(
+                userId: context.read<AuthBloc>().state.currentUser.id,
+              ),
+            );
             if (context.canPop()) {
               context.pop();
             }
