@@ -1,6 +1,3 @@
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/currencies_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:flutter/material.dart' show immutable;
 
 enum DatabaseStatesAdmin {

@@ -11,12 +11,13 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 // import 'package:uuid/v4.dart';
 
 class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
-  final AuthInnerInterface _authInterface;
+  // final AuthInnerInterface _authInterface;
   late final StreamSubscription<AppAuthUser> _authSubscription;
   DatabaseBlocAdmin({
     required AdminInnerDatabaseHandler databaseHandlerAdmin,
     required AuthInnerInterface authInnerface,
-  }) : _authInterface = authInnerface,
+  }) : 
+  // _authInterface = authInnerface,
        super(const DatabaseStateAdmin()) {
     //
     // final _uuid = Uuid();
