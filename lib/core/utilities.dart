@@ -14,6 +14,8 @@ extension ContextExtensions on BuildContext {
   ColorScheme get appColorScheme => Theme.of(this).colorScheme;
 }
 
+const double cornerRadius = 24;
+
 //local storage
 final AppAuthUser appTempUser = AppLocalStorage.tempUser;
 
