@@ -10,6 +10,7 @@ import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_event
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_state.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/main.dart';
+import 'package:crabpay/views/dialogs/on_unauth_buy_to_register.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/material_cart_page_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -109,15 +110,27 @@ class _CartPageDriverState extends State<CartPageDriver> {
     context.read<CartPageCubit>().setDeletingItem(cartItem);
   }
 
-  void _onBuyPressed(BuildContext context, double total) {
+  void _onBuyPressed(BuildContext context, double total) async {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'CartPageDriver _onBuyPressed',
       data: {'total': total},
     );
+    if (context.read<AuthBloc>().state.currentUser.isAnonymous) {
+      // context.push('/login_view/register_view');
+      final didRegistered = await showOnUnauthBuyToRegister(context);
+      if ((didRegistered ?? false) && context.mounted) {
+        context.read<PaymentBloc>().add(
+          PaymentEventPay(provider: 'YooPay', cartItems: _cartItems!),
+        );
+      }
+      Fluttertoast.showToast(msg: 'You must register to buy');
+      return;
+    }
     if (total != 0 || (_cartItems?.isNotEmpty ?? false)) {
       context.read<PaymentBloc>().add(
         PaymentEventPay(provider: 'YooPay', cartItems: _cartItems!),
       );
+      return;
     } else {
       return;
     }
@@ -144,7 +157,6 @@ class _CartPageDriverState extends State<CartPageDriver> {
       child: BlocListener<PaymentBloc, PaymentState>(
         listener: (context, state) {
           final userId = context.read<AuthBloc>().state.currentUser.id;
-
           if (state is PaymentStateUserAtProvider && _cartItems != null) {
             context.read<PaymentBloc>().add(
               PaymentEventListen(cartItems: _cartItems!),
@@ -154,6 +166,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
             context.read<PaymentBloc>().add(PaymentEventSilence());
             context.read<CartBloc>().add(
               CartEventFetchCartItems(userId: userId),
+            );
+            context.read<CartBloc>().add(
+              CartEventFetchUserCartItemAmount(userId: userId),
             );
           }
         },
@@ -167,11 +182,6 @@ class _CartPageDriverState extends State<CartPageDriver> {
             _products = context.select<DatabaseBloc, List<Product>>(
               (bloc) => bloc.state.products ?? [],
             );
-            // _cartItems = _filterItemsToBuy(
-            //   allCartItems: context.select<CartBloc, List<CartItem>>(
-            //     (bloc) => bloc.state.cartItemsToBuy ?? [],
-            //   ),
-            // );
             _cartItems = context.select<CartBloc, List<CartItem>>(
               (bloc) => bloc.state.cartItemsToBuy ?? [],
             );

@@ -44,22 +44,17 @@ class MaterialMainScreenView extends StatelessWidget {
             top: MediaQuery.paddingOf(context).top - 8,
             left: 0,
             right: 0,
-            child: Card(
-              shadowColor: Colors.transparent,
-              color: context.appColorScheme.secondaryContainer.withValues(
-                alpha: .8,
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: context.appColorScheme.onSecondaryContainer,
-                  width: 1,
-                ),
-                borderRadius: .circular(30),
-              ),
-              child: ClipRRect(
-                borderRadius: .circular(30),
-                child: BackdropFilter(
-                  filter: .blur(sigmaX: 12, sigmaY: 8),
+            child: ClipRRect(
+              borderRadius: .circular(30),
+              child: BackdropFilter(
+                filter: .blur(sigmaX: 12, sigmaY: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: .circular(30),
+                    color: context.appColorScheme.surfaceContainer.withValues(
+                      alpha: .8,
+                    ),
+                  ),
                   child: Row(
                     children: [
                       Padding(
