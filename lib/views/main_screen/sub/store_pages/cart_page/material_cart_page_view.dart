@@ -95,27 +95,18 @@ class MaterialCartPageView extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      bottom: MediaQuery.paddingOf(context).bottom + 8,
+                      bottom: MediaQuery.paddingOf(context).bottom + 18,
                       right: 16,
                       left: 16,
-                      child: AbsorbPointer(
-                        absorbing: isPaymentStateActive,
-                        child: Card(
-                          elevation: 7,
-                          shadowColor: Colors.black.withValues(alpha: .3),
-                          clipBehavior: Clip.antiAlias,
-                          color: context.appColorScheme.surfaceContainer
-                              .withValues(alpha: .5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            side: BorderSide(
-                              color:
-                                  context.appColorScheme.surfaceContainerHigh,
-                              width: 1,
-                            ),
-                          ),
-                          child: BackdropFilter(
-                            filter: .blur(sigmaX: 8, sigmaY: 8),
+                      child: Material(
+                        color: Colors.transparent,
+                        borderRadius: .circular(30),
+                        clipBehavior: .antiAlias,
+                        child: BackdropFilter(
+                          filter: .blur(sigmaX: 8, sigmaY: 8),
+                          child: Container(
+                            color: context.appColorScheme.surfaceContainerHigh
+                                .withValues(alpha: .8),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
@@ -154,7 +145,10 @@ class MaterialCartPageView extends StatelessWidget {
                                             context.appColorScheme.primary,
                                         foregroundColor:
                                             context.appColorScheme.onPrimary,
-                                        minimumSize: Size(double.maxFinite, 50),
+                                        minimumSize: Size(
+                                          double.maxFinite,
+                                          50,
+                                        ),
                                       ),
                                       child: Text(
                                         'Checkout',

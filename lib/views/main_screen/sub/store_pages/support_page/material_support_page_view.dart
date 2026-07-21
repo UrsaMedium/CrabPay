@@ -48,7 +48,7 @@ class MaterialSupportPageView extends StatelessWidget {
               },
             ),
             Positioned(
-              top: MediaQuery.paddingOf(context).top + 54,
+              top: MediaQuery.paddingOf(context).top + 46 + 8,
               right: 32,
               left: 32,
               child: Material(

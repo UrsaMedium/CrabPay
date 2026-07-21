@@ -33,7 +33,7 @@ class MaterialStorePageView extends StatelessWidget {
                 top: MediaQuery.paddingOf(context).top + 48,
                 bottom: MediaQuery.paddingOf(context).bottom,
               ),
-              itemExtent: 224,
+              itemExtent: 170,
               itemCount: filterdProductList.isEmpty
                   ? products.length
                   : filterdProductList.length,

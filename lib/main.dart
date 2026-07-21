@@ -45,6 +45,7 @@ import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/views/admin_views/admin_tools_view.dart';
 import 'package:crabpay/views/main_screen/sub/cases_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -85,6 +86,16 @@ Future<void> main() async {
     );
     return true;
   };
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ),
+  );
 
   runApp(
     MultiRepositoryProvider(
