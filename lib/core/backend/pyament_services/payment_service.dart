@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_server_conf.dart';
-import 'package:crabpay/main.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 

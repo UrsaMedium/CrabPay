@@ -5,7 +5,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/dat
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_graphql_client.dart';
-import 'package:crabpay/main.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';

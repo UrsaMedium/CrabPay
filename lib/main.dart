@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/admin/admin_database/admin_outer_database_handler/admin_outer_database_handler_with_supabase.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
@@ -53,9 +54,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
-final getIt = GetIt.instance;
+
 
 void setupDependencies() {
   getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
@@ -325,9 +325,12 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/login_view',
-      name: 'login_view',
-      builder: (BuildContext context, GoRouterState state) =>
-          const LoginViewDriver(),
+      pageBuilder: (context, state) =>
+          AppExpandingCircleTransitionRoute.circularReveal(
+            context: context,
+            state: state,
+            child: const LoginViewDriver(),
+          ),
       routes: <RouteBase>[
         GoRoute(
           path: 'register_view',

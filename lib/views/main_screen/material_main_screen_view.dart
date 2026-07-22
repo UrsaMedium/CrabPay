@@ -1,10 +1,12 @@
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MaterialMainScreenView extends StatelessWidget {
   final int itemsCount;
   final int pageIndex;
-  final VoidCallback onProfileIconPressed;
+  final Function(Offset) onProfileIconPressed;
   final VoidCallback onCasesPressed;
   final VoidCallback onAdminPressed;
   final Function(int) onPageSelected;
@@ -14,6 +16,7 @@ class MaterialMainScreenView extends StatelessWidget {
   final bool isLoggedIn;
   final bool isAdmin;
   final List<Rect> cameraBounds;
+  final GlobalKey profileIconButtonKey;
   const MaterialMainScreenView({
     super.key,
     required this.onProfileIconPressed,
@@ -28,6 +31,7 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onAdminPressed,
     required this.isAdmin,
     required this.cameraBounds,
+    required this.profileIconButtonKey,
   });
   @override
   Widget build(BuildContext context) {
@@ -85,11 +89,34 @@ class MaterialMainScreenView extends StatelessWidget {
                         ),
                       isLoggedIn
                           ? IconButton(
-                              onPressed: onProfileIconPressed,
+                              onPressed: onProfileIconPressed(Offset(0, 0)),
                               icon: Icon(Icons.account_circle_rounded),
                             )
                           : IconButton(
-                              onPressed: onProfileIconPressed,
+                              key: profileIconButtonKey,
+                              onPressed: () {
+                                final renderBox =
+                                    profileIconButtonKey.currentContext
+                                            ?.findRenderObject()
+                                        as RenderBox?;
+                                if (renderBox == null) {
+                                  getIt<InnerLoggerHandler>().logInfo(
+                                    message: 'Login Button Error',
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: 'Login Button Error',
+                                  );
+                                  return;
+                                }
+                                final position = renderBox.localToGlobal(
+                                  Offset.zero,
+                                );
+                                final centerOffset = Offset(
+                                  position.dx + (renderBox.size.width / 2),
+                                  position.dy + (renderBox.size.height / 2),
+                                );
+                                onProfileIconPressed(centerOffset);
+                              },
                               icon: Icon(Icons.account_circle_outlined),
                             ),
                       SizedBox(width: 8),
@@ -110,8 +137,7 @@ class MaterialMainScreenView extends StatelessWidget {
             ),
           ),
           Positioned(
-            // top: MediaQuery.paddingOf(context).bottom + inRadius,
-            bottom: 58,
+            bottom: 64,
             left: 0,
             right: 0,
             child: ClipPath(
@@ -129,53 +155,41 @@ class MaterialMainScreenView extends StatelessWidget {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: pageIndex,
-        height: 58,
+        height: 64,
         onDestinationSelected: onPageSelected,
         backgroundColor: context.appColorScheme.surfaceContainerHigh,
         destinations: [
-          Padding(
-            padding: const EdgeInsets.only(top: 2.0),
-            child: NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_filled),
-              label: 'Home',
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_filled),
+            label: 'Home',
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 2.0),
-            child: NavigationDestination(
-              icon: Icon(Icons.storefront_outlined),
-              selectedIcon: Icon(Icons.storefront),
-              label: 'Store',
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.storefront_outlined),
+            selectedIcon: Icon(Icons.storefront),
+            label: 'Store',
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 2.0),
-            child: NavigationDestination(
-              icon: Icon(Icons.message_outlined),
-              selectedIcon: Icon(Icons.message_rounded),
-              label: 'Ask',
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.message_outlined),
+            selectedIcon: Icon(Icons.message_rounded),
+            label: 'Ask',
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 2.0),
-            child: NavigationDestination(
-              icon: Badge(
-                backgroundColor: context.appColorScheme.error,
-                textColor: context.appColorScheme.onError,
-                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                isLabelVisible: itemsCount > 0,
-                child: Icon(Icons.shopping_cart_checkout_outlined),
-              ),
-              selectedIcon: Badge(
-                backgroundColor: context.appColorScheme.error,
-                textColor: context.appColorScheme.onError,
-                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                isLabelVisible: itemsCount > 0,
-                child: Icon(Icons.shopping_cart_rounded),
-              ),
-              label: 'Cart',
+          NavigationDestination(
+            icon: Badge(
+              backgroundColor: context.appColorScheme.error,
+              textColor: context.appColorScheme.onError,
+              label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+              isLabelVisible: itemsCount > 0,
+              child: Icon(Icons.shopping_cart_checkout_outlined),
             ),
+            selectedIcon: Badge(
+              backgroundColor: context.appColorScheme.error,
+              textColor: context.appColorScheme.onError,
+              label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+              isLabelVisible: itemsCount > 0,
+              child: Icon(Icons.shopping_cart_rounded),
+            ),
+            label: 'Cart',
           ),
         ],
       ),

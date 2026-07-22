@@ -3,7 +3,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_excep
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
-import 'package:crabpay/main.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart'; // For debugPrint
 

@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/main.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';

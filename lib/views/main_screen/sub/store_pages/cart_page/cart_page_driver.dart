@@ -9,7 +9,7 @@ import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_event.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_state.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
-import 'package:crabpay/main.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/dialogs/on_unauth_buy_to_register.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/material_cart_page_view.dart';
 import 'package:flutter/foundation.dart';

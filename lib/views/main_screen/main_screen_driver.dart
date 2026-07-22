@@ -4,7 +4,6 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/main.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
@@ -29,6 +28,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   late final PageController _pageController;
   bool _isSyncingByNavBarTap = false;
   final List<Rect> cameraBounds = [];
+  final GlobalKey profileIconButtonKey = GlobalKey();
 
   @override
   void initState() {
@@ -115,7 +115,11 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     }
   }
 
-  void _onProfileIconPressed(bool isLoggedIn, BuildContext context) {
+  void _onProfileIconPressed({
+    required bool isLoggedIn,
+    required BuildContext context,
+    required Offset buttonCenter,
+  }) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onProfileIconPressed',
       data: {'isLoggedIn': isLoggedIn},
@@ -133,7 +137,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         builder: (BuildContext sheetContext) => ProfileViewDriver(),
       );
     } else {
-      context.push('/login_view');
+      context.push('/login_view', extra: buttonCenter);
     }
   }
 
@@ -178,8 +182,11 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 itemsCount: itemsCount,
                 onPageSelected: (index) => _onPageSelected(index, cubit),
                 onPageSwiped: (index) => _onPageSwiped(index, cubit),
-                onProfileIconPressed: () =>
-                    _onProfileIconPressed(_isLoggedIn(authState), context),
+                onProfileIconPressed: (Offset center) => _onProfileIconPressed(
+                  isLoggedIn: _isLoggedIn(authState),
+                  context: context,
+                  buttonCenter: center,
+                ),
                 pageController: _pageController,
                 pageIndex: viewState.page,
                 pages: _pages,
@@ -188,6 +195,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 onAdminPressed: () => _onAdminPressed(context),
                 isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
                 cameraBounds: cameraBounds,
+                profileIconButtonKey: profileIconButtonKey,
               );
             },
           ),

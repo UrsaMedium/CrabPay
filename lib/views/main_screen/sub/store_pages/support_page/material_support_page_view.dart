@@ -109,9 +109,9 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom + 8,
-              right: 8,
-              left: 8,
+              bottom: MediaQuery.paddingOf(context).bottom + 10,
+              right: 6,
+              left: 6,
               child: Row(
                 crossAxisAlignment: .end,
                 children: [
