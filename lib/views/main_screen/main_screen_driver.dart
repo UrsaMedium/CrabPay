@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
@@ -27,7 +25,6 @@ class MainScreenDriver extends StatefulWidget {
 class _MainScreenDriverState extends State<MainScreenDriver> {
   late final PageController _pageController;
   bool _isSyncingByNavBarTap = false;
-  // final List<Rect> cameraBounds = [];
   final GlobalKey profileIconButtonKey = GlobalKey();
 
   @override
@@ -41,17 +38,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
     super.initState();
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   final cutouts = MediaQuery.displayFeaturesOf(
-  //     context,
-  //   ).where((element) => element.type == DisplayFeatureType.cutout);
-  //   for (var cutout in cutouts) {
-  //     cameraBounds.add(cutout.bounds);
-  //   }
-  //   super.didChangeDependencies();
-  // }
 
   @override
   void dispose() {
@@ -194,7 +180,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 onCasesPressed: () => _onCasesPressed(context),
                 onAdminPressed: () => _onAdminPressed(context),
                 isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
-                // cameraBounds: cameraBounds,
                 profileIconButtonKey: profileIconButtonKey,
               );
             },

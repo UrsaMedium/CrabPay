@@ -15,7 +15,6 @@ class MaterialMainScreenView extends StatelessWidget {
   final List<Widget> pages;
   final bool isLoggedIn;
   final bool isAdmin;
-  // final List<Rect> cameraBounds;
   final GlobalKey profileIconButtonKey;
   const MaterialMainScreenView({
     super.key,
@@ -30,7 +29,6 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onCasesPressed,
     required this.onAdminPressed,
     required this.isAdmin,
-    // required this.cameraBounds,
     required this.profileIconButtonKey,
   });
   @override
@@ -57,7 +55,6 @@ class MaterialMainScreenView extends StatelessWidget {
                 child: Container(
                   height: 46,
                   decoration: BoxDecoration(
-                    // borderRadius: .circular(22),
                     color: context.appColorScheme.surfaceContainer.withValues(
                       alpha: .8,
                     ),
@@ -136,21 +133,6 @@ class MaterialMainScreenView extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   bottom: 64,
-          //   left: 0,
-          //   right: 0,
-          //   child: ClipPath(
-          //     clipper: AppUpwardReveresClipper(
-          //       radius: inRadius,
-          //       isUpward: false,
-          //     ),
-          //     child: Container(
-          //       color: context.appColorScheme.surfaceContainerHigh,
-          //       height: inRadius,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
       bottomNavigationBar: ClipPath(

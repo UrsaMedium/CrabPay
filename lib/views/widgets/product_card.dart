@@ -15,12 +15,14 @@ class ProductCardDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String additionalSuffix; //tag identoty
   final int index; //tag identoty
+  final double? imageHeight;
   const ProductCardDriver({
     super.key,
     required this.openProductCardCallBack,
     required this.product,
     required this.additionalSuffix,
     required this.index,
+    this.imageHeight,
   });
 
   @override
@@ -60,6 +62,7 @@ class ProductCardDriver extends StatelessWidget {
       description: product.description,
       onProductCardPressed: onProductCardPressed,
       tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+      imageHeight: imageHeight,
     );
   }
 }
@@ -70,6 +73,7 @@ class MaterialProductCard extends StatelessWidget {
   final String imageUrl;
   final String productName;
   final String description;
+  final double? imageHeight;
   const MaterialProductCard({
     super.key,
     required this.onProductCardPressed,
@@ -77,11 +81,13 @@ class MaterialProductCard extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.tag,
+    this.imageHeight,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.all(0),
       clipBehavior: .antiAlias,
       shape: RoundedRectangleBorder(borderRadius: .circular(16)),
       color: context.appColorScheme.surfaceContainer,
@@ -104,7 +110,7 @@ class MaterialProductCard extends StatelessWidget {
                     imageUrl:
                         'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                     width: double.maxFinite,
-                    height: 190,
+                    height: imageHeight ?? 190,
                     fit: .cover,
                     errorWidget: (context, error, stackTrace) => Container(
                       color: context.appColorScheme.onInverseSurface,
@@ -124,7 +130,10 @@ class MaterialProductCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 2,
+                ),
                 child: Text(
                   productName,
                   maxLines: 1,
@@ -150,7 +159,10 @@ class MaterialProductCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 4,
+                ),
                 child: Text(
                   '\$2.49',
                   maxLines: 1,

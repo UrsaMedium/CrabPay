@@ -39,7 +39,7 @@ class MaterialStorePageView extends StatelessWidget {
                   sliver: SliverCrossAxisGroup(
                     slivers: [
                       SliverPadding(
-                        padding: .only(right: 1),
+                        padding: .only(right: 4),
                         sliver: SliverCrossAxisExpanded(
                           flex: 1,
                           sliver: SliverList.builder(
@@ -47,7 +47,7 @@ class MaterialStorePageView extends StatelessWidget {
                                 ? (products.length + 1) ~/ 2
                                 : (filterdProductList.length + 1) ~/ 2,
                             itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.only(top: 2.0),
+                              padding: const EdgeInsets.only(top: 8),
                               child: ProductCardDriver(
                                 product: filterdProductList.isEmpty
                                     ? products[index * 2]
@@ -62,7 +62,7 @@ class MaterialStorePageView extends StatelessWidget {
                         ),
                       ),
                       SliverPadding(
-                        padding: .only(left: 1),
+                        padding: .only(left: 4),
                         sliver: SliverCrossAxisExpanded(
                           flex: 1,
                           sliver: SliverList.builder(
@@ -71,7 +71,7 @@ class MaterialStorePageView extends StatelessWidget {
                                 : filterdProductList.length ~/ 2,
                             itemBuilder: (context, index) => Padding(
                               padding: EdgeInsets.only(
-                                top: index == 0 ? 60 : 2,
+                                top: index == 0 ? 60 : 8,
                               ),
                               child: ProductCardDriver(
                                 product: filterdProductList.isEmpty
