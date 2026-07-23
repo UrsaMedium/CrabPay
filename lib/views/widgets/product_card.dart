@@ -1,14 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crabpay/core/color_generator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCardDriver extends StatelessWidget {
   final OnOpenProductCardCallBack openProductCardCallBack;
@@ -27,51 +28,96 @@ class ProductCardDriver extends StatelessWidget {
     this.width,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    void onProductCardPressed() async {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'ProductCardDriver onProductCardPressed',
-        data: {'productId': product.id},
-      );
-      context.read<DatabaseBloc>().add(
-        DatabaseEventFetchProductFields(productId: product.id),
-      );
+  void _onProductCardPressed(BuildContext context) async {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'ProductCardDriver onProductCardPressed',
+      data: {'productId': product.id},
+    );
+    context.read<DatabaseBloc>().add(
+      DatabaseEventFetchProductFields(productId: product.id),
+    );
+    context.read<CartBloc>().add(
+      CartEventFetchProductCartItemAmount(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        productId: product.id,
+      ),
+    );
+    await openProductCardCallBack(
+      context: context,
+      productId: product.id,
+      additionalSuffix: additionalSuffix,
+      index: index,
+    );
+    if (context.mounted) {
       context.read<CartBloc>().add(
-        CartEventFetchProductCartItemAmount(
+        CartEventFetchUserCartItemAmount(
           userId: context.read<AuthBloc>().state.currentUser.id,
-          productId: product.id,
         ),
       );
-      await openProductCardCallBack(
-        context: context,
-        productId: product.id,
-        additionalSuffix: additionalSuffix,
-        index: index,
-      );
-      if (context.mounted) {
-        context.read<CartBloc>().add(
-          CartEventFetchUserCartItemAmount(
-            userId: context.read<AuthBloc>().state.currentUser.id,
-          ),
-        );
-      }
     }
+  }
 
-    return MaterialProductCard(
-      imageUrl: product.image,
-      productName: product.name,
-      description: product.description,
-      onProductCardPressed: onProductCardPressed,
-      tag: 'card-hero-${product.id}-$additionalSuffix-$index',
-      height: height,
-      width: width,
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => ProductCardCubit(),
+      child: Builder(
+        builder: (context) {
+          // final cardTintColor = context.select<ProductCardCubit, Color?>(
+          //   (cubit) => cubit.state.cardTintColor,
+          // );
+          // if (cardTintColor == null) {
+          //   context.read<ProductCardCubit>().cardTintColorExtractor(
+          //     context: context,
+          //     imageUrl: product.image,
+          //   );
+          // }
+          return MaterialProductCard(
+            imageUrl: product.image,
+            productName: product.name,
+            description: product.description,
+            onProductCardPressed: () => _onProductCardPressed(context),
+            tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+            height: height,
+            width: width,
+            // cardTintColor: cardTintColor, //TODO tinting
+          );
+        },
+      ),
     );
+  }
+}
+
+class ProductCardState {
+  final Color? cardTintColor;
+  ProductCardState({this.cardTintColor});
+}
+
+class ProductCardCubit extends Cubit<ProductCardState> {
+  ProductCardCubit() : super(ProductCardState());
+
+  Future<void> cardTintColorExtractor({
+    required BuildContext context,
+    required String imageUrl,
+  }) async {
+    CachedNetworkImageProvider?
+    cachedNetworkImageProvider = CachedNetworkImageProvider(
+      'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+    );
+
+    final retrievedColorScheme = MaterialColorExtractor.extractColorScheme(
+      imageProvider: cachedNetworkImageProvider,
+      context: context,
+      brightness: context.appColorScheme.brightness,
+    );
+    final colorScheme = await retrievedColorScheme;
+    emit(ProductCardState(cardTintColor: colorScheme?.primary));
   }
 }
 
 class MaterialProductCard extends StatelessWidget {
   final VoidCallback onProductCardPressed;
+  final Color? cardTintColor;
   final String tag;
   final String imageUrl;
   final String productName;
@@ -87,6 +133,7 @@ class MaterialProductCard extends StatelessWidget {
     required this.tag,
     this.height,
     this.width,
+    this.cardTintColor,
   });
 
   @override
@@ -100,17 +147,18 @@ class MaterialProductCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: .circular(16)),
         color: context.appColorScheme.surfaceContainer,
         elevation: 5,
+        surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
         child: GestureDetector(
           onTap: onProductCardPressed,
-          child: Hero(
-            tag: tag,
-            createRectTween: (begin, end) =>
-                MaterialRectArcTween(begin: begin, end: end),
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Hero(
+                  tag: tag,
+                  createRectTween: (begin, end) =>
+                      MaterialRectArcTween(begin: begin, end: end),
                   child: Material(
                     borderRadius: .circular(12),
                     clipBehavior: .antiAlias,
@@ -137,53 +185,55 @@ class MaterialProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 2,
+                ),
+                child: Text(
+                  productName,
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: .w700,
+                    color: context.appColorScheme.onPrimaryContainer,
                   ),
-                  child: Text(
-                    productName,
-                    maxLines: 1,
-                    overflow: .ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: .w800,
-                      color: context.appColorScheme.onPrimaryContainer,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  'Battle Pass & Credits',
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: .w400,
+                    color: context.appColorScheme.onSurface.withValues(
+                      alpha: .7,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    'Battle Pass & Credits',
-                    maxLines: 1,
-                    overflow: .ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: .w400,
-                      color: context.appColorScheme.onSurface,
-                    ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 4,
+                ),
+                child: Text(
+                  '\$2.49',
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: .w900,
+                    color: context.appColorScheme.onSurface,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 4,
-                  ),
-                  child: Text(
-                    '\$2.49',
-                    maxLines: 1,
-                    overflow: .ellipsis,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: .w900,
-                      color: context.appColorScheme.onSurface,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

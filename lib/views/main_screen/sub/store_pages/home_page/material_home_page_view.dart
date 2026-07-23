@@ -39,7 +39,7 @@ class MaterialHomePageView extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: context.appColorScheme.tertiaryContainer,
-                    borderRadius: .circular(24),
+                    borderRadius: .circular(22),
                   ),
                   height: 370,
                   child: featuredProducts.isNotEmpty
@@ -131,7 +131,7 @@ class MaterialHomePageView extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: context.appColorScheme.surfaceContainer,
-                    borderRadius: .circular(24),
+                    borderRadius: .circular(22),
                   ),
                   child: Stack(
                     children: [
