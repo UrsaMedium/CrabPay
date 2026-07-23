@@ -15,14 +15,16 @@ class ProductCardDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String additionalSuffix; //tag identoty
   final int index; //tag identoty
-  final double? imageHeight;
+  final double? height;
+  final double? width;
   const ProductCardDriver({
     super.key,
     required this.openProductCardCallBack,
     required this.product,
     required this.additionalSuffix,
     required this.index,
-    this.imageHeight,
+    this.height,
+    this.width,
   });
 
   @override
@@ -62,7 +64,8 @@ class ProductCardDriver extends StatelessWidget {
       description: product.description,
       onProductCardPressed: onProductCardPressed,
       tag: 'card-hero-${product.id}-$additionalSuffix-$index',
-      imageHeight: imageHeight,
+      height: height,
+      width: width,
     );
   }
 }
@@ -73,7 +76,8 @@ class MaterialProductCard extends StatelessWidget {
   final String imageUrl;
   final String productName;
   final String description;
-  final double? imageHeight;
+  final double? height;
+  final double? width;
   const MaterialProductCard({
     super.key,
     required this.onProductCardPressed,
@@ -81,100 +85,105 @@ class MaterialProductCard extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.tag,
-    this.imageHeight,
+    this.height,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(0),
-      clipBehavior: .antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: .circular(16)),
-      color: context.appColorScheme.surfaceContainer,
-      elevation: 5,
-      child: GestureDetector(
-        onTap: onProductCardPressed,
-        child: Hero(
-          tag: tag,
-          createRectTween: (begin, end) =>
-              MaterialRectArcTween(begin: begin, end: end),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Material(
-                  borderRadius: .circular(12),
-                  clipBehavior: .antiAlias,
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                    width: double.maxFinite,
-                    height: imageHeight ?? 190,
-                    fit: .cover,
-                    errorWidget: (context, error, stackTrace) => Container(
-                      color: context.appColorScheme.onInverseSurface,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.broken_image,
-                        color: context.appColorScheme.inversePrimary,
-                        size: 48,
+    return SizedBox(
+      height: height ?? 266,
+      width: width ?? 168,
+      child: Card(
+        margin: EdgeInsets.all(0),
+        clipBehavior: .antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+        color: context.appColorScheme.surfaceContainer,
+        elevation: 5,
+        child: GestureDetector(
+          onTap: onProductCardPressed,
+          child: Hero(
+            tag: tag,
+            createRectTween: (begin, end) =>
+                MaterialRectArcTween(begin: begin, end: end),
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Material(
+                    borderRadius: .circular(12),
+                    clipBehavior: .antiAlias,
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                      width: double.maxFinite,
+                      height: height != null ? (height! - 98) : 168,
+                      fit: .cover,
+                      errorWidget: (context, error, stackTrace) => Container(
+                        color: context.appColorScheme.onInverseSurface,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.broken_image,
+                          color: context.appColorScheme.inversePrimary,
+                          size: 48,
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        color: context.appColorScheme.onInverseSurface,
+                        alignment: .center,
+                        child: const CircularProgressIndicator(),
                       ),
                     ),
-                    placeholder: (context, url) => Container(
-                      color: context.appColorScheme.onInverseSurface,
-                      alignment: .center,
-                      child: const CircularProgressIndicator(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 2,
+                  ),
+                  child: Text(
+                    productName,
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: .w800,
+                      color: context.appColorScheme.onPrimaryContainer,
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 2,
-                ),
-                child: Text(
-                  productName,
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: .w800,
-                    color: context.appColorScheme.onPrimaryContainer,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    'Battle Pass & Credits',
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: .w400,
+                      color: context.appColorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text(
-                  'Battle Pass & Credits',
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: .w400,
-                    color: context.appColorScheme.onSurface,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 4,
+                  ),
+                  child: Text(
+                    '\$2.49',
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: .w900,
+                      color: context.appColorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 4,
-                ),
-                child: Text(
-                  '\$2.49',
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: .w900,
-                    color: context.appColorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

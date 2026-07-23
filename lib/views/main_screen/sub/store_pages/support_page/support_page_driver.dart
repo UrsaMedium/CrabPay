@@ -27,7 +27,6 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
       message: 'SupportPageDriver initState',
     );
     _textEditingController = TextEditingController();
-    // _scrollController.addListener(listener);
     super.initState();
   }
 

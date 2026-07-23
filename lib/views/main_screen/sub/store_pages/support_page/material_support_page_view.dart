@@ -39,7 +39,8 @@ class MaterialSupportPageView extends StatelessWidget {
               padding: EdgeInsets.only(
                 top: MediaQuery.paddingOf(context).top + 148,
                 bottom:
-                    MediaQuery.paddingOf(context).bottom + 64 - cornerRadius,
+                    MediaQuery.paddingOf(context).bottom +
+                    64, // - cornerRadius,
               ),
               itemBuilder: (context, index) {
                 return ChatBubbleDriver(
@@ -93,7 +94,8 @@ class MaterialSupportPageView extends StatelessWidget {
             if (showDownArrow)
               Positioned(
                 bottom:
-                    MediaQuery.paddingOf(context).bottom + 84 - cornerRadius,
+                    MediaQuery.paddingOf(context).bottom +
+                    84, // - cornerRadius,
                 right: 16,
                 child: Container(
                   decoration: BoxDecoration(
@@ -111,7 +113,8 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom + 10 - cornerRadius,
+              bottom:
+                  MediaQuery.paddingOf(context).bottom + 10, // - cornerRadius,
               right: 4,
               left: 4,
               child: Material(
@@ -153,6 +156,16 @@ class MaterialSupportPageView extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.paddingOf(context).bottom - cornerRadius,
+              left: 2 * cornerRadius,
+              right: 2 * cornerRadius,
+              child: Text(
+                '🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀',
+                maxLines: 1,
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ],

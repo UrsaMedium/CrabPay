@@ -41,7 +41,7 @@ class MaterialHomePageView extends StatelessWidget {
                     color: context.appColorScheme.tertiaryContainer,
                     borderRadius: .circular(24),
                   ),
-                  height: 330,
+                  height: 370,
                   child: featuredProducts.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -55,6 +55,7 @@ class MaterialHomePageView extends StatelessWidget {
                                 children: [
                                   Container(
                                     width: featuredContainerHalfWidth,
+                                    height: 68,
                                     decoration: BoxDecoration(
                                       borderRadius: .circular(16),
                                       color: context
@@ -65,7 +66,8 @@ class MaterialHomePageView extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'Featured Deals',
+                                          'Featured\nDeals',
+                                          textAlign: .center,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: .w700,
@@ -77,17 +79,14 @@ class MaterialHomePageView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  ProductCardDriver(
+                                    openProductCardCallBack:
+                                        openProductCardCallBack,
+                                    product: featuredProducts[0],
+                                    additionalSuffix: 'featuredProduct',
+                                    index: 0,
                                     width: featuredContainerHalfWidth,
-                                    // height: 300 - 68,
-                                    child: ProductCardDriver(
-                                      openProductCardCallBack:
-                                          openProductCardCallBack,
-                                      product: featuredProducts[0],
-                                      additionalSuffix: 'featuredProduct',
-                                      index: 0,
-                                      imageHeight: 190 - 15,
-                                    ),
+                                    height: 278,
                                   ),
                                 ],
                               ),
@@ -95,29 +94,23 @@ class MaterialHomePageView extends StatelessWidget {
                                 spacing: 8,
                                 crossAxisAlignment: .start,
                                 children: [
-                                  SizedBox(
+                                  ProductCardDriver(
+                                    openProductCardCallBack:
+                                        openProductCardCallBack,
+                                    product: featuredProducts[1],
+                                    additionalSuffix: 'featuredProduct',
+                                    index: 1,
                                     width: featuredContainerHalfWidth,
-                                    // height: 300 - 68,
-                                    child: ProductCardDriver(
-                                      openProductCardCallBack:
-                                          openProductCardCallBack,
-                                      product: featuredProducts[1],
-                                      additionalSuffix: 'featuredProduct',
-                                      index: 1,
-                                      imageHeight: 64,
-                                    ),
+                                    height: 173,
                                   ),
-                                  SizedBox(
+                                  ProductCardDriver(
+                                    openProductCardCallBack:
+                                        openProductCardCallBack,
+                                    product: featuredProducts[2],
+                                    additionalSuffix: 'featuredProduct',
+                                    index: 2,
                                     width: featuredContainerHalfWidth,
-                                    // height: 300 - 68,
-                                    child: ProductCardDriver(
-                                      openProductCardCallBack:
-                                          openProductCardCallBack,
-                                      product: featuredProducts[2],
-                                      additionalSuffix: 'featuredProduct',
-                                      index: 2,
-                                      imageHeight: 64,
-                                    ),
+                                    height: 173,
                                   ),
                                 ],
                               ),
