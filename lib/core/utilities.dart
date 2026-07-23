@@ -14,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+const inRadius = 24.0;
+
 final getIt = GetIt.instance;
 
 extension ContextExtensions on BuildContext {

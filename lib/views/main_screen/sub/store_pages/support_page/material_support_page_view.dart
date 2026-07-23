@@ -38,7 +38,8 @@ class MaterialSupportPageView extends StatelessWidget {
               itemCount: messages.length,
               padding: EdgeInsets.only(
                 top: MediaQuery.paddingOf(context).top + 148,
-                bottom: MediaQuery.paddingOf(context).bottom + 64,
+                bottom:
+                    MediaQuery.paddingOf(context).bottom + 64 - cornerRadius,
               ),
               itemBuilder: (context, index) {
                 return ChatBubbleDriver(
@@ -91,7 +92,8 @@ class MaterialSupportPageView extends StatelessWidget {
             ),
             if (showDownArrow)
               Positioned(
-                bottom: MediaQuery.paddingOf(context).bottom + 84,
+                bottom:
+                    MediaQuery.paddingOf(context).bottom + 84 - cornerRadius,
                 right: 16,
                 child: Container(
                   decoration: BoxDecoration(
@@ -109,65 +111,48 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom + 10,
-              right: 6,
-              left: 6,
-              child: Row(
-                crossAxisAlignment: .end,
-                children: [
-                  Expanded(
-                    child: Material(
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: .circular(cornerRadius),
-                      ),
-                      clipBehavior: .antiAlias,
-                      child: BackdropFilter(
-                        filter: .blur(sigmaX: 5, sigmaY: 5),
-                        child: TextField(
-                          controller: textEditingController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 4,
-                          minLines: 1,
-                          decoration: InputDecoration(
-                            fillColor: context.appColorScheme.primaryContainer
-                                .withValues(alpha: 0.6),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hint: Text('Type your question...'),
-                            filled: true,
-                          ),
-                        ),
-                      ),
+              bottom: MediaQuery.paddingOf(context).bottom + 10 - cornerRadius,
+              right: 4,
+              left: 4,
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: .circular(22),
+                clipBehavior: .antiAlias,
+                child: BackdropFilter(
+                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(
+                    color: context.appColorScheme.primaryContainer.withValues(
+                      alpha: .8,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: ClipRRect(
-                      borderRadius: .circular(30),
-                      child: BackdropFilter(
-                        filter: .blur(sigmaX: 5, sigmaY: 5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: context.appColorScheme.primaryContainer
-                                .withValues(alpha: 0.6),
-                            borderRadius: .circular(cornerRadius),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 2),
-                            child: IconButton(
-                              onPressed: onSendPressed,
-                              icon: Icon(Icons.send),
+                    child: Row(
+                      crossAxisAlignment: .end,
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: textEditingController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 4,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              fillColor: Colors.transparent,
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hint: Text('Type your question...'),
+                              filled: true,
                             ),
                           ),
                         ),
-                      ),
+                        IconButton(
+                          onPressed: onSendPressed,
+                          icon: Icon(Icons.send),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ],

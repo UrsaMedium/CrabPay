@@ -67,8 +67,8 @@ class _MaterialStoreSearchBarViewState
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.paddingOf(context).top + 46 + 16,
-      right: 32,
+      top: MediaQuery.paddingOf(context).top + 46 + 12,
+      right: 0,
       child: ClipRRect(
         borderRadius: .circular(30),
         child: AnimatedSize(
@@ -95,46 +95,62 @@ class _MaterialStoreSearchBarViewState
   }
 
   Widget _collapsedSearchBar(BuildContext context) {
-    return ClipRRect(
-      borderRadius: .circular(30),
-      child: BackdropFilter(
-        filter: .blur(sigmaX: 12, sigmaY: 12),
-        child: GestureDetector(
-          onTap: widget.onOpenSearch,
-          child: Container(
-            decoration: BoxDecoration(
-              color: context.appColorScheme.surfaceContainerHigh.withValues(
-                alpha: .6,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: ClipRRect(
+        borderRadius: .circular(30),
+        child: BackdropFilter(
+          filter: .blur(sigmaX: 12, sigmaY: 12),
+          child: GestureDetector(
+            onTap: widget.onOpenSearch,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.widthOf(context) / 2 - 12,
               ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 24),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 2.0),
-                    child: Text(
-                      _isUserInputEmpty() ? 'Search' : widget.controller.text,
-                      style: const TextStyle(fontWeight: .w500),
+              decoration: BoxDecoration(
+                color: context.appColorScheme.surfaceContainerHigh.withValues(
+                  alpha: .6,
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Row(
+                  mainAxisSize: .min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 2.0),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.widthOf(context) / 2 - 12 - 98,
+                        ),
+                        child: Text(
+                          maxLines: 1,
+                          _isUserInputEmpty()
+                              ? 'Search'
+                              : widget.controller.text,
+                          overflow: .ellipsis,
+                          style: const TextStyle(fontWeight: .w500),
+                        ),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: _isUserInputEmpty()
-                        ? widget.onOpenSearch
-                        : () {
-                            _materialSearchController.clear();
-                            widget.onClear();
-                          },
-                    icon: Icon(
-                      _isUserInputEmpty()
-                          ? Icons.search_rounded
-                          : Icons.clear_rounded,
+                    IconButton(
+                      onPressed: _isUserInputEmpty()
+                          ? widget.onOpenSearch
+                          : () {
+                              _materialSearchController.clear();
+                              widget.onClear();
+                            },
+                      icon: Icon(
+                        _isUserInputEmpty()
+                            ? Icons.search_rounded
+                            : Icons.clear_rounded,
+                      ),
+                      iconSize: 30,
+                      constraints: const BoxConstraints(minWidth: 70),
                     ),
-                    iconSize: 30,
-                    constraints: const BoxConstraints(minWidth: 70),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -145,44 +161,47 @@ class _MaterialStoreSearchBarViewState
 
   Widget _expandedSearchBar(BuildContext context) {
     double transparenvyLevel = .96;
-    return Container(
-      width: MediaQuery.sizeOf(context).width - 64,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-      child: SearchAnchor.bar(
-        searchController: _materialSearchController,
-        suggestionsBuilder: (context, controller) {
-          final query = controller.text.toLowerCase().trim();
-          final suggestions = widget.products
-              .where((option) => option.name.toLowerCase().contains(query))
-              .map(
-                (option) => ListTile(
-                  title: Text(option.name),
-                  onTap: () {
-                    final index = widget.products.indexOf(option);
-                    controller.closeView(option.name);
-                    widget.onProductSelected(context, option, index);
-                  },
-                ),
-              );
-          return suggestions.toList();
-        },
-        onSubmitted: (value) {
-          _materialSearchController.closeView(value);
-          widget.onSubmitted(value);
-        },
-        isFullScreen: false,
-        shrinkWrap: true,
-        dividerColor: Colors.transparent,
-        barBackgroundColor: WidgetStateProperty.all(
-          context.appColorScheme.surfaceContainerHigh.withValues(
-            alpha: transparenvyLevel,
+    return Padding(
+      padding: const EdgeInsets.only(right: 32),
+      child: Container(
+        width: MediaQuery.sizeOf(context).width - 64,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        child: SearchAnchor.bar(
+          searchController: _materialSearchController,
+          suggestionsBuilder: (context, controller) {
+            final query = controller.text.toLowerCase().trim();
+            final suggestions = widget.products
+                .where((option) => option.name.toLowerCase().contains(query))
+                .map(
+                  (option) => ListTile(
+                    title: Text(option.name),
+                    onTap: () {
+                      final index = widget.products.indexOf(option);
+                      controller.closeView(option.name);
+                      widget.onProductSelected(context, option, index);
+                    },
+                  ),
+                );
+            return suggestions.toList();
+          },
+          onSubmitted: (value) {
+            _materialSearchController.closeView(value);
+            widget.onSubmitted(value);
+          },
+          isFullScreen: false,
+          shrinkWrap: true,
+          dividerColor: Colors.transparent,
+          barBackgroundColor: WidgetStateProperty.all(
+            context.appColorScheme.surfaceContainerHigh.withValues(
+              alpha: transparenvyLevel,
+            ),
           ),
-        ),
-        viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
-            .withValues(alpha: transparenvyLevel),
-        viewConstraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width - 64,
-          maxHeight: 314,
+          viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
+              .withValues(alpha: transparenvyLevel),
+          viewConstraints: BoxConstraints(
+            maxWidth: MediaQuery.sizeOf(context).width - 64,
+            maxHeight: 314,
+          ),
         ),
       ),
     );

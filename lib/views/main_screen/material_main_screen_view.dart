@@ -15,7 +15,7 @@ class MaterialMainScreenView extends StatelessWidget {
   final List<Widget> pages;
   final bool isLoggedIn;
   final bool isAdmin;
-  final List<Rect> cameraBounds;
+  // final List<Rect> cameraBounds;
   final GlobalKey profileIconButtonKey;
   const MaterialMainScreenView({
     super.key,
@@ -30,12 +30,11 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onCasesPressed,
     required this.onAdminPressed,
     required this.isAdmin,
-    required this.cameraBounds,
+    // required this.cameraBounds,
     required this.profileIconButtonKey,
   });
   @override
   Widget build(BuildContext context) {
-    final inRadius = 28.0;
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -49,10 +48,10 @@ class MaterialMainScreenView extends StatelessWidget {
           ),
           Positioned(
             top: MediaQuery.paddingOf(context).top + 2,
-            left: 6,
-            right: 6,
+            left: 8,
+            right: 8,
             child: ClipRRect(
-              borderRadius: .circular(22),
+              borderRadius: .circular(20),
               child: BackdropFilter(
                 filter: .blur(sigmaX: 12, sigmaY: 8),
                 child: Container(
@@ -89,7 +88,8 @@ class MaterialMainScreenView extends StatelessWidget {
                         ),
                       isLoggedIn
                           ? IconButton(
-                              onPressed: onProfileIconPressed(Offset(0, 0)),
+                              onPressed: () =>
+                                  onProfileIconPressed(Offset(0, 0)),
                               icon: Icon(Icons.account_circle_rounded),
                             )
                           : IconButton(
@@ -132,66 +132,81 @@ class MaterialMainScreenView extends StatelessWidget {
               filter: .blur(sigmaX: 8, sigmaY: 8),
               child: Container(
                 color: context.appColorScheme.surfaceContainerHigh,
-                height: cameraBounds.first.height + inRadius - 4,
+                height: MediaQuery.paddingOf(context).top + inRadius - 4,
               ),
             ),
           ),
-          Positioned(
-            bottom: 64,
-            left: 0,
-            right: 0,
-            child: ClipPath(
-              clipper: AppUpwardReveresClipper(
-                radius: inRadius,
-                isUpward: false,
-              ),
-              child: Container(
-                color: context.appColorScheme.surfaceContainerHigh,
-                height: inRadius,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 64,
+          //   left: 0,
+          //   right: 0,
+          //   child: ClipPath(
+          //     clipper: AppUpwardReveresClipper(
+          //       radius: inRadius,
+          //       isUpward: false,
+          //     ),
+          //     child: Container(
+          //       color: context.appColorScheme.surfaceContainerHigh,
+          //       height: inRadius,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: pageIndex,
-        height: 64,
-        onDestinationSelected: onPageSelected,
-        backgroundColor: context.appColorScheme.surfaceContainerHigh,
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.storefront_outlined),
-            selectedIcon: Icon(Icons.storefront),
-            label: 'Store',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.message_outlined),
-            selectedIcon: Icon(Icons.message_rounded),
-            label: 'Ask',
-          ),
-          NavigationDestination(
-            icon: Badge(
-              backgroundColor: context.appColorScheme.error,
-              textColor: context.appColorScheme.onError,
-              label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-              isLabelVisible: itemsCount > 0,
-              child: Icon(Icons.shopping_cart_checkout_outlined),
+      bottomNavigationBar: ClipPath(
+        clipper: AppUpwardReveresClipper(radius: inRadius, isUpward: false),
+        child: NavigationBar(
+          selectedIndex: pageIndex,
+          height: 64 + inRadius,
+          onDestinationSelected: onPageSelected,
+          backgroundColor: context.appColorScheme.surfaceContainerHigh,
+          destinations: [
+            Padding(
+              padding: const EdgeInsets.only(top: inRadius),
+              child: NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home_filled),
+                label: 'Home',
+              ),
             ),
-            selectedIcon: Badge(
-              backgroundColor: context.appColorScheme.error,
-              textColor: context.appColorScheme.onError,
-              label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-              isLabelVisible: itemsCount > 0,
-              child: Icon(Icons.shopping_cart_rounded),
+            Padding(
+              padding: const EdgeInsets.only(top: inRadius),
+              child: NavigationDestination(
+                icon: Icon(Icons.storefront_outlined),
+                selectedIcon: Icon(Icons.storefront),
+                label: 'Store',
+              ),
             ),
-            label: 'Cart',
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: inRadius),
+              child: NavigationDestination(
+                icon: Icon(Icons.message_outlined),
+                selectedIcon: Icon(Icons.message_rounded),
+                label: 'Ask',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: inRadius),
+              child: NavigationDestination(
+                icon: Badge(
+                  backgroundColor: context.appColorScheme.error,
+                  textColor: context.appColorScheme.onError,
+                  label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+                  isLabelVisible: itemsCount > 0,
+                  child: Icon(Icons.shopping_cart_checkout_outlined),
+                ),
+                selectedIcon: Badge(
+                  backgroundColor: context.appColorScheme.error,
+                  textColor: context.appColorScheme.onError,
+                  label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+                  isLabelVisible: itemsCount > 0,
+                  child: Icon(Icons.shopping_cart_rounded),
+                ),
+                label: 'Cart',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

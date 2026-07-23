@@ -81,81 +81,88 @@ class MaterialProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      child: Card(
-        clipBehavior: .antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: .circular(32),
-          side: BorderSide(
-            color: context.appColorScheme.primary.withValues(alpha: .3),
-          ),
-        ),
-        color: context.appColorScheme.surfaceContainer,
-        child: GestureDetector(
-          onTap: onProductCardPressed,
-          child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: SizedBox(
-              height: 148,
-              child: Hero(
-                tag: tag,
-                createRectTween: (begin, end) =>
-                    MaterialRectArcTween(begin: begin, end: end),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadiusGeometry.all(
-                        Radius.circular(32),
-                      ),
-                      clipBehavior: .antiAlias,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                        width: double.infinity,
-                        height: 200,
-                        fit: .cover,
-                        errorWidget: (context, error, stackTrace) => Container(
-                          color: context.appColorScheme.onInverseSurface,
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.broken_image,
-                            color: context.appColorScheme.inversePrimary,
-                            size: 48,
-                          ),
-                        ),
-                        placeholder: (context, url) => Container(
-                          color: context.appColorScheme.onInverseSurface,
-                          alignment: .center,
-                          child: const CircularProgressIndicator(),
-                        ),
+    return Card(
+      clipBehavior: .antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+      color: context.appColorScheme.surfaceContainer,
+      elevation: 5,
+      child: GestureDetector(
+        onTap: onProductCardPressed,
+        child: Hero(
+          tag: tag,
+          createRectTween: (begin, end) =>
+              MaterialRectArcTween(begin: begin, end: end),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Material(
+                  borderRadius: .circular(12),
+                  clipBehavior: .antiAlias,
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                    width: double.maxFinite,
+                    height: 190,
+                    fit: .cover,
+                    errorWidget: (context, error, stackTrace) => Container(
+                      color: context.appColorScheme.onInverseSurface,
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.broken_image,
+                        color: context.appColorScheme.inversePrimary,
+                        size: 48,
                       ),
                     ),
-                    Positioned(
-                      bottom: 16,
-                      left: 32,
-                      child: Container(
-                        padding: .symmetric(horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          color: context.appColorScheme.primaryContainer,
-                        ),
-                        child: Material(
-                          type: .transparency,
-                          child: Text(
-                            productName,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: context.appColorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                      ),
+                    placeholder: (context, url) => Container(
+                      color: context.appColorScheme.onInverseSurface,
+                      alignment: .center,
+                      child: const CircularProgressIndicator(),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+                child: Text(
+                  productName,
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: .w800,
+                    color: context.appColorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  'Battle Pass & Credits',
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: .w400,
+                    color: context.appColorScheme.onSurface,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
+                child: Text(
+                  '\$2.49',
+                  maxLines: 1,
+                  overflow: .ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: .w900,
+                    color: context.appColorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -72,7 +72,8 @@ class MaterialCartPageView extends StatelessWidget {
                                     top: 8,
                                     bottom:
                                         MediaQuery.paddingOf(context).bottom +
-                                        64,
+                                        64 -
+                                        cornerRadius,
                                   ),
                                   shrinkWrap: true,
                                   itemExtent: 86,
@@ -95,7 +96,10 @@ class MaterialCartPageView extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      bottom: MediaQuery.paddingOf(context).bottom + 18,
+                      bottom:
+                          MediaQuery.paddingOf(context).bottom +
+                          18 -
+                          cornerRadius,
                       right: 16,
                       left: 16,
                       child: Material(
@@ -145,10 +149,7 @@ class MaterialCartPageView extends StatelessWidget {
                                             context.appColorScheme.primary,
                                         foregroundColor:
                                             context.appColorScheme.onPrimary,
-                                        minimumSize: Size(
-                                          double.maxFinite,
-                                          50,
-                                        ),
+                                        minimumSize: Size(double.maxFinite, 50),
                                       ),
                                       child: Text(
                                         'Checkout',
