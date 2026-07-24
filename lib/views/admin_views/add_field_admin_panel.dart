@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/field_constructor_bottom_sheet.dart';
@@ -27,16 +28,28 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
 
   @override
   void initState() {
-    final originalFieldsList = context.read<DatabaseBloc>().state.productFields;
-    if (originalFieldsList != null) {
-      for (var field in originalFieldsList) {
-        _fieldNames.add(field.fieldName);
-      }
+    if (widget.productId == null) {
+      context.pop();
     }
+    final originalFieldsList = context
+        .read<DatabaseBloc>()
+        .state
+        .cachedProductFields?[widget.productId];
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message:
           'AddFieldAdminPanelView: initState: originalFieldsList: $originalFieldsList',
     );
+    if (originalFieldsList != null) {
+      for (var field in originalFieldsList) {
+        _fieldNames.add(field.fieldName);
+      }
+    } else {
+      Fluttertoast.showToast(msg: 'Db error, try again');
+      context.read<DatabaseBloc>().add(
+        DatabaseEventFetchProductFields(productId: widget.productId!),
+      );
+      context.pop();
+    }
     super.initState();
   }
 

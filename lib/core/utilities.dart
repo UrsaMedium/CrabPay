@@ -187,10 +187,16 @@ Future<void> openProductCardCallBack({
 }) async {
   print('pushed $productId + $additionalSuffix + $index');
   //data prefetching
-  context.read<DatabaseBloc>().add(
-    DatabaseEventFetchProductFields(productId: productId),
-  );
-  // final currentUser = context.read<AuthBloc>().state.currentUser ?? appTempUser;
+  if (context
+          .read<DatabaseBloc>()
+          .state
+          .cachedProductFields?[productId]
+          ?.isEmpty ??
+      true) {
+    context.read<DatabaseBloc>().add(
+      DatabaseEventFetchProductFields(productId: productId),
+    );
+  }
   context.read<CartBloc>().add(
     CartEventFetchProductCartItemAmount(
       userId: context.read<AuthBloc>().state.currentUser.id,
@@ -210,6 +216,11 @@ Future<void> openProductCardCallBack({
   if (context.mounted) {
     context.read<CartBloc>().add(
       CartEventFetchUserCartItemAmount(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+      ),
+    );
+    context.read<DatabaseBloc>().add(
+      DatabaseEventFetchUserPreferences(
         userId: context.read<AuthBloc>().state.currentUser.id,
       ),
     );

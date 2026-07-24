@@ -55,8 +55,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
-
 void setupDependencies() {
   getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
 }
@@ -288,19 +286,27 @@ final GoRouter _router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/update_field_admin_panel_view/:fieldId',
+      path: '/update_field_admin_panel_view/:fieldId/:productId',
       name: 'update_field_admin_panel_view',
       builder: (context, state) {
         final fieldId = state.pathParameters['fieldId'];
-        return UpdateFieldAdminPanelView(fieldId: fieldId);
+        final productId = state.pathParameters['productId'];
+        return UpdateFieldAdminPanelView(
+          fieldId: fieldId,
+          productId: productId,
+        );
       },
     ),
     GoRoute(
-      path: '/update_price_images_field_admin_panel_view/:fieldId',
+      path: '/update_price_images_field_admin_panel_view/:fieldId/:productId',
       name: 'update_price_images_field_admin_panel_view',
       builder: (context, state) {
         final fieldId = state.pathParameters['fieldId'];
-        return UpdatePriceImagesFieldAdminPanelView(fieldId: fieldId);
+        final productId = state.pathParameters['productId'];
+        return UpdatePriceImagesFieldAdminPanelView(
+          fieldId: fieldId,
+          productId: productId,
+        );
       },
     ),
     GoRoute(

@@ -14,7 +14,12 @@ import 'package:go_router/go_router.dart';
 class UpdateFieldAdminPanelView extends StatefulWidget {
   static const routeName = 'update_field_admin_panel_view';
   final String? fieldId;
-  const UpdateFieldAdminPanelView({super.key, required this.fieldId});
+  final String? productId;
+  const UpdateFieldAdminPanelView({
+    super.key,
+    required this.fieldId,
+    required this.productId,
+  });
 
   @override
   State<UpdateFieldAdminPanelView> createState() =>
@@ -28,10 +33,18 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
 
   @override
   void initState() {
+    if (widget.fieldId == null || widget.productId == null) {
+      Fluttertoast.showToast(msg: 'Failed to pass field data');
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message:
+            'UpdateFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
+      );
+      context.pop();
+    }
     _currentField = context
         .read<DatabaseBloc>()
         .state
-        .productFields
+        .cachedProductFields![widget.productId]
         ?.firstWhere((element) => element.id == widget.fieldId);
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message:

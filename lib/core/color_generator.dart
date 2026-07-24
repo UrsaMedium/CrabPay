@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 class MaterialColorExtractor {
-  static Future<ColorScheme?> extractColorScheme({
+  static Future<int?> extractColorScheme({
     required ImageProvider imageProvider,
-    required BuildContext context,
-    Brightness brightness = Brightness.dark,
     Size targetSize = const Size(100, 100),
   }) async {
     final ImageProvider resizedProvider = ResizeImage(
@@ -68,9 +66,6 @@ class MaterialColorExtractor {
 
     if (primarySeedRgb == null) return null;
 
-    return ColorScheme.fromSeed(
-      seedColor: Color(primarySeedRgb),
-      brightness: brightness,
-    );
+    return primarySeedRgb;
   }
 }

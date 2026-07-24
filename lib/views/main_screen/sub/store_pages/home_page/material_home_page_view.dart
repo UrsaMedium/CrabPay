@@ -167,6 +167,13 @@ class MaterialHomePageView extends StatelessWidget {
                                                     openProductCardCallBack:
                                                         onOpenProductCardCallBack,
                                                     index: index,
+                                                    height: 256,
+                                                    width:
+                                                        (MediaQuery.widthOf(
+                                                              context,
+                                                            ) -
+                                                            24) /
+                                                        2,
                                                   ),
                                                 ),
                                           ),
@@ -194,6 +201,13 @@ class MaterialHomePageView extends StatelessWidget {
                                                     openProductCardCallBack:
                                                         onOpenProductCardCallBack,
                                                     index: index,
+                                                    height: 256,
+                                                    width:
+                                                        (MediaQuery.widthOf(
+                                                              context,
+                                                            ) -
+                                                            24) /
+                                                        2,
                                                   ),
                                                 ),
                                           ),

@@ -433,7 +433,10 @@ class MaterialBuyBottomSheet extends StatelessWidget {
                               onPressed: () {
                                 context.pushNamed(
                                   'update_price_images_field_admin_panel_view',
-                                  pathParameters: {'fieldId': field.id},
+                                  pathParameters: {
+                                    'fieldId': field.id,
+                                    'productId': product.id,
+                                  },
                                 );
                               },
                               icon: Icon(Icons.price_change_rounded),
@@ -449,7 +452,10 @@ class MaterialBuyBottomSheet extends StatelessWidget {
                             onPressed: () {
                               context.pushNamed(
                                 'update_field_admin_panel_view',
-                                pathParameters: {'fieldId': field.id},
+                                pathParameters: {
+                                  'fieldId': field.id,
+                                  'productId': product.id,
+                                },
                               );
                             },
                             icon: Icon(Icons.settings),

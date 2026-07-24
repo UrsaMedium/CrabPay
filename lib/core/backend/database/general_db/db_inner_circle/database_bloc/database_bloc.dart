@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
+import 'package:crabpay/core/color_generator.dart';
 // import 'package:uuid/uuid.dart';
 // import 'package:uuid/v4.dart';
 
@@ -64,16 +66,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    on<DatabaseEventFlushData>((event, emit) {
+    on<DatabaseEventFlushUserData>((event, emit) {
       try {
         emit(
           state.copyWith(
-            productFields: null,
+            // productFields: null,
             userPreferences: null,
-            currencies: null,
-            featuredProducts: null,
-            products: null,
-            states: DatabaseStates.flushed,
+            // currencies: null,
+            // featuredProducts: null,
+            // products: null,
+            states: DatabaseStates.flushedUserData,
           ),
         );
       } catch (e) {
@@ -110,15 +112,18 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('--- DatabaseEventFetchProductFields fired');
       print('---');
       try {
-        emit(
-          state.copyWith(productFields: null, states: DatabaseStates.dbLoading),
-        );
+        emit(state.copyWith(states: DatabaseStates.dbLoading));
         final productFields = await databaseHandler.fetchProductFields(
           productId: event.productId,
         );
+        if (productFields == null) throw Exception;
+        var oldMap = state.cachedProductFields;
+        oldMap ??= {};
+        oldMap[event.productId] = productFields;
         emit(
           state.copyWith(
-            productFields: productFields,
+            // productFields: productFields,
+            cachedProductFields: oldMap,
             states: DatabaseStates.fieldsFetched,
           ),
         );
@@ -272,8 +277,31 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
 
     _authSubscription = _authInterface.userStream.listen((user) {
-      add(DatabaseEventFlushData());
+      add(DatabaseEventFlushUserData());
       add(DatabaseEventInitialize(currentUser: user));
+    });
+
+    on<DatabaseEventGetProductCardTintColor>((event, emit) async {
+      print('---');
+      print('--- DatabaseEventGetProductCardTintColor fired');
+      print('---');
+      try {
+        CachedNetworkImageProvider?
+        cachedNetworkImageProvider = CachedNetworkImageProvider(
+          'https://regred-rainbowbridge.ru/crabpay/images/products/${event.product.image}.png',
+        );
+        final futureOfColor = MaterialColorExtractor.extractColorScheme(
+          imageProvider: cachedNetworkImageProvider,
+        );
+        final colorInt = await futureOfColor;
+        if (colorInt == null) return;
+        var oldMap = state.cachedProductImageDominantColor;
+        oldMap ??= {};
+        oldMap[event.product.id] = colorInt;
+        emit(state.copyWith(cachedProductImageDominantColor: oldMap));
+      } catch (e) {
+        rethrow;
+      }
     });
   }
 

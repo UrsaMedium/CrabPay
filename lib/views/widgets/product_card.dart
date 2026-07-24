@@ -6,7 +6,6 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/core/color_generator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +15,16 @@ class ProductCardDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String additionalSuffix; //tag identoty
   final int index; //tag identoty
-  final double? height;
-  final double? width;
+  final double height;
+  final double width;
   const ProductCardDriver({
     super.key,
     required this.openProductCardCallBack,
     required this.product,
     required this.additionalSuffix,
     required this.index,
-    this.height,
-    this.width,
+    required this.height,
+    required this.width,
   });
 
   void _onProductCardPressed(BuildContext context) async {
@@ -59,71 +58,73 @@ class ProductCardDriver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ProductCardCubit(),
-      child: Builder(
-        builder: (context) {
-          // final cardTintColor = context.select<ProductCardCubit, Color?>(
-          //   (cubit) => cubit.state.cardTintColor,
-          // );
-          // if (cardTintColor == null) {
-          //   context.read<ProductCardCubit>().cardTintColorExtractor(
-          //     context: context,
-          //     imageUrl: product.image,
-          //   );
-          // }
-          return MaterialProductCard(
-            imageUrl: product.image,
-            productName: product.name,
-            description: product.description,
-            onProductCardPressed: () => _onProductCardPressed(context),
-            tag: 'card-hero-${product.id}-$additionalSuffix-$index',
-            height: height,
-            width: width,
-            // cardTintColor: cardTintColor, //TODO tinting
+    return Builder(
+      builder: (context) {
+        final cardTintColor = context.select<DatabaseBloc, int?>(
+          (cubit) => cubit.state.cachedProductImageDominantColor?[product.id],
+        );
+        if (cardTintColor == null) {
+          context.read<DatabaseBloc>().add(
+            DatabaseEventGetProductCardTintColor(product: product),
           );
-        },
-      ),
+        }
+        // if (cardTintColor == null) {
+        //   context.read<ProductCardCubit>().cardTintColorExtractor(
+        //     context: context,
+        //     imageUrl: product.image,
+        //   );
+        // }
+        return MaterialProductCard(
+          imageUrl: product.image,
+          productName: product.name,
+          description: product.description,
+          onProductCardPressed: () => _onProductCardPressed(context),
+          tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+          height: height,
+          width: width,
+          cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
+        );
+      },
     );
   }
 }
 
-class ProductCardState {
-  final Color? cardTintColor;
-  ProductCardState({this.cardTintColor});
-}
+// class ProductCardState {
+//   final Color? cardTintColor;
+//   ProductCardState({this.cardTintColor});
+// }
 
-class ProductCardCubit extends Cubit<ProductCardState> {
-  ProductCardCubit() : super(ProductCardState());
+// class ProductCardCubit extends Cubit<ProductCardState> {
+//   ProductCardCubit() : super(ProductCardState());
 
-  Future<void> cardTintColorExtractor({
-    required BuildContext context,
-    required String imageUrl,
-  }) async {
-    CachedNetworkImageProvider?
-    cachedNetworkImageProvider = CachedNetworkImageProvider(
-      'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-    );
+//   Future<void> cardTintColorExtractor({
+//     required BuildContext context,
+//     required String imageUrl,
+//   }) async {
+//     CachedNetworkImageProvider?
+//     cachedNetworkImageProvider = CachedNetworkImageProvider(
+//       'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+//     );
 
-    final retrievedColorScheme = MaterialColorExtractor.extractColorScheme(
-      imageProvider: cachedNetworkImageProvider,
-      context: context,
-      brightness: context.appColorScheme.brightness,
-    );
-    final colorScheme = await retrievedColorScheme;
-    emit(ProductCardState(cardTintColor: colorScheme?.primary));
-  }
-}
+//     final retrievedColorScheme = MaterialColorExtractor.extractColorScheme(
+//       imageProvider: cachedNetworkImageProvider,
+//       context: context,
+//       brightness: context.appColorScheme.brightness,
+//     );
+//     final colorScheme = await retrievedColorScheme;
+//     emit(ProductCardState(cardTintColor: colorScheme?.primary));
+//   }
+// }
 
 class MaterialProductCard extends StatelessWidget {
   final VoidCallback onProductCardPressed;
-  final Color? cardTintColor;
   final String tag;
   final String imageUrl;
   final String productName;
   final String description;
-  final double? height;
-  final double? width;
+  final double height;
+  final double width;
+  final Color? cardTintColor;
   const MaterialProductCard({
     super.key,
     required this.onProductCardPressed,
@@ -131,16 +132,16 @@ class MaterialProductCard extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.tag,
-    this.height,
-    this.width,
+    required this.height,
+    required this.width,
     this.cardTintColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 266,
-      width: width ?? 168,
+      height: height,
+      width: width,
       child: Card(
         margin: EdgeInsets.all(0),
         clipBehavior: .antiAlias,
@@ -165,8 +166,8 @@ class MaterialProductCard extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl:
                           'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                      width: double.maxFinite,
-                      height: height != null ? (height! - 98) : 168,
+                      width: width - 8,
+                      height: height - 110,
                       fit: .cover,
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,

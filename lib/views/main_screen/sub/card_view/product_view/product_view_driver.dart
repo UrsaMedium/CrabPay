@@ -60,7 +60,7 @@ class ProductViewDriver extends StatelessWidget {
           final isBeingLoaded = dbState.states == DatabaseStates.dbLoading;
           final userFavorites = dbState.userPreferences ?? [];
           final isFavorite = userFavorites.contains(theProduct);
-          final productFields = dbState.productFields;
+          final productFields = dbState.cachedProductFields?[productId];
           final heroTag = 'card-hero-$productId-$additionalSuffix-$index';
 
           void onBackButtonPressed() {

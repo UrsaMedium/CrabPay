@@ -7,59 +7,67 @@ abstract class DatabaseEvent {
   const DatabaseEvent();
 }
 
-class DatabaseEventInitialize implements DatabaseEvent {
+class DatabaseEventInitialize extends DatabaseEvent {
   final AppAuthUser currentUser;
-  DatabaseEventInitialize({required this.currentUser});
+  const DatabaseEventInitialize({required this.currentUser});
 }
 
-class DatabaseEventFlushData implements DatabaseEvent {}
+class DatabaseEventFlushUserData extends DatabaseEvent {}
 
 // Product events
 // fetch all Poducts
-class DatabaseEventFetchAllProducts implements DatabaseEvent {}
-
+class DatabaseEventFetchAllProducts extends DatabaseEvent {}
 
 // Fields events
 // fetch Product Fields
-class DatabaseEventFetchProductFields implements DatabaseEvent {
+class DatabaseEventFetchProductFields extends DatabaseEvent {
   final String productId;
-  DatabaseEventFetchProductFields({required this.productId});
+  const DatabaseEventFetchProductFields({required this.productId});
 }
 
 // fetch Product Field
-class DatabaseEventFetchProductField implements DatabaseEvent {
+class DatabaseEventFetchProductField extends DatabaseEvent {
   final String productFieldId;
-  DatabaseEventFetchProductField({required this.productFieldId});
+  const DatabaseEventFetchProductField({required this.productFieldId});
 }
 
 // Currencies events
 // fetch All Currencies
-class DatabaseEventFetchAllCurrencies implements DatabaseEvent {}
+class DatabaseEventFetchAllCurrencies extends DatabaseEvent {}
 
 //Featured products
 //fetch all featured products
-class DatabaseEventFetchAllFeaturedProducts implements DatabaseEvent {}
+class DatabaseEventFetchAllFeaturedProducts extends DatabaseEvent {}
 
 //user preferences
 // fetch user preferences
-class DatabaseEventFetchUserPreferences implements DatabaseEvent {
+class DatabaseEventFetchUserPreferences extends DatabaseEvent {
   final String userId;
-  DatabaseEventFetchUserPreferences({required this.userId});
+  const DatabaseEventFetchUserPreferences({required this.userId});
 }
 
 // add user preferences
-class DatabaseEventAddUserPreference implements DatabaseEvent {
+class DatabaseEventAddUserPreference extends DatabaseEvent {
   final String userId;
   final Product product;
-  DatabaseEventAddUserPreference({required this.userId, required this.product});
+  const DatabaseEventAddUserPreference({
+    required this.userId,
+    required this.product,
+  });
 }
 
 //delete user preference
-class DatabaseEventDeleteUserPreference implements DatabaseEvent {
+class DatabaseEventDeleteUserPreference extends DatabaseEvent {
   final Product product;
   final String userId;
-  DatabaseEventDeleteUserPreference({
+  const DatabaseEventDeleteUserPreference({
     required this.product,
     required this.userId,
   });
+}
+
+//Card tint color
+class DatabaseEventGetProductCardTintColor extends DatabaseEvent {
+  final Product product;
+  const DatabaseEventGetProductCardTintColor({required this.product});
 }
