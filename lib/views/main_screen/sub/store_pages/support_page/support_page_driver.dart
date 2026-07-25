@@ -10,7 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SupportPageDriver extends StatefulWidget {
-  const SupportPageDriver({super.key});
+  static const routeName = 'support_view';
+  final String? message;
+  const SupportPageDriver({super.key, this.message});
 
   @override
   State<SupportPageDriver> createState() => _SupportPageDriverState();
@@ -26,7 +28,8 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'SupportPageDriver initState',
     );
-    _textEditingController = TextEditingController();
+    debugPrint(widget.message);
+    _textEditingController = TextEditingController(text: widget.message);
     super.initState();
   }
 

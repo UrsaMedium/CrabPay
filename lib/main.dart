@@ -70,20 +70,20 @@ Future<void> main() async {
   setupDependencies();
   await getIt<InnerLoggerHandler>().init();
 
-  FlutterError.onError = (FlutterErrorDetails details) {
-    getIt<InnerLoggerHandler>().recordException(
-      error: details,
-      stackTrace: details.stack ?? StackTrace.empty,
-    );
-  };
+  // FlutterError.onError = (FlutterErrorDetails details) {
+  //   getIt<InnerLoggerHandler>().recordException(
+  //     error: details,
+  //     stackTrace: details.stack ?? StackTrace.empty,
+  //   );
+  // };
 
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    getIt<InnerLoggerHandler>().recordException(
-      error: error,
-      stackTrace: stack,
-    );
-    return true;
-  };
+  // PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+  //   getIt<InnerLoggerHandler>().recordException(
+  //     error: error,
+  //     stackTrace: stack,
+  //   );
+  //   return true;
+  // };
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
@@ -180,7 +180,11 @@ final GoRouter _router = GoRouter(
           routes: [
             GoRoute(
               path: '/support',
-              builder: (context, state) => const SupportPageDriver(),
+              name: 'support_view',
+              builder: (context, state) {
+                final message = state.uri.queryParameters['message'];
+                return SupportPageDriver(message: message);
+              },
             ),
           ],
         ),

@@ -10,6 +10,7 @@ class MaterialPurchasesView extends StatelessWidget {
   final Map<String, List<CartItem>> orderGroups;
   final Map<CartItem, Product> itemToProductMap;
   final VoidCallback onBackButtonPressed;
+  final Function(String) onSupportSendMessagePressed;
   const MaterialPurchasesView({
     super.key,
     required this.onBackButtonPressed,
@@ -17,6 +18,7 @@ class MaterialPurchasesView extends StatelessWidget {
     required this.itemsDelivered,
     required this.orderGroups,
     required this.itemToProductMap,
+    required this.onSupportSendMessagePressed,
   });
 
   @override
@@ -51,6 +53,7 @@ class MaterialPurchasesView extends StatelessWidget {
                       cartItems:
                           orderGroups[orderGroups.keys.elementAt(index)] ?? [],
                       itemToProductMap: itemToProductMap,
+                      onSupportSendMessagePressed: onSupportSendMessagePressed,
                     ),
                   ),
                 ),
@@ -66,10 +69,12 @@ class MaterialPurchasesView extends StatelessWidget {
 class MaterialPurchasesCard extends StatelessWidget {
   final List<CartItem> cartItems;
   final Map<CartItem, Product> itemToProductMap;
+  final Function(String) onSupportSendMessagePressed;
   const MaterialPurchasesCard({
     super.key,
     required this.itemToProductMap,
     required this.cartItems,
+    required this.onSupportSendMessagePressed,
   });
 
   List<Widget> _rowOfProductImages() {
@@ -174,7 +179,9 @@ class MaterialPurchasesCard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => onSupportSendMessagePressed(
+                      '${cartItems.first.paymentId}',
+                    ),
                     icon: Row(
                       children: [
                         Text(

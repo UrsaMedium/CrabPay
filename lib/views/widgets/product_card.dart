@@ -17,6 +17,7 @@ class ProductCardDriver extends StatelessWidget {
   final int index; //tag identoty
   final double height;
   final double width;
+  final double cornerRadius;
   const ProductCardDriver({
     super.key,
     required this.openProductCardCallBack,
@@ -25,6 +26,7 @@ class ProductCardDriver extends StatelessWidget {
     required this.index,
     required this.height,
     required this.width,
+    required this.cornerRadius,
   });
 
   void _onProductCardPressed(BuildContext context) async {
@@ -68,12 +70,6 @@ class ProductCardDriver extends StatelessWidget {
             DatabaseEventGetProductCardTintColor(product: product),
           );
         }
-        // if (cardTintColor == null) {
-        //   context.read<ProductCardCubit>().cardTintColorExtractor(
-        //     context: context,
-        //     imageUrl: product.image,
-        //   );
-        // }
         return MaterialProductCard(
           imageUrl: product.image,
           productName: product.name,
@@ -82,39 +78,13 @@ class ProductCardDriver extends StatelessWidget {
           tag: 'card-hero-${product.id}-$additionalSuffix-$index',
           height: height,
           width: width,
+          cornerRadius: cornerRadius,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
         );
       },
     );
   }
 }
-
-// class ProductCardState {
-//   final Color? cardTintColor;
-//   ProductCardState({this.cardTintColor});
-// }
-
-// class ProductCardCubit extends Cubit<ProductCardState> {
-//   ProductCardCubit() : super(ProductCardState());
-
-//   Future<void> cardTintColorExtractor({
-//     required BuildContext context,
-//     required String imageUrl,
-//   }) async {
-//     CachedNetworkImageProvider?
-//     cachedNetworkImageProvider = CachedNetworkImageProvider(
-//       'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-//     );
-
-//     final retrievedColorScheme = MaterialColorExtractor.extractColorScheme(
-//       imageProvider: cachedNetworkImageProvider,
-//       context: context,
-//       brightness: context.appColorScheme.brightness,
-//     );
-//     final colorScheme = await retrievedColorScheme;
-//     emit(ProductCardState(cardTintColor: colorScheme?.primary));
-//   }
-// }
 
 class MaterialProductCard extends StatelessWidget {
   final VoidCallback onProductCardPressed;
@@ -124,6 +94,7 @@ class MaterialProductCard extends StatelessWidget {
   final String description;
   final double height;
   final double width;
+  final double cornerRadius;
   final Color? cardTintColor;
   const MaterialProductCard({
     super.key,
@@ -134,6 +105,7 @@ class MaterialProductCard extends StatelessWidget {
     required this.tag,
     required this.height,
     required this.width,
+    required this.cornerRadius,
     this.cardTintColor,
   });
 
@@ -145,7 +117,7 @@ class MaterialProductCard extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.all(0),
         clipBehavior: .antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
         color: context.appColorScheme.surfaceContainer,
         elevation: 5,
         surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
@@ -161,7 +133,7 @@ class MaterialProductCard extends StatelessWidget {
                   createRectTween: (begin, end) =>
                       MaterialRectArcTween(begin: begin, end: end),
                   child: Material(
-                    borderRadius: .circular(12),
+                    borderRadius: .circular(cornerRadius - 4),
                     clipBehavior: .antiAlias,
                     child: CachedNetworkImage(
                       imageUrl:

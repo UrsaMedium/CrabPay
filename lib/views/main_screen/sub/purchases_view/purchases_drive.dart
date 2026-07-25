@@ -27,6 +27,11 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
     }
   }
 
+  void _onSupportSendMessagePressed(String ordedId) {
+    String message = '-new ticket-\n$ordedId\n';
+    context.goNamed('support_view', queryParameters: {'message': message});
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -46,6 +51,7 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
                 orderGroups: viewState.orderGroups ?? {},
                 onBackButtonPressed: () => _onBackButtonPressed(context),
                 itemToProductMap: viewState.itemToProductMap ?? {},
+                onSupportSendMessagePressed: _onSupportSendMessagePressed,
               );
             },
           );

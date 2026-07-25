@@ -40,52 +40,48 @@ class MaterialStorePageView extends StatelessWidget {
                     slivers: [
                       SliverPadding(
                         padding: .only(right: 4),
-                        sliver: SliverCrossAxisExpanded(
-                          flex: 1,
-                          sliver: SliverList.builder(
-                            itemCount: filterdProductList.isEmpty
-                                ? (products.length + 1) ~/ 2
-                                : (filterdProductList.length + 1) ~/ 2,
-                            itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: ProductCardDriver(
-                                product: filterdProductList.isEmpty
-                                    ? products[index * 2]
-                                    : filterdProductList[index * 2],
-                                additionalSuffix: 'store',
-                                openProductCardCallBack:
-                                    onOpenProductCardCallBack,
-                                index: index,
-                                height: 256,
-                                width: (MediaQuery.widthOf(context) - 24) / 2,
-                              ),
+                        sliver: SliverList.builder(
+                          itemCount: filterdProductList.isEmpty
+                              ? (products.length + 1) ~/ 2
+                              : (filterdProductList.length + 1) ~/ 2,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: ProductCardDriver(
+                              product: filterdProductList.isEmpty
+                                  ? products[index * 2]
+                                  : filterdProductList[index * 2],
+                              additionalSuffix: 'store',
+                              openProductCardCallBack:
+                                  onOpenProductCardCallBack,
+                              index: index,
+                              height: 256,
+                              width: (MediaQuery.widthOf(context) - 24) / 2,
+                              cornerRadius: 16,
                             ),
                           ),
                         ),
                       ),
                       SliverPadding(
                         padding: .only(left: 4),
-                        sliver: SliverCrossAxisExpanded(
-                          flex: 1,
-                          sliver: SliverList.builder(
-                            itemCount: filterdProductList.isEmpty
-                                ? products.length ~/ 2
-                                : filterdProductList.length ~/ 2,
-                            itemBuilder: (context, index) => Padding(
-                              padding: EdgeInsets.only(
-                                top: index == 0 ? 60 : 8,
-                              ),
-                              child: ProductCardDriver(
-                                product: filterdProductList.isEmpty
-                                    ? products[index * 2 + 1]
-                                    : filterdProductList[index * 2 + 1],
-                                additionalSuffix: 'store',
-                                openProductCardCallBack:
-                                    onOpenProductCardCallBack,
-                                index: index,
-                                height: 256,
-                                width: (MediaQuery.widthOf(context) - 24) / 2,
-                              ),
+                        sliver: SliverList.builder(
+                          itemCount: filterdProductList.isEmpty
+                              ? products.length ~/ 2
+                              : filterdProductList.length ~/ 2,
+                          itemBuilder: (context, index) => Padding(
+                            padding: EdgeInsets.only(
+                              top: index == 0 ? 60 : 8,
+                            ),
+                            child: ProductCardDriver(
+                              product: filterdProductList.isEmpty
+                                  ? products[index * 2 + 1]
+                                  : filterdProductList[index * 2 + 1],
+                              additionalSuffix: 'store',
+                              openProductCardCallBack:
+                                  onOpenProductCardCallBack,
+                              index: index,
+                              height: 256,
+                              width: (MediaQuery.widthOf(context) - 24) / 2,
+                              cornerRadius: 16,
                             ),
                           ),
                         ),
@@ -106,43 +102,3 @@ class MaterialStorePageView extends StatelessWidget {
     );
   }
 }
-
-
-// SliverGrid.builder(
-//                     itemCount: products.length,
-//                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                       crossAxisCount: 2,
-//                       mainAxisSpacing: 6,
-//                       crossAxisSpacing: 6,
-//                       mainAxisExtent: 270,
-//                     ),
-//                     itemBuilder: (context, index) => ProductCardDriver(
-//                       product: filterdProductList.isEmpty
-//                           ? products[index]
-//                           : filterdProductList[index],
-//                       additionalSuffix: 'store',
-//                       openProductCardCallBack: onOpenProductCardCallBack,
-//                       index: index,
-//                     ),
-//                   ),
-
-
-// ListView.builder(
-//               physics: const AlwaysScrollableScrollPhysics(),
-//               padding: .only(
-//                 top: MediaQuery.paddingOf(context).top + 48,
-//                 bottom: MediaQuery.paddingOf(context).bottom,
-//               ),
-//               itemExtent: 170,
-//               itemCount: filterdProductList.isEmpty
-//                   ? products.length
-//                   : filterdProductList.length,
-//               itemBuilder: (context, index) => ProductCardDriver(
-//                 product: filterdProductList.isEmpty
-//                     ? products[index]
-//                     : filterdProductList[index],
-//                 additionalSuffix: 'store',
-//                 openProductCardCallBack: onOpenProductCardCallBack,
-//                 index: index,
-//               ),
-//             ),

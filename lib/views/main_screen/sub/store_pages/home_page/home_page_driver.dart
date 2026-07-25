@@ -62,8 +62,8 @@ class _HomePageDriverState extends State<HomePageDriver> {
           return MaterialHomePageView(
             onOpenProductCardCallBack: openProductCardCallBack,
             reFresher: () => _reFresher(context),
-            featuredProducts: featuredProducts,
-            userPreferences: userPrefernces,
+            featuredProducts: featuredProducts.take(3).toList(),
+            userPreferences: userPrefernces.take(13).toList(),
           );
         },
       ),
