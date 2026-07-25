@@ -358,7 +358,6 @@ class AdminOuterDatabaseHandlerWithSupabase
     required ProductField oldImageField,
     required ProductField newImageField,
   }) {
-    // TODO: implement updateProductFieldSwapImageField
     throw UnimplementedError();
   }
 }

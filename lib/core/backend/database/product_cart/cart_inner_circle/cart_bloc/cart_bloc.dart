@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
@@ -18,9 +19,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }) : _authInterface = authInterface,
        super(const CartState()) {
     on<CartEventFetchCartItems>((event, emit) async {
-      print('----');
-      print('CartEventFetchCartItems fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventFetchCartItems fired');
+      developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
         final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
@@ -48,9 +49,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventAddCartItem>((event, emit) async {
-      print('----');
-      print('CartEventAddCartItem fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventAddCartItem fired');
+      developer.log('----');
       try {
         emit(
           state.copyWith(
@@ -83,9 +84,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteCartItem>((event, emit) async {
-      print('----');
-      print('CartEventDeleteCartItem fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventDeleteCartItem fired');
+      developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItem.id);
@@ -107,9 +108,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteCartItemById>((event, emit) async {
-      print('----');
-      print('CartEventDeleteCartItemById fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventDeleteCartItemById fired');
+      developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItemId);
@@ -129,9 +130,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventUserCheckoutItems>((event, emit) async {
-      print('----');
-      print('CartEventUserCheckoutItems fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventUserCheckoutItems fired');
+      developer.log('----');
       try {
         await cartHandler.updateCartItem(event.checkoutItems, null);
       } catch (e) {
@@ -140,9 +141,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventStartCartItemsStream>((event, emit) {
-      print('----');
-      print('CartEventStartCartItemsStream fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventStartCartItemsStream fired');
+      developer.log('----');
       emit(state.copyWith(isStreaming: IsStreaming.yes));
       _streamSubscription?.cancel();
       _streamSubscription = cartHandler.cartItemsStream(event.userId).listen((
@@ -153,9 +154,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventOnChangeStreamed>((event, emit) {
-      print('----');
-      print('CartEventOnChangeStreamed fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventOnChangeStreamed fired');
+      developer.log('----');
       emit(
         state.copyWith(
           cartItemsToBuy: event.cartItems,
@@ -165,17 +166,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventCloseStream>((event, emit) {
-      print('----');
-      print('CartEventCloseStream fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventCloseStream fired');
+      developer.log('----');
       _streamSubscription?.cancel();
       emit(state.copyWith(isStreaming: IsStreaming.no));
     });
 
     on<CartEventFlushData>((event, emit) {
-      print('----');
-      print('CartEventFlushData fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventFlushData fired');
+      developer.log('----');
       emit(
         state.copyWith(
           allUserCartItems: null,
@@ -191,9 +192,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventFetchUserCartItemAmount>((event, emit) async {
-      print('----');
-      print('CartEventFetchUserCartItemAmount fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventFetchUserCartItemAmount fired');
+      developer.log('----');
       emit(state.copyWith(states: CartStates.loading));
       try {
         final userCartItemAmount = await cartHandler.getUserCartItemAmount(
@@ -212,9 +213,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventFetchProductCartItemAmount>((event, emit) async {
-      print('----');
-      print('CartEventFetchProductCartItemAmount fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventFetchProductCartItemAmount fired');
+      developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
         final productCartItemAmount = await cartHandler
@@ -234,9 +235,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<CartEventDeleteLastAddedProductCartItem>((event, emit) async {
-      print('----');
-      print('CartEventDeleteLastAddedProductCartItem fired');
-      print('----');
+      developer.log('----');
+      developer.log('CartEventDeleteLastAddedProductCartItem fired');
+      developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
         final didDelete = await cartHandler.deleteLastAddedProductCartItem(

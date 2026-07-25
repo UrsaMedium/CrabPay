@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend/admin/admin_database/admin_outer_database_handler/admin_outer_database_handler_with_supabase.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
@@ -31,6 +30,7 @@ import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_dr
 import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/admin_support_chat/admin_support_chat.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
+import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
 import 'package:crabpay/views/admin_views/admin_support_chat/choose_thread.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
@@ -44,16 +44,16 @@ import 'package:crabpay/views/main_screen/main_screen_driver.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/views/admin_views/admin_tools_view.dart';
-import 'package:crabpay/views/main_screen/sub/cases_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
-import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void setupDependencies() {
   getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
@@ -254,8 +254,8 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => DeleteInstancesFromDbView(),
     ),
     GoRoute(
-      path: '/cases_view',
-      builder: (context, state) => CasesViewDriver(),
+      path: '/purchases_view',
+      builder: (context, state) => PurchasesViewDriver(),
     ),
     GoRoute(
       path: '/admin_tools_view',

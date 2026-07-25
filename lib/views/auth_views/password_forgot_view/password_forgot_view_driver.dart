@@ -44,7 +44,7 @@ class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {
             message: 'PasswordForgotViewDriver AuthState change',
             data: {'authState': authState},
           );
-          //TODO a state to know that the reset password email has benn sent
+          //a state to know that the reset password email has benn sent
         },
         child: BlocBuilder<PasswordForgotViewCubit, PasswordForgotViewState>(
           builder: (context, viewState) {

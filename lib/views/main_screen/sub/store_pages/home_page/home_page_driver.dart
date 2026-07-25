@@ -56,7 +56,7 @@ class _HomePageDriverState extends State<HomePageDriver> {
           );
 
           if (defaultTargetPlatform == TargetPlatform.iOS) {
-            //TODO cupertino
+            // cupertino
           }
 
           return MaterialHomePageView(

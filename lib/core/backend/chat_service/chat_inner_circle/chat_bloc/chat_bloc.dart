@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
@@ -21,9 +22,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
        super(const ChatState()) {
     // Initialize Thread ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventInitializeThread>((event, emit) async {
-      print('---');
-      print('--- ChatEventInitializeThread fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventInitializeThread fired');
+      developer.log('---');
       try {
         emit(state.copyWith(status: ChatStates.loading));
         final thread = await _chatHandler.getOrCreateThread(
@@ -56,9 +57,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     // Subscribe to Real-Time Messages ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventSubscribeToMessages>((event, emit) {
-      print('---');
-      print('--- ChatEventSubscribeToMessages fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventSubscribeToMessages fired');
+      developer.log('---');
       _messagesSubscription?.cancel();
       _messagesSubscription = _chatHandler
           .subscribeToMessages(threadId: event.threadId)
@@ -67,7 +68,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               add(ChatEventMessagesUpdated(messages: messages));
             },
             onError: (error) {
-              print('Chat stream error: $error');
+              developer.log('Chat stream error: $error');
             },
           );
     });
@@ -85,9 +86,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     // Send Message ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventSendMessage>((event, emit) async {
-      print('---');
-      print('--- ChatEventSendMessage fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventSendMessage fired');
+      developer.log('---');
       // final currentThread = state.activeThread;
       // if (currentThread == null) return;
 
@@ -137,15 +138,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try {
         await _chatHandler.markMessagesAsRead(threadId: currentThread.id);
       } catch (e) {
-        print('Could not mark messages as read: $e');
+        developer.log('Could not mark messages as read: $e');
       }
     });
 
     // Flush Data ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventFlushData>((event, emit) {
-      print('---');
-      print('--- ChatEventFlushData fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventFlushData fired');
+      developer.log('---');
       _messagesSubscription?.cancel();
       _messagesSubscription = null;
       emit(const ChatState(status: ChatStates.flushed));
@@ -159,7 +160,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() {
-    print('--- ChatBloc closing: canceling real-time message stream ---');
+    developer.log('--- ChatBloc closing: canceling real-time message stream ---');
     _messagesSubscription?.cancel();
     _authSubscription.cancel();
     return super.close();

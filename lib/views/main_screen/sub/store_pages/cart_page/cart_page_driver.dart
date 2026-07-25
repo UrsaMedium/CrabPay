@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -57,7 +59,7 @@ class _CartPageDriverState extends State<CartPageDriver> {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'CartPageDriver _onUserLeave',
     );
-    print('--- User has left the app');
+    developer.log('--- User has left the app');
     if (context.read<PaymentBloc>().state is PaymentStateListening) {
       final cartItemIds = _cartItems?.map((e) => e.id).toList() ?? [];
       AppLocalStorage.saveCartItemsOnPayment(cartItemIds);
@@ -72,7 +74,7 @@ class _CartPageDriverState extends State<CartPageDriver> {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'CartPageDriver _onUserReturn',
     );
-    print('--- User has returned to the app');
+    developer.log('--- User has returned to the app');
     final cartItemIds = AppLocalStorage.getCartItemIdsOnPayment();
     if (cartItemIds != null) {
       context.read<PaymentBloc>().add(
@@ -189,7 +191,7 @@ class _CartPageDriverState extends State<CartPageDriver> {
             final total = _countTotal();
 
             if (defaultTargetPlatform == TargetPlatform.iOS) {
-              // TODO: Cupertino
+              //  Cupertino
             }
 
             final deletingItemId =

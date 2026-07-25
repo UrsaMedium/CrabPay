@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/admin_inner_chat_handler.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_state.dart';
@@ -21,9 +22,9 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
        super(const ChatStateAdmin()) {
     // Initialize Thread ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventInitializeThreadAdmin>((event, emit) async {
-      print('---');
-      print('--- ChatEventInitializeThreadAdmin fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventInitializeThreadAdmin fired');
+      developer.log('---');
       try {
         emit(state.copyWith(status: ChatStatesAdmin.loading));
         final thread = await _chatHandler.getOrCreateThreadAdmin(
@@ -56,9 +57,9 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
 
     // Subscribe to Real-Time Messages ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventSubscribeToMessagesAdmin>((event, emit) {
-      print('---');
-      print('--- ChatEventSubscribeToMessagesAdmin fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventSubscribeToMessagesAdmin fired');
+      developer.log('---');
       _messagesSubscription?.cancel();
       _messagesSubscription = _chatHandler
           .subscribeToMessagesAdmin(threadId: event.threadId)
@@ -67,7 +68,7 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
               add(ChatEventMessagesUpdatedAdmin(messages: messages));
             },
             onError: (error) {
-              print('Chat stream error: $error');
+              developer.log('Chat stream error: $error');
             },
           );
     });
@@ -85,9 +86,9 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
 
     // Send Message ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventSendMessageAdmin>((event, emit) async {
-      print('---');
-      print('--- ChatEventSendMessageAdmin fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventSendMessageAdmin fired');
+      developer.log('---');
       // final currentThread = state.activeThread;
       // if (currentThread == null) return;
 
@@ -137,15 +138,15 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
       try {
         await _chatHandler.markMessagesAsReadAdmin(threadId: currentThread.id);
       } catch (e) {
-        print('Could not mark messages as read: $e');
+        developer.log('Could not mark messages as read: $e');
       }
     });
 
     // Flush Data ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventFlushDataAdmin>((event, emit) {
-      print('---');
-      print('--- ChatEventFlushDataAdmin fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- ChatEventFlushDataAdmin fired');
+      developer.log('---');
       _messagesSubscription?.cancel();
       _messagesSubscription = null;
       emit(const ChatStateAdmin(status: ChatStatesAdmin.flushed));
@@ -159,7 +160,7 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
 
   @override
   Future<void> close() {
-    print('--- ChatBloc closing: canceling real-time message stream ---');
+    developer.log('--- ChatBloc closing: canceling real-time message stream ---');
     _messagesSubscription?.cancel();
     _authSubscription.cancel();
     return super.close();

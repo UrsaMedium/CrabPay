@@ -1,13 +1,13 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
+import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
 import 'package:crabpay/views/main_screen/sub/profile_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +35,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
-
     super.initState();
   }
 
@@ -127,11 +126,11 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     }
   }
 
-  void _onCasesPressed(BuildContext context) {
+  void _onPurchasesPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onCasesPressed',
+      message: 'MainScreenDriver _onPurchasesPressed',
     );
-    context.push('/cases_view');
+    context.push('/purchases_view');
   }
 
   void _onAdminPressed(BuildContext context) {
@@ -155,13 +154,12 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
           child: BlocBuilder<MainScreenCubit, MainScreenState>(
             builder: (context, viewState) {
               final cubit = context.read<MainScreenCubit>();
-
               final itemsCount = context.select<CartBloc, int>(
                 (bloc) => bloc.state.userCartItemAmount ?? 0,
               );
 
               if (defaultTargetPlatform == TargetPlatform.iOS) {
-                //TODO cupertino
+                // cupertino
               }
 
               return MaterialMainScreenView(
@@ -177,7 +175,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 pageIndex: viewState.page,
                 pages: _pages,
                 isLoggedIn: _isLoggedIn(authState),
-                onCasesPressed: () => _onCasesPressed(context),
+                onPurchasesPressed: () => _onPurchasesPressed(context),
                 onAdminPressed: () => _onAdminPressed(context),
                 isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
                 profileIconButtonKey: profileIconButtonKey,

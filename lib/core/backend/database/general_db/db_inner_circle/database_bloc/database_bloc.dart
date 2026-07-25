@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
@@ -25,9 +25,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
     //Initial call------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<DatabaseEventInitialize>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventInitialize fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventInitialize fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
@@ -87,9 +87,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // Products------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch all Poducts
     on<DatabaseEventFetchAllProducts>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchAllProductsForAdmin fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventFetchAllProductsForAdmin fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
@@ -108,9 +108,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // Fields------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch Product Fields
     on<DatabaseEventFetchProductFields>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchProductFields fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventFetchProductFields fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final productFields = await databaseHandler.fetchProductFields(
@@ -133,20 +133,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
 
-    // fetch Product Field
-    on<DatabaseEventFetchProductField>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchProductField fired');
-      print('---');
-      // TODO
-    });
-
     // Currencies------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // fetch All Currencies
     on<DatabaseEventFetchAllCurrencies>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchAllCurrencies fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventFetchAllCurrencies fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final allCurrencies = await databaseHandler.fetchAllCurencies();
@@ -165,9 +157,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     //Featured Products ---------------------------------------------------------------------------------------------------------------
     //fetch all featured products
     on<DatabaseEventFetchAllFeaturedProducts>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchAllFeaturedProducts fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventFetchAllFeaturedProducts fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final featuredProductIds = await databaseHandler
@@ -194,9 +186,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     //User Preferences -------------------------------------------------------------------------------------------
     //fetch user preferences
     on<DatabaseEventFetchUserPreferences>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventFetchUserPreferences fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventFetchUserPreferences fired');
+      developer.log('---');
       try {
         emit(
           state.copyWith(
@@ -227,9 +219,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
     //add user preference
     on<DatabaseEventAddUserPreference>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddUserPreference fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventAddUserPreference fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.addUserPreference(
@@ -251,9 +243,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
 
     on<DatabaseEventDeleteUserPreference>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteUserPreference fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventDeleteUserPreference fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         await databaseHandler.deleteUserPreference(
@@ -282,9 +274,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
 
     on<DatabaseEventGetProductCardTintColor>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventGetProductCardTintColor fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventGetProductCardTintColor fired');
+      developer.log('---');
       try {
         CachedNetworkImageProvider?
         cachedNetworkImageProvider = CachedNetworkImageProvider(

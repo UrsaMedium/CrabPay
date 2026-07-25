@@ -61,7 +61,7 @@ class _StorePageDriverState extends State<StorePageDriver> {
             );
 
             if (defaultTargetPlatform == TargetPlatform.iOS) {
-              //TODO cupertino
+              // cupertino
             }
 
             return MaterialStorePageView(

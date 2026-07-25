@@ -64,6 +64,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           checkoutPrice: (item['checkoutPrice'] as num).toDouble(),
           status: item['status'],
           comment: item['comment'],
+          paymentId: item['paymentId'],
         );
       }).toList();
     } catch (e) {
@@ -88,7 +89,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           query($userId: String!) {
             cartItemCollection(filter: { userId: { eq: $userId } }) {
               edges {
-                node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
+                node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment, paymentId }
               }
             }
           }

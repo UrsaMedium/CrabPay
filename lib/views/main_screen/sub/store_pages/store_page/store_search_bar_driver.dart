@@ -118,7 +118,7 @@ class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDri
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      // TODO: Return CupertinoStoreSearchBarView(...)
+      //  Return CupertinoStoreSearchBarView(...)
     }
 
     return KeyboardDetection(

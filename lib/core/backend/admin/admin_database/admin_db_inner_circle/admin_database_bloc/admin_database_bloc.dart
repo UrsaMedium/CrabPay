@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
@@ -29,9 +30,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // add Product
     on<DatabaseEventAddProductAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddProduct fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventAddProduct fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.addProductAdmin(product: event.product);
@@ -52,9 +53,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // delete Product
     on<DatabaseEventDeleteProductAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteProduct fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventDeleteProduct fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.deleteProductAdmin(product: event.product);
@@ -67,9 +68,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // update a product
     on<DatabaseEventUpdateProductAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProduct fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventUpdateProduct fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.updateProductAdmin(product: event.product);
@@ -87,9 +88,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // add Product Field
     on<DatabaseEventAddProductFieldAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddProductField fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventAddProductField fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.addProductFieldAdmin(field: event.productField);
@@ -102,9 +103,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // delete Product Field
     on<DatabaseEventDeleteProductFieldAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteProductField fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventDeleteProductField fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.deleteProductFieldAdmin(field: event.productField);
@@ -116,9 +117,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
     });
 
     on<DatabaseEventUpdateProductFieldAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProductField fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventUpdateProductField fired');
+      developer.log('---');
       emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
       try {
         await databaseHandlerAdmin.updateProductFieldAdmin(field: event.field);
@@ -130,9 +131,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
     });
 
     on<DatabaseEventUpdateProductFieldSwapImageFieldAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventUpdateProductFieldSwapImageField fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventUpdateProductFieldSwapImageField fired');
+      developer.log('---');
       emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
       try {
         if (event.oldImageField != null) {
@@ -170,9 +171,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // add Currencies
     on<DatabaseEventAddCurrenciesAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddCurrencies fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventAddCurrencies fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin .dbLoading));
         await databaseHandlerAdmin.addCurrenciesAdmin(currencies: event.currencies);
@@ -184,9 +185,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
     });
     // delet Currencies
     on<DatabaseEventDeleteCurrenciesAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteCurrencies fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventDeleteCurrencies fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.deleteCurrenciesAdmin(currencies: event.currencies);
@@ -203,9 +204,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     //add featured product
     on<DatabaseEventAddFeaturedProductAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventAddFeaturedProduct fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventAddFeaturedProduct fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.addFeaturedProductAdmin(productId: event.product.id);
@@ -217,9 +218,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
     });
 
     on<DatabaseEventDeleteFeaturedProductAdmin>((event, emit) async {
-      print('---');
-      print('--- DatabaseEventDeleteFeaturedProduct fired');
-      print('---');
+      developer.log('---');
+      developer.log('--- DatabaseEventDeleteFeaturedProduct fired');
+      developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin .dbLoading));
         await databaseHandlerAdmin.deleteFeaturedProductAdmin(

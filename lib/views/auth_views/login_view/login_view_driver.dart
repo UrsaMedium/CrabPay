@@ -131,7 +131,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
               }
 
               if (defaultTargetPlatform == TargetPlatform.iOS && !kIsWeb) {
-                //TODO cupertino view
+                // cupertino view
               }
 
               return MaterialLoginView(

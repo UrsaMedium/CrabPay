@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
@@ -185,7 +186,7 @@ Future<void> openProductCardCallBack({
   required String additionalSuffix,
   required int index,
 }) async {
-  print('pushed $productId + $additionalSuffix + $index');
+  developer.log('pushed $productId + $additionalSuffix + $index');
   //data prefetching
   if (context
           .read<DatabaseBloc>()

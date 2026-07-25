@@ -7,7 +7,7 @@ class MaterialMainScreenView extends StatelessWidget {
   final int itemsCount;
   final int pageIndex;
   final Function(Offset) onProfileIconPressed;
-  final VoidCallback onCasesPressed;
+  final VoidCallback onPurchasesPressed;
   final VoidCallback onAdminPressed;
   final Function(int) onPageSelected;
   final Function(int) onPageSwiped;
@@ -26,7 +26,7 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onPageSwiped,
     required this.pages,
     required this.isLoggedIn,
-    required this.onCasesPressed,
+    required this.onPurchasesPressed,
     required this.onAdminPressed,
     required this.isAdmin,
     required this.profileIconButtonKey,
@@ -80,7 +80,7 @@ class MaterialMainScreenView extends StatelessWidget {
                         ),
                       if (isLoggedIn)
                         IconButton(
-                          onPressed: onCasesPressed,
+                          onPressed: onPurchasesPressed,
                           icon: Icon(Icons.cases_rounded),
                         ),
                       isLoggedIn

@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -79,7 +81,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
         data: {'itemCount': itemCount, 'error': e},
       );
       Fluttertoast.showToast(msg: 'Failed to delete');
-      print('Failed to delete last cart item::: $e');
+      developer.log('Failed to delete last cart item::: $e');
     }
   }
 
@@ -117,7 +119,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
         // });
       } on Exception catch (e) {
         Fluttertoast.showToast(msg: 'Failed to add to your cart');
-        print('Failed to add to your cart: $e');
+        developer.log('Failed to add to your cart: $e');
       }
     } else {
       getIt<InnerLoggerHandler>().logBreadcrumb(
