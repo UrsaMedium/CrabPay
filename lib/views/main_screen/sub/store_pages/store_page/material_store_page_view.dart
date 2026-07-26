@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class MaterialStorePageView extends StatelessWidget {
   final List<Product> products;
-  final List<Product> filterdProductList;
+  // final List<Product> filterdProductList;
   final OnOpenProductCardCallBack onOpenProductCardCallBack;
   final Future<void> Function() reFresher;
   final Function(List<Product>) onSearchSubmitedCallBack;
@@ -16,7 +16,7 @@ class MaterialStorePageView extends StatelessWidget {
     required this.products,
     required this.onOpenProductCardCallBack,
     required this.onSearchSubmitedCallBack,
-    required this.filterdProductList,
+    // required this.filterdProductList,
   });
 
   @override
@@ -41,15 +41,17 @@ class MaterialStorePageView extends StatelessWidget {
                       SliverPadding(
                         padding: .only(right: 4),
                         sliver: SliverList.builder(
-                          itemCount: filterdProductList.isEmpty
-                              ? (products.length + 1) ~/ 2
-                              : (filterdProductList.length + 1) ~/ 2,
+                          itemCount: // filterdProductList.isEmpty
+                              //?
+                              (products.length + 1) ~/ 2,
+                          //: (filterdProductList.length + 1) ~/ 2
                           itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: ProductCardDriver(
-                              product: filterdProductList.isEmpty
-                                  ? products[index * 2]
-                                  : filterdProductList[index * 2],
+                              product: // filterdProductList.isEmpty
+                                  //?
+                                  products[index * 2],
+                              //: filterdProductList[index * 2]
                               additionalSuffix: 'store',
                               openProductCardCallBack:
                                   onOpenProductCardCallBack,
@@ -64,17 +66,17 @@ class MaterialStorePageView extends StatelessWidget {
                       SliverPadding(
                         padding: .only(left: 4),
                         sliver: SliverList.builder(
-                          itemCount: filterdProductList.isEmpty
-                              ? products.length ~/ 2
-                              : filterdProductList.length ~/ 2,
+                          itemCount: //filterdProductList.isEmpty
+                              //?
+                              products.length ~/ 2,
+                          //: filterdProductList.length ~/ 2
                           itemBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.only(
-                              top: index == 0 ? 60 : 8,
-                            ),
+                            padding: EdgeInsets.only(top: index == 0 ? 60 : 8),
                             child: ProductCardDriver(
-                              product: filterdProductList.isEmpty
-                                  ? products[index * 2 + 1]
-                                  : filterdProductList[index * 2 + 1],
+                              product: // filterdProductList.isEmpty
+                                  //?
+                                  products[index * 2 + 1],
+                              //: filterdProductList[index * 2 + 1]
                               additionalSuffix: 'store',
                               openProductCardCallBack:
                                   onOpenProductCardCallBack,

@@ -2,11 +2,13 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ChooseThreadView extends StatelessWidget {
+  static final routeName = 'choose_thread_view';
   const ChooseThreadView({super.key});
 
   @override
@@ -48,7 +50,7 @@ class ChooseThreadView extends StatelessWidget {
                     return ElevatedButton(
                       onPressed: () {
                         context.pushNamed(
-                          'admin_support_chat_view',
+                          AppRoutes.adminSupportChat.name,
                           pathParameters: {'threadId': allThreads[index].id},
                         );
                       },

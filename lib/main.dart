@@ -1,57 +1,37 @@
 import 'package:crabpay/core/backend/admin/admin_database/admin_outer_database_handler/admin_outer_database_handler_with_supabase.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/s3_price_space_fill_view.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s1_add_complete_product_product_view.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_outer_circle/admin_outer_chat_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s4_data_overview_view.dart';
 import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_auth_interface.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
-import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/core/backend/chat_service/chat_outer_circle/outer_chat_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
-import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
-import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_view.dart';
-import 'package:crabpay/views/admin_views/admin_support_chat/admin_support_chat.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
-import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';
-import 'package:crabpay/views/admin_views/admin_support_chat/choose_thread.dart';
-import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
-import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
-import 'package:crabpay/views/admin_views/delete_instances_from_db_view.dart';
-import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
-import 'package:crabpay/views/admin_views/add_featured_product_view.dart';
-import 'package:crabpay/views/admin_views/add_field_admin_panel.dart';
-import 'package:crabpay/views/main_screen/main_screen_driver.dart';
+import 'package:crabpay/views/app_routes/main_screen_routes.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
-import 'package:crabpay/views/admin_views/admin_tools_view.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:crabpay/views/app_routes/admin_routes.dart';
+import 'package:crabpay/views/app_routes/other_routes.dart';
+import 'package:crabpay/views/app_routes/auth_routes.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -152,208 +132,13 @@ Future<void> main() async {
   );
 }
 
-final GoRouter _router = GoRouter(
-  initialLocation: '/',
+final GoRouter _appRouter = GoRouter(
+  initialLocation: AppRoutes.home.path,
   routes: <RouteBase>[
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return MainScreenDriver(navigationShell: navigationShell);
-      },
-      branches: <StatefulShellBranch>[
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/',
-              builder: (context, state) => const HomePageDriver(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/store',
-              builder: (context, state) => StorePageDriver(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/support',
-              name: 'support_view',
-              builder: (context, state) {
-                final message = state.uri.queryParameters['message'];
-                return SupportPageDriver(message: message);
-              },
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/cart',
-              builder: (context, state) => const CartPageDriver(),
-            ),
-          ],
-        ),
-      ],
-    ),
-
-    GoRoute(
-      path: '/store/card_view/:productId/:additionalSuffix/:index',
-      name: 'card_view',
-      pageBuilder: (context, state) {
-        final productId = state.pathParameters['productId'] ?? '0';
-        final additionalSuffix =
-            state.pathParameters['additionalSuffix'] ?? '0';
-        final index = state.pathParameters['index'] ?? '0';
-        return CustomTransitionPage(
-          key: state.pageKey,
-          child: ProductViewDriver(
-            productId: productId,
-            additionalSuffix: additionalSuffix,
-            index: index,
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-              child: child,
-            );
-          },
-        );
-      },
-    ),
-    ShellRoute(
-      builder: (context, state, child) =>
-          BlocProvider(create: (context) => AdminBloc(), child: child),
-      routes: <RouteBase>[
-        GoRoute(
-          path: '/add_complete_product_product_view',
-          name: 'add_complete_product_product_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              const AddCompleteProductProductView(),
-          routes: <RouteBase>[
-            GoRoute(
-              path: 'add_product_fields_view',
-              builder: (context, state) => const AddProductFieldsView(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: 'price_space_fill_view',
-                  builder: (context, state) => const PriceSpaceFillView(),
-                  routes: <RouteBase>[
-                    GoRoute(
-                      path: 'data_overview_view',
-                      builder: (context, state) => const DataOverviewView(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/deleting_view',
-      builder: (context, state) => DeleteInstancesFromDbView(),
-    ),
-    GoRoute(
-      path: '/purchases_view',
-      builder: (context, state) => PurchasesViewDriver(),
-    ),
-    GoRoute(
-      path: '/admin_tools_view',
-      builder: (context, state) => AdminToolsView(),
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'choose_thread_view',
-          builder: (context, state) => ChooseThreadView(),
-          routes: <RouteBase>[
-            GoRoute(
-              path: 'admin_support_chat_view/:threadId',
-              name: 'admin_support_chat_view',
-              builder: (context, state) {
-                final threadId = state.pathParameters['threadId'];
-                return AdminSupportChatView(threadId: threadId);
-              },
-            ),
-          ],
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/update_product_admin_panel_view/:productId',
-      name: 'update_product_admin_panel_view',
-      builder: (context, state) {
-        final productId = state.pathParameters['productId'];
-        return UpdateProductAdminPanelView(productId: productId);
-      },
-    ),
-    GoRoute(
-      path: '/update_field_admin_panel_view/:fieldId/:productId',
-      name: 'update_field_admin_panel_view',
-      builder: (context, state) {
-        final fieldId = state.pathParameters['fieldId'];
-        final productId = state.pathParameters['productId'];
-        return UpdateFieldAdminPanelView(
-          fieldId: fieldId,
-          productId: productId,
-        );
-      },
-    ),
-    GoRoute(
-      path: '/update_price_images_field_admin_panel_view/:fieldId/:productId',
-      name: 'update_price_images_field_admin_panel_view',
-      builder: (context, state) {
-        final fieldId = state.pathParameters['fieldId'];
-        final productId = state.pathParameters['productId'];
-        return UpdatePriceImagesFieldAdminPanelView(
-          fieldId: fieldId,
-          productId: productId,
-        );
-      },
-    ),
-    GoRoute(
-      path: '/add_field_admin_panel_view/:productId',
-      name: 'add_field_admin_panel_view',
-      builder: (context, state) {
-        final productId = state.pathParameters['productId'];
-        return AddFieldAdminPanelView(productId: productId);
-      },
-    ),
-    GoRoute(
-      path: '/reset_price_image_field_admin_panel_view/:productId',
-      name: 'reset_price_image_field_admin_panel_view',
-      builder: (context, state) {
-        final productId = state.pathParameters['productId'];
-        return ResetPriceImageFieldAdminPanelView(productId: productId);
-      },
-    ),
-    GoRoute(
-      path: '/add_featured_product_view',
-      builder: (context, state) => AddFeaturedProductView(),
-    ),
-    GoRoute(
-      path: '/login_view',
-      pageBuilder: (context, state) =>
-          AppExpandingCircleTransitionRoute.circularReveal(
-            context: context,
-            state: state,
-            child: const LoginViewDriver(),
-          ),
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'register_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              const RegisterViewDriver(),
-        ),
-        GoRoute(
-          path: 'password-forgot_view',
-          builder: (BuildContext context, GoRouterState state) =>
-              const PasswordForgotViewDriver(),
-        ),
-      ],
-    ),
+    mainScreenShellRoutes,
+    ...otherRoutes,
+    ...authRoutes,
+    adminShellRoute,
   ],
 );
 
@@ -392,11 +177,13 @@ class CrabPayApp extends StatelessWidget {
             message: 'CrabPayApp build',
           );
           return MaterialApp.router(
+            // showPerformanceOverlay: true,
+            // debugShowMaterialGrid: true,
             debugShowCheckedModeBanner: false,
             title: 'CrabPay Demo',
             theme: ThemeData(colorScheme: lightScheme, useMaterial3: true),
             darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
-            routerConfig: _router,
+            routerConfig: _appRouter,
             builder: (context, child) {
               return GlobalLoaderStack(
                 child: Overlay(

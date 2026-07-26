@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class UpdateProductAdminPanelView extends StatefulWidget {
-  static const routeName = 'update_product_admin_panel_view';
+  static final routeName = AppRoutes.updateProduct.name;
   final String? productId;
   const UpdateProductAdminPanelView({super.key, required this.productId});
 
@@ -100,7 +101,9 @@ class _UpdateProductAdminPanelViewState
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.support.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -112,7 +115,7 @@ class _UpdateProductAdminPanelViewState
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/ask');
+                context.go(AppRoutes.support.path);
               }
             },
             icon: Icon(Icons.arrow_back),
@@ -319,7 +322,7 @@ class _UpdateProductAdminPanelViewState
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: _selectedProduct != null
+                    onPressed: _selectedProduct != null && state.states != DatabaseStatesAdmin.dbLoading
                         ? () {
                             getIt<InnerLoggerHandler>().logBreadcrumb(
                               message:

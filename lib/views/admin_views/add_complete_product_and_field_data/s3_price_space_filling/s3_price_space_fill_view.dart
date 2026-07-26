@@ -2,6 +2,7 @@ import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bl
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -85,9 +86,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                                   _dataAndWidgetsPreperation!.productFields!,
                             ),
                           );
-                          context.push(
-                            '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view/data_overview_view',
-                          );
+                          context.pushNamed(AppRoutes.dataOverview.name);
                         }
                       },
                       child: Text('Next'),

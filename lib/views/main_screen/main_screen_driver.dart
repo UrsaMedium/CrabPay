@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
@@ -49,6 +52,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void didUpdateWidget(covariant MainScreenDriver oldWidget) {
+     Timeline.startSync('Data_Processing_Tweak_V2');
     super.didUpdateWidget(oldWidget);
     if (_pageController.hasClients &&
         _pageController.page?.round() != widget.navigationShell.currentIndex &&
@@ -59,6 +63,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         curve: Curves.easeInOut,
       );
     }
+    Timeline.finishSync();
   }
 
   final List<Widget> _pages = const [
@@ -69,6 +74,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   ];
 
   void _onPageSwiped(int index, MainScreenCubit cubit) {
+    Timeline.startSync('Data_Processing_Tweak_V2');
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onPageSwiped',
       data: {'index': index},
@@ -76,15 +82,18 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (_isSyncingByNavBarTap) return;
     widget.navigationShell.goBranch(index);
     cubit.onPageSwipe(index);
+    Timeline.finishSync();
   }
 
   void _onPageSelected(int index, MainScreenCubit cubit) async {
+    Timeline.startSync('Data_Processing_Tweak_V2');
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onPageSelected',
       data: {'index': index},
     );
     if (index == widget.navigationShell.currentIndex) {
       widget.navigationShell.goBranch(index, initialLocation: true);
+      Timeline.finishSync();
       return;
     }
     setState(() => _isSyncingByNavBarTap = true);
@@ -98,6 +107,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (mounted) {
       setState(() => _isSyncingByNavBarTap = false);
     }
+    Timeline.finishSync();
   }
 
   void _onProfileIconPressed({
@@ -122,7 +132,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         builder: (BuildContext sheetContext) => ProfileViewDriver(),
       );
     } else {
-      context.push('/login_view', extra: buttonCenter);
+      context.push(AppRoutes.login.path, extra: buttonCenter);
     }
   }
 
@@ -130,14 +140,14 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onPurchasesPressed',
     );
-    context.push('/purchases_view');
+    context.push(AppRoutes.purchases.path);
   }
 
   void _onAdminPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onAdminPressed',
     );
-    context.push('/admin_tools_view');
+    context.push(AppRoutes.adminTools.path);
   }
 
   bool _isLoggedIn(AuthState authState) {

@@ -65,7 +65,7 @@ class DatabaseStateAdmin {
   final DatabaseStatesAdmin states;
 
   const DatabaseStateAdmin({
-    this.states = DatabaseStatesAdmin.dbLoading,
+    this.states = DatabaseStatesAdmin.initialized,
   });
 
   DatabaseStateAdmin copyWith({

@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SupportPageDriver extends StatefulWidget {
-  static const routeName = 'support_view';
+  static const routeName = 'support';
   final String? message;
   const SupportPageDriver({super.key, this.message});
 

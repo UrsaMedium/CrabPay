@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -56,7 +57,9 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.support.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -68,7 +71,7 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/ask');
+                context.go(AppRoutes.support.path);
               }
             },
             icon: Icon(Icons.arrow_back),

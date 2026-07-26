@@ -66,9 +66,11 @@ class _StorePageDriverState extends State<StorePageDriver> {
 
             return MaterialStorePageView(
               onOpenProductCardCallBack: openProductCardCallBack,
-              products: products ?? [],
+              products: (filterdProductList?.isEmpty ?? true)
+                  ? products ?? []
+                  : filterdProductList!,
               reFresher: () => _reFresher(context),
-              filterdProductList: filterdProductList ?? [],
+              // filterdProductList: filterdProductList ?? [],
               onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
             );
           },

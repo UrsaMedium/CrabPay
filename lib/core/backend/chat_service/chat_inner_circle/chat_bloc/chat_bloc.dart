@@ -81,7 +81,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           status: ChatStates.messagesUpdated,
         ),
       );
-      add(ChatEventMarkAsRead());
+      // add(ChatEventMarkAsRead());
     });
 
     // Send Message ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -132,15 +132,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     // Mark Messages as Read ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    on<ChatEventMarkAsRead>((event, emit) async {
-      final currentThread = state.activeThread;
-      if (currentThread == null) return;
-      try {
-        await _chatHandler.markMessagesAsRead(threadId: currentThread.id);
-      } catch (e) {
-        developer.log('Could not mark messages as read: $e');
-      }
-    });
+    // on<ChatEventMarkAsRead>((event, emit) async {
+    //   final currentThread = state.activeThread;
+    //   if (currentThread == null) return;
+    //   try {
+    //     await _chatHandler.markMessagesAsRead(threadId: currentThread.id);
+    //   } catch (e) {
+    //     developer.log('Could not mark messages as read: $e');
+    //   }
+    // });
 
     // Flush Data ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventFlushData>((event, emit) {

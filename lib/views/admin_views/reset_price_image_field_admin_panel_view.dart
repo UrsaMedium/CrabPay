@@ -6,13 +6,14 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class ResetPriceImageFieldAdminPanelView extends StatefulWidget {
-  static const routeName = 'reset_price_image_field_admin_panel_view';
+  static final routeName = AppRoutes.resetPriceImage.path;
   final String? productId;
   const ResetPriceImageFieldAdminPanelView({super.key, this.productId});
 
@@ -103,7 +104,9 @@ class _ResetPriceImageFieldAdminPanelViewState
               'ResetPriceImageFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -116,7 +119,7 @@ class _ResetPriceImageFieldAdminPanelViewState
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/');
+                context.go(AppRoutes.home.path);
               }
             },
             icon: Icon(Icons.arrow_back),
@@ -148,7 +151,7 @@ class _ResetPriceImageFieldAdminPanelViewState
                   // GlobalLoadingScreen().show();
                 } else {
                   // GlobalLoadingScreen().hide();
-                  context.go('/');
+                  context.go(AppRoutes.home.path);
                 }
               },
               child: ElevatedButton(

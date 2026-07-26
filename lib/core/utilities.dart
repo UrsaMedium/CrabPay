@@ -9,6 +9,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -206,7 +207,7 @@ Future<void> openProductCardCallBack({
   );
   //
   await context.pushNamed(
-    'card_view',
+    AppRoutes.productCard.name,
     pathParameters: {
       'productId': productId,
       'additionalSuffix': additionalSuffix,

@@ -8,6 +8,7 @@ import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_ha
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/field_constructor_bottom_sheet.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s2_add_fields_views/s2_add_product_fields_view.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -122,7 +123,9 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.support.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -131,7 +134,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/');
+                context.go(AppRoutes.home.path);
               }
             },
             icon: Icon(Icons.arrow_back),
@@ -257,7 +260,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                                       ),
                                                     );
                                               }
-                                              context.go('/');
+                                              context.go(AppRoutes.home.path);
                                             } catch (e) {
                                               Fluttertoast.showToast(
                                                 msg: 'BOO',

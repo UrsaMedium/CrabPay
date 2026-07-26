@@ -5,6 +5,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,9 @@ class _AdminToolsViewState extends State<AdminToolsView> {
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -65,20 +68,20 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                   ),
                   ElevatedButton(
                     onPressed: () =>
-                        context.push('/add_complete_product_product_view'),
+                        context.pushNamed(AppRoutes.addCompleteProduct.name),
                     child: Text('Add complete product'),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.push('/deleting_view'),
+                    onPressed: () => context.pushNamed(AppRoutes.deleting.name),
                     child: Text('Delete instances from DB'),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.push('/add_featured_product_view'),
+                    onPressed: () =>
+                        context.pushNamed(AppRoutes.addFeaturedProduct.name),
                     child: Text('Add Featured Product'),
                   ),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.push('/admin_tools_view/choose_thread_view'),
+                    onPressed: () => context.pushNamed(AppRoutes.chooseThread.name),
                     child: Text('Answer to users'),
                   ),
                   ElevatedButton(

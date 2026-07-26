@@ -9,6 +9,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
       message: 'BuyBottomSheetDriver _onResetImageFieldPressed',
     );
     context.pushNamed(
-      'reset_price_image_field_admin_panel_view',
+      AppRoutes.resetPriceImage.path,
       pathParameters: {'productId': widget.product.id},
     );
   }
@@ -56,7 +57,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
       message: 'BuyBottomSheetDriver _onAddFieldPressed',
     );
     context.pushNamed(
-      'add_field_admin_panel_view',
+      AppRoutes.addField.path,
       pathParameters: {'productId': widget.product.id},
     );
   }
@@ -134,7 +135,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'BuyBottomSheetDriver _onCartIconPressed',
     );
-    context.go('/cart');
+    context.go(AppRoutes.cart.path);
   }
 
   void _onUserInput({

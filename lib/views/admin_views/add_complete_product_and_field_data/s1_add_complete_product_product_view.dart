@@ -5,6 +5,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/dialogs/generic_dialog_text_input.dart'
     show showOnInputDialog;
 import 'package:flutter/material.dart';
@@ -75,7 +76,9 @@ class _AddCompleteProductProductViewState
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -84,7 +87,7 @@ class _AddCompleteProductProductViewState
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/ask');
+                context.go(AppRoutes.home.path);
               }
             },
             icon: Icon(Icons.arrow_back),
@@ -225,9 +228,7 @@ class _AddCompleteProductProductViewState
                                   appProduct: collectedAppProduct,
                                 ),
                               );
-                              context.push(
-                                '/add_complete_product_product_view/add_product_fields_view',
-                              );
+                              context.pushNamed(AppRoutes.addProductFields.name);
                             } else {
                               Fluttertoast.showToast(msg: 'Not enough data');
                             }
@@ -278,9 +279,7 @@ class _AddCompleteProductProductViewState
                             appProduct: collectedAppProduct,
                           ),
                         );
-                        context.go(
-                          '/add_complete_product_product_view/add_product_fields_view',
-                        );
+                        context.pushNamed(AppRoutes.addProductFields.name);
                       },
                       child: Text('Mock Data'),
                     ),

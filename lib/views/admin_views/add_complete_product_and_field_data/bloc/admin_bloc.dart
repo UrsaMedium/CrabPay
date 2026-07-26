@@ -7,6 +7,7 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -110,7 +111,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
           message: 'AdminEventPushesData: pushed product and fields',
           data: {'product': productToPush, 'fields': state.appProductFields},
         );
-        event.context.go('/');
+        event.context.go(AppRoutes.home.path);
       } catch (e) {
         getIt<OuterLoggerHandler>().logBreadcrumb(
           message: 'AdminEventPushesData: error pushing product and fields',

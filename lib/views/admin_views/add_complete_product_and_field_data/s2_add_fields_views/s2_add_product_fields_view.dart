@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/widgets/widget_factory.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
@@ -212,9 +213,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                                     appProductFields: collectFields,
                                   ),
                                 );
-                                context.push(
-                                  '/add_complete_product_product_view/add_product_fields_view/price_space_fill_view',
-                                );
+                                context.pushNamed(AppRoutes.priceSpaceFill.name);
                               } else {
                                 Fluttertoast.showToast(
                                   msg:

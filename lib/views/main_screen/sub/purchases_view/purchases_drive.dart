@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/purchases_view/material_purchases_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -27,35 +28,52 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
     }
   }
 
-  void _onSupportSendMessagePressed(String ordedId) {
-    String message = '-new ticket-\n$ordedId\n';
-    context.goNamed('support_view', queryParameters: {'message': message});
+  void _onSupportSendMessagePressed(String orderId) {
+    context.goNamed(
+      AppRoutes.support.name,
+      queryParameters: {'orderId': orderId},
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PurchasesViewCubit(),
-      child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, cartState) {
-          final itemsAfterPayment = cartState.cartItemsProccessed ?? [];
-          context.read<PurchasesViewCubit>().sortCartItems(
-            itemsAfterPayment: itemsAfterPayment,
-            products: context.read<DatabaseBloc>().state.products ?? [],
-          );
-          return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
-            builder: (context, viewState) {
-              return MaterialPurchasesView(
-                itemsDelivered: viewState.itemsDelivered ?? [],
-                itemsInProccess: viewState.itemsInProccess ?? [],
-                orderGroups: viewState.orderGroups ?? {},
-                onBackButtonPressed: () => _onBackButtonPressed(context),
-                itemToProductMap: viewState.itemToProductMap ?? {},
-                onSupportSendMessagePressed: _onSupportSendMessagePressed,
-              );
-            },
-          );
-        },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        getIt<InnerLoggerHandler>().logBreadcrumb(
+          message: 'LoginViewDriver onPopInvokedWithResult',
+          data: {'didPop': didPop, 'result': result},
+        );
+        if (didPop) {
+          return;
+        }
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
+      },
+      child: BlocProvider(
+        create: (_) => PurchasesViewCubit(),
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, cartState) {
+            final itemsAfterPayment = cartState.cartItemsProccessed ?? [];
+            context.read<PurchasesViewCubit>().sortCartItems(
+              itemsAfterPayment: itemsAfterPayment,
+              products: context.read<DatabaseBloc>().state.products ?? [],
+            );
+            return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
+              builder: (context, viewState) {
+                return MaterialPurchasesView(
+                  itemsDelivered: viewState.itemsDelivered ?? [],
+                  itemsInProccess: viewState.itemsInProccess ?? [],
+                  orderGroups: viewState.orderGroups ?? {},
+                  onBackButtonPressed: () => _onBackButtonPressed(context),
+                  itemToProductMap: viewState.itemToProductMap ?? {},
+                  onSupportSendMessagePressed: _onSupportSendMessagePressed,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

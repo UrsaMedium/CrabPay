@@ -4,12 +4,16 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:retry/retry.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart'; // For debugPrint
 
 class SupabaseOuterAuthInterface implements AuthInnerInterface {
   SupabaseClient get _supabase => Supabase.instance.client;
-
+  final retryer = const RetryOptions(
+    maxAttempts: 3,
+    delayFactor: Duration(milliseconds: 500),
+  );
   @override
   Future<AppAuthUser> createUser({
     required String email,
@@ -24,21 +28,24 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
       var currentUser = _supabase.auth.currentUser;
 
       if (currentUser == null) {
-        final anonRes = await _supabase.auth.signInAnonymously();
+        final anonRes = await retryer.retry(
+          () => _supabase.auth.signInAnonymously(),
+        );
         currentUser = anonRes.user;
       }
 
       if (currentUser != null && currentUser.isAnonymous) {
         // Upgrade anonymous user to permanent
-        final response = await _supabase.auth.updateUser(
-          UserAttributes(email: email, password: password),
+        final response = await retryer.retry(
+          () => _supabase.auth.updateUser(
+            UserAttributes(email: email, password: password),
+          ),
         );
         if (response.user == null) throw NoUserSignInException();
       } else {
         // Standard signup
-        final response = await _supabase.auth.signUp(
-          email: email,
-          password: password,
+        final response = await retryer.retry(
+          () => _supabase.auth.signUp(email: email, password: password),
         );
 
         if (response.user == null) throw NoUserSignInException();
@@ -52,7 +59,7 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         }
       }
 
-      final user = await getUser();
+      final user = await retryer.retry(() => getUser());
       if (user != null) return user;
 
       throw NoUserSignInException();
@@ -93,7 +100,9 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         message: 'exe: signInAnonymously',
         category: 'Auth Service',
       );
-      final response = await _supabase.auth.signInAnonymously();
+      final response = await retryer.retry(
+        () => _supabase.auth.signInAnonymously(),
+      );
       final anonUser = response.user;
       return anonUser != null ? _mapToInnerCircle(anonUser) : null;
     } on AuthException catch (e) {
@@ -125,9 +134,9 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         category: 'Auth Service',
         data: {'email': email, 'password': password},
       );
-      final response = await _supabase.auth.signInWithPassword(
-        email: email,
-        password: password,
+      final response = await retryer.retry(
+        () =>
+            _supabase.auth.signInWithPassword(email: email, password: password),
       );
 
       if (response.user != null) {
@@ -148,7 +157,8 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
   }
 
   @override
-  Future<void> logOut() async => await _supabase.auth.signOut();
+  Future<void> logOut() async =>
+      await retryer.retry(() => _supabase.auth.signOut());
 
   @override
   Future<void> sendEmailVerification() async {}
@@ -160,9 +170,11 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         message: 'exe: initialize',
         category: 'Auth Service',
       );
-      await Supabase.initialize(
-        url: supabaseAccessConf['url']!,
-        publishableKey: supabaseAccessConf['publishableKey']!,
+      await retryer.retry(
+        () => Supabase.initialize(
+          url: supabaseAccessConf['url']!,
+          publishableKey: supabaseAccessConf['publishableKey']!,
+        ),
       );
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
@@ -181,7 +193,7 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
       category: 'Auth Service',
       data: {'toEmail': toEmail},
     );
-    await _supabase.auth.resetPasswordForEmail(toEmail);
+    await retryer.retry(() => _supabase.auth.resetPasswordForEmail(toEmail));
   }
 
   AppAuthUser _mapToInnerCircle(User user) {

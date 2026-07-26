@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet_driver.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/material_product_view.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductViewDriver extends StatelessWidget {
-  static const routeName = 'card-view';
+  static const routeName = 'card_view';
   final String productId; //also tag identoty
   final String additionalSuffix; //tag identoty
   final String index; //tag identoty
@@ -41,7 +42,7 @@ class ProductViewDriver extends StatelessWidget {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop() ? context.go('/') : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: BlocBuilder<DatabaseBloc, DatabaseState>(
         builder: (context, dbState) {
@@ -54,7 +55,7 @@ class ProductViewDriver extends StatelessWidget {
               message: 'ProductViewDriver product not found',
               data: {'productId': productId},
             );
-            context.go('/');
+            context.go(AppRoutes.home.path);
           }
 
           final isBeingLoaded = dbState.states == DatabaseStates.dbLoading;
@@ -70,7 +71,7 @@ class ProductViewDriver extends StatelessWidget {
             if (GoRouter.of(context).canPop()) {
               context.pop();
             } else {
-              context.go('/');
+              context.go(AppRoutes.home.path);
             }
           }
 
@@ -79,7 +80,7 @@ class ProductViewDriver extends StatelessWidget {
               message: 'ProductViewDriver onAdminProductPanelPressed',
             );
             context.pushNamed(
-              'update_product_admin_panel_view',
+              AppRoutes.updateProduct.name,
               pathParameters: {'productId': productId},
             );
           }

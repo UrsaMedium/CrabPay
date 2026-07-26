@@ -5,6 +5,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/dialogs/on_database_item_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class UpdateFieldAdminPanelView extends StatefulWidget {
-  static const routeName = 'update_field_admin_panel_view';
+  static final routeName = AppRoutes.updateField.path;
   final String? fieldId;
   final String? productId;
   const UpdateFieldAdminPanelView({
@@ -63,7 +64,9 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
               'UpdateFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
         );
         if (didPop) return;
-        !Navigator.of(context).canPop() ? context.go('/ask') : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.support.path)
+            : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -75,7 +78,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
               if (GoRouter.of(context).canPop()) {
                 context.pop();
               } else {
-                context.go('/');
+                context.go(AppRoutes.home.path);
               }
             },
             icon: Icon(Icons.arrow_back),
@@ -116,7 +119,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                     productField: _currentField!,
                                   ),
                                 );
-                                context.go('/');
+                                context.go(AppRoutes.home.path);
                               } else {
                                 Fluttertoast.showToast(msg: 'Phew');
                               }
@@ -253,7 +256,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 Fluttertoast.showToast(
                                   msg: 'Happily ever after',
                                 );
-                                context.go('/');
+                                context.go(AppRoutes.home.path);
                               } else {
                                 Fluttertoast.showToast(msg: 'Failed');
                               }

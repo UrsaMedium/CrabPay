@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/auth_views/login_view/material_login_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop() ? context.go('/') : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: BlocProvider(
         create: (_) => LoginViewCubit(),
@@ -62,7 +63,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
               data: {'authState': authState},
             );
             if (authState is AuthStateLoggedIn) {
-              context.go('/');
+              context.go(AppRoutes.home.path);
             }
             if (authState is AuthStateLoggedOut) {
               if (authState.bloodyAuthException != null) {
@@ -119,7 +120,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
                   message: 'LoginViewDriver onSignUpPressed',
                 );
                 context.read<LoginViewCubit>().clearErrors();
-                context.push('/login_view/register_view');
+                context.push(AppRoutes.register.path);
               }
 
               void onForgotPasswordPressed() {
@@ -127,7 +128,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
                   message: 'LoginViewDriver onForgotPasswordPressed',
                 );
                 context.read<LoginViewCubit>().clearErrors();
-                context.push('/login_view/password-forgot_view');
+                context.push(AppRoutes.resetPassword.path);
               }
 
               if (defaultTargetPlatform == TargetPlatform.iOS && !kIsWeb) {
