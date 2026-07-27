@@ -216,11 +216,11 @@ Future<void> openProductCardCallBack({
   );
   // refreshing cart counter
   if (context.mounted) {
-    context.read<CartBloc>().add(
-      CartEventFetchUserCartItemAmount(
-        userId: context.read<AuthBloc>().state.currentUser.id,
-      ),
-    );
+    // context.read<CartBloc>().add(
+    //   CartEventFetchUserCartItemAmount(
+    //     userId: context.read<AuthBloc>().state.currentUser.id,
+    //   ),
+    // );
     context.read<DatabaseBloc>().add(
       DatabaseEventFetchUserPreferences(
         userId: context.read<AuthBloc>().state.currentUser.id,

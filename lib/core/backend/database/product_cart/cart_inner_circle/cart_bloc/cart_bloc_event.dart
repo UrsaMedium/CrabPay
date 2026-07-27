@@ -50,15 +50,15 @@ class CartEventSignedOutUserCheckoutItems extends CartEvent {
 
 class CartEventFlushData extends CartEvent {}
 
-class CartEventStartCartItemsStream extends CartEvent {
-  final String userId;
-  CartEventStartCartItemsStream({required this.userId});
-}
+// class CartEventStartCartItemsStream extends CartEvent {
+//   final String userId;
+//   CartEventStartCartItemsStream({required this.userId});
+// }
 
-class CartEventOnChangeStreamed extends CartEvent {
-  final List<CartItem> cartItems;
-  CartEventOnChangeStreamed({required this.cartItems});
-}
+// class CartEventOnChangeStreamed extends CartEvent {
+//   final List<CartItem> cartItems;
+//   CartEventOnChangeStreamed({required this.cartItems});
+// }
 
 class CartEventCloseStream extends CartEvent {}
 
@@ -71,10 +71,20 @@ class CartEventFetchProductCartItemAmount extends CartEvent {
   });
 }
 
-class CartEventFetchUserCartItemAmount extends CartEvent {
+class CartEventStartStreamUserCartItemAmount extends CartEvent {
   final String userId;
-  CartEventFetchUserCartItemAmount({required this.userId});
+  CartEventStartStreamUserCartItemAmount({required this.userId});
 }
+
+class CartEventUpdateUserCartItemAmountFromStream extends CartEvent {
+  final int amount;
+  CartEventUpdateUserCartItemAmountFromStream({required this.amount});
+}
+
+// class CartEventFetchUserCartItemAmount extends CartEvent {
+//   final String userId;
+//   CartEventFetchUserCartItemAmount({required this.userId});
+// }
 
 class CartEventDeleteLastAddedProductCartItem extends CartEvent {
   final String userId;

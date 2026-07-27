@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/app_routes/app_routes.dart';
@@ -52,7 +52,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void didUpdateWidget(covariant MainScreenDriver oldWidget) {
-     Timeline.startSync('Data_Processing_Tweak_V2');
     super.didUpdateWidget(oldWidget);
     if (_pageController.hasClients &&
         _pageController.page?.round() != widget.navigationShell.currentIndex &&
@@ -63,7 +62,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         curve: Curves.easeInOut,
       );
     }
-    Timeline.finishSync();
   }
 
   final List<Widget> _pages = const [
@@ -74,7 +72,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   ];
 
   void _onPageSwiped(int index, MainScreenCubit cubit) {
-    Timeline.startSync('Data_Processing_Tweak_V2');
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onPageSwiped',
       data: {'index': index},
@@ -82,18 +79,15 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (_isSyncingByNavBarTap) return;
     widget.navigationShell.goBranch(index);
     cubit.onPageSwipe(index);
-    Timeline.finishSync();
   }
 
   void _onPageSelected(int index, MainScreenCubit cubit) async {
-    Timeline.startSync('Data_Processing_Tweak_V2');
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'MainScreenDriver _onPageSelected',
       data: {'index': index},
     );
     if (index == widget.navigationShell.currentIndex) {
       widget.navigationShell.goBranch(index, initialLocation: true);
-      Timeline.finishSync();
       return;
     }
     setState(() => _isSyncingByNavBarTap = true);
@@ -107,7 +101,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (mounted) {
       setState(() => _isSyncingByNavBarTap = false);
     }
-    Timeline.finishSync();
   }
 
   void _onProfileIconPressed({
@@ -157,43 +150,42 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, authState) {
-        return BlocProvider(
-          create: (_) => MainScreenCubit(),
-          child: BlocBuilder<MainScreenCubit, MainScreenState>(
-            builder: (context, viewState) {
-              final cubit = context.read<MainScreenCubit>();
-              final itemsCount = context.select<CartBloc, int>(
-                (bloc) => bloc.state.userCartItemAmount ?? 0,
-              );
+    return BlocProvider(
+      create: (_) => MainScreenCubit(),
+      child: BlocConsumer<MainScreenCubit, MainScreenState>(
+        listenWhen: (previous, current) => previous.page == 2,
+        listener: (context, state) {
+          context.read<ChatBloc>().add(ChatEventFlushData());
+        },
+        builder: (context, viewState) {
+          final cubit = context.read<MainScreenCubit>();
+          final itemsCount = context.select<CartBloc, int>(
+            (bloc) => bloc.state.userCartItemAmount ?? 0,
+          );
 
-              if (defaultTargetPlatform == TargetPlatform.iOS) {
-                // cupertino
-              }
-
-              return MaterialMainScreenView(
-                itemsCount: itemsCount,
-                onPageSelected: (index) => _onPageSelected(index, cubit),
-                onPageSwiped: (index) => _onPageSwiped(index, cubit),
-                onProfileIconPressed: (Offset center) => _onProfileIconPressed(
-                  isLoggedIn: _isLoggedIn(authState),
-                  context: context,
-                  buttonCenter: center,
-                ),
-                pageController: _pageController,
-                pageIndex: viewState.page,
-                pages: _pages,
-                isLoggedIn: _isLoggedIn(authState),
-                onPurchasesPressed: () => _onPurchasesPressed(context),
-                onAdminPressed: () => _onAdminPressed(context),
-                isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
-                profileIconButtonKey: profileIconButtonKey,
-              );
-            },
-          ),
-        );
-      },
+          if (defaultTargetPlatform == TargetPlatform.iOS) {
+            // cupertino
+          }
+          return MaterialMainScreenView(
+            itemsCount: itemsCount,
+            onPageSelected: (index) => _onPageSelected(index, cubit),
+            onPageSwiped: (index) => _onPageSwiped(index, cubit),
+            onProfileIconPressed: (Offset center) => _onProfileIconPressed(
+              isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
+              context: context,
+              buttonCenter: center,
+            ),
+            pageController: _pageController,
+            pageIndex: viewState.page,
+            pages: _pages,
+            isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
+            onPurchasesPressed: () => _onPurchasesPressed(context),
+            onAdminPressed: () => _onAdminPressed(context),
+            isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
+            profileIconButtonKey: profileIconButtonKey,
+          );
+        },
+      ),
     );
   }
 }

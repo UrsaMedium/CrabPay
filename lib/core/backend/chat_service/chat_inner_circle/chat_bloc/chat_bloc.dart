@@ -56,11 +56,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     // Subscribe to Real-Time Messages ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    on<ChatEventSubscribeToMessages>((event, emit) {
+    on<ChatEventSubscribeToMessages>((event, emit) async {
       developer.log('---');
       developer.log('--- ChatEventSubscribeToMessages fired');
       developer.log('---');
       _messagesSubscription?.cancel();
+      emit(
+        state.copyWith(isSubscribed: false, status: ChatStates.unsubscribed),
+      );
       _messagesSubscription = _chatHandler
           .subscribeToMessages(threadId: event.threadId)
           .listen(
@@ -77,6 +80,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ChatEventMessagesUpdated>((event, emit) {
       emit(
         state.copyWith(
+          isSubscribed: true,
           messages: event.messages,
           status: ChatStates.messagesUpdated,
         ),
@@ -91,7 +95,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       developer.log('---');
       // final currentThread = state.activeThread;
       // if (currentThread == null) return;
-
+      emit(state.copyWith(status: ChatStates.loading));
       try {
         await _chatHandler.sendMessage(
           threadId: event.threadId,
@@ -111,25 +115,25 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     // Fetch all threads ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    on<ChatEventFetchAllThreads>((event, emit) async {
-      emit(state.copyWith(status: ChatStates.loading));
-      try {
-        final allThreads = await _chatHandler.getAllThreads();
-        if (allThreads.isEmpty) {
-          emit(state.copyWith(status: ChatStates.error, allThreads: null));
-        } else {
-          emit(
-            state.copyWith(
-              status: ChatStates.fetchedAllThreads,
-              allThreads: allThreads,
-            ),
-          );
-        }
-      } catch (e) {
-        emit(state.copyWith(status: ChatStates.error));
-        rethrow;
-      }
-    });
+    // on<ChatEventFetchAllThreads>((event, emit) async {
+    //   emit(state.copyWith(status: ChatStates.loading));
+    //   try {
+    //     final allThreads = await _chatHandler.getAllThreads();
+    //     if (allThreads.isEmpty) {
+    //       emit(state.copyWith(status: ChatStates.error, allThreads: null));
+    //     } else {
+    //       emit(
+    //         state.copyWith(
+    //           status: ChatStates.fetchedAllThreads,
+    //           allThreads: allThreads,
+    //         ),
+    //       );
+    //     }
+    //   } catch (e) {
+    //     emit(state.copyWith(status: ChatStates.error));
+    //     rethrow;
+    //   }
+    // });
 
     // Mark Messages as Read ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // on<ChatEventMarkAsRead>((event, emit) async {
@@ -149,18 +153,33 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       developer.log('---');
       _messagesSubscription?.cancel();
       _messagesSubscription = null;
-      emit(const ChatState(status: ChatStates.flushed));
+      emit(
+        const ChatState(
+          activeThread: null,
+          messages: null,
+          errorMessage: null,
+          isSubscribed: false,
+          status: ChatStates.flushed,
+        ),
+      );
     });
 
+    // auth stream -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    String? currentUserId;
     _authSubscription = _authInterface.userStream.listen((user) {
-      add(ChatEventFlushData());
-      add(ChatEventInitializeThread(userId: user.id));
+      if (currentUserId != user.id) {
+        currentUserId = user.id;
+        add(ChatEventFlushData());
+        // add(ChatEventInitializeThread(userId: user.id));
+      }
     });
   }
 
   @override
   Future<void> close() {
-    developer.log('--- ChatBloc closing: canceling real-time message stream ---');
+    developer.log(
+      '--- ChatBloc closing: canceling real-time message stream ---',
+    );
     _messagesSubscription?.cancel();
     _authSubscription.cancel();
     return super.close();

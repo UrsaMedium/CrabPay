@@ -12,6 +12,8 @@ class MaterialSupportPageView extends StatelessWidget {
   final AppAuthUser currentUser;
   final bool showDownArrow;
   final VoidCallback onDonwArrowPressed;
+  final VoidCallback onStartChatPressed;
+  final bool isChatStarted;
   const MaterialSupportPageView({
     super.key,
     required this.messages,
@@ -21,6 +23,8 @@ class MaterialSupportPageView extends StatelessWidget {
     required this.scrollController,
     required this.showDownArrow,
     required this.onDonwArrowPressed,
+    required this.onStartChatPressed,
+    required this.isChatStarted,
   });
 
   @override
@@ -33,7 +37,7 @@ class MaterialSupportPageView extends StatelessWidget {
             ListView.builder(
               controller: scrollController,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              addAutomaticKeepAlives: true,
+              // addAutomaticKeepAlives: true,
               reverse: true,
               itemCount: messages.length,
               padding: EdgeInsets.only(
@@ -49,6 +53,13 @@ class MaterialSupportPageView extends StatelessWidget {
                 );
               },
             ),
+            if (!isChatStarted)
+              Center(
+                child: TextButton(
+                  onPressed: () => onStartChatPressed(),
+                  child: Text('Start The Chat'),
+                ),
+              ),
             Positioned(
               top: MediaQuery.paddingOf(context).top + 46 + 8,
               right: 32,
@@ -132,6 +143,7 @@ class MaterialSupportPageView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextField(
+                            enabled: isChatStarted,
                             controller: textEditingController,
                             keyboardType: TextInputType.multiline,
                             maxLines: 4,
@@ -149,7 +161,9 @@ class MaterialSupportPageView extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: onSendPressed,
+                          onPressed: isChatStarted
+                              ? () => onSendPressed()
+                              : null,
                           icon: Icon(Icons.send),
                         ),
                       ],

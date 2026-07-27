@@ -9,24 +9,25 @@ enum ChatStates {
   messagesUpdated,
   messageSent,
   messageSendFailed,
-  fetchedAllThreads,
   flushed,
   error,
+  subscribed,
+  unsubscribed,
 }
 
 class ChatState extends Equatable {
   final ChatStates status;
   final SupportThread? activeThread;
-  final List<SupportThread>? allThreads;
   final List<ChatMessage>? messages;
   final String? errorMessage;
+  final bool isSubscribed;
 
   const ChatState({
     this.status = ChatStates.initial,
     this.activeThread,
     this.messages,
     this.errorMessage,
-    this.allThreads,
+    this.isSubscribed = false,
   });
 
   ChatState copyWith({
@@ -34,14 +35,14 @@ class ChatState extends Equatable {
     SupportThread? activeThread,
     List<ChatMessage>? messages,
     String? errorMessage,
-    List<SupportThread>? allThreads,
+    bool? isSubscribed,
   }) {
     return ChatState(
       status: status ?? this.status,
       activeThread: activeThread ?? this.activeThread,
       messages: messages ?? this.messages,
       errorMessage: errorMessage ?? this.errorMessage,
-      allThreads: allThreads ?? this.allThreads,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
     );
   }
 
@@ -51,6 +52,6 @@ class ChatState extends Equatable {
     activeThread,
     messages,
     errorMessage,
-    allThreads,
+    isSubscribed,
   ];
 }

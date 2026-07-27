@@ -3,11 +3,12 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/dat
 
 abstract class InnerCartHandler {
   Future<List<CartItem>> fetchCartItems(String userId);
-  Stream<List<CartItem>> cartItemsStream(String userId);
+  // Stream<List<CartItem>> cartItemsStream(String userId);
+  Stream<int> streamUserCartItemAmount(String userId);
   Future<void> addCartItem(CartItem cartItem);
   Future<void> deleteCartItem(String cartItemId);
   Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user);
   Future<int> getProductCartItemAmount(String userId, String productId);
-  Future<int> getUserCartItemAmount(String userId);
+  // Future<int> getUserCartItemAmount(String userId);
   Future<bool> deleteLastAddedProductCartItem(String userId, String productId);
 }

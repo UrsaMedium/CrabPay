@@ -126,6 +126,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
         category: 'Chat Service',
         data: {'threadId': threadId},
       );
+
       return _client
           .from('chat_messages')
           .stream(primaryKey: ['id'])
@@ -144,47 +145,59 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
                   ),
                 )
                 .toList();
+          })
+          // 1. INTERCEPT RUNTIME STREAM ERRORS HERE:
+          .handleError((error, stackTrace) {
+            getIt<InnerLoggerHandler>().recordException(
+              error: 'Runtime Stream Error in subscribeToMessages: $error',
+              stackTrace: stackTrace is StackTrace
+                  ? stackTrace
+                  : StackTrace.current,
+            );
+            // Let the error flow to the UI (e.g., BLoC onError or StreamBuilder.hasError)
+            throw error;
           });
     } catch (e) {
+      // This now correctly only catches synchronous setup errors (e.g., client not initialized)
       getIt<InnerLoggerHandler>().recordException(
-        error: 'failed exe: subscribeToMessages',
+        error: 'Failed synchronous setup: subscribeToMessages',
         stackTrace: StackTrace.fromString(e.toString()),
       );
       rethrow;
     }
   }
 
-  @override
-  Future<List<SupportThread>> getAllThreads() async {
-    try {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'exe: Get All Threads',
-        category: 'Chat Service',
-      );
-      final fetchedAllThreads = await retryer.retry(() {
-        return _client.from('support_threads').select();
-      });
-      List<SupportThread> allThreads = [];
-      for (var thread in fetchedAllThreads) {
-        allThreads.add(
-          SupportThread(
-            id: thread['id'] as String,
-            userId: thread['user_id'] as String,
-            status: thread['status'] as String,
-          ),
-        );
-      }
-      return allThreads;
-    } catch (e) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'failed exe: getAllThreads',
-        stackTrace: StackTrace.fromString(e.toString()),
-      );
-      debugPrint('Failed to fetch all threads: $e');
-      Fluttertoast.showToast(msg: 'Failed to fetch all threads');
-      rethrow;
-    }
-  }
+  // @override
+  // Future<List<SupportThread>> getAllThreads() async {
+  //   try {
+  //     getIt<InnerLoggerHandler>().logBreadcrumb(
+  //       message: 'exe: Get All Threads',
+  //       category: 'Chat Service',
+  //     );
+  //     final fetchedAllThreads = await retryer.retry(() {
+  //       return _client.from('support_threads').select();
+  //     });
+  //     List<SupportThread> allThreads = [];
+  //     for (var thread in fetchedAllThreads) {
+  //       allThreads.add(
+  //         SupportThread(
+  //           id: thread['id'] as String,
+  //           userId: thread['user_id'] as String,
+  //           status: thread['status'] as String,
+  //         ),
+  //       );
+  //     }
+  //     return allThreads;
+  //   } catch (e) {
+  //     getIt<InnerLoggerHandler>().recordException(
+  //       error: 'failed exe: getAllThreads',
+  //       stackTrace: StackTrace.fromString(e.toString()),
+  //     );
+  //     debugPrint('Failed to fetch all threads: $e');
+  //     Fluttertoast.showToast(msg: 'Failed to fetch all threads');
+  //     rethrow;
+  //   }
+  // }
 }
 
       // await _client.auth.refreshSession();

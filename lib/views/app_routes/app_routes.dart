@@ -1,8 +1,10 @@
 enum AppRoutes {
+  //root
+  root('/','root'),
   //
   //User UI
   // Main screen and pages
-  home('/', 'home'),
+  home('/home', 'home'),
   store('/store', 'store'),
   support('/support', 'support'),
   cart('/cart', 'cart'),

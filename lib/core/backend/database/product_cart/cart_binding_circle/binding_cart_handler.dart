@@ -22,9 +22,9 @@ class BindingCartHandler implements InnerCartHandler {
   Future<void> addCartItem(CartItem cartItem) =>
       cartHandler.addCartItem(cartItem);
 
-  @override
-  Stream<List<CartItem>> cartItemsStream(String userId) =>
-      cartHandler.cartItemsStream(userId);
+  // @override
+  // Stream<List<CartItem>> cartItemsStream(String userId) =>
+  //     cartHandler.cartItemsStream(userId);
 
   @override
   Future<void> updateCartItem(List<CartItem> cartItems, AppAuthUser? user) =>
@@ -34,13 +34,17 @@ class BindingCartHandler implements InnerCartHandler {
   Future<int> getProductCartItemAmount(String userId, String productId) =>
       cartHandler.getProductCartItemAmount(userId, productId);
 
-  @override
-  Future<int> getUserCartItemAmount(String userId) =>
-      cartHandler.getUserCartItemAmount(userId);
+  // @override
+  // Future<int> getUserCartItemAmount(String userId) =>
+  //     cartHandler.getUserCartItemAmount(userId);
 
   @override
   Future<bool> deleteLastAddedProductCartItem(
     String userId,
     String productId,
   ) => cartHandler.deleteLastAddedProductCartItem(userId, productId);
+
+  @override
+  Stream<int> streamUserCartItemAmount(String userId) =>
+      cartHandler.streamUserCartItemAmount(userId);
 }

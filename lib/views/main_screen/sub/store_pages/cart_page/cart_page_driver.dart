@@ -169,9 +169,9 @@ class _CartPageDriverState extends State<CartPageDriver> {
             context.read<CartBloc>().add(
               CartEventFetchCartItems(userId: userId),
             );
-            context.read<CartBloc>().add(
-              CartEventFetchUserCartItemAmount(userId: userId),
-            );
+            // context.read<CartBloc>().add(
+            //   CartEventFetchUserCartItemAmount(userId: userId),
+            // );
           }
         },
         child: BlocBuilder<PaymentBloc, PaymentState>(

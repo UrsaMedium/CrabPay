@@ -2,15 +2,15 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/material_support_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SupportPageDriver extends StatefulWidget {
-  static const routeName = 'support';
+  static final routeName = AppRoutes.support.name;
   final String? message;
   const SupportPageDriver({super.key, this.message});
 
@@ -30,6 +30,11 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
     );
     debugPrint(widget.message);
     _textEditingController = TextEditingController(text: widget.message);
+    // context.read<ChatBloc>().add(
+    //   ChatEventInitializeThread(
+    //     userId: context.read<AuthBloc>().state.currentUser.id,
+    //   ),
+    // );
     super.initState();
   }
 
@@ -75,32 +80,38 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
     context.read<SupportPageCubit>().hideArrow();
   }
 
+  void _onStartChatPressed(BuildContext context) {
+    context.read<ChatBloc>().add(
+      ChatEventInitializeThread(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SupportPageCubit(),
-      child: BlocBuilder<SupportPageCubit, SupportPageState>(
-        builder: (context, viewState) {
-          return BlocListener<ChatBloc, ChatState>(
-            listener: (context, state) {
-              _onNewMessage(context);
+      child: BlocConsumer<ChatBloc, ChatState>(
+        listener: (context, state) {
+          _onNewMessage(context);
+        },
+        builder: (context, chatState) {
+          final messages = chatState.messages ?? [];
+          return BlocBuilder<SupportPageCubit, SupportPageState>(
+            builder: (context, viewState) {
+              return MaterialSupportPageView(
+                onDonwArrowPressed: () => _onDownArrowPressed(context),
+                scrollController: _scrollController,
+                currentUser: context.read<AuthBloc>().state.currentUser,
+                messages: messages,
+                textEditingController: _textEditingController,
+                onSendPressed: () => _onSendPressed(context),
+                showDownArrow: viewState.showDownScrollArrow,
+                onStartChatPressed: () => _onStartChatPressed(context),
+                isChatStarted: chatState.isSubscribed,
+              );
             },
-            child: Builder(
-              builder: (context) {
-                final messages = context.select<ChatBloc, List<ChatMessage>>(
-                  (bloc) => bloc.state.messages ?? [],
-                );
-                return MaterialSupportPageView(
-                  onDonwArrowPressed: () => _onDownArrowPressed(context),
-                  scrollController: _scrollController,
-                  currentUser: context.read<AuthBloc>().state.currentUser,
-                  messages: messages,
-                  textEditingController: _textEditingController,
-                  onSendPressed: () => _onSendPressed(context),
-                  showDownArrow: viewState.showDownScrollArrow,
-                );
-              },
-            ),
           );
         },
       ),

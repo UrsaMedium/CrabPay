@@ -10,6 +10,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retry/retry.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OuterCartHandlerWithSupabase implements InnerCartHandler {
   final GraphQLClient _client = SupabaseGraphQLClient.client;
@@ -83,7 +84,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         message: 'Fetching cart items',
         category: 'Cart Items',
         data: {'userId': userId},
-      );
+      ); // TODO
       final QueryOptions options = QueryOptions(
         document: gql(r'''
           query($userId: String!) {
@@ -174,36 +175,128 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     }
   }
 
+  // @override
+  // Stream<List<CartItem>> cartItemsStream(String userId) {
+  //   try {
+  //     getIt<InnerLoggerHandler>().logBreadcrumb(
+  //       message: 'Cart item streming',
+  //       category: 'Cart Items',
+  //       data: {'userId': userId},
+  //     );
+  //     final SubscriptionOptions options = SubscriptionOptions(
+  //       document: gql(r'''
+  //   subscription($userId: String!) {
+  //     cartItemCollection(filter: { userId: { eq: $userId } }) {
+  //       edges {
+  //         node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
+  //       }
+  //     }
+  //   }
+  // '''),
+  //       variables: {'userId': userId},
+  //     );
+
+  //     return _client.subscribe(options).map((result) {
+  //       final nodes =
+  //           result.data?['cartItemCollection']['edges'] as List? ?? [];
+  //       return _dataCasting(nodes);
+  //     });
+  //   } catch (e) {
+  //     getIt<InnerLoggerHandler>().recordException(
+  //       error: 'Failed to start stream of cart items',
+  //       stackTrace: StackTrace.fromString(e.toString()),
+  //     );
+  //     rethrow;
+  //   }
+  // }
+
+  // @override
+  // Future<int> getUserCartItemAmount(String userId) async {
+  //   try {
+  //     getIt<InnerLoggerHandler>().logBreadcrumb(
+  //       message: 'Getting User Cart Item Amount',
+  //       category: 'Cart Items',
+  //       data: {'userId': userId},
+  //     );
+  //     final QueryOptions options = QueryOptions(
+  //       document: gql(r'''
+  //         query($uId: String!) {
+  //           ofUserCartItemCounterCollection(filter: { userId: { eq: $uId } }) {
+  //             edges { node { userCartItemCount } }
+  //           }
+  //         }
+  //       '''),
+  //       variables: {'uId': userId},
+  //       fetchPolicy: FetchPolicy.networkOnly,
+  //     );
+
+  //     final result = await retryer.retry(() => _client.query(options));
+
+  //     if (result.hasException) {
+  //       debugPrint(
+  //         ' GraphQL Query Error (User Cart Count): ${result.exception.toString()}',
+  //       );
+  //       throw Exception(result.exception.toString());
+  //     }
+
+  //     final nodes =
+  //         result.data?['ofUserCartItemCounterCollection']['edges'] as List? ??
+  //         [];
+
+  //     if (nodes.isEmpty) return 0;
+
+  //     return nodes.first['node']['userCartItemCount'] ?? 0;
+  //   } catch (e) {
+  //     getIt<InnerLoggerHandler>().recordException(
+  //       error: 'Failed to get amount of cart items',
+  //       stackTrace: StackTrace.fromString(e.toString()),
+  //     );
+  //     rethrow;
+  //   }
+  // }
+
   @override
-  Stream<List<CartItem>> cartItemsStream(String userId) {
+  Stream<int> streamUserCartItemAmount(String userId) {
     try {
+      // 1. Log the synchronous setup attempt
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'Cart item streming',
-        category: 'Cart Items',
+        message: 'exe: Start User Cart Item Amount Stream',
+        category: 'Cart Service',
         data: {'userId': userId},
       );
-      final SubscriptionOptions options = SubscriptionOptions(
-        document: gql(r'''
-    subscription($userId: String!) {
-      cartItemCollection(filter: { userId: { eq: $userId } }) {
-        edges {
-          node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
-        }
-      }
-    }
-  '''),
-        variables: {'userId': userId},
-      );
 
-      return _client.subscribe(options).map((result) {
-        final nodes =
-            result.data?['cartItemCollection']['edges'] as List? ?? [];
-        return _dataCasting(nodes);
-      });
-    } catch (e) {
+      final supabase = Supabase.instance.client;
+      // 3. Build and return the robust WebSocket stream pipeline
+      return supabase
+          .from('ofUserCartItemCounter')
+          .stream(primaryKey: ['userId'])
+          .eq('userId', userId)
+          .map((List<Map<String, dynamic>> rows) {
+            // A. Guard against empty state (e.g., new user with no cart items yet)
+            if (rows.isEmpty) {
+              return 0;
+            }
+
+            // B. Safe numeric casting (prevents runtime double-to-int type errors)
+            final rawCount = rows.first['userCartItemCount'];
+            return (rawCount as num?)?.toInt() ?? 0;
+          })
+          // 4. CRITICAL: Asynchronous error interception for live data drops
+          .handleError((Object error, StackTrace stackTrace) {
+            getIt<InnerLoggerHandler>().recordException(
+              error:
+                  'Runtime WebSocket Error in userCartItemAmountStream: $error',
+              stackTrace: stackTrace,
+            );
+
+            // Let the error flow to UI layer (e.g., StreamBuilder.hasError / BLoC onError)
+            throw error;
+          });
+    } catch (e, s) {
+      // 5. Catch immediate synchronous configuration errors
       getIt<InnerLoggerHandler>().recordException(
-        error: 'Failed to start stream of cart items',
-        stackTrace: StackTrace.fromString(e.toString()),
+        error: 'Failed synchronous setup: userCartItemAmountStream',
+        stackTrace: s,
       );
       rethrow;
     }
@@ -289,51 +382,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'Failed to get product cart items amount',
-        stackTrace: StackTrace.fromString(e.toString()),
-      );
-      rethrow;
-    }
-  }
-
-  @override
-  Future<int> getUserCartItemAmount(String userId) async {
-    try {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'Getting User Cart Item Amount',
-        category: 'Cart Items',
-        data: {'userId': userId},
-      );
-      final QueryOptions options = QueryOptions(
-        document: gql(r'''
-          query($uId: String!) {
-            ofUserCartItemCounterCollection(filter: { userId: { eq: $uId } }) {
-              edges { node { userCartItemCount } }
-            }
-          }
-        '''),
-        variables: {'uId': userId},
-        fetchPolicy: FetchPolicy.networkOnly,
-      );
-
-      final result = await retryer.retry(() => _client.query(options));
-
-      if (result.hasException) {
-        debugPrint(
-          ' GraphQL Query Error (User Cart Count): ${result.exception.toString()}',
-        );
-        throw Exception(result.exception.toString());
-      }
-
-      final nodes =
-          result.data?['ofUserCartItemCounterCollection']['edges'] as List? ??
-          [];
-
-      if (nodes.isEmpty) return 0;
-
-      return nodes.first['node']['userCartItemCount'] ?? 0;
-    } catch (e) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'Failed to get amount of cart items',
         stackTrace: StackTrace.fromString(e.toString()),
       );
       rethrow;
