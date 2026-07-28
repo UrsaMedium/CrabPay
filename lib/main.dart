@@ -19,7 +19,6 @@ import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
 import 'package:crabpay/views/app_routes/main_screen_routes.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
-import 'package:crabpay/views/root_view.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/views/app_routes/admin_routes.dart';
@@ -134,18 +133,12 @@ Future<void> main() async {
 }
 
 final GoRouter _appRouter = GoRouter(
-  initialLocation: AppRoutes.root.path,
+  initialLocation: AppRoutes.home.path,
   routes: <RouteBase>[
-    GoRoute(
-      path: AppRoutes.root.path,
-      builder: (context, state) => RootView(),
-      routes: [
-        mainScreenShellRoutes,
-        ...otherRoutes,
-        ...authRoutes,
-        adminShellRoute,
-      ],
-    ),
+    ...mainScreenShellRoutes,
+    ...otherRoutes,
+    ...authRoutes,
+    adminShellRoute,
   ],
 );
 

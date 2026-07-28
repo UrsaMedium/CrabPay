@@ -1,1 +1,3 @@
 !VRI, !Sentry, !WindowOnBackDispatcher, !MIUIInput
+
+!Sentry,  !MIUIInput, !InsetsSource, !FlutterJNI, !ViewRootImplStubImpl

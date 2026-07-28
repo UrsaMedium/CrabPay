@@ -5,8 +5,6 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class MaterialPurchasesView extends StatelessWidget {
-  final List<CartItem> itemsInProccess;
-  final List<CartItem> itemsDelivered;
   final Map<String, List<CartItem>> orderGroups;
   final Map<CartItem, Product> itemToProductMap;
   final VoidCallback onBackButtonPressed;
@@ -14,8 +12,6 @@ class MaterialPurchasesView extends StatelessWidget {
   const MaterialPurchasesView({
     super.key,
     required this.onBackButtonPressed,
-    required this.itemsInProccess,
-    required this.itemsDelivered,
     required this.orderGroups,
     required this.itemToProductMap,
     required this.onSupportSendMessagePressed,

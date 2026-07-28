@@ -10,7 +10,6 @@ import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_ha
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
-import 'package:crabpay/views/main_screen/sub/profile_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -113,17 +112,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
       data: {'isLoggedIn': isLoggedIn},
     );
     if (isLoggedIn) {
-      showModalBottomSheet(
-        useRootNavigator: false,
-        showDragHandle: false,
-        useSafeArea: false,
-        context: context,
-        enableDrag: true,
-        isScrollControlled: true,
-        backgroundColor: context.appColorScheme.surfaceContainerHighest
-            .withValues(alpha: .5),
-        builder: (BuildContext sheetContext) => ProfileViewDriver(),
-      );
+      context.push(AppRoutes.profileSheet.path);
     } else {
       context.push(AppRoutes.login.path, extra: buttonCenter);
     }

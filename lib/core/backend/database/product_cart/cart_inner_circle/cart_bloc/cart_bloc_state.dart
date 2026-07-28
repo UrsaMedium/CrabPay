@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
@@ -21,14 +22,14 @@ enum CartStates {
   failedToDeleteLastAddedProductCartItem,
 }
 
-enum IsStreaming { yes, no }
+enum IsCartStreaming { yes, no }
 
 @immutable
 class CartState {
-  final IsStreaming isStreaming;
+  final IsCartStreaming isCartStreaming;
   final List<CartItem>? cartItemsToBuy;
-  final List<CartItem>? cartItemsProccessed;
-  final List<CartItem>? allUserCartItems;
+  final PaginatedResult<String>? orders;
+  final Map<String, List<CartItem>>? itemsOfOrder;
   final CartItem? cartItemToPush;
   final CartStates states;
   final int? productCartItemAmount;
@@ -37,34 +38,34 @@ class CartState {
     this.cartItemsToBuy,
     this.states = CartStates.empty,
     this.cartItemToPush,
-    this.isStreaming = IsStreaming.no,
-    this.allUserCartItems,
+    this.isCartStreaming = IsCartStreaming.no,
     this.productCartItemAmount,
     this.userCartItemAmount,
-    this.cartItemsProccessed,
+    this.orders,
+    this.itemsOfOrder,
   });
 
   CartState copyWith({
     List<CartItem>? cartItemsToBuy,
-    List<CartItem>? cartItemsProccessed,
-    List<CartItem>? allUserCartItems,
     List<CartItem>? cartItemsFromSignedOutUser,
+    PaginatedResult<String>? orders,
+    Map<String, List<CartItem>>? itemsOfOrder,
     CartStates? states,
     CartItem? cartItemToPush,
-    IsStreaming? isStreaming,
+    IsCartStreaming? isCartStreaming,
     int? productCartItemAmount,
     int? userCartItemAmount,
   }) {
     return CartState(
       cartItemsToBuy: cartItemsToBuy ?? this.cartItemsToBuy,
-      cartItemsProccessed: cartItemsProccessed ?? this.cartItemsProccessed,
-      allUserCartItems: allUserCartItems ?? this.allUserCartItems,
       cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
-      isStreaming: isStreaming ?? this.isStreaming,
+      isCartStreaming: isCartStreaming ?? this.isCartStreaming,
       productCartItemAmount:
           productCartItemAmount ?? this.productCartItemAmount,
       userCartItemAmount: userCartItemAmount ?? this.userCartItemAmount,
+      itemsOfOrder: itemsOfOrder ?? this.itemsOfOrder,
+      orders: orders ?? this.orders,
     );
   }
 }

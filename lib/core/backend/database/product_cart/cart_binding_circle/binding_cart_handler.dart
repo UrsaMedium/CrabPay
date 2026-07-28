@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
+import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_outer_circle/outer_cart_handler_with_supabase.dart';
@@ -10,9 +11,9 @@ class BindingCartHandler implements InnerCartHandler {
   factory BindingCartHandler.cartDb() =>
       BindingCartHandler(cartHandler: (OuterCartHandlerWithSupabase()));
 
-  @override
-  Future<List<CartItem>> fetchCartItems(String userId) =>
-      cartHandler.fetchCartItems(userId);
+  // @override
+  // Future<List<CartItem>> fetchCartItems(String userId) =>
+  //     cartHandler.fetchCartItems(userId);
 
   @override
   Future<void> deleteCartItem(String cartItemId) =>
@@ -47,4 +48,18 @@ class BindingCartHandler implements InnerCartHandler {
   @override
   Stream<int> streamUserCartItemAmount(String userId) =>
       cartHandler.streamUserCartItemAmount(userId);
+
+  @override
+  Future<List<CartItem>> fetchCartItemsToBuy(String userId) =>
+      cartHandler.fetchCartItemsToBuy(userId);
+
+  @override
+  Future<PaginatedResult<String>> fetchPaymentIds(
+    String userId, {
+    String? pageToken,
+  }) => cartHandler.fetchPaymentIds(userId, pageToken: pageToken);
+
+  @override
+  Future<List<CartItem>> fetchItemsOfOrder(String userId, String orderId) =>
+      cartHandler.fetchItemsOfOrder(userId, orderId);
 }

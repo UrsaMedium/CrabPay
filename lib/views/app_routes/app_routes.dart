@@ -1,6 +1,6 @@
 enum AppRoutes {
   //root
-  root('/','root'),
+  root('/', 'root'),
   //
   //User UI
   // Main screen and pages
@@ -8,13 +8,11 @@ enum AppRoutes {
   store('/store', 'store'),
   support('/support', 'support'),
   cart('/cart', 'cart'),
+  profileSheet('/profile_sheet', 'profileSheet'),
   purchases('/purchases_view', 'purchases'),
 
   // Product View
-  productCard(
-    '/card_view/:productId/:additionalSuffix/:index',
-    'card_view',
-  ),
+  productCard('/card_view/:productId/:additionalSuffix/:index', 'card_view'),
 
   // Auth
   login('/login_view', 'login'),

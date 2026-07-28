@@ -148,9 +148,7 @@ class _ResetPriceImageFieldAdminPanelViewState
                   data: {'state': state.states.toString()},
                 );
                 if (state.states == DatabaseStatesAdmin.dbLoading) {
-                  // GlobalLoadingScreen().show();
                 } else {
-                  // GlobalLoadingScreen().hide();
                   context.go(AppRoutes.home.path);
                 }
               },

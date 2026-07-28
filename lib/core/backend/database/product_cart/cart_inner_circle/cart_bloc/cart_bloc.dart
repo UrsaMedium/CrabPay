@@ -3,9 +3,9 @@ import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
+import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,6 +24,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
        super(const CartState()) {
     _lifecycleListener = AppLifecycleListener(
       onResume: _onAppResumeFromBackground,
+      onRestart: _onAppResumeFromBackground,
+      onShow: _onAppResumeFromBackground,
     );
 
     on<CartEventFetchCartItems>((event, emit) async {
@@ -32,21 +34,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
-        final allUserCartItems = await cartHandler.fetchCartItems(event.userId);
-        List<CartItem> cartItemsToBuy = [];
-        List<CartItem> cartItemsProccessed = [];
-        for (var cartItem in allUserCartItems) {
-          if (cartItem.status == 'created' || cartItem.status == 'failed') {
-            cartItemsToBuy.add(cartItem);
-          } else {
-            cartItemsProccessed.add(cartItem);
-          }
-        }
+        final cartItemsToBuy = await cartHandler.fetchCartItemsToBuy(
+          event.userId,
+        );
+
         emit(
           state.copyWith(
             cartItemsToBuy: cartItemsToBuy,
-            allUserCartItems: allUserCartItems,
-            cartItemsProccessed: cartItemsProccessed,
             states: CartStates.got,
           ),
         );
@@ -146,31 +140,46 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
-    // on<CartEventStartCartItemsStream>((event, emit) {
-    //   developer.log('----');
-    //   developer.log('CartEventStartCartItemsStream fired');
-    //   developer.log('----');
-    //   emit(state.copyWith(isStreaming: IsStreaming.yes));
-    //   _streamSubscription?.cancel();
-    //   _streamSubscription = cartHandler.cartItemsStream(event.userId).listen((
-    //     streamedCartItems,
-    //   ) {
-    //     add(CartEventOnChangeStreamed(cartItems: streamedCartItems));
-    //   }, onError: (error) => debugPrint(error));
-    // });
+    on<CartEventFetchOrders>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventFetchOrders fired');
+      developer.log('----');
+      try {
+        emit(state.copyWith(states: CartStates.loading));
+        final fetchedOrders = await cartHandler.fetchPaymentIds(
+          event.userId,
+          pageToken: event.pageToken,
+        );
+        List<String> oldOrdersList = state.orders?.objects ?? [];
+        List<String> newOrdersList = [
+          ...oldOrdersList,
+          ...fetchedOrders.objects,
+        ];
 
-    // on<CartEventOnChangeStreamed>((event, emit) async {
-    //   developer.log('----');
-    //   developer.log('CartEventOnChangeStreamed fired');
-    //   developer.log('----');
+        var mapOfOrders = state.itemsOfOrder ?? {};
+        for (final order in oldOrdersList) {
+          final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
+            event.userId,
+            order,
+          );
+          mapOfOrders[order] = itemsOfOrder;
+        }
 
-    //   emit(
-    //     state.copyWith(
-    //       cartItemsToBuy: event.cartItems,
-    //       states: CartStates.streamEvent,
-    //     ),
-    //   );
-    // });
+        emit(
+          state.copyWith(
+            states: CartStates.got,
+            itemsOfOrder: mapOfOrders,
+            orders: PaginatedResult(
+              objects: newOrdersList,
+              hasMore: fetchedOrders.hasMore,
+              nextPageToken: fetchedOrders.nextPageToken,
+            ),
+          ),
+        );
+      } catch (e) {
+        rethrow;
+      }
+    });
 
     on<CartEventStartStreamUserCartItemAmount>((event, emit) async {
       if (_activeUserId == event.userId && _streamSubscription != null) {
@@ -201,7 +210,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       emit(
         state.copyWith(
-          isStreaming: IsStreaming.yes,
+          isCartStreaming: IsCartStreaming.yes,
           userCartItemAmount: event.amount,
         ),
       );
@@ -221,13 +230,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       emit(
         state.copyWith(
-          allUserCartItems: null,
           cartItemToPush: null,
           cartItemsToBuy: null,
+          itemsOfOrder: null,
+          orders: null,
           cartItemsFromSignedOutUser: null,
-          isStreaming: null,
           productCartItemAmount: null,
           userCartItemAmount: null,
+          isCartStreaming: IsCartStreaming.no,
           states: CartStates.empty,
         ),
       );

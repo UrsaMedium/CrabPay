@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
+import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
@@ -78,17 +79,24 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   @override
-  Future<List<CartItem>> fetchCartItems(String userId) async {
+  Future<List<CartItem>> fetchCartItemsToBuy(String userId) async {
     try {
       getIt<InnerLoggerHandler>().logBreadcrumb(
         message: 'Fetching cart items',
         category: 'Cart Items',
         data: {'userId': userId},
-      ); // TODO
+      );
       final QueryOptions options = QueryOptions(
         document: gql(r'''
           query($userId: String!) {
-            cartItemCollection(filter: { userId: { eq: $userId } }) {
+            cartItemCollection(
+              first: 128, 
+              orderBy: [{ createdAt: DescNullsLast }],
+              filter: { 
+                userId: { eq: $userId }, 
+                status: { in: ["created", "failed"] } 
+              }
+            ) {
               edges {
                 node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment, paymentId }
               }
@@ -96,6 +104,132 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           }
         '''),
         variables: {'userId': userId},
+        fetchPolicy: FetchPolicy.networkOnly,
+      );
+
+      final result = await retryer.retry(() => _client.query(options));
+      if (result.hasException) throw result.exception!;
+
+      final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
+      return _dataCasting(nodes);
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch cart items',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      Fluttertoast.showToast(msg: 'Failed to fetch cart items');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PaginatedResult<String>> fetchPaymentIds(
+    String userId, {
+    String? pageToken,
+  }) async {
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching paginated unique payment IDs',
+        category: 'Order History',
+        data: {'userId': userId, 'pageToken': pageToken},
+      );
+
+      final QueryOptions options = QueryOptions(
+        document: gql(r'''
+          query($userId: String!, $afterCursor: Cursor) {
+            userUniquePaymentCollection(
+              first: 4,
+              after: $afterCursor,
+              orderBy: [{ latestCreatedAt: DescNullsLast }],
+              filter: { 
+                userId: { eq: $userId } 
+              }
+            ) {
+              pageInfo {
+                endCursor
+                hasNextPage
+              }
+              edges {
+                node { 
+                  paymentId 
+                }
+              }
+            }
+          }
+        '''),
+        variables: {'userId': userId, 'afterCursor': pageToken},
+        fetchPolicy: FetchPolicy.networkOnly,
+      );
+
+      final result = await retryer.retry(() => _client.query(options));
+      if (result.hasException) throw result.exception!;
+
+      final collection = result.data?['userUniquePaymentCollection'] ?? {};
+      final pageInfo = collection['pageInfo'] ?? {};
+      final edges = collection['edges'] as List? ?? [];
+
+      final List<String> paymentIds = edges
+          .map((edge) => edge['node']['paymentId'] as String?)
+          .where((id) => id != null && id.isNotEmpty)
+          .cast<String>()
+          .toList();
+
+      return PaginatedResult<String>(
+        objects: paymentIds,
+        hasMore: (pageInfo['hasNextPage'] as bool?) ?? false,
+        nextPageToken: pageInfo['endCursor'] as String?,
+      );
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch unique payment IDs',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      Fluttertoast.showToast(msg: 'Failed to load order history');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CartItem>> fetchItemsOfOrder(
+    String userId,
+    String orderId,
+  ) async {
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching Items Of Order',
+        category: 'Cart Items',
+        data: {'userId': userId, 'orderId': orderId},
+      );
+      final QueryOptions options = QueryOptions(
+        document: gql(r'''
+          query($userId: String!, $orderId: String!) {
+            cartItemCollection(
+              first: 128, 
+              orderBy: [{ createdAt: DescNullsLast }],
+              filter: { 
+                userId: { eq: $userId },
+                paymentId: { eq: $orderId }
+              }
+            ) {
+              edges {
+                node { 
+                  id, 
+                  userId, 
+                  userName, 
+                  productId, 
+                  productName, 
+                  purchaseData, 
+                  currency, 
+                  checkoutPrice, 
+                  status, 
+                  comment, 
+                  paymentId 
+                }
+              }
+            }
+          }
+        '''),
+        variables: {'userId': userId, 'orderId': orderId},
         fetchPolicy: FetchPolicy.networkOnly,
       );
 

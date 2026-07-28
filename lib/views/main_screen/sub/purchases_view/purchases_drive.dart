@@ -1,7 +1,8 @@
+import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/app_routes/app_routes.dart';
@@ -19,6 +20,17 @@ class PurchasesViewDriver extends StatefulWidget {
 }
 
 class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
+  @override
+  void initState() {
+    context.read<CartBloc>().add(
+      CartEventFetchOrders(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
+      ),
+    );
+    super.initState();
+  }
+
   void _onBackButtonPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'CasesViewDriver _onBackButtonPressed',
@@ -55,17 +67,10 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
         create: (_) => PurchasesViewCubit(),
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, cartState) {
-            final itemsAfterPayment = cartState.cartItemsProccessed ?? [];
-            context.read<PurchasesViewCubit>().sortCartItems(
-              itemsAfterPayment: itemsAfterPayment,
-              products: context.read<DatabaseBloc>().state.products ?? [],
-            );
             return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
               builder: (context, viewState) {
                 return MaterialPurchasesView(
-                  itemsDelivered: viewState.itemsDelivered ?? [],
-                  itemsInProccess: viewState.itemsInProccess ?? [],
-                  orderGroups: viewState.orderGroups ?? {},
+                  orderGroups: cartState.itemsOfOrder ?? {},
                   onBackButtonPressed: () => _onBackButtonPressed(context),
                   itemToProductMap: viewState.itemToProductMap ?? {},
                   onSupportSendMessagePressed: _onSupportSendMessagePressed,
