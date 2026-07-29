@@ -4,8 +4,6 @@ import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/app_routes/app_routes.dart';
@@ -162,35 +160,6 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                     children: [
                       Flexible(child: TextField(controller: _fieldControler)),
                       IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text('cartitem'),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: TextField(controller: _cartItemControler),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          getIt<InnerLoggerHandler>().logBreadcrumb(
-                            message:
-                                'DeleteInstancesFromDbView onDeleteCartItemButtonPressed',
-                            data: {'cartItemId': _cartItemControler.text},
-                          );
-                          context.read<CartBloc>().add(
-                            CartEventDeleteCartItemById(
-                              cartItemId: _cartItemControler.text,
-                            ),
-                          );
-                          _cartItemControler.clear();
-                          setState(() {});
-                        },
-                        icon: Icon(Icons.delete),
-                      ),
                     ],
                   ),
                 ],

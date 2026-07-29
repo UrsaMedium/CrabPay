@@ -26,7 +26,6 @@ class CartPageDriver extends StatefulWidget {
 }
 
 class _CartPageDriverState extends State<CartPageDriver> {
-  // late final AppLifecycleListener _appLifecycleListener;
   List<CartItem>? _cartItemsTuBuy;
   List<CartItem>? _cartItemsOnPaymentState;
   late final List<Product> _products;
@@ -157,9 +156,6 @@ class _CartPageDriverState extends State<CartPageDriver> {
             context.read<CartBloc>().add(
               CartEventFetchCartItems(userId: userId),
             );
-            // context.read<CartBloc>().add(
-            //   CartEventFetchUserCartItemAmount(userId: userId),
-            // );
           }
         },
         child: BlocBuilder<PaymentBloc, PaymentState>(

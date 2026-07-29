@@ -183,7 +183,7 @@ class MaterialCartPageView extends StatelessWidget {
                                           ),
                                         ),
                                         child: Text(
-                                          'You have Unpaid Order!',
+                                          'You have Unpaid ${cartItemsOnPaymentState.length} Order!',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,

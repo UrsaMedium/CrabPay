@@ -118,21 +118,21 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
           listener: (context, state) {
             context.read<PurchasesViewCubit>().setLoadingState(false);
           },
-          child: BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
-            builder: (context, viewState) {
-              final itemsOfOrder = context
-                  .select<CartBloc, Map<String, List<CartItem>>>(
-                    (bloc) => bloc.state.itemsOfOrder ?? {},
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, cartState) {
+              return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
+                builder: (context, viewState) {
+                  return MaterialPurchasesView(
+                    isLoadingMore: viewState.isLoadingMore,
+                    scrollController: _scrollController,
+                    orderGroups: cartState.itemsOfOrder ?? {},
+                    cartItemToProductMap: _cartItemToProductMapping(
+                      itemsOfOrder: cartState.itemsOfOrder ?? {},
+                    ),
+                    onBackButtonPressed: () => _onBackButtonPressed(context),
+                    onSupportSendMessagePressed: _onSupportSendMessagePressed,
                   );
-              return MaterialPurchasesView(
-                isLoadingMore: viewState.isLoadingMore,
-                scrollController: _scrollController,
-                orderGroups: itemsOfOrder,
-                cartItemToProductMap: _cartItemToProductMapping(
-                  itemsOfOrder: itemsOfOrder,
-                ),
-                onBackButtonPressed: () => _onBackButtonPressed(context),
-                onSupportSendMessagePressed: _onSupportSendMessagePressed,
+                },
               );
             },
           ),

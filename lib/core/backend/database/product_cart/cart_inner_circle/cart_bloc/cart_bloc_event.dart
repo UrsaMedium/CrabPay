@@ -4,54 +4,33 @@ abstract class CartEvent {
   const CartEvent();
 }
 
+//add item
 class CartEventAddCartItem extends CartEvent {
   final String userId;
   final CartItem cartItem;
   const CartEventAddCartItem({required this.cartItem, required this.userId});
 }
 
+//fetch items
 class CartEventFetchCartItems extends CartEvent {
   final String userId;
   CartEventFetchCartItems({required this.userId});
 }
 
+//delete item
 class CartEventDeleteCartItem extends CartEvent {
   final String userId;
   final CartItem cartItem;
   const CartEventDeleteCartItem({required this.cartItem, required this.userId});
 }
 
-class CartEventDeleteCartItemById extends CartEvent {
-  final String cartItemId;
-  const CartEventDeleteCartItemById({required this.cartItemId});
-}
-
-class CartEventUserCheckoutItems extends CartEvent {
-  final List<CartItem> checkoutItems;
-  final String? comment;
-  final String status;
-  CartEventUserCheckoutItems({
-    required this.checkoutItems,
-    this.comment,
-    required this.status,
-  });
-}
-
-class CartEventSignedOutUserCheckoutItems extends CartEvent {
-  final List<CartItem> checkoutItems;
-  final String? comment;
-  final String status;
-  CartEventSignedOutUserCheckoutItems({
-    required this.checkoutItems,
-    this.comment,
-    required this.status,
-  });
-}
-
+// flush data
 class CartEventFlushData extends CartEvent {}
 
+//close stream
 class CartEventCloseStream extends CartEvent {}
 
+//fetch amount of items of a certain product
 class CartEventFetchProductCartItemAmount extends CartEvent {
   final String userId;
   final String productId;
@@ -61,29 +40,35 @@ class CartEventFetchProductCartItemAmount extends CartEvent {
   });
 }
 
+// start sreaming total amount of items in a user's cart
 class CartEventStartStreamUserCartItemAmount extends CartEvent {
   final String userId;
   CartEventStartStreamUserCartItemAmount({required this.userId});
 }
 
+// helper for the stream
 class CartEventUpdateUserCartItemAmountFromStream extends CartEvent {
   final int amount;
   CartEventUpdateUserCartItemAmountFromStream({required this.amount});
 }
 
+// fetch orders for purchase view
 class CartEventFetchOrders extends CartEvent {
   final String userId;
   final String? pageToken;
   CartEventFetchOrders({required this.userId, required this.pageToken});
 }
 
+// flush orders
 class CartEventFlushOrders extends CartEvent {}
 
+// fetch items that are waiting for a payment
 class CartEventFetchCartItemsOnPaymentState extends CartEvent {
   final String userId;
   CartEventFetchCartItemsOnPaymentState({required this.userId});
 }
 
+// delete last added item of a certain product
 class CartEventDeleteLastAddedProductCartItem extends CartEvent {
   final String userId;
   final String productId;
