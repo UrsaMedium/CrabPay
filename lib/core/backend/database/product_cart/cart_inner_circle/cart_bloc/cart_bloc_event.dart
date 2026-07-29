@@ -77,6 +77,11 @@ class CartEventFetchOrders extends CartEvent {
   CartEventFetchOrders({required this.userId, required this.pageToken});
 }
 
+class CartEventFetchCartItemsOnPaymentState extends CartEvent {
+  final String userId;
+  CartEventFetchCartItemsOnPaymentState({required this.userId});
+}
+
 class CartEventDeleteLastAddedProductCartItem extends CartEvent {
   final String userId;
   final String productId;

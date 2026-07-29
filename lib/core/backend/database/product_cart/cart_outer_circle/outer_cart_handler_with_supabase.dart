@@ -67,6 +67,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           status: item['status'],
           comment: item['comment'],
           paymentId: item['paymentId'],
+          paymentLink: item['paymentLink'],
         );
       }).toList();
     } catch (e) {
@@ -309,86 +310,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     }
   }
 
-  // @override
-  // Stream<List<CartItem>> cartItemsStream(String userId) {
-  //   try {
-  //     getIt<InnerLoggerHandler>().logBreadcrumb(
-  //       message: 'Cart item streming',
-  //       category: 'Cart Items',
-  //       data: {'userId': userId},
-  //     );
-  //     final SubscriptionOptions options = SubscriptionOptions(
-  //       document: gql(r'''
-  //   subscription($userId: String!) {
-  //     cartItemCollection(filter: { userId: { eq: $userId } }) {
-  //       edges {
-  //         node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment }
-  //       }
-  //     }
-  //   }
-  // '''),
-  //       variables: {'userId': userId},
-  //     );
-
-  //     return _client.subscribe(options).map((result) {
-  //       final nodes =
-  //           result.data?['cartItemCollection']['edges'] as List? ?? [];
-  //       return _dataCasting(nodes);
-  //     });
-  //   } catch (e) {
-  //     getIt<InnerLoggerHandler>().recordException(
-  //       error: 'Failed to start stream of cart items',
-  //       stackTrace: StackTrace.fromString(e.toString()),
-  //     );
-  //     rethrow;
-  //   }
-  // }
-
-  // @override
-  // Future<int> getUserCartItemAmount(String userId) async {
-  //   try {
-  //     getIt<InnerLoggerHandler>().logBreadcrumb(
-  //       message: 'Getting User Cart Item Amount',
-  //       category: 'Cart Items',
-  //       data: {'userId': userId},
-  //     );
-  //     final QueryOptions options = QueryOptions(
-  //       document: gql(r'''
-  //         query($uId: String!) {
-  //           ofUserCartItemCounterCollection(filter: { userId: { eq: $uId } }) {
-  //             edges { node { userCartItemCount } }
-  //           }
-  //         }
-  //       '''),
-  //       variables: {'uId': userId},
-  //       fetchPolicy: FetchPolicy.networkOnly,
-  //     );
-
-  //     final result = await retryer.retry(() => _client.query(options));
-
-  //     if (result.hasException) {
-  //       debugPrint(
-  //         ' GraphQL Query Error (User Cart Count): ${result.exception.toString()}',
-  //       );
-  //       throw Exception(result.exception.toString());
-  //     }
-
-  //     final nodes =
-  //         result.data?['ofUserCartItemCounterCollection']['edges'] as List? ??
-  //         [];
-
-  //     if (nodes.isEmpty) return 0;
-
-  //     return nodes.first['node']['userCartItemCount'] ?? 0;
-  //   } catch (e) {
-  //     getIt<InnerLoggerHandler>().recordException(
-  //       error: 'Failed to get amount of cart items',
-  //       stackTrace: StackTrace.fromString(e.toString()),
-  //     );
-  //     rethrow;
-  //   }
-  // }
-
   @override
   Stream<int> streamUserCartItemAmount(String userId) {
     try {
@@ -578,6 +499,52 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       getIt<InnerLoggerHandler>().recordException(
         error: 'Failed to delete last added cart items',
         stackTrace: StackTrace.fromString(e.toString()),
+      );
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CartItem>> fetchCartItemsOnPyamentState(String userId) async {
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching cart items On Pyament State',
+        category: 'Cart Items',
+        data: {'userId': userId},
+      );
+      final QueryOptions options = QueryOptions(
+        document: gql(r'''
+          query($userId: String!) {
+            cartItemCollection(
+              first: 128, 
+              orderBy: [{ createdAt: DescNullsLast }],
+              filter: { 
+                userId: { eq: $userId }, 
+                status: { eq: "waiting for the payment" } 
+              }
+            ) {
+              edges {
+                node { id, userId, userName, productId, productName, purchaseData, currency, checkoutPrice, status, comment, paymentId, paymentLink }
+              }
+            }
+          }
+        '''),
+        variables: {'userId': userId},
+        fetchPolicy: FetchPolicy.networkOnly,
+      );
+
+      final result = await retryer.retry(() => _client.query(options));
+      if (result.hasException) throw result.exception!;
+
+      final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
+      return _dataCasting(nodes);
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch cart items On Pyament State',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      Fluttertoast.showToast(
+        msg: 'Failed to fetch cart items On Pyament State',
       );
       rethrow;
     }

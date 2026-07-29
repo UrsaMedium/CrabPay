@@ -5,6 +5,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/dat
 abstract class InnerCartHandler {
   // Future<List<CartItem>> fetchCartItems(String userId);
   Future<List<CartItem>> fetchCartItemsToBuy(String userId);
+  Future<List<CartItem>> fetchCartItemsOnPyamentState(String userId);
   Future<PaginatedResult<String>> fetchPaymentIds(
     String userId, {
     String? pageToken,

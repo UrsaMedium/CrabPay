@@ -62,4 +62,8 @@ class BindingCartHandler implements InnerCartHandler {
   @override
   Future<List<CartItem>> fetchItemsOfOrder(String userId, String orderId) =>
       cartHandler.fetchItemsOfOrder(userId, orderId);
+
+  @override
+  Future<List<CartItem>> fetchCartItemsOnPyamentState(String userId) =>
+      cartHandler.fetchCartItemsOnPyamentState(userId);
 }

@@ -1,8 +1,9 @@
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/main_screen_driver.dart';
-import 'package:crabpay/views/main_screen/sub/profile_view.dart';
+import 'package:crabpay/views/main_screen/sub/profile_sheet.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
+import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/items_on_payment_sheet.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
@@ -17,7 +18,17 @@ final List<RouteBase> mainScreenShellRoutes = [
       key: state.pageKey,
       backgroundColor: context.appColorScheme.surfaceContainerHighest
           .withValues(alpha: .7),
-      child: const ProfileViewDriver(),
+      child: const ProfileSheetDriver(),
+    ),
+  ),
+  GoRoute(
+    path: AppRoutes.itemsOnPaymentSheet.path,
+    name: AppRoutes.itemsOnPaymentSheet.name,
+    pageBuilder: (context, state) => BottomSheetPage(
+      key: state.pageKey,
+      backgroundColor: context.appColorScheme.surfaceContainerHighest
+          .withValues(alpha: .7),
+      child: const ItemsOnPaymentSheetDriver(),
     ),
   ),
   StatefulShellRoute.indexedStack(

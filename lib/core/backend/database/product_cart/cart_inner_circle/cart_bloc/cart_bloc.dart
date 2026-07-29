@@ -216,13 +216,26 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       );
     });
 
-    // on<CartEventCloseStream>((event, emit) {
-    //   developer.log('----');
-    //   developer.log('CartEventCloseStream fired');
-    //   developer.log('----');
-    //   _streamSubscription?.cancel();
-    //   emit(state.copyWith(isStreaming: IsStreaming.no));
-    // });
+    on<CartEventFetchCartItemsOnPaymentState>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventFetchCartItemsOnPaymentState fired');
+      developer.log('----');
+      try {
+        emit(state.copyWith(states: CartStates.loading));
+        final cartItemsOnPaymentState = await cartHandler
+            .fetchCartItemsOnPyamentState(event.userId);
+
+        emit(
+          state.copyWith(
+            cartItemsOnPaymentState: cartItemsOnPaymentState,
+            states: CartStates.got,
+          ),
+        );
+      } catch (e) {
+        state.copyWith(states: CartStates.failedToGet);
+        rethrow;
+      }
+    });
 
     on<CartEventFlushData>((event, emit) {
       developer.log('----');

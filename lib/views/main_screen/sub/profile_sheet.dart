@@ -7,14 +7,14 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfileViewDriver extends StatefulWidget {
-  const ProfileViewDriver({super.key});
+class ProfileSheetDriver extends StatefulWidget {
+  const ProfileSheetDriver({super.key});
 
   @override
-  State<ProfileViewDriver> createState() => _ProfileViewDriverState();
+  State<ProfileSheetDriver> createState() => _ProfileSheetDriverState();
 }
 
-class _ProfileViewDriverState extends State<ProfileViewDriver> {
+class _ProfileSheetDriverState extends State<ProfileSheetDriver> {
   void _onSignOutPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(message: 'User signed out');
     context.read<AuthBloc>().add(AuthEventLogOut());
@@ -25,17 +25,17 @@ class _ProfileViewDriverState extends State<ProfileViewDriver> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialProfileView(
+    return MaterialProfileSheet(
       user: context.read<AuthBloc>().state.currentUser,
       onSignOutPressed: () => _onSignOutPressed(context),
     );
   }
 }
 
-class MaterialProfileView extends StatelessWidget {
+class MaterialProfileSheet extends StatelessWidget {
   final VoidCallback onSignOutPressed;
   final AppAuthUser user;
-  const MaterialProfileView({
+  const MaterialProfileSheet({
     super.key,
     required this.user,
     required this.onSignOutPressed,

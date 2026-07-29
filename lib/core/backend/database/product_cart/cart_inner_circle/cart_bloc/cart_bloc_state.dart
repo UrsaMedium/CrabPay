@@ -28,6 +28,7 @@ enum IsCartStreaming { yes, no }
 class CartState {
   final IsCartStreaming isCartStreaming;
   final List<CartItem>? cartItemsToBuy;
+  final List<CartItem>? cartItemsOnPaymentState;
   final PaginatedResult<String>? orders;
   final Map<String, List<CartItem>>? itemsOfOrder;
   final CartItem? cartItemToPush;
@@ -43,10 +44,12 @@ class CartState {
     this.userCartItemAmount,
     this.orders,
     this.itemsOfOrder,
+    this.cartItemsOnPaymentState,
   });
 
   CartState copyWith({
     List<CartItem>? cartItemsToBuy,
+    List<CartItem>? cartItemsOnPaymentState,
     List<CartItem>? cartItemsFromSignedOutUser,
     PaginatedResult<String>? orders,
     Map<String, List<CartItem>>? itemsOfOrder,
@@ -66,6 +69,8 @@ class CartState {
       userCartItemAmount: userCartItemAmount ?? this.userCartItemAmount,
       itemsOfOrder: itemsOfOrder ?? this.itemsOfOrder,
       orders: orders ?? this.orders,
+      cartItemsOnPaymentState:
+          cartItemsOnPaymentState ?? this.cartItemsOnPaymentState,
     );
   }
 }
