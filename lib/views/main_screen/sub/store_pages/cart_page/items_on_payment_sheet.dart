@@ -18,7 +18,6 @@ class ItemsOnPaymentSheetDriver extends StatelessWidget {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'ItemsOnPaymentSheetDriver _onPaymentLinkPressed',
     );
-    print(link);
     if (link != null) {
       context.read<PaymentBloc>().add(PaymentEventReturnToProvider(link: link));
       context.pop();

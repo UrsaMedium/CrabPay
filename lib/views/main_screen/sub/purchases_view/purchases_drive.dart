@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
@@ -20,15 +21,45 @@ class PurchasesViewDriver extends StatefulWidget {
 }
 
 class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
+  final ScrollController _scrollController = ScrollController();
+  late final PurchasesViewCubit _purchasesViewCubit;
+  late final List<Product> _products;
+
   @override
   void initState() {
+    _products = context.read<DatabaseBloc>().state.products ?? [];
+    _purchasesViewCubit = PurchasesViewCubit();
+    context.read<CartBloc>().add(CartEventFlushOrders());
     context.read<CartBloc>().add(
       CartEventFetchOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
         pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
       ),
     );
+    _scrollController.addListener(_onScrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _purchasesViewCubit.close();
+    super.dispose();
+  }
+
+  void _onScrollListener() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        !_purchasesViewCubit.state.isLoadingMore &&
+        (context.read<CartBloc>().state.orders?.hasMore ?? false)) {
+      context.read<CartBloc>().add(
+        CartEventFetchOrders(
+          userId: context.read<AuthBloc>().state.currentUser.id,
+          pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
+        ),
+      );
+      _purchasesViewCubit.setLoadingState(true);
+    }
   }
 
   void _onBackButtonPressed(BuildContext context) {
@@ -47,6 +78,22 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
     );
   }
 
+  Map<CartItem, Product> _cartItemToProductMapping({
+    required Map<String, List<CartItem>> itemsOfOrder,
+  }) {
+    Map<CartItem, Product> result = {};
+    final allItems = itemsOfOrder.values.expand((element) => element);
+    final uniqueItems = {
+      for (var item in allItems) item.id: item,
+    }.values.toList();
+    for (var item in uniqueItems) {
+      result[item] = _products.firstWhere(
+        (product) => product.id == item.productId,
+      );
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -63,21 +110,32 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
             ? context.go(AppRoutes.home.path)
             : context.pop();
       },
-      child: BlocProvider(
-        create: (_) => PurchasesViewCubit(),
-        child: BlocBuilder<CartBloc, CartState>(
-          builder: (context, cartState) {
-            return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
-              builder: (context, viewState) {
-                return MaterialPurchasesView(
-                  orderGroups: cartState.itemsOfOrder ?? {},
-                  onBackButtonPressed: () => _onBackButtonPressed(context),
-                  itemToProductMap: viewState.itemToProductMap ?? {},
-                  onSupportSendMessagePressed: _onSupportSendMessagePressed,
-                );
-              },
-            );
+      child: BlocProvider.value(
+        value: _purchasesViewCubit,
+        child: BlocListener<CartBloc, CartState>(
+          listenWhen: (previous, current) =>
+              current.states == CartStates.loadedMoreOrders,
+          listener: (context, state) {
+            context.read<PurchasesViewCubit>().setLoadingState(false);
           },
+          child: BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
+            builder: (context, viewState) {
+              final itemsOfOrder = context
+                  .select<CartBloc, Map<String, List<CartItem>>>(
+                    (bloc) => bloc.state.itemsOfOrder ?? {},
+                  );
+              return MaterialPurchasesView(
+                isLoadingMore: viewState.isLoadingMore,
+                scrollController: _scrollController,
+                orderGroups: itemsOfOrder,
+                cartItemToProductMap: _cartItemToProductMapping(
+                  itemsOfOrder: itemsOfOrder,
+                ),
+                onBackButtonPressed: () => _onBackButtonPressed(context),
+                onSupportSendMessagePressed: _onSupportSendMessagePressed,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -85,29 +143,13 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
 }
 
 class PurchasesViewState {
-  final List<CartItem>? itemsInProccess;
-  final List<CartItem>? itemsDelivered;
-  final Map<String, List<CartItem>>? orderGroups;
-  final Map<CartItem, Product>? itemToProductMap;
+  final bool isLoadingMore;
 
-  PurchasesViewState({
-    this.itemsInProccess,
-    this.itemsDelivered,
-    this.orderGroups,
-    this.itemToProductMap,
-  });
+  PurchasesViewState({this.isLoadingMore = false});
 
-  PurchasesViewState copyWith(
-    List<CartItem>? itemsInProccess,
-    List<CartItem>? itemsDelivered,
-    Map<String, List<CartItem>>? orderGroups,
-    Map<CartItem, Product>? itemToProductMap,
-  ) {
+  PurchasesViewState copyWith({bool? isLoadingMore}) {
     return PurchasesViewState(
-      itemsInProccess: itemsInProccess ?? this.itemsInProccess,
-      itemsDelivered: itemsDelivered ?? this.itemsDelivered,
-      orderGroups: orderGroups ?? this.orderGroups,
-      itemToProductMap: itemToProductMap ?? this.itemToProductMap,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 }
@@ -115,37 +157,7 @@ class PurchasesViewState {
 class PurchasesViewCubit extends Cubit<PurchasesViewState> {
   PurchasesViewCubit() : super(PurchasesViewState());
 
-  void sortCartItems({
-    required List<CartItem> itemsAfterPayment,
-    required List<Product> products,
-  }) {
-    final itemsInProccess = itemsAfterPayment
-        .where((element) => element.status == 'paid')
-        .toList();
-    final itemsDelivered = itemsAfterPayment
-        .where((element) => element.status == 'delivered')
-        .toList();
-    Map<String, List<CartItem>> orderGroups = {};
-    for (final cartItem in itemsAfterPayment) {
-      if (cartItem.paymentId != null) {
-        var oldList = orderGroups[cartItem.paymentId] ?? [];
-        oldList.add(cartItem);
-        orderGroups[cartItem.paymentId!] = oldList;
-      }
-    }
-    Map<CartItem, Product> itemToProductMap = {};
-    for (var item in itemsAfterPayment) {
-      itemToProductMap[item] = products.firstWhere(
-        (product) => product.id == item.productId,
-      );
-    }
-    emit(
-      PurchasesViewState().copyWith(
-        itemsInProccess,
-        itemsDelivered,
-        orderGroups,
-        itemToProductMap,
-      ),
-    );
+  void setLoadingState(bool isLoading) {
+    emit(state.copyWith(isLoadingMore: isLoading));
   }
 }

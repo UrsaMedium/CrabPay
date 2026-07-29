@@ -10,6 +10,7 @@ enum CartStates {
   deleted,
   failedToDelete,
   got,
+  loadedMoreOrders,
   failedToGet,
   streamEvent,
   userCheckouts,

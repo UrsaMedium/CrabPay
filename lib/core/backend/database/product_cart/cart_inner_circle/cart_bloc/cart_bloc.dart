@@ -167,7 +167,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
         emit(
           state.copyWith(
-            states: CartStates.got,
+            states: CartStates.loadedMoreOrders,
             itemsOfOrder: mapOfOrders,
             orders: PaginatedResult(
               objects: newOrdersList,
@@ -254,6 +254,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           states: CartStates.empty,
         ),
       );
+    });
+
+    on<CartEventFlushOrders>((event, emit) {
+      developer.log('----');
+      developer.log('CartEventFlushOrders fired');
+      developer.log('----');
+      emit(state.copyWith(orders: null, itemsOfOrder: null));
     });
 
     on<CartEventFetchProductCartItemAmount>((event, emit) async {

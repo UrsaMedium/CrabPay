@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 
 class MaterialPurchasesView extends StatelessWidget {
   final Map<String, List<CartItem>> orderGroups;
-  final Map<CartItem, Product> itemToProductMap;
+  final Map<CartItem, Product> cartItemToProductMap;
   final VoidCallback onBackButtonPressed;
+  final ScrollController scrollController;
   final Function(String) onSupportSendMessagePressed;
+  final bool isLoadingMore;
   const MaterialPurchasesView({
     super.key,
     required this.onBackButtonPressed,
     required this.orderGroups,
-    required this.itemToProductMap,
     required this.onSupportSendMessagePressed,
+    required this.cartItemToProductMap,
+    required this.scrollController,
+    required this.isLoadingMore,
   });
 
   @override
@@ -26,37 +30,54 @@ class MaterialPurchasesView extends StatelessWidget {
           icon: Icon(Icons.arrow_back_rounded),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Container(
-                padding: .all(8),
-                decoration: BoxDecoration(
-                  color: context.appColorScheme.surfaceContainerHigh,
-                  borderRadius: .circular(24),
-                ),
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: orderGroups.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => Padding(
-                    padding: index == 0
-                        ? const EdgeInsets.all(0)
-                        : const EdgeInsets.only(top: 8),
-                    child: MaterialPurchasesCard(
-                      cartItems:
-                          orderGroups[orderGroups.keys.elementAt(index)] ?? [],
-                      itemToProductMap: itemToProductMap,
-                      onSupportSendMessagePressed: onSupportSendMessagePressed,
+      body: Stack(
+        children: [
+          AbsorbPointer(
+            absorbing: isLoadingMore,
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: .all(8),
+                      decoration: BoxDecoration(
+                        color: context.appColorScheme.surfaceContainerHigh,
+                        borderRadius: .circular(24),
+                      ),
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: orderGroups.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => Padding(
+                          padding: index == 0
+                              ? const EdgeInsets.all(0)
+                              : const EdgeInsets.only(top: 8),
+                          child: MaterialPurchasesCard(
+                            cartItems:
+                                orderGroups[orderGroups.keys.elementAt(
+                                  index,
+                                )] ??
+                                [],
+                            itemToProductMap: cartItemToProductMap,
+                            onSupportSendMessagePressed:
+                                onSupportSendMessagePressed,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          if (isLoadingMore)
+            BackdropFilter(
+              filter: .blur(sigmaX: 5, sigmaY: 5),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+        ],
       ),
     );
   }
