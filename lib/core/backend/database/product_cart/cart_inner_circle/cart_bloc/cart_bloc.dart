@@ -124,7 +124,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         ];
 
         var mapOfOrders = state.itemsOfOrder ?? {};
-        for (final order in oldOrdersList) {
+        for (final order in fetchedOrders.objects) {
           final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
             event.userId,
             order,
