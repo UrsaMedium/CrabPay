@@ -7,14 +7,11 @@ import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
-import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  StreamSubscription? _streamSubscription;
   final AuthInnerInterface _authInterface;
   late final StreamSubscription<AppAuthUser> _authSubscription;
-  late final AppLifecycleListener _lifecycleListener;
+  StreamSubscription? _userCartItemAmountSub;
   String? _activeUserId;
 
   CartBloc({
@@ -22,11 +19,52 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     required AuthInnerInterface authInterface,
   }) : _authInterface = authInterface,
        super(const CartState()) {
-    _lifecycleListener = AppLifecycleListener(
-      onResume: _onAppResumeFromBackground,
-      onRestart: _onAppResumeFromBackground,
-      onShow: _onAppResumeFromBackground,
-    );
+    //streaming---------------------------------------------------------------------------------
+
+    _authSubscription = _authInterface.userStream.listen((user) {
+      final isAccountChange = _activeUserId != user.id;
+      _activeUserId = user.id;
+
+      if (isAccountChange) {
+        add(CartEventFlushData());
+        add(CartEventFetchCartItems(userId: user.id));
+      }
+
+      if (user.id.isNotEmpty) {
+        add(CartEventStartStreamUserCartItemAmount(userId: user.id));
+      }
+    });
+
+    on<CartEventStartStreamUserCartItemAmount>((event, emit) async {
+      if (_activeUserId == event.userId && _userCartItemAmountSub != null) {
+        return;
+      }
+
+      await _userCartItemAmountSub?.cancel();
+      _activeUserId = event.userId;
+      _userCartItemAmountSub = cartHandler
+          .streamUserCartItemAmount(_activeUserId!)
+          .listen((userCartItemAmount) {
+            add(
+              CartEventUpdateUserCartItemAmountFromStream(
+                amount: userCartItemAmount,
+              ),
+            );
+          });
+    });
+
+    on<CartEventUpdateUserCartItemAmountFromStream>((event, emit) {
+      developer.log('----');
+      developer.log('CartEventUpdateUserCartItemAmountFromStream fired');
+      developer.log('----');
+      emit(
+        state.copyWith(
+          isCartStreaming: IsCartStreaming.yes,
+          userCartItemAmount: event.amount,
+        ),
+      );
+    });
+    //streaming---------------------------------------------------------------------------------
 
     on<CartEventFetchCartItems>((event, emit) async {
       developer.log('----');
@@ -148,41 +186,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
-    on<CartEventStartStreamUserCartItemAmount>((event, emit) async {
-      if (_activeUserId == event.userId && _streamSubscription != null) {
-        return;
-      }
-
-      await _streamSubscription?.cancel();
-      _activeUserId = event.userId;
-
-      _streamSubscription = cartHandler
-          .streamUserCartItemAmount(event.userId)
-          .listen(
-            (count) {
-              add(CartEventUpdateUserCartItemAmountFromStream(amount: count));
-            },
-            onError: (error, stackTrace) {
-              _activeUserId = null;
-            },
-            onDone: () {
-              _activeUserId = null;
-            },
-          );
-    });
-
-    on<CartEventUpdateUserCartItemAmountFromStream>((event, emit) {
-      developer.log('----');
-      developer.log('CartEventUpdateUserCartItemAmountFromStream fired');
-      developer.log('----');
-      emit(
-        state.copyWith(
-          isCartStreaming: IsCartStreaming.yes,
-          userCartItemAmount: event.amount,
-        ),
-      );
-    });
-
     on<CartEventFetchCartItemsOnPaymentState>((event, emit) async {
       developer.log('----');
       developer.log('CartEventFetchCartItemsOnPaymentState fired');
@@ -296,38 +299,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         rethrow;
       }
     });
-
-    _authSubscription = _authInterface.userStream.listen((user) {
-      final isAccountChange = _activeUserId != user.id;
-      _activeUserId = user.id;
-
-      if (isAccountChange) {
-        add(CartEventFlushData());
-        add(CartEventFetchCartItems(userId: user.id));
-      }
-
-      if (user.id.isNotEmpty) {
-        add(CartEventStartStreamUserCartItemAmount(userId: user.id));
-      }
-    });
-  }
-  void _onAppResumeFromBackground() {
-    final session = Supabase.instance.client.auth.currentSession;
-    final userId = session?.user.id;
-
-    if (userId != null && userId.isNotEmpty && !session!.isExpired) {
-      Supabase.instance.client.removeAllChannels();
-
-      _activeUserId = null;
-      add(CartEventStartStreamUserCartItemAmount(userId: userId));
-    }
   }
 
   @override
   Future<void> close() {
     _authSubscription.cancel();
-    _streamSubscription?.cancel();
-    _lifecycleListener.dispose();
+    _userCartItemAmountSub?.cancel();
     return super.close();
   }
 }

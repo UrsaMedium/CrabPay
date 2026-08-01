@@ -37,7 +37,9 @@ void setupDependencies() {
   );
   //
   getIt.registerLazySingleton<InnerCartHandler>(
-    () => OuterCartHandlerWithSupabase(),
+    () => OuterCartHandlerWithSupabase(
+      appLifecycleService: getIt<AppLifecycleService>(),
+    ),
   );
   //
   getIt.registerLazySingleton<PaymentOuterHandler>(() => PaymentOuterHandler());

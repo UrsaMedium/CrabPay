@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
@@ -19,6 +20,98 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     maxAttempts: 3,
     delayFactor: Duration(milliseconds: 500),
   );
+
+  //streaming---------------------------------------------
+  StreamSubscription? _appLifecycleSub;
+  StreamSubscription? _supabaseSubToStreamUserCartItemAmount;
+  String? _activeUserId;
+
+  final _userCartItemAmountController = StreamController<int>.broadcast();
+
+  final AppLifecycleService _appLifecycleService;
+  OuterCartHandlerWithSupabase({
+    required AppLifecycleService appLifecycleService,
+  }) : _appLifecycleService = appLifecycleService {
+    _initAppLifecycleService();
+  }
+
+  void _initAppLifecycleService() {
+    _appLifecycleSub = _appLifecycleService.appStateStream.listen((state) {
+      if (state == AppState.active && _activeUserId != null) {
+        _connectToSupabase(_activeUserId!);
+      } else if (state == AppState.paused) {
+        _disconnectFromSupabase();
+      }
+    });
+  }
+
+  @override
+  Stream<int> streamUserCartItemAmount(String userId) {
+    _activeUserId = userId;
+
+    _disconnectFromSupabase();
+    _connectToSupabase(userId);
+
+    return _userCartItemAmountController.stream;
+  }
+
+  void _connectToSupabase(String userId) {
+    if (_supabaseSubToStreamUserCartItemAmount != null) return;
+
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'exe: Start User Cart Item Amount Stream',
+        category: 'Cart Service',
+        data: {'userId': userId},
+      );
+
+      final supabase = Supabase.instance.client;
+
+      _supabaseSubToStreamUserCartItemAmount = supabase
+          .from('ofUserCartItemCounter')
+          .stream(primaryKey: ['userId'])
+          .eq('userId', userId)
+          .map((List<Map<String, dynamic>> rows) {
+            if (rows.isEmpty) return 0;
+            final rawCount = rows.first['userCartItemCount'];
+            return (rawCount as num?)?.toInt() ?? 0;
+          })
+          .handleError((Object error, StackTrace stackTrace) {
+            getIt<InnerLoggerHandler>().recordException(
+              error:
+                  'Runtime WebSocket Error in userCartItemAmountStream: $error',
+              stackTrace: stackTrace,
+            );
+            _userCartItemAmountController.addError(error);
+          })
+          .listen(
+            (itemCount) {
+              _userCartItemAmountController.add(itemCount);
+            },
+            onError: (error) {
+              _userCartItemAmountController.addError(error);
+            },
+          );
+    } catch (e, s) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed synchronous setup: userCartItemAmountStream',
+        stackTrace: s,
+      );
+      _userCartItemAmountController.addError(e);
+    }
+  }
+
+  void _disconnectFromSupabase() {
+    _supabaseSubToStreamUserCartItemAmount?.cancel();
+    _supabaseSubToStreamUserCartItemAmount = null;
+  }
+
+  void dispose() {
+    _disconnectFromSupabase();
+    _appLifecycleSub?.cancel();
+    _userCartItemAmountController.close();
+  }
+  //streaming---------------------------------------------
 
   Future<QueryResult> _mutateAndCheck(MutationOptions options) async {
     return await retryer.retry(() async {
@@ -306,53 +399,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       Fluttertoast.showToast(msg: 'Failed to add the cart item');
-      rethrow;
-    }
-  }
-
-  @override
-  Stream<int> streamUserCartItemAmount(String userId) {
-    try {
-      // 1. Log the synchronous setup attempt
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'exe: Start User Cart Item Amount Stream',
-        category: 'Cart Service',
-        data: {'userId': userId},
-      );
-
-      final supabase = Supabase.instance.client;
-      // 3. Build and return the robust WebSocket stream pipeline
-      return supabase
-          .from('ofUserCartItemCounter')
-          .stream(primaryKey: ['userId'])
-          .eq('userId', userId)
-          .map((List<Map<String, dynamic>> rows) {
-            // A. Guard against empty state (e.g., new user with no cart items yet)
-            if (rows.isEmpty) {
-              return 0;
-            }
-
-            // B. Safe numeric casting (prevents runtime double-to-int type errors)
-            final rawCount = rows.first['userCartItemCount'];
-            return (rawCount as num?)?.toInt() ?? 0;
-          })
-          // 4. CRITICAL: Asynchronous error interception for live data drops
-          .handleError((Object error, StackTrace stackTrace) {
-            getIt<InnerLoggerHandler>().recordException(
-              error:
-                  'Runtime WebSocket Error in userCartItemAmountStream: $error',
-              stackTrace: stackTrace,
-            );
-
-            // Let the error flow to UI layer (e.g., StreamBuilder.hasError / BLoC onError)
-            throw error;
-          });
-    } catch (e, s) {
-      // 5. Catch immediate synchronous configuration errors
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'Failed synchronous setup: userCartItemAmountStream',
-        stackTrace: s,
-      );
       rethrow;
     }
   }
