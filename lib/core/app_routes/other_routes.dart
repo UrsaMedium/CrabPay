@@ -1,4 +1,4 @@
-import 'package:crabpay/views/app_routes/app_routes.dart';
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
 import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
 import 'package:flutter/material.dart';

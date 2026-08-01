@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_c
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/adminchat_event.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
-import 'package:crabpay/views/app_routes/app_routes.dart';
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

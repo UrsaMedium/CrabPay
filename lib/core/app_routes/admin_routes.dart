@@ -14,7 +14,7 @@ import 'package:crabpay/views/admin_views/reset_price_image_field_admin_panel_vi
 import 'package:crabpay/views/admin_views/update_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/update_price_images_field_admin_panel_view.dart';
 import 'package:crabpay/views/admin_views/update_product_admin_panel_view.dart';
-import 'package:crabpay/views/app_routes/app_routes.dart';
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

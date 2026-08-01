@@ -1,5 +1,5 @@
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/app_routes/app_routes.dart';
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/auth_views/login_view/login_view_driver.dart';
 import 'package:crabpay/views/auth_views/password_forgot_view/password_forgot_view_driver.dart';
 import 'package:crabpay/views/auth_views/register_view/register_view_driver.dart';

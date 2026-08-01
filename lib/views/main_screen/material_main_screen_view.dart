@@ -39,6 +39,7 @@ class MaterialMainScreenView extends StatelessWidget {
       body: Stack(
         children: [
           PageView.builder(
+            itemCount: pages.length,
             physics: const CustomFasterPageScrollPhysics(),
             controller: pageController,
             onPageChanged: onPageSwiped,
