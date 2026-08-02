@@ -85,7 +85,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
                   : StackTrace.current,
             );
             _messagesControler.addError(error);
-          })
+          }) 
           .listen(
             (messages) {
               _messagesControler.add(messages);
