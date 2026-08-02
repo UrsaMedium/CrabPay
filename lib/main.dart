@@ -1,7 +1,7 @@
-import 'package:crabpay/core/app_bootstrap.dart';
-import 'package:crabpay/core/app_providers.dart';
+import 'package:crabpay/core/set_up/app_bootstrap.dart';
+import 'package:crabpay/core/set_up/app_providers.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/core/theme/app_theme.dart';
+import 'package:crabpay/core/set_up/theme/app_theme.dart';
 import 'package:crabpay/core/app_routes/app_router.dart';
 import 'package:crabpay/views/widgets/global_loading_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';

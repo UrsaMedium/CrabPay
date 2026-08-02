@@ -5,6 +5,7 @@ abstract class InnerChatHandler {
   Future<SupportThread?> getOrCreateThread({required String userId});
   // Future<List<SupportThread>> getAllThreads();
   Stream<List<ChatMessage>> subscribeToMessages({required String threadId});
+  void unsubscribeFromMessages();
   Future<void> sendMessage({
     required String threadId,
     required String senderId,

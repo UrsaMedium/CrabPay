@@ -15,7 +15,7 @@ import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_ha
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
 
-import 'utilities.dart';
+import '../utilities.dart';
 
 void setupDependencies() {
   getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
@@ -23,7 +23,9 @@ void setupDependencies() {
   getIt.registerSingleton<AppLifecycleService>(AppLifecycleService());
   //
   getIt.registerLazySingleton<InnerChatHandler>(
-    () => OuterChatHandlerWithSupabase(),
+    () => OuterChatHandlerWithSupabase(
+      appLifecycleService: getIt<AppLifecycleService>(),
+    ),
   );
   getIt.registerLazySingleton<AdminInnerChatHandler>(
     () => AdminOuterChatHandlerWithSupabase(),

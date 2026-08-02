@@ -8,7 +8,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/core/color_generator.dart';
+import 'package:crabpay/core/custom_ui_elements/color_generator.dart';
 // import 'package:uuid/uuid.dart';
 // import 'package:uuid/v4.dart';
 

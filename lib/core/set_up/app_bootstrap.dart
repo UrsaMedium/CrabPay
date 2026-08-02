@@ -1,6 +1,6 @@
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_conf.dart';
-import 'package:crabpay/core/get_it.dart';
+import 'package:crabpay/core/set_up/get_it.dart';
 import 'package:crabpay/core/local_storage/local_storage.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
