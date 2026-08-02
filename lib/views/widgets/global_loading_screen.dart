@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
+import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

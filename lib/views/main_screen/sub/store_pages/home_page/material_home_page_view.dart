@@ -1,5 +1,5 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
+import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/widgets/product_card.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
