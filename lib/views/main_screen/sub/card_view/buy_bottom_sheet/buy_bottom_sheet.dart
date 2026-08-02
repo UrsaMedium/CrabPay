@@ -1,7 +1,7 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
 import 'package:crabpay/views/widgets/widget_factory.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
 import 'package:flutter/material.dart';
 
 class MaterialPurchasesView extends StatelessWidget {

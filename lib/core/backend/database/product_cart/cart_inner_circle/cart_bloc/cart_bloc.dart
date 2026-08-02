@@ -104,10 +104,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           event.userId,
           event.cartItem.productId,
         );
-        // final updatedUserAmount = await cartHandler.getUserCartItemAmount(
-        //   event.userId,
-        // );
-        // final updatedCartItems = await cartHandler.fetchCartItems(event.userId);
         emit(
           state.copyWith(
             // cartItems: updatedCartItems,

@@ -1,4 +1,4 @@
-import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/main_screen_driver.dart';
 import 'package:crabpay/views/main_screen/sub/profile_sheet.dart';

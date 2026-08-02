@@ -25,7 +25,6 @@ class CrabPayApp extends StatelessWidget {
         builder: (lightDynamic, darkDynamic) {
           return MaterialApp.router(
             // showPerformanceOverlay: true,
-            // debugShowMaterialGrid: true,
             debugShowCheckedModeBanner: false,
             title: 'CrabPay Demo',
             theme: AppTheme.light(lightDynamic),

@@ -1,4 +1,6 @@
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/custom_faster_page_scroll_physics.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -126,72 +128,63 @@ class MaterialMainScreenView extends StatelessWidget {
               ),
             ),
           ),
-          ClipPath(
-            clipper: AppUpwardReveresClipper(radius: inRadius, isUpward: true),
-            child: BackdropFilter(
-              filter: .blur(sigmaX: 8, sigmaY: 8),
-              child: Container(
-                color: context.appColorScheme.surfaceContainerHigh,
-                height: MediaQuery.paddingOf(context).top + inRadius - 4,
-              ),
-            ),
+          Container(
+            color: context.appColorScheme.surfaceContainerHigh,
+            height: MediaQuery.paddingOf(context).top + inRadius - 4,
           ),
         ],
       ),
-      bottomNavigationBar: ClipPath(
-        clipper: AppUpwardReveresClipper(radius: inRadius, isUpward: false),
-        child: NavigationBar(
-          selectedIndex: pageIndex,
-          height: 64 + inRadius,
-          onDestinationSelected: onPageSelected,
-          backgroundColor: context.appColorScheme.surfaceContainerHigh,
-          destinations: [
-            Padding(
-              padding: const EdgeInsets.only(top: inRadius),
-              child: NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home_filled),
-                label: 'Home',
-              ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: pageIndex,
+        height: 64 + inRadius,
+        onDestinationSelected: onPageSelected,
+        backgroundColor: context.appColorScheme.surfaceContainerHigh,
+        destinations: [
+          Padding(
+            padding: const EdgeInsets.only(top: inRadius),
+            child: NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_filled),
+              label: 'Home',
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: inRadius),
-              child: NavigationDestination(
-                icon: Icon(Icons.storefront_outlined),
-                selectedIcon: Icon(Icons.storefront),
-                label: 'Store',
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: inRadius),
+            child: NavigationDestination(
+              icon: Icon(Icons.storefront_outlined),
+              selectedIcon: Icon(Icons.storefront),
+              label: 'Store',
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: inRadius),
-              child: NavigationDestination(
-                icon: Icon(Icons.message_outlined),
-                selectedIcon: Icon(Icons.message_rounded),
-                label: 'Ask',
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: inRadius),
+            child: NavigationDestination(
+              icon: Icon(Icons.message_outlined),
+              selectedIcon: Icon(Icons.message_rounded),
+              label: 'Ask',
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: inRadius),
-              child: NavigationDestination(
-                icon: Badge(
-                  backgroundColor: context.appColorScheme.error,
-                  textColor: context.appColorScheme.onError,
-                  label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                  isLabelVisible: itemsCount > 0,
-                  child: Icon(Icons.shopping_cart_checkout_outlined),
-                ),
-                selectedIcon: Badge(
-                  backgroundColor: context.appColorScheme.error,
-                  textColor: context.appColorScheme.onError,
-                  label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                  isLabelVisible: itemsCount > 0,
-                  child: Icon(Icons.shopping_cart_rounded),
-                ),
-                label: 'Cart',
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: inRadius),
+            child: NavigationDestination(
+              icon: Badge(
+                backgroundColor: context.appColorScheme.error,
+                textColor: context.appColorScheme.onError,
+                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+                isLabelVisible: itemsCount > 0,
+                child: Icon(Icons.shopping_cart_checkout_outlined),
               ),
+              selectedIcon: Badge(
+                backgroundColor: context.appColorScheme.error,
+                textColor: context.appColorScheme.onError,
+                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+                isLabelVisible: itemsCount > 0,
+                child: Icon(Icons.shopping_cart_rounded),
+              ),
+              label: 'Cart',
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

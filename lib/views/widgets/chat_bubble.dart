@@ -1,6 +1,6 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
-import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/core/custom_ui_elements.dart/ui_utilities.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubbleDriver extends StatefulWidget {
@@ -55,7 +55,7 @@ class MaterialChatBubble extends StatelessWidget {
             color: isMe
                 ? context.appColorScheme.primary
                 : context.appColorScheme.secondary,
-                borderRadius: .circular(24)
+            borderRadius: .circular(24),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10),
