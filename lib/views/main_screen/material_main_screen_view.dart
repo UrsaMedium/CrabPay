@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/core/custom_ui_elements/app_nav_bar.dart';
 import 'package:crabpay/core/custom_ui_elements/custom_faster_page_scroll_physics.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -49,19 +50,33 @@ class MaterialMainScreenView extends StatelessWidget {
               return pages[index];
             },
           ),
+          Container(
+            height: MediaQuery.paddingOf(context).top * 2 + 4,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: .topCenter,
+                end: .bottomCenter,
+                colors: [Colors.black, Colors.transparent],
+              ),
+            ),
+          ),
+
           Positioned(
             top: MediaQuery.paddingOf(context).top + 2,
             left: 8,
             right: 8,
-            child: ClipRRect(
-              borderRadius: .circular(20),
+            child: Material(
+              borderRadius: .circular(24),
+              clipBehavior: .antiAlias,
+              color: Colors.transparent,
               child: BackdropFilter(
-                filter: .blur(sigmaX: 12, sigmaY: 8),
+                enabled: context.highGraphics,
+                filter: .blur(sigmaX: 12, sigmaY: 12),
                 child: Container(
                   height: 46,
                   decoration: BoxDecoration(
                     color: context.appColorScheme.surfaceContainer.withValues(
-                      alpha: .8,
+                      alpha: context.highGraphics ? .5 : .9,
                     ),
                   ),
                   child: Row(
@@ -128,64 +143,20 @@ class MaterialMainScreenView extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            color: context.appColorScheme.surfaceContainerHigh,
-            height: MediaQuery.paddingOf(context).top + inRadius - 4,
-          ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: pageIndex,
-        height: 64 + inRadius,
-        onDestinationSelected: onPageSelected,
-        backgroundColor: context.appColorScheme.surfaceContainerHigh,
-        destinations: [
-          Padding(
-            padding: const EdgeInsets.only(top: inRadius),
-            child: NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_filled),
-              label: 'Home',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: inRadius),
-            child: NavigationDestination(
-              icon: Icon(Icons.storefront_outlined),
-              selectedIcon: Icon(Icons.storefront),
-              label: 'Store',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: inRadius),
-            child: NavigationDestination(
-              icon: Icon(Icons.message_outlined),
-              selectedIcon: Icon(Icons.message_rounded),
-              label: 'Ask',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: inRadius),
-            child: NavigationDestination(
-              icon: Badge(
-                backgroundColor: context.appColorScheme.error,
-                textColor: context.appColorScheme.onError,
-                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                isLabelVisible: itemsCount > 0,
-                child: Icon(Icons.shopping_cart_checkout_outlined),
-              ),
-              selectedIcon: Badge(
-                backgroundColor: context.appColorScheme.error,
-                textColor: context.appColorScheme.onError,
-                label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
-                isLabelVisible: itemsCount > 0,
-                child: Icon(Icons.shopping_cart_rounded),
-              ),
-              label: 'Cart',
-            ),
-          ),
-        ],
+      bottomNavigationBar: AppNavBar(
+        currentIndex: pageIndex,
+        onTap: onPageSelected,
       ),
     );
   }
 }
+
+                // Badge(
+                //   backgroundColor: context.appColorScheme.error,
+                //   textColor: context.appColorScheme.onError,
+                //   label: Text(itemsCount > 0 ? itemsCount.toString() : ''),
+                //   isLabelVisible: itemsCount > 0,
+                //   child: Icon(Icons.shopping_cart_checkout_outlined),
+                // ),

@@ -32,7 +32,7 @@ class MaterialStorePageView extends StatelessWidget {
                 SliverPadding(
                   padding: .only(
                     top: MediaQuery.paddingOf(context).top + 52,
-                    bottom: MediaQuery.paddingOf(context).bottom + 8,
+                    bottom: MediaQuery.paddingOf(context).bottom + 16,
                     right: 8,
                     left: 8,
                   ),

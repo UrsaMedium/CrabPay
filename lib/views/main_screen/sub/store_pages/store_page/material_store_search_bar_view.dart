@@ -100,7 +100,8 @@ class _MaterialStoreSearchBarViewState
       child: ClipRRect(
         borderRadius: .circular(30),
         child: BackdropFilter(
-          filter: .blur(sigmaX: 12, sigmaY: 12),
+          enabled: context.highGraphics,
+          filter: .blur(sigmaX: 8, sigmaY: 8),
           child: GestureDetector(
             onTap: widget.onOpenSearch,
             child: Container(
@@ -109,7 +110,7 @@ class _MaterialStoreSearchBarViewState
               ),
               decoration: BoxDecoration(
                 color: context.appColorScheme.surfaceContainerHigh.withValues(
-                  alpha: .6,
+                  alpha: context.highGraphics ? .5 : .9,
                 ),
                 borderRadius: BorderRadius.circular(30),
               ),

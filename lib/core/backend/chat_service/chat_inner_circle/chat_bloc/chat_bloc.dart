@@ -13,6 +13,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   late final StreamSubscription<AppAuthUser> _authSubscription;
   final InnerChatHandler _chatHandler;
   StreamSubscription<List<ChatMessage>>? _messagesSubscription;
+  // String? threadId;
 
   ChatBloc({
     required InnerChatHandler chatHandler,
@@ -20,38 +21,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }) : _authInterface = authInterface,
        _chatHandler = chatHandler,
        super(const ChatState()) {
-    // Initialize Thread ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    on<ChatEventInitializeThread>((event, emit) async {
-      developer.log('---');
-      developer.log('--- ChatEventInitializeThread fired');
-      developer.log('---');
-      try {
-        emit(state.copyWith(status: ChatStates.loading));
-        final thread = await _chatHandler.getOrCreateThread(
-          userId: event.userId,
-        );
+    //streaming -----------------------------------------------------------------------
 
-        if (thread != null) {
-          emit(
-            state.copyWith(
-              activeThread: thread,
-              status: ChatStates.threadInitialized,
-            ),
-          );
-          add(ChatEventSubscribeToMessages(threadId: thread.id));
-        } else {
-          emit(
-            state.copyWith(
-              status: ChatStates.error,
-              errorMessage: 'Could not initialize chat thread.',
-            ),
-          );
-        }
-      } catch (e) {
-        emit(
-          state.copyWith(status: ChatStates.error, errorMessage: e.toString()),
-        );
-        rethrow;
+    // auth stream -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    String? currentUserId;
+    _authSubscription = _authInterface.userStream.listen((user) {
+      if (currentUserId != user.id) {
+        currentUserId = user.id;
+        add(ChatEventFlushData());
+        add(ChatEventUnsubscribe());
+        // add(ChatEventInitializeThread(userId: user.id));
       }
     });
 
@@ -88,6 +67,50 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       // add(ChatEventMarkAsRead());
     });
 
+    on<ChatEventUnsubscribe>((event, emit) {
+      emit(
+        state.copyWith(isSubscribed: false, status: ChatStates.unsubscribed),
+      );
+      _chatHandler.unsubscribeFromMessages();
+    });
+
+    //streaming -----------------------------------------------------------------------
+
+    // Initialize Thread ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    on<ChatEventInitializeThread>((event, emit) async {
+      developer.log('---');
+      developer.log('--- ChatEventInitializeThread fired');
+      developer.log('---');
+      try {
+        emit(state.copyWith(status: ChatStates.loading));
+        final thread = await _chatHandler.getOrCreateThread(
+          userId: event.userId,
+        );
+
+        if (thread != null) {
+          emit(
+            state.copyWith(
+              activeThread: thread,
+              status: ChatStates.threadInitialized,
+            ),
+          );
+          add(ChatEventSubscribeToMessages(threadId: thread.id));
+        } else {
+          emit(
+            state.copyWith(
+              status: ChatStates.error,
+              errorMessage: 'Could not initialize chat thread.',
+            ),
+          );
+        }
+      } catch (e) {
+        emit(
+          state.copyWith(status: ChatStates.error, errorMessage: e.toString()),
+        );
+        rethrow;
+      }
+    });
+
     // Send Message ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventSendMessage>((event, emit) async {
       developer.log('---');
@@ -114,38 +137,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     });
 
-    // Fetch all threads ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // on<ChatEventFetchAllThreads>((event, emit) async {
-    //   emit(state.copyWith(status: ChatStates.loading));
-    //   try {
-    //     final allThreads = await _chatHandler.getAllThreads();
-    //     if (allThreads.isEmpty) {
-    //       emit(state.copyWith(status: ChatStates.error, allThreads: null));
-    //     } else {
-    //       emit(
-    //         state.copyWith(
-    //           status: ChatStates.fetchedAllThreads,
-    //           allThreads: allThreads,
-    //         ),
-    //       );
-    //     }
-    //   } catch (e) {
-    //     emit(state.copyWith(status: ChatStates.error));
-    //     rethrow;
-    //   }
-    // });
-
-    // Mark Messages as Read ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // on<ChatEventMarkAsRead>((event, emit) async {
-    //   final currentThread = state.activeThread;
-    //   if (currentThread == null) return;
-    //   try {
-    //     await _chatHandler.markMessagesAsRead(threadId: currentThread.id);
-    //   } catch (e) {
-    //     developer.log('Could not mark messages as read: $e');
-    //   }
-    // });
-
     // Flush Data ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     on<ChatEventFlushData>((event, emit) {
       developer.log('---');
@@ -162,16 +153,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           status: ChatStates.flushed,
         ),
       );
-    });
-
-    // auth stream -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    String? currentUserId;
-    _authSubscription = _authInterface.userStream.listen((user) {
-      if (currentUserId != user.id) {
-        currentUserId = user.id;
-        add(ChatEventFlushData());
-        // add(ChatEventInitializeThread(userId: user.id));
-      }
     });
   }
 

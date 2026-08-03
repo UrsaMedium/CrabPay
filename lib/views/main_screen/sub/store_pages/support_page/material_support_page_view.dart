@@ -71,10 +71,11 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
                 clipBehavior: .antiAlias,
                 child: BackdropFilter(
+                  enabled: context.highGraphics,
                   filter: .blur(sigmaX: 8, sigmaY: 8),
                   child: Container(
                     color: context.appColorScheme.surfaceContainer.withValues(
-                      alpha: .8,
+                      alpha: context.highGraphics ? .5 : .9,
                     ),
                     // height: 64,
                     child: Padding(
@@ -133,10 +134,11 @@ class MaterialSupportPageView extends StatelessWidget {
                 borderRadius: .circular(22),
                 clipBehavior: .antiAlias,
                 child: BackdropFilter(
+                  enabled: context.highGraphics,
                   filter: .blur(sigmaX: 8, sigmaY: 8),
                   child: Container(
                     color: context.appColorScheme.primaryContainer.withValues(
-                      alpha: .8,
+                      alpha: context.highGraphics ? .4 : .8,
                     ),
                     child: Row(
                       crossAxisAlignment: .end,
@@ -172,16 +174,16 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom - cornerRadius,
-              left: 2 * cornerRadius,
-              right: 2 * cornerRadius,
-              child: Text(
-                '🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀',
-                maxLines: 1,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+            // Positioned(
+            //   bottom: MediaQuery.paddingOf(context).bottom - cornerRadius,
+            //   left: 2 * cornerRadius,
+            //   right: 2 * cornerRadius,
+            //   child: Text(
+            //     '🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀',
+            //     maxLines: 1,
+            //     style: TextStyle(fontSize: 18),
+            //   ),
+            // ),
           ],
         ),
       ),

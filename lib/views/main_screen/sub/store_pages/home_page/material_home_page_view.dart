@@ -32,7 +32,7 @@ class MaterialHomePageView extends StatelessWidget {
               left: 16,
               right: 16,
               top: MediaQuery.paddingOf(context).top + 48 + 16,
-              bottom: MediaQuery.paddingOf(context).bottom,
+              bottom: MediaQuery.paddingOf(context).bottom + 16,
             ),
             child: Column(
               children: [

@@ -1,5 +1,5 @@
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/widgets/cart_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -92,10 +92,7 @@ class MaterialCartPageView extends StatelessWidget {
                       ],
                     ),
                     Positioned(
-                      bottom:
-                          MediaQuery.paddingOf(context).bottom +
-                          18 -
-                          cornerRadius,
+                      bottom: MediaQuery.paddingOf(context).bottom + 8,
                       right: 16,
                       left: 16,
                       child: Material(
@@ -103,10 +100,13 @@ class MaterialCartPageView extends StatelessWidget {
                         borderRadius: .circular(30),
                         clipBehavior: .antiAlias,
                         child: BackdropFilter(
+                          enabled: context.highGraphics,
                           filter: .blur(sigmaX: 8, sigmaY: 8),
                           child: Container(
                             color: context.appColorScheme.surfaceContainerHigh
-                                .withValues(alpha: .8),
+                                .withValues(
+                                  alpha: context.highGraphics ? .5 : .9,
+                                ),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
@@ -167,11 +167,7 @@ class MaterialCartPageView extends StatelessWidget {
                                         top: 8,
                                       ),
                                       child: ElevatedButton(
-                                        onPressed:
-                                            //  cartItemsOnPaymentState.isEmpty
-                                            //     ? null
-                                            //     :
-                                            onShowBottonSheet,
+                                        onPressed: onShowBottonSheet,
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               context.appColorScheme.primary,

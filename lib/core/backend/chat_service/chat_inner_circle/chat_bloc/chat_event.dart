@@ -24,6 +24,8 @@ class ChatEventSubscribeToMessages extends ChatEvent {
   List<Object?> get props => [threadId];
 }
 
+class ChatEventUnsubscribe extends ChatEvent {}
+
 class ChatEventMessagesUpdated extends ChatEvent {
   final List<ChatMessage> messages;
   const ChatEventMessagesUpdated({required this.messages});
