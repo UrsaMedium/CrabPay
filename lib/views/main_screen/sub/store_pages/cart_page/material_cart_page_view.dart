@@ -101,11 +101,11 @@ class MaterialCartPageView extends StatelessWidget {
                         clipBehavior: .antiAlias,
                         child: BackdropFilter(
                           enabled: context.highGraphics,
-                          filter: .blur(sigmaX: 8, sigmaY: 8),
+                          filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: Container(
                             color: context.appColorScheme.surfaceContainerHigh
                                 .withValues(
-                                  alpha: context.highGraphics ? .5 : .9,
+                                  alpha: context.highGraphics ? .5 : .97,
                                 ),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),

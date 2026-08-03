@@ -20,7 +20,10 @@ class AppNavBar extends StatelessWidget {
               gradient: LinearGradient(
                 begin: .bottomCenter,
                 end: .topCenter,
-                colors: [Colors.black, Colors.transparent],
+                colors: [
+                  context.appColorScheme.surfaceContainerLowest,
+                  Colors.transparent,
+                ],
               ),
             ),
           ),
@@ -32,16 +35,15 @@ class AppNavBar extends StatelessWidget {
           margin: .only(
             left: (MediaQuery.widthOf(context) - 308) / 2,
             right: (MediaQuery.widthOf(context) - 308) / 2,
-            bottom: 16,
+            bottom: 8,
           ),
           child: BackdropFilter(
             enabled: context.highGraphics,
             filter: .blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               decoration: BoxDecoration(
-                color: context.appColorScheme.surfaceContainerLow.withValues(
-                  alpha: context.highGraphics ? 0.4 : .9,
-                ),
+                color: context.appColorScheme.surfaceContainerHighest
+                    .withValues(alpha: context.highGraphics ? 0.4 : .97),
               ),
               child: Row(
                 mainAxisAlignment: .center,

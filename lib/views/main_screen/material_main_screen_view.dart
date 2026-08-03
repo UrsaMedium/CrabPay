@@ -76,7 +76,7 @@ class MaterialMainScreenView extends StatelessWidget {
                   height: 46,
                   decoration: BoxDecoration(
                     color: context.appColorScheme.surfaceContainer.withValues(
-                      alpha: context.highGraphics ? .5 : .9,
+                      alpha: context.highGraphics ? .5 : .97,
                     ),
                   ),
                   child: Row(

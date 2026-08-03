@@ -72,10 +72,10 @@ class MaterialSupportPageView extends StatelessWidget {
                 clipBehavior: .antiAlias,
                 child: BackdropFilter(
                   enabled: context.highGraphics,
-                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  filter: .blur(sigmaX: 12, sigmaY: 12),
                   child: Container(
                     color: context.appColorScheme.surfaceContainer.withValues(
-                      alpha: context.highGraphics ? .5 : .9,
+                      alpha: context.highGraphics ? .5 : .97,
                     ),
                     // height: 64,
                     child: Padding(
@@ -135,10 +135,10 @@ class MaterialSupportPageView extends StatelessWidget {
                 clipBehavior: .antiAlias,
                 child: BackdropFilter(
                   enabled: context.highGraphics,
-                  filter: .blur(sigmaX: 8, sigmaY: 8),
+                  filter: .blur(sigmaX: 12, sigmaY: 12),
                   child: Container(
                     color: context.appColorScheme.primaryContainer.withValues(
-                      alpha: context.highGraphics ? .4 : .8,
+                      alpha: context.highGraphics ? .4 : .97,
                     ),
                     child: Row(
                       crossAxisAlignment: .end,

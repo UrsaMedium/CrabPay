@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/buy_bottom_sheet/buy_bottom_sheet_driver.dart';
@@ -42,7 +43,9 @@ class ProductViewDriver extends StatelessWidget {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
       },
       child: BlocBuilder<DatabaseBloc, DatabaseState>(
         builder: (context, dbState) {
@@ -127,9 +130,10 @@ class ProductViewDriver extends StatelessWidget {
                 context: context,
                 enableDrag: true,
                 isScrollControlled: true,
-                backgroundColor: Theme.of(
-                  context,
-                ).colorScheme.surfaceContainerLow.withValues(alpha: .6),
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerLow
+                    .withValues(alpha: context.highGraphics ? .5 : .95),
                 builder: (_) {
                   return BuyBottomSheetDriver(
                     product: theProduct!,

@@ -46,83 +46,65 @@ class MaterialProfileSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: const .only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-            border: .all(
-              color: context.appColorScheme.surfaceContainerLow.withValues(
-                alpha: .5,
-              ),
-            ),
-          ),
-          child: ClipRRect(
-            borderRadius: const .only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-            child: BackdropFilter(
-              filter: .blur(sigmaX: 8, sigmaY: 8),
-              child: SizedBox(
-                height: 200,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
+        BackdropFilter(
+          enabled: context.highGraphics,
+          filter: .blur(sigmaX: 12, sigmaY: 12),
+          child: SizedBox(
+            height: 200,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Your profile:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: context.appColorScheme.primary,
-                                    ),
-                                  ),
-                                  Text('${user.email}'),
-                                ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Your profile:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: context.appColorScheme.primary,
+                                ),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: onSignOutPressed,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: context.appColorScheme.primary,
-                                foregroundColor:
-                                    context.appColorScheme.onPrimary,
-                                minimumSize: Size(0, 50),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.logout_outlined),
-                                  Text(
-                                    '  Sign Out',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                              Text('${user.email}'),
+                            ],
+                          ),
                         ),
-                        Container(height: 8),
-                        Divider(
-                          thickness: 1,
-                          color: context.appColorScheme.outline,
+                        ElevatedButton(
+                          onPressed: onSignOutPressed,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.appColorScheme.primary,
+                            foregroundColor:
+                                context.appColorScheme.onPrimary,
+                            minimumSize: Size(0, 50),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.logout_outlined),
+                              Text(
+                                '  Sign Out',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Container(height: 8),
                       ],
                     ),
-                  ),
+                    Container(height: 8),
+                    Divider(
+                      thickness: 1,
+                      color: context.appColorScheme.outline,
+                    ),
+                    Container(height: 8),
+                  ],
                 ),
               ),
             ),

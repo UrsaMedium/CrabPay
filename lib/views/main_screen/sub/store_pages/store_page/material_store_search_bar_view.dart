@@ -101,7 +101,7 @@ class _MaterialStoreSearchBarViewState
         borderRadius: .circular(30),
         child: BackdropFilter(
           enabled: context.highGraphics,
-          filter: .blur(sigmaX: 8, sigmaY: 8),
+          filter: .blur(sigmaX: 12, sigmaY: 12),
           child: GestureDetector(
             onTap: widget.onOpenSearch,
             child: Container(
@@ -110,7 +110,7 @@ class _MaterialStoreSearchBarViewState
               ),
               decoration: BoxDecoration(
                 color: context.appColorScheme.surfaceContainerHigh.withValues(
-                  alpha: context.highGraphics ? .5 : .9,
+                  alpha: context.highGraphics ? .5 : .97,
                 ),
                 borderRadius: BorderRadius.circular(30),
               ),

@@ -74,7 +74,8 @@ class MaterialPurchasesView extends StatelessWidget {
           ),
           if (isLoadingMore)
             BackdropFilter(
-              filter: .blur(sigmaX: 5, sigmaY: 5),
+              enabled: context.highGraphics,
+              filter: .blur(sigmaX: 12, sigmaY: 12),
               child: Center(child: CircularProgressIndicator()),
             ),
         ],
