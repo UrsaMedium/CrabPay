@@ -95,78 +95,78 @@ class MaterialPurchasesCard extends StatelessWidget {
     required this.onSupportSendMessagePressed,
   });
 
-  List<Widget> _rowOfProductImages() {
-    List<Widget> result = [];
-    for (var item in cartItems) {
-      result.add(
-        Row(
-          spacing: 8,
-          children: [
-            Container(
-              height: 64,
-              clipBehavior: .antiAlias,
-              decoration: BoxDecoration(borderRadius: .circular(12)),
-              child: AspectRatio(
-                aspectRatio: 1.4,
-                child: CachedNetworkImage(
-                  imageUrl:
-                      'https://regred-rainbowbridge.ru/crabpay/images/products/${itemToProductMap[item]?.image}.png',
-                  fit: .cover,
-                  errorWidget: (context, error, stackTrace) => Container(
-                    color: context.appColorScheme.onInverseSurface,
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.broken_image,
-                          color: context.appColorScheme.inversePrimary,
-                          size: 16,
-                        ),
-                        Text(error),
-                      ],
-                    ),
-                  ),
-                  placeholder: (context, url) => Container(
-                    color: context.appColorScheme.onInverseSurface,
-                    alignment: .center,
-                    child: const CircularProgressIndicator(),
-                  ),
-                ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(item.productName),
-                Text('RUB: ${item.checkoutPrice}'),
-              ],
-            ),
-            Spacer(flex: 1),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Column(
-                crossAxisAlignment: .end,
-                children: [
-                  Text('Status'),
-                  Text(
-                    item.status == 'delivered'
-                        ? item.status
-                        : 'being delivered',
-                    style: TextStyle(
-                      color: item.status == 'delivered'
-                          ? Colors.greenAccent
-                          : Colors.yellowAccent,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    return result;
-  }
+  // List<Widget> _rowOfProductImages() {
+  //   List<Widget> result = [];
+  //   for (var item in cartItems) {
+  //     result.add(
+  //       Row(
+  //         spacing: 8,
+  //         children: [
+  //           Container(
+  //             height: 64,
+  //             clipBehavior: .antiAlias,
+  //             decoration: BoxDecoration(borderRadius: .circular(12)),
+  //             child: AspectRatio(
+  //               aspectRatio: 1.4,
+  //               child: CachedNetworkImage(
+  //                 imageUrl:
+  //                     'https://regred-rainbowbridge.ru/crabpay/images/products/${itemToProductMap[item]?.image}.png',
+  //                 fit: .cover,
+  //                 errorWidget: (context, error, stackTrace) => Container(
+  //                   color: context.appColorScheme.onInverseSurface,
+  //                   alignment: Alignment.center,
+  //                   child: Column(
+  //                     children: [
+  //                       Icon(
+  //                         Icons.broken_image,
+  //                         color: context.appColorScheme.inversePrimary,
+  //                         size: 16,
+  //                       ),
+  //                       Text(error),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 placeholder: (context, url) => Container(
+  //                   color: context.appColorScheme.onInverseSurface,
+  //                   alignment: .center,
+  //                   child: const CircularProgressIndicator(),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           Column(
+  //             crossAxisAlignment: .start,
+  //             children: [
+  //               Text(item.productName),
+  //               Text('RUB: ${item.checkoutPrice}'),
+  //             ],
+  //           ),
+  //           Spacer(flex: 1),
+  //           Padding(
+  //             padding: const EdgeInsets.only(right: 8.0),
+  //             child: Column(
+  //               crossAxisAlignment: .end,
+  //               children: [
+  //                 Text('Status'),
+  //                 Text(
+  //                   item.status == 'delivered'
+  //                       ? item.status
+  //                       : 'being delivered',
+  //                   style: TextStyle(
+  //                     color: item.status == 'delivered'
+  //                         ? Colors.greenAccent
+  //                         : Colors.yellowAccent,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  //   return result;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -188,13 +188,19 @@ class MaterialPurchasesCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  Text(
-                    '  Order: ${cartItems.first.paymentId!.substring(0, 8)}',
-                    style: TextStyle(
-                      color: context.appColorScheme.onPrimaryContainer,
-                      fontSize: 18,
-                      fontWeight: .w500,
-                    ),
+                  Column(
+                    children: [
+                      Text(
+                        'Order: ${cartItems.first.paymentId!.substring(0, 8)}',
+                        style: TextStyle(
+                          color: context.appColorScheme.onPrimaryContainer,
+                          fontSize: 18,
+                          fontWeight: .w500,
+                        ),
+                      ),
+                      Text(cartItems.first.createdAt.toString()),
+                      Text(cartItems.first.statusChangedAt.toString()),
+                    ],
                   ),
                   IconButton(
                     onPressed: () => onSupportSendMessagePressed(
@@ -219,7 +225,7 @@ class MaterialPurchasesCard extends StatelessWidget {
                 ],
               ),
             ),
-            ..._rowOfProductImages(),
+            // ..._rowOfProductImages(),
           ],
         ),
       ),

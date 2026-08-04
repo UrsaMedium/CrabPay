@@ -12,6 +12,21 @@ import 'package:go_router/go_router.dart';
 
 final getIt = GetIt.instance;
 
+extension DynamicDataParsing on dynamic {
+  DateTime? toLocalDate() {
+    if (this == null || this is! String) return null;
+
+    final String dateString = this as String;
+    if (dateString.isEmpty) return null;
+
+    try {
+      return DateTime.parse(dateString).toLocal();
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
 typedef OnOpenProductCardCallBack =
     Future<void> Function({
       required BuildContext context,

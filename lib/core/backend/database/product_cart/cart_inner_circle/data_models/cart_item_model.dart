@@ -11,6 +11,8 @@ class CartItem {
   final String? comment;
   final String? paymentId;
   final String? paymentLink;
+  final DateTime createdAt;
+  final DateTime? statusChangedAt;
 
   CartItem({
     required this.id,
@@ -25,6 +27,8 @@ class CartItem {
     this.comment,
     this.paymentId,
     this.paymentLink,
+    required this.createdAt,
+    this.statusChangedAt,
   });
 
   factory CartItem.intial() => CartItem(
@@ -37,5 +41,6 @@ class CartItem {
     currency: '',
     checkoutPrice: 0,
     status: '',
+    createdAt: DateTime(0),
   );
 }

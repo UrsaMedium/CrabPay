@@ -106,6 +106,7 @@ class _BuyBottomSheetDriverState extends State<BuyBottomSheetDriver> {
             .state
             .precalculatedPrice,
         status: 'created',
+        createdAt: DateTime(0),
       );
       try {
         context.read<CartBloc>().add(

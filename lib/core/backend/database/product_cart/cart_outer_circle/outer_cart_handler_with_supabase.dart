@@ -137,8 +137,24 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       return edges.map((edge) {
         final item = edge['node'];
         final dynamic rawPurchaseData = item['purchaseData'] ?? {};
+        final dynamic rawCreatedAt = item['createdAt'];
+        final dynamic rawStatusChangedAt = item['statusChangedAt'];
 
-        // Safely handles both Stringified JSON and mapped JSON from the server
+        DateTime? paredCreatedAt;
+        DateTime? parsedStatusChangedAt;
+
+        if (rawCreatedAt != null &&
+            rawCreatedAt is String &&
+            rawCreatedAt.isNotEmpty) {
+          paredCreatedAt = DateTime.parse(rawCreatedAt).toLocal();
+        }
+
+        if (rawStatusChangedAt != null &&
+            rawStatusChangedAt is String &&
+            rawStatusChangedAt.isNotEmpty) {
+          parsedStatusChangedAt = DateTime.parse(rawStatusChangedAt).toLocal();
+        }
+
         final Map<String, dynamic> decodedPurchaseData =
             rawPurchaseData is String
             ? jsonDecode(rawPurchaseData)
@@ -147,7 +163,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         final Map<String, String> finalPurchaseData = decodedPurchaseData.map(
           (k, v) => MapEntry(k, v.toString()),
         );
-
         return CartItem(
           id: item['id'],
           userId: item['userId'],
@@ -161,6 +176,8 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           comment: item['comment'],
           paymentId: item['paymentId'],
           paymentLink: item['paymentLink'],
+          createdAt: paredCreatedAt ?? DateTime(0),
+          statusChangedAt: parsedStatusChangedAt,
         );
       }).toList();
     } catch (e) {
@@ -317,7 +334,9 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
                   checkoutPrice, 
                   status, 
                   comment, 
-                  paymentId 
+                  paymentId,
+                  createdAt,
+                  statusChangedAt
                 }
               }
             }

@@ -1,10 +1,13 @@
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AppNavBar extends StatelessWidget {
+class MaterialAppNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
-  const AppNavBar({super.key, required this.currentIndex, required this.onTap});
+  const MaterialAppNavBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -49,25 +52,40 @@ class AppNavBar extends StatelessWidget {
                 mainAxisAlignment: .center,
                 spacing: 12,
                 children: [
-                  AppNavBarItem(
+                  MaterialAppNavBarItem(
                     icon: Icons.home_outlined,
                     isSelected: currentIndex == 0,
                     onTap: () => onTap(0),
                   ),
-                  AppNavBarItem(
+                  MaterialAppNavBarItem(
                     icon: Icons.storefront_outlined,
                     isSelected: currentIndex == 1,
                     onTap: () => onTap(1),
                   ),
-                  AppNavBarItem(
+                  MaterialAppNavBarItem(
                     icon: Icons.support_agent_outlined,
                     isSelected: currentIndex == 2,
                     onTap: () => onTap(2),
                   ),
-                  AppNavBarItem(
-                    icon: Icons.shopping_cart_checkout_rounded,
-                    isSelected: currentIndex == 3,
-                    onTap: () => onTap(3),
+                  BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) {
+                      final itemsCount = state.userCartItemAmount ?? 0;
+                      return Badge(
+                        alignment: .center,
+                        offset: Offset(16, -20),
+                        backgroundColor: context.appColorScheme.error,
+                        textColor: context.appColorScheme.onError,
+                        label: Text(
+                          itemsCount > 0 ? itemsCount.toString() : '',
+                        ),
+                        isLabelVisible: itemsCount > 0,
+                        child: MaterialAppNavBarItem(
+                          icon: Icons.shopping_cart_checkout_rounded,
+                          isSelected: currentIndex == 3,
+                          onTap: () => onTap(3),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -79,12 +97,12 @@ class AppNavBar extends StatelessWidget {
   }
 }
 
-class AppNavBarItem extends StatelessWidget {
+class MaterialAppNavBarItem extends StatelessWidget {
   final IconData icon;
   final IconData? activeIcon;
   final bool isSelected;
   final VoidCallback onTap;
-  const AppNavBarItem({
+  const MaterialAppNavBarItem({
     super.key,
     required this.icon,
     this.activeIcon,
@@ -103,7 +121,7 @@ class AppNavBarItem extends StatelessWidget {
         padding: const .symmetric(horizontal: 19, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? context.appColorScheme.primaryContainer.withValues(alpha: .5)
+              ? context.appColorScheme.secondaryContainer.withValues(alpha: .8)
               : Colors.transparent,
           borderRadius: .circular(24),
         ),
@@ -111,7 +129,7 @@ class AppNavBarItem extends StatelessWidget {
           icon,
           color: isSelected
               ? context.appColorScheme.primary
-              : context.appColorScheme.onPrimaryContainer,
+              : context.appColorScheme.onSurface,
           size: 28,
         ),
       ),
