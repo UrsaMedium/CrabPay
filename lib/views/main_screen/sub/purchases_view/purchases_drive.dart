@@ -8,6 +8,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/purchases_view/material_purchases_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +22,6 @@ class PurchasesViewDriver extends StatefulWidget {
 }
 
 class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
-  final ScrollController _scrollController = ScrollController();
   late final PurchasesViewCubit _purchasesViewCubit;
   late final List<Product> _products;
 
@@ -36,36 +36,30 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
         pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
       ),
     );
-    _scrollController.addListener(_onScrollListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _purchasesViewCubit.close();
     super.dispose();
   }
 
-  void _onScrollListener() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 200 &&
-        !_purchasesViewCubit.state.isLoadingMore &&
-        (context.read<CartBloc>().state.orders?.hasMore ?? false)) {
-      context.read<CartBloc>().add(
-        CartEventFetchOrders(
-          userId: context.read<AuthBloc>().state.currentUser.id,
-          pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
-        ),
-      );
-      _purchasesViewCubit.setLoadingState(true);
-    }
+  void _onLoadMore(BuildContext context) {
+    _purchasesViewCubit.setLoadingState(true);
+    context.read<CartBloc>().add(
+      CartEventFetchOrders(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
+      ),
+    );
   }
 
   void _onBackButtonPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
       message: 'CasesViewDriver _onBackButtonPressed',
     );
+    context.read<CartBloc>().add(CartEventFlushOrders());
     if (context.canPop()) {
       context.pop();
     }
@@ -76,22 +70,6 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
       AppRoutes.support.name,
       queryParameters: {'orderId': orderId},
     );
-  }
-
-  Map<CartItem, Product> _cartItemToProductMapping({
-    required Map<String, List<CartItem>> itemsOfOrder,
-  }) {
-    Map<CartItem, Product> result = {};
-    final allItems = itemsOfOrder.values.expand((element) => element);
-    final uniqueItems = {
-      for (var item in allItems) item.id: item,
-    }.values.toList();
-    for (var item in uniqueItems) {
-      result[item] = _products.firstWhere(
-        (product) => product.id == item.productId,
-      );
-    }
-    return result;
   }
 
   @override
@@ -117,22 +95,28 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
               current.states == CartStates.loadedMoreOrders,
           listener: (context, state) {
             context.read<PurchasesViewCubit>().setLoadingState(false);
+            context.read<PurchasesViewCubit>().setHasMore(
+              state.orders?.hasMore ?? true,
+            );
+            context.read<PurchasesViewCubit>().cartItemToProductMapping(
+              itemsOfOrder: state.itemsOfOrder ?? {},
+              products: _products,
+            );
+            context.read<PurchasesViewCubit>().setOrderGroups(
+              orderGroups: state.itemsOfOrder ?? {},
+            );
           },
-          child: BlocBuilder<CartBloc, CartState>(
-            builder: (context, cartState) {
-              return BlocBuilder<PurchasesViewCubit, PurchasesViewState>(
-                builder: (context, viewState) {
-                  return MaterialPurchasesView(
-                    isLoadingMore: viewState.isLoadingMore,
-                    scrollController: _scrollController,
-                    orderGroups: cartState.itemsOfOrder ?? {},
-                    cartItemToProductMap: _cartItemToProductMapping(
-                      itemsOfOrder: cartState.itemsOfOrder ?? {},
-                    ),
-                    onBackButtonPressed: () => _onBackButtonPressed(context),
-                    onSupportSendMessagePressed: _onSupportSendMessagePressed,
-                  );
-                },
+          child: Builder(
+            builder: (context) {
+              if (defaultTargetPlatform == TargetPlatform.iOS) {
+                // return CupertinoPurchasesView();
+              }
+
+              return MaterialPurchasesView(
+                onLoadMore: () => _onLoadMore(context),
+                // scrollController: _scrollController,
+                onBackButtonPressed: () => _onBackButtonPressed(context),
+                onSupportSendMessagePressed: _onSupportSendMessagePressed,
               );
             },
           ),
@@ -144,12 +128,28 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
 
 class PurchasesViewState {
   final bool isLoadingMore;
+  final bool hasMore;
+  final Map<CartItem, Product>? cartItemToProductMap;
+  final Map<String, List<CartItem>>? orderGroups;
 
-  PurchasesViewState({this.isLoadingMore = false});
+  PurchasesViewState({
+    this.isLoadingMore = false,
+    this.hasMore = true,
+    this.cartItemToProductMap,
+    this.orderGroups,
+  });
 
-  PurchasesViewState copyWith({bool? isLoadingMore}) {
+  PurchasesViewState copyWith({
+    bool? isLoadingMore,
+    bool? hasMore,
+    Map<CartItem, Product>? cartItemToProductMap,
+    Map<String, List<CartItem>>? orderGroups,
+  }) {
     return PurchasesViewState(
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMore: hasMore ?? this.hasMore,
+      cartItemToProductMap: cartItemToProductMap ?? this.cartItemToProductMap,
+      orderGroups: orderGroups ?? this.orderGroups,
     );
   }
 }
@@ -159,5 +159,31 @@ class PurchasesViewCubit extends Cubit<PurchasesViewState> {
 
   void setLoadingState(bool isLoading) {
     emit(state.copyWith(isLoadingMore: isLoading));
+  }
+
+  void setHasMore(bool hasMore) {
+    emit(state.copyWith(hasMore: hasMore));
+  }
+
+  void setOrderGroups({required Map<String, List<CartItem>> orderGroups}) {
+    final newData = Map<String, List<CartItem>>.from(orderGroups);
+    emit(state.copyWith(orderGroups: newData));
+  }
+
+  void cartItemToProductMapping({
+    required Map<String, List<CartItem>> itemsOfOrder,
+    required List<Product> products,
+  }) {
+    Map<CartItem, Product> result = {};
+    final allItems = itemsOfOrder.values.expand((element) => element);
+    final uniqueItems = {
+      for (var item in allItems) item.id: item,
+    }.values.toList();
+    for (var item in uniqueItems) {
+      result[item] = products.firstWhere(
+        (product) => product.id == item.productId,
+      );
+    }
+    emit(state.copyWith(cartItemToProductMap: result));
   }
 }

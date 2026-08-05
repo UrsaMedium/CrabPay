@@ -1,24 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialPurchasesView extends StatelessWidget {
-  final Map<String, List<CartItem>> orderGroups;
-  final Map<CartItem, Product> cartItemToProductMap;
   final VoidCallback onBackButtonPressed;
-  final ScrollController scrollController;
+  final VoidCallback onLoadMore;
   final Function(String) onSupportSendMessagePressed;
-  final bool isLoadingMore;
   const MaterialPurchasesView({
     super.key,
     required this.onBackButtonPressed,
-    required this.orderGroups,
     required this.onSupportSendMessagePressed,
-    required this.cartItemToProductMap,
-    required this.scrollController,
-    required this.isLoadingMore,
+    required this.onLoadMore,
   });
 
   @override
@@ -30,55 +25,59 @@ class MaterialPurchasesView extends StatelessWidget {
           icon: Icon(Icons.arrow_back_rounded),
         ),
       ),
-      body: Stack(
-        children: [
-          AbsorbPointer(
-            absorbing: isLoadingMore,
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: .all(8),
-                      decoration: BoxDecoration(
-                        color: context.appColorScheme.surfaceContainerHigh,
-                        borderRadius: .circular(24),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          // controller: scrollController,
+          slivers: [
+            Builder(
+              builder: (context) {
+                final orderGroups = context
+                    .select<PurchasesViewCubit, Map<String, List<CartItem>>>(
+                      (cubit) => cubit.state.orderGroups ?? {},
+                    );
+                final orderEntries = orderGroups.entries.toList();
+
+                return SliverList.builder(
+                  itemCount: orderGroups.length,
+                  itemBuilder: (context, index) {
+                    final group = orderEntries[index];
+                    return Padding(
+                      padding: index == 0
+                          ? const EdgeInsets.all(0)
+                          : const EdgeInsets.only(top: 8),
+                      child: MaterialPurchasesCard(
+                        cartItems: group.value,
+                        onSupportSendMessagePressed:
+                            onSupportSendMessagePressed,
                       ),
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: orderGroups.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => Padding(
-                          padding: index == 0
-                              ? const EdgeInsets.all(0)
-                              : const EdgeInsets.only(top: 8),
-                          child: MaterialPurchasesCard(
-                            cartItems:
-                                orderGroups[orderGroups.keys.elementAt(
-                                  index,
-                                )] ??
-                                [],
-                            itemToProductMap: cartItemToProductMap,
-                            onSupportSendMessagePressed:
-                                onSupportSendMessagePressed,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                    );
+                  },
+                );
+              },
+            ),
+            SliverToBoxAdapter(
+              child: Builder(
+                builder: (context) {
+                  final isLoadingMore = context
+                      .select<PurchasesViewCubit, bool>(
+                        (cubit) => cubit.state.isLoadingMore,
+                      );
+                  final hasMore = context.select<PurchasesViewCubit, bool>(
+                    (cubit) => cubit.state.hasMore,
+                  );
+                  return ElevatedButton(
+                    onPressed: hasMore ? onLoadMore : null,
+                    child: isLoadingMore
+                        ? CircularProgressIndicator()
+                        : Text(hasMore ? 'Load More' : 'That\'s it'),
+                  );
+                },
               ),
             ),
-          ),
-          if (isLoadingMore)
-            BackdropFilter(
-              enabled: context.highGraphics,
-              filter: .blur(sigmaX: 12, sigmaY: 12),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -86,14 +85,110 @@ class MaterialPurchasesView extends StatelessWidget {
 
 class MaterialPurchasesCard extends StatelessWidget {
   final List<CartItem> cartItems;
-  final Map<CartItem, Product> itemToProductMap;
   final Function(String) onSupportSendMessagePressed;
   const MaterialPurchasesCard({
     super.key,
-    required this.itemToProductMap,
     required this.cartItems,
     required this.onSupportSendMessagePressed,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: .all(0),
+      shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Column(
+          spacing: 6,
+          children: [
+            Container(
+              margin: const .only(bottom: 4),
+              padding: const .symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: context.appColorScheme.primaryContainer,
+                borderRadius: .circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        dateConversion(
+                          cartItems.first.statusChangedAt.toString(),
+                        ),
+                        style: const TextStyle(fontWeight: .w600),
+                      ),
+                      Text(
+                        'Order: ${cartItems.first.paymentId!.substring(0, 8)}',
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () => onSupportSendMessagePressed(
+                      '${cartItems.first.paymentId}',
+                    ),
+                    icon: Row(
+                      children: [
+                        Text(
+                          'Support  ',
+                          style: TextStyle(
+                            fontWeight: .w500,
+                            color: context.appColorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                        Icon(
+                          Icons.send_rounded,
+                          color: context.appColorScheme.onPrimaryContainer,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(height: 52),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [Text('Delivered'), Text(' --')],
+                  ),
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [Text('Products'), Text(' ---')],
+                  ),
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [Text('Order Price'), Text(' \$ --')],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MaterialCustomWidgetRowOfImages extends StatelessWidget {
+  const MaterialCustomWidgetRowOfImages({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+
+
+
 
   // List<Widget> _rowOfProductImages() {
   //   List<Widget> result = [];
@@ -167,68 +262,3 @@ class MaterialPurchasesCard extends StatelessWidget {
   //   }
   //   return result;
   // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: .all(0),
-      shape: RoundedRectangleBorder(borderRadius: .circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Column(
-          spacing: 6,
-          children: [
-            Container(
-              margin: .only(bottom: 4),
-              padding: .all(4),
-              decoration: BoxDecoration(
-                color: context.appColorScheme.primaryContainer,
-                borderRadius: .circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        'Order: ${cartItems.first.paymentId!.substring(0, 8)}',
-                        style: TextStyle(
-                          color: context.appColorScheme.onPrimaryContainer,
-                          fontSize: 18,
-                          fontWeight: .w500,
-                        ),
-                      ),
-                      Text(cartItems.first.createdAt.toString()),
-                      Text(cartItems.first.statusChangedAt.toString()),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () => onSupportSendMessagePressed(
-                      '${cartItems.first.paymentId}',
-                    ),
-                    icon: Row(
-                      children: [
-                        Text(
-                          'Support  ',
-                          style: TextStyle(
-                            fontWeight: .w500,
-                            color: context.appColorScheme.onPrimaryContainer,
-                          ),
-                        ),
-                        Icon(
-                          Icons.send_rounded,
-                          color: context.appColorScheme.onPrimaryContainer,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // ..._rowOfProductImages(),
-          ],
-        ),
-      ),
-    );
-  }
-}

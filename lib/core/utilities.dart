@@ -12,19 +12,53 @@ import 'package:go_router/go_router.dart';
 
 final getIt = GetIt.instance;
 
-extension DynamicDataParsing on dynamic {
-  DateTime? toLocalDate() {
-    if (this == null || this is! String) return null;
-
-    final String dateString = this as String;
-    if (dateString.isEmpty) return null;
-
-    try {
-      return DateTime.parse(dateString).toLocal();
-    } catch (e) {
-      return null;
-    }
+String dateConversion(String date) {
+  final stripedDate = date.substring(0, 16);
+  String result = '';
+  switch (stripedDate.substring(5, 7)) {
+    case '01':
+      result = 'Jan ';
+      break;
+    case '02':
+      result = 'Feb ';
+      break;
+    case '03':
+      result = 'Mar ';
+      break;
+    case '04':
+      result = 'Apr ';
+      break;
+    case '05':
+      result = 'May ';
+      break;
+    case '06':
+      result = 'Jun ';
+      break;
+    case '07':
+      result = 'Jul ';
+      break;
+    case '08':
+      result = 'Aug ';
+      break;
+    case '09':
+      result = 'Sep ';
+      break;
+    case '10':
+      result = 'Oct ';
+      break;
+    case '11':
+      result = 'Nov ';
+      break;
+    case '12':
+      result = 'Dec ';
+      break;
+    default:
+      result = 'error';
   }
+  result =
+      '$result${stripedDate.substring(8, 10)}, ${stripedDate.substring(0, 4)} | ${stripedDate.substring(11, 16)}';
+  return result;
+  // return stripedDate.substring(5, 7);
 }
 
 typedef OnOpenProductCardCallBack =
