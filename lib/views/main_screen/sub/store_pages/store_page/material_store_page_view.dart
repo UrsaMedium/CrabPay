@@ -25,13 +25,13 @@ class MaterialStorePageView extends StatelessWidget {
       body: Stack(
         children: [
           RefreshIndicator(
-            edgeOffset: MediaQuery.paddingOf(context).top + 40,
+            edgeOffset: MediaQuery.paddingOf(context).top,
             onRefresh: reFresher,
             child: CustomScrollView(
               slivers: [
                 SliverPadding(
                   padding: .only(
-                    top: MediaQuery.paddingOf(context).top + 52,
+                    top: MediaQuery.paddingOf(context).top + 8,
                     bottom: MediaQuery.paddingOf(context).bottom + 16,
                     right: 8,
                     left: 8,

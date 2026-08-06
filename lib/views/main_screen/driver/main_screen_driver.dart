@@ -8,7 +8,7 @@ import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
-import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
+import 'package:crabpay/views/main_screen/view/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -118,11 +118,11 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     }
   }
 
-  void _onPurchasesPressed(BuildContext context) {
+  void _onOrdersPressed(BuildContext context) {
     getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onPurchasesPressed',
+      message: 'MainScreenDriver _onOrdersPressed',
     );
-    context.push(AppRoutes.purchases.path);
+    context.push(AppRoutes.orders.path);
   }
 
   void _onAdminPressed(BuildContext context) {
@@ -170,7 +170,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 pageIndex: viewState.page,
                 pages: _pages,
                 isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
-                onPurchasesPressed: () => _onPurchasesPressed(context),
+                onOrdersPressed: () => _onOrdersPressed(context),
                 onAdminPressed: () => _onAdminPressed(context),
                 isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
                 profileIconButtonKey: profileIconButtonKey,

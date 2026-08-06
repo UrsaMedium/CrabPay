@@ -4,9 +4,9 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/logger/logger_outer_handler/outer_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
-import 'package:crabpay/views/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
+import 'package:crabpay/views/main_screen/sub/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
+import 'package:crabpay/views/main_screen/sub/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
+import 'package:crabpay/views/main_screen/sub/admin_views/add_complete_product_and_field_data/s3_price_space_filling/data_and_widgets_preperation.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';

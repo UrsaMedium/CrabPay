@@ -52,7 +52,7 @@ class CartEventUpdateUserCartItemAmountFromStream extends CartEvent {
   CartEventUpdateUserCartItemAmountFromStream({required this.amount});
 }
 
-// fetch orders for purchase view
+// fetch orders for orders view
 class CartEventFetchOrders extends CartEvent {
   final String userId;
   final String? pageToken;

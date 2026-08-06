@@ -4,8 +4,8 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/driver/cubit.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/material_purchases_view.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/material_orders_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -13,21 +13,21 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-class PurchasesViewDriver extends StatefulWidget {
-  const PurchasesViewDriver({super.key});
+class OrdersViewDriver extends StatefulWidget {
+  const OrdersViewDriver({super.key});
 
   @override
-  State<PurchasesViewDriver> createState() => _PurchasesViewDriverState();
+  State<OrdersViewDriver> createState() => _OrdersViewDriverState();
 }
 
-class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
-  late final PurchasesViewCubit _purchasesViewCubit;
+class _OrdersViewDriverState extends State<OrdersViewDriver> {
+  late final OrdersViewCubit _ordersViewCubit;
   late final List<Product> _products;
 
   @override
   void initState() {
     _products = context.read<DatabaseBloc>().state.products ?? [];
-    _purchasesViewCubit = PurchasesViewCubit(
+    _ordersViewCubit = OrdersViewCubit(
       cartBloc: context.read<CartBloc>(),
       products: _products,
     );
@@ -43,12 +43,12 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
 
   @override
   void dispose() {
-    _purchasesViewCubit.close();
+    _ordersViewCubit.close();
     super.dispose();
   }
 
   void _onLoadMore(BuildContext context) {
-    _purchasesViewCubit.setLoadingState(true);
+    _ordersViewCubit.setLoadingState(true);
     context.read<CartBloc>().add(
       CartEventFetchOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
@@ -91,15 +91,15 @@ class _PurchasesViewDriverState extends State<PurchasesViewDriver> {
             : context.pop();
       },
       child: BlocProvider.value(
-        value: _purchasesViewCubit,
+        value: _ordersViewCubit,
         child: Builder(
           builder: (context) {
             //
             if (defaultTargetPlatform == TargetPlatform.iOS) {
-              // return CupertinoPurchasesView();
+              // return CupertinoOrdersView();
             }
 
-            return MaterialPurchasesView(
+            return MaterialOrdersView(
               onLoadMore: () => _onLoadMore(context),
               onBackButtonPressed: () => _onBackButtonPressed(context),
               onSupportSendMessagePressed: _onSupportSendMessagePressed,

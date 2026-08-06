@@ -1,14 +1,14 @@
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/driver/purchases_drive.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/orders_driver.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final List<RouteBase> otherRoutes = [
   GoRoute(
-    path: AppRoutes.purchases.path,
-    name: AppRoutes.purchases.name,
-    builder: (context, state) => const PurchasesViewDriver(),
+    path: AppRoutes.orders.path,
+    name: AppRoutes.orders.name,
+    builder: (context, state) => const OrdersViewDriver(),
   ),
   GoRoute(
     path: AppRoutes.productCard.path,

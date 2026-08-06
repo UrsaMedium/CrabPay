@@ -4,26 +4,26 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/driver/crab_order_model.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PurchasesViewState {
+class OrdersViewState {
   final bool isLoadingMore;
   final bool hasMore;
   final List<CrabOrder>? crabOrders;
 
-  PurchasesViewState({
+  OrdersViewState({
     this.isLoadingMore = false,
     this.hasMore = true,
     this.crabOrders,
   });
 
-  PurchasesViewState copyWith({
+  OrdersViewState copyWith({
     bool? isLoadingMore,
     bool? hasMore,
     List<CrabOrder>? crabOrders,
   }) {
-    return PurchasesViewState(
+    return OrdersViewState(
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       hasMore: hasMore ?? this.hasMore,
       crabOrders: crabOrders ?? this.crabOrders,
@@ -31,16 +31,16 @@ class PurchasesViewState {
   }
 }
 
-class PurchasesViewCubit extends Cubit<PurchasesViewState> {
+class OrdersViewCubit extends Cubit<OrdersViewState> {
   final CartBloc _cartBloc;
   final List<Product> _products;
   late final StreamSubscription _cartSubscription;
-  PurchasesViewCubit({
+  OrdersViewCubit({
     required CartBloc cartBloc,
     required List<Product> products,
   }) : _products = products,
        _cartBloc = cartBloc,
-       super(PurchasesViewState()) {
+       super(OrdersViewState()) {
     _syncData(_cartBloc.state);
     _cartSubscription = _cartBloc.stream.listen((cartState) {
       if (cartState.states == CartStates.loadedMoreOrders) {

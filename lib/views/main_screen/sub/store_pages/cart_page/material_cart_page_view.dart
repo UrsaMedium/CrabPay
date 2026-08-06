@@ -43,7 +43,7 @@ class MaterialCartPageView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            top: MediaQuery.paddingOf(context).top + 16,
+                            top: 8,
                             left: 16,
                           ),
                           child: Text(

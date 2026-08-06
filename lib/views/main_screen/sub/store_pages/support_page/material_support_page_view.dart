@@ -41,7 +41,7 @@ class MaterialSupportPageView extends StatelessWidget {
               reverse: true,
               itemCount: messages.length,
               padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top + 148,
+                top: MediaQuery.paddingOf(context).top + 102,
                 bottom:
                     MediaQuery.paddingOf(context).bottom +
                     64, // - cornerRadius,
@@ -61,7 +61,7 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             Positioned(
-              top: MediaQuery.paddingOf(context).top + 46 + 8,
+              top: MediaQuery.paddingOf(context).top + 8,
               right: 32,
               left: 32,
               child: Material(

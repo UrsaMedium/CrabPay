@@ -10,7 +10,7 @@ enum AppRoutes {
   cart('/cart', 'cart'),
   profileSheet('/profile_sheet', 'profileSheet'),
   itemsOnPaymentSheet('/items_on_payment_sheet', 'itemsOnPaymentSheet'),
-  purchases('/purchases_view', 'purchases'),
+  orders('/orders_view', 'orders'),
 
   // Product View
   productCard('/card_view/:productId/:additionalSuffix/:index', 'card_view'),

@@ -31,7 +31,7 @@ class MaterialHomePageView extends StatelessWidget {
             padding: EdgeInsetsGeometry.only(
               left: 16,
               right: 16,
-              top: MediaQuery.paddingOf(context).top + 48 + 16,
+              top: MediaQuery.paddingOf(context).top + 16,
               bottom: MediaQuery.paddingOf(context).bottom + 16,
             ),
             child: Column(
