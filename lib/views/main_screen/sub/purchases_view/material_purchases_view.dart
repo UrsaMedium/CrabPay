@@ -1,7 +1,7 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
-import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
+import 'package:crabpay/views/main_screen/sub/purchases_view/driver/crab_order_model.dart';
+import 'package:crabpay/views/main_screen/sub/purchases_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,22 +33,20 @@ class MaterialPurchasesView extends StatelessWidget {
           slivers: [
             Builder(
               builder: (context) {
-                final orderGroups = context
-                    .select<PurchasesViewCubit, Map<String, List<CartItem>>>(
-                      (cubit) => cubit.state.orderGroups ?? {},
+                final crabOrders = context
+                    .select<PurchasesViewCubit, List<CrabOrder>>(
+                      (cubit) => cubit.state.crabOrders ?? [],
                     );
-                final orderEntries = orderGroups.entries.toList();
 
                 return SliverList.builder(
-                  itemCount: orderGroups.length,
+                  itemCount: crabOrders.length,
                   itemBuilder: (context, index) {
-                    final group = orderEntries[index];
                     return Padding(
                       padding: index == 0
                           ? const EdgeInsets.all(0)
                           : const EdgeInsets.only(top: 8),
                       child: MaterialPurchasesCard(
-                        cartItems: group.value,
+                        crabOrder: crabOrders[index],
                         onSupportSendMessagePressed:
                             onSupportSendMessagePressed,
                       ),
@@ -84,12 +82,12 @@ class MaterialPurchasesView extends StatelessWidget {
 }
 
 class MaterialPurchasesCard extends StatelessWidget {
-  final List<CartItem> cartItems;
+  final CrabOrder crabOrder;
   final Function(String) onSupportSendMessagePressed;
   const MaterialPurchasesCard({
     super.key,
-    required this.cartItems,
     required this.onSupportSendMessagePressed,
+    required this.crabOrder,
   });
 
   @override
@@ -116,20 +114,14 @@ class MaterialPurchasesCard extends StatelessWidget {
                     crossAxisAlignment: .start,
                     children: [
                       Text(
-                        dateConversion(
-                          cartItems.first.statusChangedAt.toString(),
-                        ),
+                        crabOrder.orderDate,
                         style: const TextStyle(fontWeight: .w600),
                       ),
-                      Text(
-                        'Order: ${cartItems.first.paymentId!.substring(0, 8)}',
-                      ),
+                      Text('Order: ${crabOrder.orderIdToDisplay}'),
                     ],
                   ),
                   IconButton(
-                    onPressed: () => onSupportSendMessagePressed(
-                      '${cartItems.first.paymentId}',
-                    ),
+                    onPressed: () {},
                     icon: Row(
                       children: [
                         Text(
@@ -149,7 +141,12 @@ class MaterialPurchasesCard extends StatelessWidget {
                 ],
               ),
             ),
-            Container(height: 52),
+            Container(
+              margin: .symmetric(horizontal: 8),
+              child: MaterialCustomWidgetRowOfImages(
+                images: crabOrder.itemsToImagesMap.values.toList(),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
@@ -157,15 +154,24 @@ class MaterialPurchasesCard extends StatelessWidget {
                 children: [
                   Column(
                     crossAxisAlignment: .start,
-                    children: [Text('Delivered'), Text(' --')],
+                    children: [
+                      Text('Delivered'),
+                      Text(' ${crabOrder.amountOfDeliveredItems}'),
+                    ],
                   ),
                   Column(
                     crossAxisAlignment: .start,
-                    children: [Text('Products'), Text(' ---')],
+                    children: [
+                      Text('Products'),
+                      Text(' ${crabOrder.amountOfItems}'),
+                    ],
                   ),
                   Column(
                     crossAxisAlignment: .start,
-                    children: [Text('Order Price'), Text(' \$ --')],
+                    children: [
+                      Text('Order Price'),
+                      Text(' \$${crabOrder.orderPrice}'),
+                    ],
                   ),
                 ],
               ),
@@ -178,87 +184,60 @@ class MaterialPurchasesCard extends StatelessWidget {
 }
 
 class MaterialCustomWidgetRowOfImages extends StatelessWidget {
-  const MaterialCustomWidgetRowOfImages({super.key});
+  final List<String> images;
+  const MaterialCustomWidgetRowOfImages({super.key, required this.images});
+
+  List<Widget> _rowOfImages(BuildContext context) {
+    List<Widget> result = [];
+    for (var image in images.length > 5 ? images.getRange(0, 6) : images) {
+      result.add(
+        Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(borderRadius: .circular(4)),
+          clipBehavior: .antiAlias,
+          child: CachedNetworkImage(
+            imageUrl:
+                'https://regred-rainbowbridge.ru/crabpay/images/products/$image.png',
+            fit: .cover,
+            errorWidget: (context, error, stackTrace) => Container(
+              color: context.appColorScheme.onInverseSurface,
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.broken_image,
+                    color: context.appColorScheme.inversePrimary,
+                    size: 16,
+                  ),
+                  Text(error),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    if (images.length > 5) {
+      result.add(
+        Container(
+          margin: .symmetric(horizontal: 8),
+          alignment: .center,
+          height: 30,
+          width: 40,
+          decoration: BoxDecoration(
+            color: context.appColorScheme.surfaceContainerHighest,
+            borderRadius: .circular(12),
+          ),
+          child: Text('+${images.length - 6}'),
+        ),
+      );
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Row(spacing: 2, children: _rowOfImages(context));
   }
 }
-
-
-
-
-
-  // List<Widget> _rowOfProductImages() {
-  //   List<Widget> result = [];
-  //   for (var item in cartItems) {
-  //     result.add(
-  //       Row(
-  //         spacing: 8,
-  //         children: [
-  //           Container(
-  //             height: 64,
-  //             clipBehavior: .antiAlias,
-  //             decoration: BoxDecoration(borderRadius: .circular(12)),
-  //             child: AspectRatio(
-  //               aspectRatio: 1.4,
-  //               child: CachedNetworkImage(
-  //                 imageUrl:
-  //                     'https://regred-rainbowbridge.ru/crabpay/images/products/${itemToProductMap[item]?.image}.png',
-  //                 fit: .cover,
-  //                 errorWidget: (context, error, stackTrace) => Container(
-  //                   color: context.appColorScheme.onInverseSurface,
-  //                   alignment: Alignment.center,
-  //                   child: Column(
-  //                     children: [
-  //                       Icon(
-  //                         Icons.broken_image,
-  //                         color: context.appColorScheme.inversePrimary,
-  //                         size: 16,
-  //                       ),
-  //                       Text(error),
-  //                     ],
-  //                   ),
-  //                 ),
-  //                 placeholder: (context, url) => Container(
-  //                   color: context.appColorScheme.onInverseSurface,
-  //                   alignment: .center,
-  //                   child: const CircularProgressIndicator(),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           Column(
-  //             crossAxisAlignment: .start,
-  //             children: [
-  //               Text(item.productName),
-  //               Text('RUB: ${item.checkoutPrice}'),
-  //             ],
-  //           ),
-  //           Spacer(flex: 1),
-  //           Padding(
-  //             padding: const EdgeInsets.only(right: 8.0),
-  //             child: Column(
-  //               crossAxisAlignment: .end,
-  //               children: [
-  //                 Text('Status'),
-  //                 Text(
-  //                   item.status == 'delivered'
-  //                       ? item.status
-  //                       : 'being delivered',
-  //                   style: TextStyle(
-  //                     color: item.status == 'delivered'
-  //                         ? Colors.greenAccent
-  //                         : Colors.yellowAccent,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   }
-  //   return result;
-  // }

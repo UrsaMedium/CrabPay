@@ -60,7 +60,6 @@ class MaterialMainScreenView extends StatelessWidget {
               ),
             ),
           ),
-
           Positioned(
             top: MediaQuery.paddingOf(context).top + 2,
             left: 8,

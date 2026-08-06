@@ -1,6 +1,6 @@
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/card_view/product_view/product_view_driver.dart';
-import 'package:crabpay/views/main_screen/sub/purchases_view/purchases_drive.dart';
+import 'package:crabpay/views/main_screen/sub/purchases_view/driver/purchases_drive.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

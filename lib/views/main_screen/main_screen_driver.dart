@@ -1,15 +1,15 @@
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
-import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/material_main_screen_view.dart';
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -139,42 +139,46 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MainScreenCubit(),
-      child: BlocConsumer<MainScreenCubit, MainScreenState>(
-        listenWhen: (previous, current) => previous.page == 2,
-        listener: (context, state) {
-          context.read<ChatBloc>().add(ChatEventFlushData());
-        },
-        builder: (context, viewState) {
-          final cubit = context.read<MainScreenCubit>();
-          final itemsCount = context.select<CartBloc, int>(
-            (bloc) => bloc.state.userCartItemAmount ?? 0,
-          );
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return BlocProvider(
+          create: (_) => MainScreenCubit(),
+          child: BlocConsumer<MainScreenCubit, MainScreenState>(
+            listenWhen: (previous, current) => previous.page == 2,
+            listener: (context, state) {
+              context.read<ChatBloc>().add(ChatEventFlushData());
+            },
+            builder: (context, viewState) {
+              final cubit = context.read<MainScreenCubit>();
+              final itemsCount = context.select<CartBloc, int>(
+                (bloc) => bloc.state.userCartItemAmount ?? 0,
+              );
 
-          if (defaultTargetPlatform == TargetPlatform.iOS) {
-            // cupertino
-          }
-          return MaterialMainScreenView(
-            itemsCount: itemsCount,
-            onPageSelected: (index) => _onPageSelected(index, cubit),
-            onPageSwiped: (index) => _onPageSwiped(index, cubit),
-            onProfileIconPressed: (Offset center) => _onProfileIconPressed(
-              isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
-              context: context,
-              buttonCenter: center,
-            ),
-            pageController: _pageController,
-            pageIndex: viewState.page,
-            pages: _pages,
-            isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
-            onPurchasesPressed: () => _onPurchasesPressed(context),
-            onAdminPressed: () => _onAdminPressed(context),
-            isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
-            profileIconButtonKey: profileIconButtonKey,
-          );
-        },
-      ),
+              if (defaultTargetPlatform == TargetPlatform.iOS) {
+                // cupertino
+              }
+              return MaterialMainScreenView(
+                itemsCount: itemsCount,
+                onPageSelected: (index) => _onPageSelected(index, cubit),
+                onPageSwiped: (index) => _onPageSwiped(index, cubit),
+                onProfileIconPressed: (Offset center) => _onProfileIconPressed(
+                  isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
+                  context: context,
+                  buttonCenter: center,
+                ),
+                pageController: _pageController,
+                pageIndex: viewState.page,
+                pages: _pages,
+                isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
+                onPurchasesPressed: () => _onPurchasesPressed(context),
+                onAdminPressed: () => _onAdminPressed(context),
+                isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
+                profileIconButtonKey: profileIconButtonKey,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
