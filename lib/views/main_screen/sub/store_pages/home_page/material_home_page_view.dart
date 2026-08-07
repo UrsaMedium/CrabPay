@@ -22,7 +22,7 @@ class MaterialHomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final containerHalfWidth = MediaQuery.sizeOf(context).width / 2 - 28;
     return RefreshIndicator(
-      edgeOffset: MediaQuery.paddingOf(context).top + 40,
+      edgeOffset: MediaQuery.paddingOf(context).top,
       onRefresh: reFresher,
       child: Scaffold(
         body: SingleChildScrollView(

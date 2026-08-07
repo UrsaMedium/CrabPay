@@ -52,11 +52,24 @@ class CartEventUpdateUserCartItemAmountFromStream extends CartEvent {
   CartEventUpdateUserCartItemAmountFromStream({required this.amount});
 }
 
-// fetch orders for orders view
-class CartEventFetchOrders extends CartEvent {
+// fetch orders from orders view which are not delivered
+class CartEventFetchNotDeliveredOrders extends CartEvent {
   final String userId;
   final String? pageToken;
-  CartEventFetchOrders({required this.userId, required this.pageToken});
+  CartEventFetchNotDeliveredOrders({
+    required this.userId,
+    required this.pageToken,
+  });
+}
+
+// fetch orders from orders view which are delivered
+class CartEventFetchDeliveredOrders extends CartEvent {
+  final String userId;
+  final String? pageToken;
+  CartEventFetchDeliveredOrders({
+    required this.userId,
+    required this.pageToken,
+  });
 }
 
 // flush orders

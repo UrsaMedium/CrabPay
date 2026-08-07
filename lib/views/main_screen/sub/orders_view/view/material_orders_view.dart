@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crabpay/core/custom_ui_elements/custom_faster_page_scroll_physics.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material_custom_orders_view_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,66 +11,115 @@ class MaterialOrdersView extends StatelessWidget {
   final VoidCallback onBackButtonPressed;
   final VoidCallback onLoadMore;
   final Function(String) onSupportSendMessagePressed;
+  final PageController pageController;
+  final Function(int) onPageSwiped;
+  final Function(int) onPageSelected;
+  final Function(BuildContext, int) pageBuilder;
   const MaterialOrdersView({
     super.key,
     required this.onBackButtonPressed,
     required this.onSupportSendMessagePressed,
     required this.onLoadMore,
+    required this.pageController,
+    required this.onPageSwiped,
+    required this.pageBuilder,
+    required this.onPageSelected,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: onBackButtonPressed,
-          icon: Icon(Icons.arrow_back_rounded),
-        ),
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      appBar: MaterialCustomOrdersViewAppbar(
+        onBackButtonPressed: onBackButtonPressed,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            Builder(
-              builder: (context) {
-                final crabOrders = context
-                    .select<OrdersViewCubit, List<CrabOrder>>(
-                      (cubit) => cubit.state.crabOrders ?? [],
-                    );
-
-                return SliverList.builder(
-                  itemCount: crabOrders.length,
-                  itemBuilder: (context, index) {
-                    return MaterialOrderCard(
-                      crabOrder: crabOrders[index],
-                      onSupportSendMessagePressed: onSupportSendMessagePressed,
-                    );
-                  },
-                );
-              },
-            ),
-            SliverToBoxAdapter(
-              child: Builder(
-                builder: (context) {
-                  final isLoadingMore = context
-                      .select<OrdersViewCubit, bool>(
-                        (cubit) => cubit.state.isLoadingMore,
+      body: Stack(
+        children: [
+          PageView.builder(
+            itemCount: 2,
+            physics: const CustomFasterPageScrollPhysics(),
+            controller: pageController,
+            onPageChanged: onPageSwiped,
+            itemBuilder: (context, index) => pageBuilder(context, index),
+          ),
+          Positioned(
+            top: MediaQuery.paddingOf(context).top * 2 + 12,
+            left: 8,
+            right: 8,
+            child: Material(
+              borderRadius: .circular(14),
+              clipBehavior: .antiAlias,
+              color: Colors.transparent,
+              child: BackdropFilter(
+                enabled: context.highGraphics,
+                filter: .blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  height: 36,
+                  // width: 46,
+                  decoration: BoxDecoration(
+                    color: context.appColorScheme.surfaceContainer.withValues(
+                      alpha: context.highGraphics ? .5 : .97,
+                    ),
+                  ),
+                  child: Builder(
+                    builder: (context) {
+                      final page = context.select<OrdersViewCubit, int>(
+                        (cubit) => cubit.state.page,
                       );
-                  final hasMore = context.select<OrdersViewCubit, bool>(
-                    (cubit) => cubit.state.hasMore,
-                  );
-                  return ElevatedButton(
-                    onPressed: hasMore ? onLoadMore : null,
-                    child: isLoadingMore
-                        ? CircularProgressIndicator()
-                        : Text(hasMore ? 'Load More' : 'That\'s it'),
-                  );
-                },
+                      return Row(
+                        mainAxisAlignment: .spaceAround,
+                        spacing: 8,
+                        children: [
+                          GestureDetector(
+                            onTap: onPageSelected(0),
+                            child: Container(
+                              padding: .symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: page == 0
+                                    ? context.appColorScheme.primary
+                                    : null,
+                                borderRadius: .circular(16),
+                              ),
+                              child: Text(
+                                'Being Delivered',
+                                style: TextStyle(
+                                  color: page == 0
+                                      ? context.appColorScheme.onPrimary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: onPageSelected(1),
+                            child: Container(
+                              padding: .symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: page == 1
+                                    ? context.appColorScheme.primary
+                                    : null,
+                                borderRadius: .circular(16),
+                              ),
+                              child: Text(
+                                'Delivered',
+                                style: TextStyle(
+                                  color: page == 1
+                                      ? context.appColorScheme.onPrimary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

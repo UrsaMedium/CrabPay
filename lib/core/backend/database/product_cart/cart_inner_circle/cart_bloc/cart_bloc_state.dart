@@ -30,8 +30,10 @@ class CartState {
   final IsCartStreaming isCartStreaming;
   final List<CartItem>? cartItemsToBuy;
   final List<CartItem>? cartItemsOnPaymentState;
-  final PaginatedResult<String>? orders;
-  final Map<String, List<CartItem>>? itemsOfOrder;
+  final PaginatedResult<String>? notDeliveredOrders;
+  final PaginatedResult<String>? deliveredOrders;
+  final Map<String, List<CartItem>>? itemsOfNotDeliveredOrder;
+  final Map<String, List<CartItem>>? itemsOfDeliveredOrder;
   final CartItem? cartItemToPush;
   final CartStates states;
   final int? productCartItemAmount;
@@ -43,17 +45,21 @@ class CartState {
     this.isCartStreaming = IsCartStreaming.no,
     this.productCartItemAmount,
     this.userCartItemAmount,
-    this.orders,
-    this.itemsOfOrder,
+    this.notDeliveredOrders,
+    this.itemsOfNotDeliveredOrder,
     this.cartItemsOnPaymentState,
+    this.deliveredOrders,
+    this.itemsOfDeliveredOrder,
   });
 
   CartState copyWith({
     List<CartItem>? cartItemsToBuy,
     List<CartItem>? cartItemsOnPaymentState,
     List<CartItem>? cartItemsFromSignedOutUser,
-    PaginatedResult<String>? orders,
-    Map<String, List<CartItem>>? itemsOfOrder,
+    PaginatedResult<String>? notDeliveredOrders,
+    PaginatedResult<String>? deliveredOrders,
+    Map<String, List<CartItem>>? itemsOfNotDeliveredOrder,
+    Map<String, List<CartItem>>? itemsOfDeliveredOrder,
     CartStates? states,
     CartItem? cartItemToPush,
     IsCartStreaming? isCartStreaming,
@@ -68,10 +74,14 @@ class CartState {
       productCartItemAmount:
           productCartItemAmount ?? this.productCartItemAmount,
       userCartItemAmount: userCartItemAmount ?? this.userCartItemAmount,
-      itemsOfOrder: itemsOfOrder ?? this.itemsOfOrder,
-      orders: orders ?? this.orders,
+      itemsOfNotDeliveredOrder:
+          itemsOfNotDeliveredOrder ?? this.itemsOfNotDeliveredOrder,
+      notDeliveredOrders: notDeliveredOrders ?? this.notDeliveredOrders,
       cartItemsOnPaymentState:
           cartItemsOnPaymentState ?? this.cartItemsOnPaymentState,
+      deliveredOrders: deliveredOrders ?? this.deliveredOrders,
+      itemsOfDeliveredOrder:
+          itemsOfDeliveredOrder ?? this.itemsOfDeliveredOrder,
     );
   }
 }

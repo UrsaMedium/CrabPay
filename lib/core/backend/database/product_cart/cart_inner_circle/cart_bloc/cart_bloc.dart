@@ -141,23 +141,23 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
-    on<CartEventFetchOrders>((event, emit) async {
+    on<CartEventFetchNotDeliveredOrders>((event, emit) async {
       developer.log('----');
-      developer.log('CartEventFetchOrders fired');
+      developer.log('CartEventFetchNotDeliveredOrders fired');
       developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
-        final fetchedOrders = await cartHandler.fetchPaymentIds(
+        final fetchedOrders = await cartHandler.fetchNotDeliveredOrdersIds(
           event.userId,
           pageToken: event.pageToken,
         );
-        List<String> oldOrdersList = state.orders?.objects ?? [];
+        List<String> oldOrdersList = state.notDeliveredOrders?.objects ?? [];
         List<String> newOrdersList = [
           ...oldOrdersList,
           ...fetchedOrders.objects,
         ];
 
-        var mapOfOrders = state.itemsOfOrder ?? {};
+        var mapOfOrders = state.itemsOfNotDeliveredOrder ?? {};
         for (final order in fetchedOrders.objects) {
           final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
             event.userId,
@@ -169,8 +169,49 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(
           state.copyWith(
             states: CartStates.loadedMoreOrders,
-            itemsOfOrder: mapOfOrders,
-            orders: PaginatedResult(
+            itemsOfNotDeliveredOrder: mapOfOrders,
+            notDeliveredOrders: PaginatedResult(
+              objects: newOrdersList,
+              hasMore: fetchedOrders.hasMore,
+              nextPageToken: fetchedOrders.nextPageToken,
+            ),
+          ),
+        );
+      } catch (e) {
+        rethrow;
+      }
+    });
+
+    on<CartEventFetchDeliveredOrders>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventFetchDeliveredOrders fired');
+      developer.log('----');
+      try {
+        emit(state.copyWith(states: CartStates.loading));
+        final fetchedOrders = await cartHandler.fetchDeliveredOrdersIds(
+          event.userId,
+          pageToken: event.pageToken,
+        );
+        List<String> oldOrdersList = state.deliveredOrders?.objects ?? [];
+        List<String> newOrdersList = [
+          ...oldOrdersList,
+          ...fetchedOrders.objects,
+        ];
+
+        var mapOfOrders = state.itemsOfDeliveredOrder ?? {};
+        for (final order in fetchedOrders.objects) {
+          final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
+            event.userId,
+            order,
+          );
+          mapOfOrders[order] = itemsOfOrder;
+        }
+
+        emit(
+          state.copyWith(
+            states: CartStates.loadedMoreOrders,
+            itemsOfDeliveredOrder: mapOfOrders,
+            deliveredOrders: PaginatedResult(
               objects: newOrdersList,
               hasMore: fetchedOrders.hasMore,
               nextPageToken: fetchedOrders.nextPageToken,
@@ -211,8 +252,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         state.copyWith(
           cartItemToPush: null,
           cartItemsToBuy: null,
-          itemsOfOrder: null,
-          orders: null,
+          itemsOfNotDeliveredOrder: null,
+          notDeliveredOrders: null,
           cartItemsFromSignedOutUser: null,
           productCartItemAmount: null,
           userCartItemAmount: null,
@@ -226,7 +267,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       developer.log('CartEventFlushOrders fired');
       developer.log('----');
-      emit(state.copyWith(orders: null, itemsOfOrder: null));
+      emit(
+        state.copyWith(
+          notDeliveredOrders: null,
+          itemsOfNotDeliveredOrder: null,
+        ),
+      );
     });
 
     on<CartEventFetchProductCartItemAmount>((event, emit) async {

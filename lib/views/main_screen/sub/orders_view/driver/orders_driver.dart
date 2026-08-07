@@ -5,7 +5,9 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/material_orders_view.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material_delivered_orders_page.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material_not_delivered_orders_page.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material_orders_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -23,6 +25,8 @@ class OrdersViewDriver extends StatefulWidget {
 class _OrdersViewDriverState extends State<OrdersViewDriver> {
   late final OrdersViewCubit _ordersViewCubit;
   late final List<Product> _products;
+  late final PageController _pageController;
+  bool _isSyncingPages = false;
 
   @override
   void initState() {
@@ -33,11 +37,16 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     );
     context.read<CartBloc>().add(CartEventFlushOrders());
     context.read<CartBloc>().add(
-      CartEventFetchOrders(
+      CartEventFetchNotDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
+        pageToken: context
+            .read<CartBloc>()
+            .state
+            .notDeliveredOrders
+            ?.nextPageToken,
       ),
     );
+    _pageController = PageController(initialPage: 0);
     super.initState();
   }
 
@@ -47,12 +56,46 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     super.dispose();
   }
 
+  Widget _pageBuilder({required BuildContext context, required int index}) {
+    Widget result;
+    if (index == 0) {
+      result = MaterialNotDeliveredOrdersPage(
+        onLoadMore: () => _onLoadMore(context),
+        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+      );
+    } else {
+      result = MaterialDeliveredOrdersPage();
+    }
+    return result;
+  }
+
+  void _onPageSwiped(int index) {
+    _ordersViewCubit.setPage(index);
+  }
+
+  void _onPageSelected(int index) async {
+    getIt<InnerLoggerHandler>().logBreadcrumb(
+      message: 'MainScreenDriver _onPageSelected',
+      data: {'index': index},
+    );
+    _ordersViewCubit.setPage(index);
+    await _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void _onLoadMore(BuildContext context) {
     _ordersViewCubit.setLoadingState(true);
     context.read<CartBloc>().add(
-      CartEventFetchOrders(
+      CartEventFetchNotDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context.read<CartBloc>().state.orders?.nextPageToken,
+        pageToken: context
+            .read<CartBloc>()
+            .state
+            .notDeliveredOrders
+            ?.nextPageToken,
       ),
     );
   }
@@ -103,6 +146,11 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
               onLoadMore: () => _onLoadMore(context),
               onBackButtonPressed: () => _onBackButtonPressed(context),
               onSupportSendMessagePressed: _onSupportSendMessagePressed,
+              pageBuilder: (context, index) =>
+                  _pageBuilder(context: context, index: index),
+              onPageSwiped: (index) => _onPageSwiped(index),
+              pageController: _pageController,
+              onPageSelected: (index) => _onPageSelected(index),
             );
           },
         ),

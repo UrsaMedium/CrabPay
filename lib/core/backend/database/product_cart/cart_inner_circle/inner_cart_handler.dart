@@ -6,7 +6,11 @@ abstract class InnerCartHandler {
   // Future<List<CartItem>> fetchCartItems(String userId);
   Future<List<CartItem>> fetchCartItemsToBuy(String userId);
   Future<List<CartItem>> fetchCartItemsOnPyamentState(String userId);
-  Future<PaginatedResult<String>> fetchPaymentIds(
+  Future<PaginatedResult<String>> fetchNotDeliveredOrdersIds(
+    String userId, {
+    String? pageToken,
+  });
+  Future<PaginatedResult<String>> fetchDeliveredOrdersIds(
     String userId, {
     String? pageToken,
   });

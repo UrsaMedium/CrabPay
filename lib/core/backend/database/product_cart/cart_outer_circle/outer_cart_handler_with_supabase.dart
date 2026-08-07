@@ -234,7 +234,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   @override
-  Future<PaginatedResult<String>> fetchPaymentIds(
+  Future<PaginatedResult<String>> fetchNotDeliveredOrdersIds(
     String userId, {
     String? pageToken,
   }) async {
@@ -253,7 +253,76 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
               after: $afterCursor,
               orderBy: [{ latestCreatedAt: DescNullsLast }],
               filter: { 
-                userId: { eq: $userId } 
+                userId: { eq: $userId }
+                status: { neq: "delivered" }
+              }
+            ) {
+              pageInfo {
+                endCursor
+                hasNextPage
+              }
+              edges {
+                node { 
+                  paymentId 
+                }
+              }
+            }
+          }
+        '''),
+        variables: {'userId': userId, 'afterCursor': pageToken},
+        fetchPolicy: FetchPolicy.networkOnly,
+      );
+
+      final result = await retryer.retry(() => _client.query(options));
+      if (result.hasException) throw result.exception!;
+
+      final collection = result.data?['userUniquePaymentCollection'] ?? {};
+      final pageInfo = collection['pageInfo'] ?? {};
+      final edges = collection['edges'] as List? ?? [];
+
+      final List<String> paymentIds = edges
+          .map((edge) => edge['node']['paymentId'] as String?)
+          .where((id) => id != null && id.isNotEmpty)
+          .cast<String>()
+          .toList();
+
+      return PaginatedResult<String>(
+        objects: paymentIds,
+        hasMore: (pageInfo['hasNextPage'] as bool?) ?? false,
+        nextPageToken: pageInfo['endCursor'] as String?,
+      );
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch unique payment IDs',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      Fluttertoast.showToast(msg: 'Failed to load order history');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PaginatedResult<String>> fetchDeliveredOrdersIds(
+    String userId, {
+    String? pageToken,
+  }) async {
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching paginated unique payment IDs',
+        category: 'Order History',
+        data: {'userId': userId, 'pageToken': pageToken},
+      );
+
+      final QueryOptions options = QueryOptions(
+        document: gql(r'''
+          query($userId: String!, $afterCursor: Cursor) {
+            userUniquePaymentCollection(
+              first: 4,
+              after: $afterCursor,
+              orderBy: [{ latestCreatedAt: DescNullsLast }],
+              filter: { 
+                userId: { eq: $userId }
+                status: { eq: "delivered" }
               }
             ) {
               pageInfo {
@@ -403,7 +472,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           'userName': cartItem.userName,
           'productId': cartItem.productId,
           'productName': cartItem.productName,
-          // MAGIC FIX: Stringify the map so pg_graphql handles it correctly
           'purchaseData': jsonEncode(cartItem.purchaseData),
           'currency': cartItem.currency,
           'checkoutPrice': cartItem.checkoutPrice,
