@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialNotDeliveredOrdersPage extends StatelessWidget {
-  final VoidCallback onLoadMore;
+  final VoidCallback onLoadMoreNotDeliveredOrders;
   final Function(String) onSupportSendMessagePressed;
   const MaterialNotDeliveredOrdersPage({
     super.key,
-    required this.onLoadMore,
+    required this.onLoadMoreNotDeliveredOrders,
     required this.onSupportSendMessagePressed,
   });
 
@@ -29,7 +29,7 @@ class MaterialNotDeliveredOrdersPage extends StatelessWidget {
                 builder: (context) {
                   final crabOrders = context
                       .select<OrdersViewCubit, List<CrabOrder>>(
-                        (cubit) => cubit.state.crabOrders ?? [],
+                        (cubit) => cubit.state.crabNotDeliveredOrders ?? [],
                       );
 
                   return SliverList.builder(
@@ -52,10 +52,10 @@ class MaterialNotDeliveredOrdersPage extends StatelessWidget {
                     (cubit) => cubit.state.isLoadingMore,
                   );
                   final hasMore = context.select<OrdersViewCubit, bool>(
-                    (cubit) => cubit.state.hasMore,
+                    (cubit) => cubit.state.hasMoreNotDeliveredOrders,
                   );
                   return ElevatedButton(
-                    onPressed: hasMore ? onLoadMore : null,
+                    onPressed: hasMore ? onLoadMoreNotDeliveredOrders : null,
                     child: isLoadingMore
                         ? CircularProgressIndicator()
                         : Text(hasMore ? 'Load More' : 'That\'s it'),

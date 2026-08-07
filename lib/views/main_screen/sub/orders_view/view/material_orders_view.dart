@@ -72,7 +72,7 @@ class MaterialOrdersView extends StatelessWidget {
                         spacing: 8,
                         children: [
                           GestureDetector(
-                            onTap: onPageSelected(0),
+                            onTap: () => onPageSelected(0),
                             child: Container(
                               padding: .symmetric(horizontal: 8, vertical: 2),
                               decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class MaterialOrdersView extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: onPageSelected(1),
+                            onTap: () => onPageSelected(1),
                             child: Container(
                               padding: .symmetric(horizontal: 8, vertical: 2),
                               decoration: BoxDecoration(

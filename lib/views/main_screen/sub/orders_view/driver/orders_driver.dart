@@ -46,6 +46,16 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             ?.nextPageToken,
       ),
     );
+    context.read<CartBloc>().add(
+      CartEventFetchDeliveredOrders(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        pageToken: context
+            .read<CartBloc>()
+            .state
+            .deliveredOrders
+            ?.nextPageToken,
+      ),
+    );
     _pageController = PageController(initialPage: 0);
     super.initState();
   }
@@ -60,33 +70,38 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     Widget result;
     if (index == 0) {
       result = MaterialNotDeliveredOrdersPage(
-        onLoadMore: () => _onLoadMore(context),
+        onLoadMoreNotDeliveredOrders: () =>
+            _onLoadMoreNotDeliveredOrders(context),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
       );
     } else {
-      result = MaterialDeliveredOrdersPage();
+      result = MaterialDeliveredOrdersPage(
+        onLoadMoreDeliveredOrders: () => _onLoadMoreDeliveredOrders(context),
+        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+      );
     }
     return result;
   }
 
   void _onPageSwiped(int index) {
+    if (_isSyncingPages) return;
     _ordersViewCubit.setPage(index);
   }
 
   void _onPageSelected(int index) async {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onPageSelected',
-      data: {'index': index},
-    );
+    setState(() => _isSyncingPages = true);
     _ordersViewCubit.setPage(index);
     await _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+    if (mounted) {
+      setState(() => _isSyncingPages = false);
+    }
   }
 
-  void _onLoadMore(BuildContext context) {
+  void _onLoadMoreNotDeliveredOrders(BuildContext context) {
     _ordersViewCubit.setLoadingState(true);
     context.read<CartBloc>().add(
       CartEventFetchNotDeliveredOrders(
@@ -95,6 +110,20 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             .read<CartBloc>()
             .state
             .notDeliveredOrders
+            ?.nextPageToken,
+      ),
+    );
+  }
+
+  void _onLoadMoreDeliveredOrders(BuildContext context) {
+    _ordersViewCubit.setLoadingState(true);
+    context.read<CartBloc>().add(
+      CartEventFetchDeliveredOrders(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        pageToken: context
+            .read<CartBloc>()
+            .state
+            .deliveredOrders
             ?.nextPageToken,
       ),
     );
@@ -143,7 +172,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             }
 
             return MaterialOrdersView(
-              onLoadMore: () => _onLoadMore(context),
+              onLoadMore: () => _onLoadMoreNotDeliveredOrders(context),
               onBackButtonPressed: () => _onBackButtonPressed(context),
               onSupportSendMessagePressed: _onSupportSendMessagePressed,
               pageBuilder: (context, index) =>

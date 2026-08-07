@@ -168,7 +168,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
         emit(
           state.copyWith(
-            states: CartStates.loadedMoreOrders,
+            states: CartStates.loadedMoreOrdersNotDeliveredOrders,
             itemsOfNotDeliveredOrder: mapOfOrders,
             notDeliveredOrders: PaginatedResult(
               objects: newOrdersList,
@@ -209,7 +209,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
         emit(
           state.copyWith(
-            states: CartStates.loadedMoreOrders,
+            states: CartStates.loadedMoreOrdersDeliveredOrders,
             itemsOfDeliveredOrder: mapOfOrders,
             deliveredOrders: PaginatedResult(
               objects: newOrdersList,
