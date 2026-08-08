@@ -25,10 +25,14 @@ class CartPageDriver extends StatefulWidget {
   State<CartPageDriver> createState() => _CartPageDriverState();
 }
 
-class _CartPageDriverState extends State<CartPageDriver> {
+class _CartPageDriverState extends State<CartPageDriver>
+    with AutomaticKeepAliveClientMixin {
   List<CartItem>? _cartItemsTuBuy;
   List<CartItem>? _cartItemsOnPaymentState;
   late final List<Product> _products;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -141,6 +145,7 @@ class _CartPageDriverState extends State<CartPageDriver> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider(
       create: (_) => CartPageCubit(),
       child: BlocListener<PaymentBloc, PaymentState>(

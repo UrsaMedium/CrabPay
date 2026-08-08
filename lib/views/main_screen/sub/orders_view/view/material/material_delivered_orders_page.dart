@@ -1,10 +1,10 @@
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/view/material_orders_view.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MaterialDeliveredOrdersPage extends StatelessWidget {
+class MaterialDeliveredOrdersPage extends StatefulWidget {
   final VoidCallback onLoadMoreDeliveredOrders;
   final Function(String) onSupportSendMessagePressed;
   const MaterialDeliveredOrdersPage({
@@ -14,7 +14,19 @@ class MaterialDeliveredOrdersPage extends StatelessWidget {
   });
 
   @override
+  State<MaterialDeliveredOrdersPage> createState() =>
+      _MaterialDeliveredOrdersPageState();
+}
+
+class _MaterialDeliveredOrdersPageState
+    extends State<MaterialDeliveredOrdersPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
@@ -23,7 +35,7 @@ class MaterialDeliveredOrdersPage extends StatelessWidget {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top + 44,
+                top: MediaQuery.paddingOf(context).top + 40,
               ),
               sliver: Builder(
                 builder: (context) {
@@ -38,7 +50,7 @@ class MaterialDeliveredOrdersPage extends StatelessWidget {
                       return MaterialOrderCard(
                         crabOrder: crabOrders[index],
                         onSupportSendMessagePressed:
-                            onSupportSendMessagePressed,
+                            widget.onSupportSendMessagePressed,
                       );
                     },
                   );
@@ -54,11 +66,16 @@ class MaterialDeliveredOrdersPage extends StatelessWidget {
                   final hasMore = context.select<OrdersViewCubit, bool>(
                     (cubit) => cubit.state.hasMoreDeliveredOrders,
                   );
-                  return ElevatedButton(
-                    onPressed: hasMore ? onLoadMoreDeliveredOrders : null,
-                    child: isLoadingMore
-                        ? CircularProgressIndicator()
-                        : Text(hasMore ? 'Load More' : 'That\'s it'),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 100),
+                    child: ElevatedButton(
+                      onPressed: hasMore
+                          ? widget.onLoadMoreDeliveredOrders
+                          : null,
+                      child: isLoadingMore
+                          ? CircularProgressIndicator()
+                          : Text(hasMore ? 'Load More' : 'That\'s it'),
+                    ),
                   );
                 },
               ),

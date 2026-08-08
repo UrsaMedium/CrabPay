@@ -18,10 +18,14 @@ class StorePageDriver extends StatefulWidget {
   State<StorePageDriver> createState() => _StorePageDriverState();
 }
 
-class _StorePageDriverState extends State<StorePageDriver> {
+class _StorePageDriverState extends State<StorePageDriver>
+    with AutomaticKeepAliveClientMixin {
   Completer<void>? _refreshCompleter;
   List<Product>? products;
   List<Product>? filterdProductList;
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<void> _reFresher(BuildContext context) async {
     getIt<InnerLoggerHandler>().logBreadcrumb(
@@ -43,6 +47,7 @@ class _StorePageDriverState extends State<StorePageDriver> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocListener<DatabaseBloc, DatabaseState>(
       listenWhen: (previous, current) =>
           previous.states == DatabaseStates.dbLoading &&

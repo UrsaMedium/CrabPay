@@ -5,9 +5,9 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/view/material_delivered_orders_page.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/view/material_not_delivered_orders_page.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/view/material_orders_view.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_delivered_orders_page.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_not_delivered_orders_page.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_orders_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -26,7 +26,6 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
   late final OrdersViewCubit _ordersViewCubit;
   late final List<Product> _products;
   late final PageController _pageController;
-  bool _isSyncingPages = false;
 
   @override
   void initState() {
@@ -84,12 +83,12 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
   }
 
   void _onPageSwiped(int index) {
-    if (_isSyncingPages) return;
+    if (_ordersViewCubit.state.isSyncingPages) return;
     _ordersViewCubit.setPage(index);
   }
 
   void _onPageSelected(int index) async {
-    setState(() => _isSyncingPages = true);
+    _ordersViewCubit.setSyncingState(true);
     _ordersViewCubit.setPage(index);
     await _pageController.animateToPage(
       index,
@@ -97,7 +96,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       curve: Curves.easeInOut,
     );
     if (mounted) {
-      setState(() => _isSyncingPages = false);
+      _ordersViewCubit.setSyncingState(false);
     }
   }
 

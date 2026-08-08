@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrdersViewState {
   final int page;
+  final bool isSyncingPages;
   final bool isLoadingMore;
   final bool hasMoreNotDeliveredOrders;
   final bool hasMoreDeliveredOrders;
@@ -22,6 +23,7 @@ class OrdersViewState {
     this.page = 0,
     this.hasMoreDeliveredOrders = true,
     this.crabDeliveredOrders,
+    this.isSyncingPages = false,
   });
 
   OrdersViewState copyWith({
@@ -31,6 +33,7 @@ class OrdersViewState {
     List<CrabOrder>? crabNotDeliveredOrders,
     bool? hasMoreDeliveredOrders,
     List<CrabOrder>? crabDeliveredOrders,
+    bool? isSyncingPages,
   }) {
     return OrdersViewState(
       page: page ?? this.page,
@@ -42,6 +45,7 @@ class OrdersViewState {
       crabDeliveredOrders: crabDeliveredOrders ?? this.crabDeliveredOrders,
       hasMoreDeliveredOrders:
           hasMoreDeliveredOrders ?? this.hasMoreDeliveredOrders,
+      isSyncingPages: isSyncingPages ?? this.isSyncingPages,
     );
   }
 }
@@ -113,6 +117,10 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
       );
     }
     emit(state.copyWith(crabDeliveredOrders: result));
+  }
+
+  void setSyncingState(bool isSyncingPages) {
+    emit(state.copyWith(isSyncingPages: isSyncingPages));
   }
 
   void setLoadingState(bool isLoading) {

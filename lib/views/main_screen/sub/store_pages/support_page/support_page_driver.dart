@@ -18,10 +18,14 @@ class SupportPageDriver extends StatefulWidget {
   State<SupportPageDriver> createState() => _SupportPageDriverState();
 }
 
-class _SupportPageDriverState extends State<SupportPageDriver> {
+class _SupportPageDriverState extends State<SupportPageDriver>
+    with AutomaticKeepAliveClientMixin {
   late final TextEditingController _textEditingController;
   final ScrollController _scrollController = ScrollController();
   final double _bottomPadding = 300;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -90,6 +94,7 @@ class _SupportPageDriverState extends State<SupportPageDriver> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider(
       create: (_) => SupportPageCubit(),
       child: BlocConsumer<ChatBloc, ChatState>(

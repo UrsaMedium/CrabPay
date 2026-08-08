@@ -19,8 +19,12 @@ class HomePageDriver extends StatefulWidget {
   State<HomePageDriver> createState() => _HomePageDriverState();
 }
 
-class _HomePageDriverState extends State<HomePageDriver> {
+class _HomePageDriverState extends State<HomePageDriver>
+    with AutomaticKeepAliveClientMixin {
   Completer<void>? _refreshCompleter;
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<void> _reFresher(BuildContext context) async {
     getIt<InnerLoggerHandler>().logBreadcrumb(
@@ -37,6 +41,7 @@ class _HomePageDriverState extends State<HomePageDriver> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocListener<DatabaseBloc, DatabaseState>(
       listenWhen: (previous, current) =>
           previous.states == DatabaseStates.dbLoading &&

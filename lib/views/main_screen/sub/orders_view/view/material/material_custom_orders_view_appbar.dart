@@ -53,6 +53,7 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                       ),
                     ),
                     child: IconButton(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       onPressed: onBackButtonPressed,
                       icon: Icon(Icons.arrow_back_rounded),
                     ),
@@ -106,6 +107,7 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                       ),
                     ),
                     child: IconButton(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       onPressed: () {},
                       icon: Icon(Icons.search_rounded),
                     ),
