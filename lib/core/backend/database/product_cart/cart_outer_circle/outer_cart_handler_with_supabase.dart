@@ -301,6 +301,125 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     }
   }
 
+  // TODO test
+  @override
+  Future<PaginatedResult<String>> fetchSearchedOrdersIds({
+    required String userId,
+    String? pageToken,
+    DateTime? fromDate,
+    DateTime? toDate,
+    String? orderId,
+  }) async {
+    try {
+      getIt<InnerLoggerHandler>().logBreadcrumb(
+        message: 'Fetching filtered unique payment IDs',
+        category: 'Order History',
+        data: {
+          'userId': userId,
+          'pageToken': pageToken,
+          'fromDate': fromDate?.toIso8601String(),
+          'toDate': toDate?.toIso8601String(),
+          'orderId': orderId,
+        },
+      );
+
+      // 1. Initialize builders with the mandatory userId and pagination arguments
+      final StringBuffer signatureVariables = StringBuffer('\$userId: String!, \$afterCursor: Cursor');
+      final StringBuffer filterBlock = StringBuffer('userId: { eq: \$userId }');
+      
+      final Map<String, dynamic> variables = {
+        'userId': userId,
+        'afterCursor': pageToken,
+      };
+
+      // 2. Conditionally inject orderId (paymentId)
+      if (orderId != null && orderId.trim().isNotEmpty) {
+        signatureVariables.write(', \$orderId: String!');
+        filterBlock.writeln();
+        filterBlock.write('paymentId: { eq: \$orderId }');
+        variables['orderId'] = orderId.trim();
+      }
+
+      // 3. Conditionally inject date ranges
+      if (fromDate != null || toDate != null) {
+        filterBlock.writeln();
+        filterBlock.write('latestCreatedAt: { ');
+        
+        if (fromDate != null) {
+          signatureVariables.write(', \$fromDate: Datetime!');
+          filterBlock.write('gte: \$fromDate ');
+          variables['fromDate'] = fromDate.toIso8601String();
+        }
+        
+        if (toDate != null) {
+          if (fromDate != null) filterBlock.write(', ');
+          signatureVariables.write(', \$toDate: Datetime!');
+          filterBlock.write('lte: \$toDate ');
+          variables['toDate'] = toDate.toIso8601String();
+        }
+        
+        filterBlock.write('}');
+      }
+
+      // 4. Construct the final raw string
+      final String queryDocument = '''
+        query(\$signatureVariables) {
+          userUniquePaymentCollection(
+            first: 15,
+            after: \$afterCursor,
+            orderBy: [{ latestCreatedAt: DescNullsLast }],
+            filter: {
+              \$filterBlock
+            }
+          ) {
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
+            edges {
+              node {
+                paymentId
+              }
+            }
+          }
+        }
+      ''';
+
+      final QueryOptions options = QueryOptions(
+        document: gql(queryDocument),
+        variables: variables,
+        fetchPolicy: FetchPolicy.networkOnly,
+      );
+
+      final result = await retryer.retry(() => _client.query(options));
+      if (result.hasException) throw result.exception!;
+
+      final collection = result.data?['userUniquePaymentCollection'] ?? {};
+      final pageInfo = collection['pageInfo'] ?? {};
+      final edges = collection['edges'] as List? ?? [];
+
+      final List<String> paymentIds = edges
+          .map((edge) => edge['node']['paymentId'] as String?)
+          .where((id) => id != null && id.isNotEmpty)
+          .cast<String>()
+          .toList();
+
+      return PaginatedResult<String>(
+        objects: paymentIds,
+        hasMore: (pageInfo['hasNextPage'] as bool?) ?? false,
+        nextPageToken: pageInfo['endCursor'] as String?,
+      );
+    } catch (e) {
+      getIt<InnerLoggerHandler>().recordException(
+        error: 'Failed to fetch filtered unique payment IDs',
+        stackTrace: StackTrace.fromString(e.toString()),
+      );
+      Fluttertoast.showToast(msg: 'Failed to filter order history');
+      rethrow;
+    }
+  }
+  //TODO test
+
   @override
   Future<PaginatedResult<String>> fetchDeliveredOrdersIds(
     String userId, {

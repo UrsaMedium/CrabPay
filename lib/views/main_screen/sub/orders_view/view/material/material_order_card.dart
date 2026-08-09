@@ -17,6 +17,7 @@ class MaterialOrderCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Card(
+        color: context.appColorScheme.surfaceContainerLowest,
         margin: .all(0),
         shape: RoundedRectangleBorder(borderRadius: .circular(16)),
         child: Padding(
@@ -28,7 +29,7 @@ class MaterialOrderCard extends StatelessWidget {
                 margin: const .only(bottom: 8),
                 padding: const .symmetric(horizontal: 16, vertical: 4),
                 decoration: BoxDecoration(
-                  color: context.appColorScheme.primaryContainer,
+                  color: context.appColorScheme.surfaceContainerLow,
                   borderRadius: .circular(12),
                 ),
                 child: Row(

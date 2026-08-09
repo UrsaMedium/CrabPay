@@ -42,10 +42,7 @@ class MaterialCartPageView extends StatelessWidget {
                     ListView(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
-                            top: 8,
-                            left: 16,
-                          ),
+                          padding: EdgeInsets.only(top: 8, left: 16),
                           child: Text(
                             'Shopping Cart',
                             textAlign: .left,
@@ -73,7 +70,7 @@ class MaterialCartPageView extends StatelessWidget {
                                       cornerRadius,
                                 ),
                                 shrinkWrap: true,
-                                itemExtent: 86,
+                                // itemExtent: 84,
                                 itemBuilder: (context, index) {
                                   return CartItemWidgetDriver(
                                     onACartItemDelete: onACartItemDelete,
@@ -95,103 +92,148 @@ class MaterialCartPageView extends StatelessWidget {
                       bottom: MediaQuery.paddingOf(context).bottom + 8,
                       right: 16,
                       left: 16,
-                      child: Material(
-                        color: Colors.transparent,
-                        borderRadius: .circular(30),
-                        clipBehavior: .antiAlias,
-                        child: BackdropFilter(
-                          enabled: context.highGraphics,
-                          filter: .blur(sigmaX: 12, sigmaY: 12),
-                          child: Container(
-                            color: context.appColorScheme.surfaceContainerHigh
-                                .withValues(
-                                  alpha: context.highGraphics ? .5 : .97,
-                                ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 16,
-                                      left: 18,
-                                      right: 18,
+                      child: Stack(
+                        children: [
+                          Material(
+                            color: Colors.transparent,
+                            borderRadius: .circular(24),
+                            clipBehavior: .antiAlias,
+                            child: BackdropFilter(
+                              enabled: context.highGraphics,
+                              filter: .blur(sigmaX: 12, sigmaY: 12),
+                              child: Container(
+                                height: cartItemsOnPaymentState.isNotEmpty
+                                    ? 186
+                                    : 128,
+                                color: context
+                                    .appColorScheme
+                                    .surfaceContainerHigh
+                                    .withValues(
+                                      alpha: context.highGraphics ? .5 : .97,
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 16,
+                                          left: 18,
+                                          right: 18,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                'Total',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: .w500,
+                                                ),
+                                              ),
+                                            ),
+                                            Text('$total'),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0,
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed:
+                                              (cartItemsToBuy.isEmpty ||
+                                                  cartItemsOnPaymentState
+                                                      .isNotEmpty)
+                                              ? null
+                                              : onBuyPressed,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                context.appColorScheme.primary,
+                                            foregroundColor: context
+                                                .appColorScheme
+                                                .onPrimary,
+                                            minimumSize: Size(
+                                              double.maxFinite,
+                                              50,
+                                            ),
+                                          ),
                                           child: Text(
-                                            'Total',
+                                            'Checkout',
                                             style: TextStyle(
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16,
-                                              fontWeight: .w500,
                                             ),
                                           ),
                                         ),
-                                        Text('$total'),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: ElevatedButton(
-                                      onPressed:
-                                          (cartItemsToBuy.isEmpty ||
-                                              cartItemsOnPaymentState
-                                                  .isNotEmpty)
-                                          ? null
-                                          : onBuyPressed,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            context.appColorScheme.primary,
-                                        foregroundColor:
-                                            context.appColorScheme.onPrimary,
-                                        minimumSize: Size(double.maxFinite, 50),
                                       ),
-                                      child: Text(
-                                        'Checkout',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (cartItemsOnPaymentState.isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 16.0,
-                                        right: 16.0,
-                                        top: 8,
-                                      ),
-                                      child: ElevatedButton(
-                                        onPressed: onShowBottonSheet,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              context.appColorScheme.primary,
-                                          foregroundColor:
-                                              context.appColorScheme.onPrimary,
-                                          minimumSize: Size(
-                                            double.maxFinite,
-                                            50,
+                                      if (cartItemsOnPaymentState.isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 16.0,
+                                            right: 16.0,
+                                            top: 8,
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: onShowBottonSheet,
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: context
+                                                  .appColorScheme
+                                                  .primary,
+                                              foregroundColor: context
+                                                  .appColorScheme
+                                                  .onPrimary,
+                                              minimumSize: Size(
+                                                double.maxFinite,
+                                                50,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'You have Unpaid ${cartItemsOnPaymentState.length} Order!',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        child: Text(
-                                          'You have Unpaid ${cartItemsOnPaymentState.length} Order!',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          IgnorePointer(
+                            child: ShaderMask(
+                              shaderCallback: (bounds) => LinearGradient(
+                                begin: .topCenter,
+                                end: .bottomCenter,
+                                colors: [
+                                  context.appColorScheme.outline.withValues(
+                                    alpha: .2,
+                                  ),
+                                  context.appColorScheme.outline.withValues(
+                                    alpha: .1,
+                                  ),
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  context.appColorScheme.outline.withValues(
+                                    alpha: .1,
+                                  ),
+                                ],
+                              ).createShader(bounds),
+                              child: Container(
+                                height: cartItemsOnPaymentState.isNotEmpty
+                                    ? 186
+                                    : 128,
+                                decoration: BoxDecoration(
+                                  borderRadius: .circular(24),
+                                  border: .all(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: MediaQuery.paddingOf(context).bottom),

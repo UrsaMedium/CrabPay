@@ -72,6 +72,22 @@ class CartEventFetchDeliveredOrders extends CartEvent {
   });
 }
 
+// fetch orders from orders view which are delivered
+class CartEventFetchSearchedOrders extends CartEvent {
+  final String userId;
+  final String? pageToken;
+  DateTime? fromDate;
+  DateTime? toDate;
+  String? orderId;
+  CartEventFetchSearchedOrders({
+    required this.userId,
+    required this.pageToken,
+    this.fromDate,
+    this.toDate,
+    this.orderId,
+  });
+}
+
 // flush orders
 class CartEventFlushOrders extends CartEvent {}
 

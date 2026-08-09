@@ -14,6 +14,13 @@ abstract class InnerCartHandler {
     String userId, {
     String? pageToken,
   });
+  Future<PaginatedResult<String>> fetchSearchedOrdersIds({
+    required String userId,
+    String? pageToken,
+    DateTime? fromDate,
+    DateTime? toDate,
+    String? orderId,
+  });
   Future<List<CartItem>> fetchItemsOfOrder(String userId, String orderId);
   // Stream<List<CartItem>> cartItemsStream(String userId);
   Stream<int> streamUserCartItemAmount(String userId);

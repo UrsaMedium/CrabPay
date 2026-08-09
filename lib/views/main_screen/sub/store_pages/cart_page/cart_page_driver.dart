@@ -50,11 +50,6 @@ class _CartPageDriverState extends State<CartPageDriver>
       ),
     );
     _products = context.read<DatabaseBloc>().state.products ?? [];
-    // _appLifecycleListener = AppLifecycleListener(
-    //   onHide: () => _onUserLeave(context: context),
-    //   onResume: () => _onUserReturn(context: context),
-    // );
-    // _onUserReturn(context: context);
     super.initState();
   }
 
@@ -63,34 +58,6 @@ class _CartPageDriverState extends State<CartPageDriver>
     // _appLifecycleListener.dispose();
     super.dispose();
   }
-
-  // void _onUserLeave({required BuildContext context}) {
-  //   getIt<InnerLoggerHandler>().logBreadcrumb(
-  //     message: 'CartPageDriver _onUserLeave',
-  //   );
-  //   developer.log('--- User has left the app');
-  //   if (context.read<PaymentBloc>().state is PaymentStateListening) {
-  //     final cartItemIds = _cartItems?.map((e) => e.id).toList() ?? [];
-  //     AppLocalStorage.saveCartItemsOnPayment(cartItemIds);
-  //   } else {
-  //     AppLocalStorage.saveCartItemsOnPayment([]);
-  //     AppLocalStorage.savePaymentLink('');
-  //   }
-  //   // _lifecycleListener.dispose();
-  // }
-
-  // void _onUserReturn({required BuildContext context}) {
-  //   getIt<InnerLoggerHandler>().logBreadcrumb(
-  //     message: 'CartPageDriver _onUserReturn',
-  //   );
-  //   developer.log('--- User has returned to the app');
-  //   final cartItemIds = AppLocalStorage.getCartItemIdsOnPayment();
-  //   if (cartItemIds != null) {
-  //     context.read<PaymentBloc>().add(
-  //       PaymentEventOnAppBackToLive(cartItemIds: cartItemIds),
-  //     );
-  //   }
-  // }
 
   double _countTotal() {
     return _cartItemsTuBuy?.fold(0, (sum, item) => sum! + item.checkoutPrice) ??

@@ -22,6 +22,7 @@ enum CartStates {
   faildToFetchUserCartItemCount,
   deletedLastAddedProductCartItem,
   failedToDeleteLastAddedProductCartItem,
+  searchedOrders
 }
 
 enum IsCartStreaming { yes, no }
@@ -33,8 +34,10 @@ class CartState {
   final List<CartItem>? cartItemsOnPaymentState;
   final PaginatedResult<String>? notDeliveredOrders;
   final PaginatedResult<String>? deliveredOrders;
-  final Map<String, List<CartItem>>? itemsOfNotDeliveredOrder;
-  final Map<String, List<CartItem>>? itemsOfDeliveredOrder;
+  final PaginatedResult<String>? searchedOrders;
+  final Map<String, List<CartItem>>? itemsOfNotDeliveredOrders;
+  final Map<String, List<CartItem>>? itemsOfDeliveredOrders;
+  final Map<String, List<CartItem>>? itemsOfSearchedOrders;
   final CartItem? cartItemToPush;
   final CartStates states;
   final int? productCartItemAmount;
@@ -47,10 +50,12 @@ class CartState {
     this.productCartItemAmount,
     this.userCartItemAmount,
     this.notDeliveredOrders,
-    this.itemsOfNotDeliveredOrder,
+    this.itemsOfNotDeliveredOrders,
     this.cartItemsOnPaymentState,
     this.deliveredOrders,
-    this.itemsOfDeliveredOrder,
+    this.itemsOfDeliveredOrders,
+    this.searchedOrders,
+    this.itemsOfSearchedOrders,
   });
 
   CartState copyWith({
@@ -59,8 +64,10 @@ class CartState {
     List<CartItem>? cartItemsFromSignedOutUser,
     PaginatedResult<String>? notDeliveredOrders,
     PaginatedResult<String>? deliveredOrders,
-    Map<String, List<CartItem>>? itemsOfNotDeliveredOrder,
-    Map<String, List<CartItem>>? itemsOfDeliveredOrder,
+    PaginatedResult<String>? searchedOrders,
+    Map<String, List<CartItem>>? itemsOfNotDeliveredOrders,
+    Map<String, List<CartItem>>? itemsOfDeliveredOrders,
+    Map<String, List<CartItem>>? itemsOfSearchedOrders,
     CartStates? states,
     CartItem? cartItemToPush,
     IsCartStreaming? isCartStreaming,
@@ -68,21 +75,64 @@ class CartState {
     int? userCartItemAmount,
   }) {
     return CartState(
-      cartItemsToBuy: cartItemsToBuy ?? this.cartItemsToBuy,
-      cartItemToPush: cartItemToPush ?? this.cartItemToPush,
       states: states ?? this.states,
       isCartStreaming: isCartStreaming ?? this.isCartStreaming,
-      productCartItemAmount:
-          productCartItemAmount ?? this.productCartItemAmount,
-      userCartItemAmount: userCartItemAmount ?? this.userCartItemAmount,
-      itemsOfNotDeliveredOrder:
-          itemsOfNotDeliveredOrder ?? this.itemsOfNotDeliveredOrder,
-      notDeliveredOrders: notDeliveredOrders ?? this.notDeliveredOrders,
-      cartItemsOnPaymentState:
-          cartItemsOnPaymentState ?? this.cartItemsOnPaymentState,
-      deliveredOrders: deliveredOrders ?? this.deliveredOrders,
-      itemsOfDeliveredOrder:
-          itemsOfDeliveredOrder ?? this.itemsOfDeliveredOrder,
+      //
+      cartItemsToBuy: cartItemsToBuy == null
+          ? this.cartItemsToBuy
+          : cartItemsToBuy.isEmpty
+          ? null
+          : cartItemsToBuy,
+      cartItemToPush: cartItemToPush == null
+          ? this.cartItemToPush
+          : cartItemToPush.productId.isEmpty
+          ? null
+          : cartItemToPush,
+      productCartItemAmount: productCartItemAmount == null
+          ? this.productCartItemAmount
+          : productCartItemAmount == -1
+          ? null
+          : productCartItemAmount,
+      userCartItemAmount: userCartItemAmount == null
+          ? this.userCartItemAmount
+          : userCartItemAmount == -1
+          ? null
+          : userCartItemAmount,
+      itemsOfNotDeliveredOrders: itemsOfNotDeliveredOrders == null
+          ? this.itemsOfNotDeliveredOrders
+          : itemsOfNotDeliveredOrders.isEmpty
+          ? null
+          : itemsOfNotDeliveredOrders,
+      notDeliveredOrders: notDeliveredOrders == null
+          ? this.notDeliveredOrders
+          : notDeliveredOrders.objects.isEmpty
+          ? null
+          : notDeliveredOrders,
+      deliveredOrders: deliveredOrders == null
+          ? this.deliveredOrders
+          : deliveredOrders.objects.isEmpty
+          ? null
+          : deliveredOrders,
+      itemsOfDeliveredOrders: itemsOfDeliveredOrders == null
+          ? this.itemsOfDeliveredOrders
+          : itemsOfDeliveredOrders.isEmpty
+          ? null
+          : itemsOfDeliveredOrders,
+      searchedOrders: searchedOrders == null
+          ? this.searchedOrders
+          : searchedOrders.objects.isEmpty
+          ? null
+          : searchedOrders,
+      itemsOfSearchedOrders: itemsOfSearchedOrders == null
+          ? this.itemsOfSearchedOrders
+          : itemsOfSearchedOrders.isEmpty
+          ? null
+          : itemsOfSearchedOrders,
+      cartItemsOnPaymentState: cartItemsOnPaymentState == null
+          ? this.cartItemsOnPaymentState
+          : cartItemsOnPaymentState.isEmpty
+          ? null
+          : cartItemsOnPaymentState,
     );
   }
 }

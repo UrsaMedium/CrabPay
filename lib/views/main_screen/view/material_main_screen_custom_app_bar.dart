@@ -47,81 +47,103 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
             left: 8,
             right: 8,
           ),
-          child: Material(
-            borderRadius: .circular(24),
-            clipBehavior: .antiAlias,
-            color: Colors.transparent,
-            child: BackdropFilter(
-              enabled: context.highGraphics,
-              filter: .blur(sigmaX: 12, sigmaY: 12),
-              child: Container(
-                height: 46,
-                decoration: BoxDecoration(
-                  color: context.appColorScheme.surfaceContainer.withValues(
-                    alpha: context.highGraphics ? .5 : .97,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        '🦀 Crab Pay',
-                        style: TextStyle(
-                          color: context.appColorScheme.primary,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w800,
-                        ),
+          child: Stack(
+            children: [
+              Material(
+                borderRadius: .circular(24),
+                clipBehavior: .antiAlias,
+                color: Colors.transparent,
+                child: BackdropFilter(
+                  enabled: context.highGraphics,
+                  filter: .blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: context.appColorScheme.surfaceContainerHigh.withValues(
+                        alpha: context.highGraphics ? .5 : .97,
                       ),
                     ),
-                    Spacer(flex: 1),
-                    if (isAdmin)
-                      IconButton(
-                        onPressed: onAdminPressed,
-                        icon: Icon(Icons.settings),
-                      ),
-                    if (isLoggedIn)
-                      IconButton(
-                        onPressed: onOrdersPressed,
-                        icon: Icon(Icons.cases_rounded),
-                      ),
-                    isLoggedIn
-                        ? IconButton(
-                            onPressed: () => onProfileIconPressed(Offset(0, 0)),
-                            icon: Icon(Icons.account_circle_rounded),
-                          )
-                        : IconButton(
-                            key: profileIconButtonKey,
-                            onPressed: () {
-                              final renderBox =
-                                  profileIconButtonKey.currentContext
-                                          ?.findRenderObject()
-                                      as RenderBox?;
-                              if (renderBox == null) {
-                                getIt<InnerLoggerHandler>().logInfo(
-                                  message: 'Login Button Error',
-                                );
-                                Fluttertoast.showToast(
-                                  msg: 'Login Button Error',
-                                );
-                                return;
-                              }
-                              final position = renderBox.localToGlobal(
-                                Offset.zero,
-                              );
-                              final centerOffset = Offset(
-                                position.dx + (renderBox.size.width / 2),
-                                position.dy + (renderBox.size.height / 2),
-                              );
-                              onProfileIconPressed(centerOffset);
-                            },
-                            icon: Icon(Icons.account_circle_outlined),
-                          ),
-                    SizedBox(width: 8),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  begin: .topCenter,
+                  end: .bottomCenter,
+                  colors: [
+                    context.appColorScheme.outline.withValues(alpha: .2),
+                    context.appColorScheme.outline.withValues(alpha: .1),
+                    Colors.transparent,
+                    Colors.transparent,
+                    context.appColorScheme.outline.withValues(alpha: .1),
+                  ],
+                ).createShader(bounds),
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: .circular(24),
+                    border: .all(color: Colors.white),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      '🦀 Crab Pay',
+                      style: TextStyle(
+                        color: context.appColorScheme.primary,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  Spacer(flex: 1),
+                  if (isAdmin)
+                    IconButton(
+                      onPressed: onAdminPressed,
+                      icon: Icon(Icons.settings),
+                    ),
+                  if (isLoggedIn)
+                    IconButton(
+                      onPressed: onOrdersPressed,
+                      icon: Icon(Icons.cases_rounded),
+                    ),
+                  isLoggedIn
+                      ? IconButton(
+                          onPressed: () => onProfileIconPressed(Offset(0, 0)),
+                          icon: Icon(Icons.account_circle_rounded),
+                        )
+                      : IconButton(
+                          key: profileIconButtonKey,
+                          onPressed: () {
+                            final renderBox =
+                                profileIconButtonKey.currentContext
+                                        ?.findRenderObject()
+                                    as RenderBox?;
+                            if (renderBox == null) {
+                              getIt<InnerLoggerHandler>().logInfo(
+                                message: 'Login Button Error',
+                              );
+                              Fluttertoast.showToast(msg: 'Login Button Error');
+                              return;
+                            }
+                            final position = renderBox.localToGlobal(
+                              Offset.zero,
+                            );
+                            final centerOffset = Offset(
+                              position.dx + (renderBox.size.width / 2),
+                              position.dy + (renderBox.size.height / 2),
+                            );
+                            onProfileIconPressed(centerOffset);
+                          },
+                          icon: Icon(Icons.account_circle_outlined),
+                        ),
+                  SizedBox(width: 8),
+                ],
+              ),
+            ],
           ),
         ),
       ],

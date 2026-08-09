@@ -74,70 +74,96 @@ class _MaterialCustomOrdersViewPageBarState
       borderRadius: .circular(14),
       clipBehavior: .antiAlias,
       color: Colors.transparent,
-      child: BackdropFilter(
-        enabled: context.highGraphics,
-        filter: .blur(sigmaX: 12, sigmaY: 12),
-        child: Container(
-          height: 36,
-          // width: 46,
-          decoration: BoxDecoration(
-            color: context.appColorScheme.surfaceContainer.withValues(
-              alpha: context.highGraphics ? .5 : .97,
-            ),
-          ),
-          child: Stack(
-            key: _stackKey,
-            alignment: .center,
-            children: [
-              if (activePosition != null && activeSize != null)
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOutCubic,
-                  left: activePosition.dx - 16,
-                  top: activePosition.dy - 2,
-                  width: activeSize.width + 32,
-                  height: activeSize.height + 4,
-                  child: Container(
-                    padding: .symmetric(horizontal: 16, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: context.appColorScheme.secondaryContainer
-                          .withValues(alpha: .8),
-                      borderRadius: .circular(16),
-                    ),
-                  ),
+      child: Stack(
+        children: [
+          BackdropFilter(
+            enabled: context.highGraphics,
+            filter: .blur(sigmaX: 12, sigmaY: 12),
+            child: Container(
+              height: 36,
+              // width: 46,
+              decoration: BoxDecoration(
+                color: context.appColorScheme.surfaceContainerHigh.withValues(
+                  alpha: context.highGraphics ? .5 : .97,
                 ),
-              Row(
-                mainAxisAlignment: .spaceAround,
+              ),
+              child: Stack(
+                key: _stackKey,
+                alignment: .center,
                 children: [
-                  GestureDetector(
-                    key: _tab0Key,
-                    onTap: () => widget.onPageSelected(0),
-                    child: Text(
-                      'Being Delivered',
-                      style: TextStyle(
-                        color: page == 0
-                            ? context.appColorScheme.primary
-                            : context.appColorScheme.onSurface,
+                  if (activePosition != null && activeSize != null)
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOutCubic,
+                      left: activePosition.dx - 16,
+                      top: activePosition.dy - 2,
+                      width: activeSize.width + 32,
+                      height: activeSize.height + 4,
+                      child: Container(
+                        padding: .symmetric(horizontal: 16, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: context.appColorScheme.secondaryContainer
+                              .withValues(alpha: .8),
+                          borderRadius: .circular(16),
+                        ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    key: _tab1Key,
-                    onTap: () => widget.onPageSelected(1),
-                    child: Text(
-                      'Delivered',
-                      style: TextStyle(
-                        color: page == 1
-                            ? context.appColorScheme.primary
-                            : context.appColorScheme.onSurface,
+                  Row(
+                    mainAxisAlignment: .spaceAround,
+                    children: [
+                      GestureDetector(
+                        key: _tab0Key,
+                        onTap: () => widget.onPageSelected(0),
+                        child: Text(
+                          'Being Delivered',
+                          style: TextStyle(
+                            color: page == 0
+                                ? context.appColorScheme.primary
+                                : context.appColorScheme.onSurface,
+                          ),
+                        ),
                       ),
-                    ),
+                      GestureDetector(
+                        key: _tab1Key,
+                        onTap: () => widget.onPageSelected(1),
+                        child: Text(
+                          'Delivered',
+                          style: TextStyle(
+                            color: page == 1
+                                ? context.appColorScheme.primary
+                                : context.appColorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+          IgnorePointer(
+            child: ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                begin: .topCenter,
+                end: .bottomCenter,
+                colors: [
+                  context.appColorScheme.outline.withValues(alpha: .2),
+                  context.appColorScheme.outline.withValues(alpha: .1),
+                  Colors.transparent,
+                  Colors.transparent,
+                  context.appColorScheme.outline.withValues(alpha: .1),
+                ],
+              ).createShader(bounds),
+              child: Container(
+                height: 36,
+                decoration: BoxDecoration(
+                  borderRadius: .circular(22),
+                  border: .all(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

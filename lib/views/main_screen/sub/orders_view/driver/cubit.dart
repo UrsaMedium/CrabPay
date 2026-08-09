@@ -13,8 +13,11 @@ class OrdersViewState {
   final bool isLoadingMore;
   final bool hasMoreNotDeliveredOrders;
   final bool hasMoreDeliveredOrders;
+  final bool hasMoreSearchedOrders;
   final List<CrabOrder>? crabNotDeliveredOrders;
   final List<CrabOrder>? crabDeliveredOrders;
+  final List<CrabOrder>? crabSearchedOrders;
+  final bool isSerchOpen;
 
   OrdersViewState({
     this.isLoadingMore = false,
@@ -24,6 +27,9 @@ class OrdersViewState {
     this.hasMoreDeliveredOrders = true,
     this.crabDeliveredOrders,
     this.isSyncingPages = false,
+    this.isSerchOpen = false,
+    this.hasMoreSearchedOrders = true,
+    this.crabSearchedOrders,
   });
 
   OrdersViewState copyWith({
@@ -34,6 +40,9 @@ class OrdersViewState {
     bool? hasMoreDeliveredOrders,
     List<CrabOrder>? crabDeliveredOrders,
     bool? isSyncingPages,
+    bool? isSerchOpen,
+    bool? hasMoreSearchedOrders,
+    List<CrabOrder>? crabSearchedOrders,
   }) {
     return OrdersViewState(
       page: page ?? this.page,
@@ -46,6 +55,10 @@ class OrdersViewState {
       hasMoreDeliveredOrders:
           hasMoreDeliveredOrders ?? this.hasMoreDeliveredOrders,
       isSyncingPages: isSyncingPages ?? this.isSyncingPages,
+      isSerchOpen: isSerchOpen ?? this.isSerchOpen,
+      hasMoreSearchedOrders:
+          hasMoreSearchedOrders ?? this.hasMoreSearchedOrders,
+      crabSearchedOrders: crabSearchedOrders ?? this.crabSearchedOrders,
     );
   }
 }
@@ -66,6 +79,9 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
       if (cartState.states == CartStates.loadedMoreOrdersDeliveredOrders) {
         _syncDataForDeliveredOrders(cartState);
       }
+      if (cartState.states == CartStates.searchedOrders) {
+        _syncSearchedOrders(cartState);
+      }
     });
   }
 
@@ -74,7 +90,7 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
       cartState.notDeliveredOrders?.hasMore ?? true,
     );
     _setNotDeliveredOrderGroups(
-      crabNotDeliveredOrders: cartState.itemsOfNotDeliveredOrder ?? {},
+      crabNotDeliveredOrders: cartState.itemsOfNotDeliveredOrders ?? {},
     );
     setLoadingState(false);
   }
@@ -98,7 +114,7 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
   void _syncDataForDeliveredOrders(CartState cartState) {
     _setHasMoreDeliveredOrders(cartState.deliveredOrders?.hasMore ?? true);
     _setDeliveredOrderGroups(
-      crabDeliveredOrders: cartState.itemsOfDeliveredOrder ?? {},
+      crabDeliveredOrders: cartState.itemsOfDeliveredOrders ?? {},
     );
     setLoadingState(false);
   }
@@ -117,6 +133,30 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
       );
     }
     emit(state.copyWith(crabDeliveredOrders: result));
+  }
+
+  void _syncSearchedOrders(CartState cartState) {
+    _setHasMoreSearchedOrders(cartState.searchedOrders?.hasMore ?? true);
+    _setSearchedOrderGroups(
+      crabSearchedOrders: cartState.itemsOfSearchedOrders ?? {},
+    );
+    setLoadingState(false);
+  }
+
+  void _setHasMoreSearchedOrders(bool hasMoreSearchedOrders) {
+    emit(state.copyWith(hasMoreSearchedOrders: hasMoreSearchedOrders));
+  }
+
+  void _setSearchedOrderGroups({
+    required Map<String, List<CartItem>> crabSearchedOrders,
+  }) {
+    List<CrabOrder> result = [];
+    for (var orderEntry in crabSearchedOrders.entries) {
+      result.add(
+        CrabOrder.fromOrderEntry(orderEntry: orderEntry, products: _products),
+      );
+    }
+    emit(state.copyWith(crabSearchedOrders: result));
   }
 
   void setSyncingState(bool isSyncingPages) {

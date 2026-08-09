@@ -45,6 +45,7 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
           content: SizedBox(
             height: 120,
             child: Column(
+              spacing: 8,
               children: [
                 TextField(
                   controller: email,
@@ -55,13 +56,13 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
                       borderSide: BorderSide(
                         color: context.appColorScheme.primaryFixed,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: context.appColorScheme.primaryFixed,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
                     label: Text('Email*'),
                     filled: true,
@@ -77,13 +78,13 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
                       borderSide: BorderSide(
                         color: context.appColorScheme.primaryFixed,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: context.appColorScheme.primaryFixed,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
                     label: Text('Password*'),
                     filled: true,

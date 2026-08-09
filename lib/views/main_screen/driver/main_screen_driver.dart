@@ -2,8 +2,6 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
-import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
@@ -146,7 +144,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
           child: BlocConsumer<MainScreenCubit, MainScreenState>(
             listenWhen: (previous, current) => previous.page == 2,
             listener: (context, state) {
-              context.read<ChatBloc>().add(ChatEventFlushData());
+              // context.read<ChatBloc>().add(ChatEventFlushData()); //TODO
             },
             builder: (context, viewState) {
               final cubit = context.read<MainScreenCubit>();

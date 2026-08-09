@@ -67,94 +67,137 @@ class _MaterialStoreSearchBarViewState
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.paddingOf(context).top+ 12,
+      top: MediaQuery.paddingOf(context).top + 12,
       right: 0,
-      child: ClipRRect(
-        borderRadius: .circular(30),
-        child: AnimatedSize(
-          onEnd: () {
-            if (widget.isSearchOpen && !_materialSearchController.isOpen) {
-              _materialSearchController.openView();
-            }
-          },
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.linearToEaseOut,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 150),
-            layoutBuilder: (currentChild, previousChildren) => Stack(
-              children: [
-                widget.isSearchOpen
-                    ? _expandedSearchBar(context)
-                    : _collapsedSearchBar(context),
-              ],
-            ),
+      child: AnimatedSize(
+        onEnd: () {
+          if (widget.isSearchOpen && !_materialSearchController.isOpen) {
+            _materialSearchController.openView();
+          }
+        },
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.linearToEaseOut,
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 150),
+          layoutBuilder: (currentChild, previousChildren) => Stack(
+            children: [
+              widget.isSearchOpen
+                  ? _expandedSearchBar(context)
+                  : _collapsedSearchBar(context),
+            ],
           ),
         ),
       ),
     );
   }
 
+  final GlobalKey _collapsedSearchBarKey = GlobalKey();
+  Size? _collapsedSearchBarSize;
+  Size? _oldCollapsedSearchBarSize;
+  void _extractPositions() {
+    final collapsedSearchBarContext = _collapsedSearchBarKey.currentContext;
+
+    if (collapsedSearchBarContext != null) {
+      final collapsedSearchBarRenderBox =
+          collapsedSearchBarContext.findRenderObject() as RenderBox;
+
+      final size = collapsedSearchBarRenderBox.size;
+      if (size != _oldCollapsedSearchBarSize) {
+        setState(() {
+          _oldCollapsedSearchBarSize = _collapsedSearchBarSize;
+          _collapsedSearchBarSize = size;
+        });
+      }
+    }
+  }
+
   Widget _collapsedSearchBar(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _extractPositions();
+    });
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      child: ClipRRect(
-        borderRadius: .circular(30),
-        child: BackdropFilter(
-          enabled: context.highGraphics,
-          filter: .blur(sigmaX: 12, sigmaY: 12),
-          child: GestureDetector(
-            onTap: widget.onOpenSearch,
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.widthOf(context) / 2 - 12,
-              ),
-              decoration: BoxDecoration(
-                color: context.appColorScheme.surfaceContainerHigh.withValues(
-                  alpha: context.highGraphics ? .5 : .97,
-                ),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: Row(
-                  mainAxisSize: .min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.widthOf(context) / 2 - 12 - 98,
+      padding: EdgeInsets.only(right: 16),
+      child: GestureDetector(
+        onTap: widget.onOpenSearch,
+        child: Stack(
+          children: [
+            Material(
+              borderRadius: .circular(30),
+              clipBehavior: .antiAlias,
+              color: Colors.transparent,
+              child: BackdropFilter(
+                enabled: context.highGraphics,
+                filter: .blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  key: _collapsedSearchBarKey,
+                  color: context.appColorScheme.surfaceContainerHigh.withValues(
+                    alpha: context.highGraphics ? .5 : .97,
+                  ),
+                  child: Row(
+                    mainAxisSize: .min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 2.0),
+                        child: Container(
+                          margin: .only(left: 16),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.widthOf(context) / 2 - 12 - 98,
+                          ),
+                          child: Text(
+                            maxLines: 1,
+                            _isUserInputEmpty()
+                                ? 'Search'
+                                : widget.controller.text,
+                            overflow: .ellipsis,
+                            style: const TextStyle(fontWeight: .w500),
+                          ),
                         ),
-                        child: Text(
-                          maxLines: 1,
+                      ),
+                      IconButton(
+                        onPressed: _isUserInputEmpty()
+                            ? widget.onOpenSearch
+                            : () {
+                                _materialSearchController.clear();
+                                widget.onClear();
+                              },
+                        icon: Icon(
                           _isUserInputEmpty()
-                              ? 'Search'
-                              : widget.controller.text,
-                          overflow: .ellipsis,
-                          style: const TextStyle(fontWeight: .w500),
+                              ? Icons.search_rounded
+                              : Icons.clear_rounded,
                         ),
+                        iconSize: 30,
+                        constraints: const BoxConstraints(minWidth: 32),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: _isUserInputEmpty()
-                          ? widget.onOpenSearch
-                          : () {
-                              _materialSearchController.clear();
-                              widget.onClear();
-                            },
-                      icon: Icon(
-                        _isUserInputEmpty()
-                            ? Icons.search_rounded
-                            : Icons.clear_rounded,
-                      ),
-                      iconSize: 30,
-                      constraints: const BoxConstraints(minWidth: 70),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+            if (_collapsedSearchBarSize != null)
+              IgnorePointer(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    begin: .topCenter,
+                    end: .bottomCenter,
+                    colors: [
+                      context.appColorScheme.outline.withValues(alpha: .2),
+                      context.appColorScheme.outline.withValues(alpha: .1),
+                      Colors.transparent,
+                      Colors.transparent,
+                      context.appColorScheme.outline.withValues(alpha: .1),
+                    ],
+                  ).createShader(bounds),
+                  child: Container(
+                    width: _collapsedSearchBarSize!.width,
+                    height: _collapsedSearchBarSize!.height,
+                    decoration: BoxDecoration(
+                      borderRadius: .circular(30),
+                      border: .all(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

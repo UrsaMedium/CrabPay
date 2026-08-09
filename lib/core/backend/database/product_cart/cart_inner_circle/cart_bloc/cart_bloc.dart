@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
@@ -157,7 +158,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           ...fetchedOrders.objects,
         ];
 
-        var mapOfOrders = state.itemsOfNotDeliveredOrder ?? {};
+        var mapOfOrders = state.itemsOfNotDeliveredOrders ?? {};
         for (final order in fetchedOrders.objects) {
           final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
             event.userId,
@@ -169,7 +170,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(
           state.copyWith(
             states: CartStates.loadedMoreOrdersNotDeliveredOrders,
-            itemsOfNotDeliveredOrder: mapOfOrders,
+            itemsOfNotDeliveredOrders: mapOfOrders,
             notDeliveredOrders: PaginatedResult(
               objects: newOrdersList,
               hasMore: fetchedOrders.hasMore,
@@ -198,7 +199,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           ...fetchedOrders.objects,
         ];
 
-        var mapOfOrders = state.itemsOfDeliveredOrder ?? {};
+        var mapOfOrders = state.itemsOfDeliveredOrders ?? {};
         for (final order in fetchedOrders.objects) {
           final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
             event.userId,
@@ -210,8 +211,52 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(
           state.copyWith(
             states: CartStates.loadedMoreOrdersDeliveredOrders,
-            itemsOfDeliveredOrder: mapOfOrders,
+            itemsOfDeliveredOrders: mapOfOrders,
             deliveredOrders: PaginatedResult(
+              objects: newOrdersList,
+              hasMore: fetchedOrders.hasMore,
+              nextPageToken: fetchedOrders.nextPageToken,
+            ),
+          ),
+        );
+      } catch (e) {
+        rethrow;
+      }
+    });
+
+    on<CartEventFetchSearchedOrders>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventFetchSearchedOrders fired');
+      developer.log('----');
+      try {
+        emit(state.copyWith(states: CartStates.loading));
+        final fetchedOrders = await cartHandler.fetchSearchedOrdersIds(
+          userId: event.userId,
+          pageToken: event.pageToken,
+          fromDate: event.fromDate,
+          toDate: event.toDate,
+          orderId: event.orderId,
+        );
+        List<String> oldOrdersList = state.searchedOrders?.objects ?? [];
+        List<String> newOrdersList = [
+          ...oldOrdersList,
+          ...fetchedOrders.objects,
+        ];
+
+        var mapOfOrders = state.itemsOfSearchedOrders ?? {};
+        for (final order in fetchedOrders.objects) {
+          final itemsOfOrder = await cartHandler.fetchItemsOfOrder(
+            event.userId,
+            order,
+          );
+          mapOfOrders[order] = itemsOfOrder;
+        }
+
+        emit(
+          state.copyWith(
+            states: CartStates.searchedOrders,
+            itemsOfSearchedOrders: mapOfOrders,
+            searchedOrders: PaginatedResult(
               objects: newOrdersList,
               hasMore: fetchedOrders.hasMore,
               nextPageToken: fetchedOrders.nextPageToken,
@@ -250,13 +295,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       emit(
         state.copyWith(
-          cartItemToPush: null,
-          cartItemsToBuy: null,
-          itemsOfNotDeliveredOrder: null,
-          notDeliveredOrders: null,
-          cartItemsFromSignedOutUser: null,
-          productCartItemAmount: null,
-          userCartItemAmount: null,
+          cartItemToPush: CartItem.intial(),
+          cartItemsToBuy: [],
+          itemsOfNotDeliveredOrders: {},
+          notDeliveredOrders: PaginatedResult(objects: [], hasMore: false),
+          itemsOfDeliveredOrders: {},
+          deliveredOrders: PaginatedResult(objects: [], hasMore: false),
+          cartItemsFromSignedOutUser: [],
+          productCartItemAmount: -1,
+          userCartItemAmount: -1,
           isCartStreaming: IsCartStreaming.no,
           states: CartStates.empty,
         ),
@@ -269,8 +316,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       emit(
         state.copyWith(
-          notDeliveredOrders: null,
-          itemsOfNotDeliveredOrder: null,
+          itemsOfNotDeliveredOrders: {},
+          notDeliveredOrders: PaginatedResult(objects: [], hasMore: false),
+          itemsOfDeliveredOrders: {},
+          deliveredOrders: PaginatedResult(objects: [], hasMore: false),
         ),
       );
     });
@@ -310,18 +359,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         if (didDelete) {
           final updatedProductAmount = await cartHandler
               .getProductCartItemAmount(event.userId, event.productId);
-          // final updatedUserAmount = await cartHandler.getUserCartItemAmount(
-          //   event.userId,
-          // );
-          // final updatedCartItems = await cartHandler.fetchCartItems(
-          //   event.userId,
-          // );
           emit(
             state.copyWith(
-              // cartItems: updatedCartItems,
-              // allUserCartItems: updatedCartItems,
               productCartItemAmount: updatedProductAmount,
-              // userCartItemAmount: updatedUserAmount,
               states: CartStates.deletedLastAddedProductCartItem,
             ),
           );
