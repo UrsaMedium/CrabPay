@@ -328,6 +328,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       );
     });
 
+    on<CartEventFlushSearchedOrders>((event, emit) {
+      developer.log('----');
+      developer.log('CartEventFlushSearchedOrders fired');
+      developer.log('----');
+      emit(
+        state.copyWith(
+          itemsOfSearchedOrders: {},
+          searchedOrders: PaginatedResult(objects: [], hasMore: false),
+        ),
+      );
+    });
+
     on<CartEventFetchProductCartItemAmount>((event, emit) async {
       developer.log('----');
       developer.log('CartEventFetchProductCartItemAmount fired');

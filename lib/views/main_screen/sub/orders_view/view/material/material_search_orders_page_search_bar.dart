@@ -1,9 +1,15 @@
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
-import 'package:crabpay/views/dialogs/custom_syncfusion_date_range_dialog.dart';
+import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
-  const MaterialSearchOrdersPageSearchBar({super.key});
+  final VoidCallback onSearchBarPressed;
+  const MaterialSearchOrdersPageSearchBar({
+    super.key,
+    required this.onSearchBarPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +23,7 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
             enabled: context.highGraphics,
             filter: .blur(sigmaX: 12, sigmaY: 12),
             child: GestureDetector(
-              onTap: () async {
-                final dateRange = await openDateRangePicker(context);
-                debugPrint('${dateRange?.startDate} - ${dateRange?.endDate}');
-              },
+              onTap: onSearchBarPressed,
               child: Container(
                 height: 36,
                 // width: 46,
@@ -32,22 +35,34 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                 child: Stack(
                   alignment: .center,
                   children: [
-                    Row(
-                      mainAxisAlignment: .spaceAround,
-                      children: [
-                        Text(
-                          'From:',
-                          style: TextStyle(
-                            color: context.appColorScheme.onSurface,
-                          ),
-                        ),
-                        Text(
-                          'To:',
-                          style: TextStyle(
-                            color: context.appColorScheme.onSurface,
-                          ),
-                        ),
-                      ],
+                    Builder(
+                      builder: (context) {
+                        final fromDate = context
+                            .select<OrdersViewCubit, DateTime?>(
+                              (cubit) => cubit.state.fromDate,
+                            );
+                        final toDate = context
+                            .select<OrdersViewCubit, DateTime?>(
+                              (cubit) => cubit.state.toDate,
+                            );
+                        return Row(
+                          mainAxisAlignment: .spaceAround,
+                          children: [
+                            Text(
+                              'From: ${fromDate == null ? '' : dateConversion(fromDate.toString()).substring(0, 12)}',
+                              style: TextStyle(
+                                color: context.appColorScheme.onSurface,
+                              ),
+                            ),
+                            Text(
+                              'To: ${toDate == null ? '' : dateConversion(toDate.toString()).substring(0, 12)}',
+                              style: TextStyle(
+                                color: context.appColorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

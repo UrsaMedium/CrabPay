@@ -4,6 +4,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/views/dialogs/custom_syncfusion_date_range_dialog.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_delivered_orders_page.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_not_delivered_orders_page.dart';
@@ -83,8 +84,8 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       result = MaterialSearchedOrdersPage(
         onLoadMoreSearchedOrders: (p0, p1, p2) => _onLoadMoreSearchedOrders(
           context: context,
-          fromDate: DateTime(2026, 7, 15), // TODO mock date
-          toDate: DateTime(2026, 7, 17),
+          fromDate: p0,
+          toDate: p1,
           orderId: p2,
         ),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
@@ -161,8 +162,27 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     );
   }
 
+  void _onSearchBarPressed(BuildContext context) async {
+    final dateRange = await openDateRangePicker(context);
+    if (dateRange?.startDate != null &&
+        dateRange?.endDate != null &&
+        context.mounted) {
+      _ordersViewCubit.setSearchFilterParameters(
+        dateRange?.startDate,
+        dateRange?.endDate,
+      );
+      context.read<CartBloc>().add(CartEventFlushSearchedOrders());
+      _onLoadMoreSearchedOrders(
+        context: context,
+        fromDate: dateRange?.startDate,
+        toDate: dateRange?.endDate,
+      );
+    }
+  }
+
   void _changeSearchState() {
     _ordersViewCubit.setSearchingState(!_ordersViewCubit.state.isSerchOpen);
+    _ordersViewCubit.setSearchFilterParameters(null, null);
   }
 
   void _onBackButtonPressed(BuildContext context) {
@@ -217,6 +237,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
               pageController: _pageController,
               onPageSelected: (index) => _onPageSelected(index),
               changeSearchState: _changeSearchState,
+              onSearchBarPressed: () => _onSearchBarPressed(context),
             );
           },
         ),

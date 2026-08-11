@@ -106,3 +106,5 @@ class CartEventDeleteLastAddedProductCartItem extends CartEvent {
     required this.productId,
   });
 }
+
+class CartEventFlushSearchedOrders extends CartEvent {}

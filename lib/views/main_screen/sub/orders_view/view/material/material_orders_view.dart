@@ -15,6 +15,7 @@ class MaterialOrdersView extends StatelessWidget {
   final Function(int) onPageSelected;
   final Function(BuildContext, int) pageBuilder;
   final VoidCallback changeSearchState;
+  final VoidCallback onSearchBarPressed;
   const MaterialOrdersView({
     super.key,
     required this.onBackButtonPressed,
@@ -25,6 +26,7 @@ class MaterialOrdersView extends StatelessWidget {
     required this.pageBuilder,
     required this.onPageSelected,
     required this.changeSearchState,
+    required this.onSearchBarPressed,
   });
 
   @override
@@ -55,7 +57,9 @@ class MaterialOrdersView extends StatelessWidget {
                   top: MediaQuery.paddingOf(context).top * 2 + 12,
                   left: 8,
                   right: 8,
-                  child: MaterialSearchOrdersPageSearchBar(),
+                  child: MaterialSearchOrdersPageSearchBar(
+                    onSearchBarPressed: onSearchBarPressed,
+                  ),
                 ),
               ],
             ),

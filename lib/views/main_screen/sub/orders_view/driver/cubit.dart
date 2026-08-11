@@ -18,6 +18,8 @@ class OrdersViewState {
   final List<CrabOrder>? crabDeliveredOrders;
   final List<CrabOrder>? crabSearchedOrders;
   final bool isSerchOpen;
+  final DateTime? fromDate;
+  final DateTime? toDate;
 
   OrdersViewState({
     this.isLoadingMore = false,
@@ -30,6 +32,8 @@ class OrdersViewState {
     this.isSerchOpen = false,
     this.hasMoreSearchedOrders = true,
     this.crabSearchedOrders,
+    this.fromDate,
+    this.toDate,
   });
 
   OrdersViewState copyWith({
@@ -43,6 +47,8 @@ class OrdersViewState {
     bool? isSerchOpen,
     bool? hasMoreSearchedOrders,
     List<CrabOrder>? crabSearchedOrders,
+    DateTime? fromDate,
+    DateTime? toDate,
   }) {
     return OrdersViewState(
       page: page ?? this.page,
@@ -59,6 +65,16 @@ class OrdersViewState {
       hasMoreSearchedOrders:
           hasMoreSearchedOrders ?? this.hasMoreSearchedOrders,
       crabSearchedOrders: crabSearchedOrders ?? this.crabSearchedOrders,
+      fromDate: fromDate == null
+          ? this.fromDate
+          : fromDate == DateTime(0)
+          ? null
+          : fromDate,
+      toDate: toDate == null
+          ? this.toDate
+          : toDate == DateTime(0)
+          ? null
+          : toDate,
     );
   }
 }
@@ -161,6 +177,15 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
 
   void setSearchingState(bool isSerchOpen) {
     emit(state.copyWith(isSerchOpen: isSerchOpen));
+  }
+
+  void setSearchFilterParameters(DateTime? fromDate, DateTime? toDate) {
+    emit(
+      state.copyWith(
+        fromDate: fromDate ?? DateTime(0),
+        toDate: toDate ?? DateTime(0),
+      ),
+    );
   }
 
   void setSyncingState(bool isSyncingPages) {
