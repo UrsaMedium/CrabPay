@@ -302,7 +302,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   // TODO test
-  @override
+ @override
   Future<PaginatedResult<String>> fetchSearchedOrdersIds({
     required String userId,
     String? pageToken,
@@ -323,59 +323,60 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         },
       );
 
-      // 1. Initialize builders with the mandatory userId and pagination arguments
-      final StringBuffer signatureVariables = StringBuffer('\$userId: String!, \$afterCursor: Cursor');
+      // 1. Convert the pageToken (which is now an offset string) to an integer
+      int currentOffset = 0;
+      if (pageToken != null && pageToken.isNotEmpty) {
+        currentOffset = int.tryParse(pageToken) ?? 0;
+      }
+
+      // 2. Initialize builders with the mandatory userId and OFFSET arguments
+      final StringBuffer signatureVariables = StringBuffer('\$userId: String!, \$offset: Int!');
       final StringBuffer filterBlock = StringBuffer('userId: { eq: \$userId }');
       
       final Map<String, dynamic> variables = {
         'userId': userId,
-        'afterCursor': pageToken,
+        'offset': currentOffset,
       };
 
-      // 2. Conditionally inject orderId (paymentId)
+      // 3. Conditionally inject orderId (paymentId)
       if (orderId != null && orderId.trim().isNotEmpty) {
         signatureVariables.write(', \$orderId: String!');
-        filterBlock.writeln();
-        filterBlock.write('paymentId: { eq: \$orderId }');
+        filterBlock.write(', paymentId: { eq: \$orderId }');
         variables['orderId'] = orderId.trim();
       }
 
-      // 3. Conditionally inject date ranges
+      // 4. Conditionally inject date ranges
       if (fromDate != null || toDate != null) {
-        filterBlock.writeln();
-        filterBlock.write('latestCreatedAt: { ');
+        filterBlock.write(', latestCreatedAt: { ');
         
         if (fromDate != null) {
           signatureVariables.write(', \$fromDate: Datetime!');
           filterBlock.write('gte: \$fromDate ');
-          variables['fromDate'] = fromDate.toIso8601String();
+          // Force UTC conversion to ensure pg_graphql accepts the filter strictly
+          variables['fromDate'] = fromDate.toUtc().toIso8601String();
         }
         
         if (toDate != null) {
           if (fromDate != null) filterBlock.write(', ');
           signatureVariables.write(', \$toDate: Datetime!');
           filterBlock.write('lte: \$toDate ');
-          variables['toDate'] = toDate.toIso8601String();
+          variables['toDate'] = toDate.toUtc().toIso8601String();
         }
         
         filterBlock.write('}');
       }
 
-      // 4. Construct the final raw string
+      // 5. Construct the final raw string using 'offset: $offset' instead of 'after:'
       final String queryDocument = '''
-        query(\$signatureVariables) {
+        query(${signatureVariables.toString()}) {
           userUniquePaymentCollection(
-            first: 15,
-            after: \$afterCursor,
+            first: 500,
+            offset: \$offset,
             orderBy: [{ latestCreatedAt: DescNullsLast }],
             filter: {
-              \$filterBlock
+              ${filterBlock.toString()}
             }
           ) {
-            pageInfo {
-              endCursor
-              hasNextPage
-            }
             edges {
               node {
                 paymentId
@@ -395,7 +396,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       if (result.hasException) throw result.exception!;
 
       final collection = result.data?['userUniquePaymentCollection'] ?? {};
-      final pageInfo = collection['pageInfo'] ?? {};
       final edges = collection['edges'] as List? ?? [];
 
       final List<String> paymentIds = edges
@@ -404,10 +404,14 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           .cast<String>()
           .toList();
 
+      // 6. Calculate manual pagination bounds based on offset length
+      final bool hasMore = edges.length == 4;
+      final String? nextToken = hasMore ? (currentOffset + 4).toString() : null;
+
       return PaginatedResult<String>(
         objects: paymentIds,
-        hasMore: (pageInfo['hasNextPage'] as bool?) ?? false,
-        nextPageToken: pageInfo['endCursor'] as String?,
+        hasMore: hasMore,
+        nextPageToken: nextToken,
       );
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(

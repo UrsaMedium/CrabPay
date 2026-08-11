@@ -301,6 +301,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           notDeliveredOrders: PaginatedResult(objects: [], hasMore: false),
           itemsOfDeliveredOrders: {},
           deliveredOrders: PaginatedResult(objects: [], hasMore: false),
+          itemsOfSearchedOrders: {},
+          searchedOrders: PaginatedResult(objects: [], hasMore: false),
           cartItemsFromSignedOutUser: [],
           productCartItemAmount: -1,
           userCartItemAmount: -1,
@@ -320,6 +322,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           notDeliveredOrders: PaginatedResult(objects: [], hasMore: false),
           itemsOfDeliveredOrders: {},
           deliveredOrders: PaginatedResult(objects: [], hasMore: false),
+          itemsOfSearchedOrders: {},
+          searchedOrders: PaginatedResult(objects: [], hasMore: false),
         ),
       );
     });

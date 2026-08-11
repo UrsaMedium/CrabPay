@@ -159,6 +159,10 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
     emit(state.copyWith(crabSearchedOrders: result));
   }
 
+  void setSearchingState(bool isSerchOpen) {
+    emit(state.copyWith(isSerchOpen: isSerchOpen));
+  }
+
   void setSyncingState(bool isSyncingPages) {
     emit(state.copyWith(isSyncingPages: isSyncingPages));
   }

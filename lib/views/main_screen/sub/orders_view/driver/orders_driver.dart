@@ -9,6 +9,7 @@ import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_not_delivered_orders_page.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_orders_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_searched_orders_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
@@ -73,9 +74,19 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             _onLoadMoreNotDeliveredOrders(context),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
       );
-    } else {
+    } else if (index == 1) {
       result = MaterialDeliveredOrdersPage(
         onLoadMoreDeliveredOrders: () => _onLoadMoreDeliveredOrders(context),
+        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+      );
+    } else {
+      result = MaterialSearchedOrdersPage(
+        onLoadMoreSearchedOrders: (p0, p1, p2) => _onLoadMoreSearchedOrders(
+          context: context,
+          fromDate: DateTime(2026, 7, 15), // TODO mock date
+          toDate: DateTime(2026, 7, 17),
+          orderId: p2,
+        ),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
       );
     }
@@ -126,6 +137,32 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             ?.nextPageToken,
       ),
     );
+  }
+
+  void _onLoadMoreSearchedOrders({
+    required BuildContext context,
+    DateTime? fromDate,
+    DateTime? toDate,
+    String? orderId,
+  }) {
+    _ordersViewCubit.setLoadingState(true);
+    context.read<CartBloc>().add(
+      CartEventFetchSearchedOrders(
+        userId: context.read<AuthBloc>().state.currentUser.id,
+        pageToken: context
+            .read<CartBloc>()
+            .state
+            .deliveredOrders
+            ?.nextPageToken,
+        fromDate: fromDate,
+        toDate: toDate,
+        orderId: orderId,
+      ),
+    );
+  }
+
+  void _changeSearchState() {
+    _ordersViewCubit.setSearchingState(!_ordersViewCubit.state.isSerchOpen);
   }
 
   void _onBackButtonPressed(BuildContext context) {
@@ -179,6 +216,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
               onPageSwiped: (index) => _onPageSwiped(index),
               pageController: _pageController,
               onPageSelected: (index) => _onPageSelected(index),
+              changeSearchState: _changeSearchState,
             );
           },
         ),
