@@ -1,6 +1,6 @@
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
-import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_order_card.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/order_card/material_order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

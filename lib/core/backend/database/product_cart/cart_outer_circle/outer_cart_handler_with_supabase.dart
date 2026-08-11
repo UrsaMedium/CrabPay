@@ -301,7 +301,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     }
   }
 
-  // TODO test
  @override
   Future<PaginatedResult<String>> fetchSearchedOrdersIds({
     required String userId,
@@ -323,13 +322,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         },
       );
 
-      // 1. Convert the pageToken (which is now an offset string) to an integer
       int currentOffset = 0;
       if (pageToken != null && pageToken.isNotEmpty) {
         currentOffset = int.tryParse(pageToken) ?? 0;
       }
 
-      // 2. Initialize builders with the mandatory userId and OFFSET arguments
       final StringBuffer signatureVariables = StringBuffer('\$userId: String!, \$offset: Int!');
       final StringBuffer filterBlock = StringBuffer('userId: { eq: \$userId }');
       
@@ -338,21 +335,18 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         'offset': currentOffset,
       };
 
-      // 3. Conditionally inject orderId (paymentId)
       if (orderId != null && orderId.trim().isNotEmpty) {
         signatureVariables.write(', \$orderId: String!');
         filterBlock.write(', paymentId: { eq: \$orderId }');
         variables['orderId'] = orderId.trim();
       }
 
-      // 4. Conditionally inject date ranges
       if (fromDate != null || toDate != null) {
         filterBlock.write(', latestCreatedAt: { ');
         
         if (fromDate != null) {
           signatureVariables.write(', \$fromDate: Datetime!');
           filterBlock.write('gte: \$fromDate ');
-          // Force UTC conversion to ensure pg_graphql accepts the filter strictly
           variables['fromDate'] = fromDate.toUtc().toIso8601String();
         }
         
@@ -366,7 +360,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         filterBlock.write('}');
       }
 
-      // 5. Construct the final raw string using 'offset: $offset' instead of 'after:'
       final String queryDocument = '''
         query(${signatureVariables.toString()}) {
           userUniquePaymentCollection(
@@ -422,7 +415,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       rethrow;
     }
   }
-  //TODO test
 
   @override
   Future<PaginatedResult<String>> fetchDeliveredOrdersIds(
