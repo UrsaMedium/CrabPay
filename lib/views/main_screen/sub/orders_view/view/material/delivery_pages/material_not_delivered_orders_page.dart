@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MaterialNotDeliveredOrdersPage extends StatefulWidget {
   final VoidCallback onLoadMoreNotDeliveredOrders;
   final Function(String) onSupportSendMessagePressed;
+  final Function(CrabOrder) onOpenCardDetails;
   const MaterialNotDeliveredOrdersPage({
     super.key,
     required this.onLoadMoreNotDeliveredOrders,
     required this.onSupportSendMessagePressed,
+    required this.onOpenCardDetails,
   });
 
   @override
@@ -51,6 +53,8 @@ class _MaterialNotDeliveredOrdersPageState
                         crabOrder: crabOrders[index],
                         onSupportSendMessagePressed:
                             widget.onSupportSendMessagePressed,
+                        onOrederCardPressed: () =>
+                            widget.onOpenCardDetails(crabOrders[index]),
                       );
                     },
                   );

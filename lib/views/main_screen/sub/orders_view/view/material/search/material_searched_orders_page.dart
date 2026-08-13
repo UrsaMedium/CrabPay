@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MaterialSearchedOrdersPage extends StatelessWidget {
   final Function(String) onSupportSendMessagePressed;
   final Function(DateTime?, DateTime?, String?) onLoadMoreSearchedOrders;
+  final Function(CrabOrder) onOpenCardDetails;
   const MaterialSearchedOrdersPage({
     super.key,
     required this.onSupportSendMessagePressed,
     required this.onLoadMoreSearchedOrders,
+    required this.onOpenCardDetails,
   });
 
   @override
@@ -23,7 +25,7 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
           slivers: [
             SliverPadding(
               padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top + 40,
+                top: MediaQuery.paddingOf(context).top + 60,
               ),
               sliver: Builder(
                 builder: (context) {
@@ -39,6 +41,8 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
                         crabOrder: crabOrders[index],
                         onSupportSendMessagePressed:
                             onSupportSendMessagePressed,
+                        onOrederCardPressed: () =>
+                            onOpenCardDetails(crabOrders[index]),
                       );
                     },
                   );

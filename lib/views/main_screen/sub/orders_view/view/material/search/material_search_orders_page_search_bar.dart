@@ -25,8 +25,9 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
             child: GestureDetector(
               onTap: onSearchBarPressed,
               child: Container(
-                height: 36,
+                height: 56,
                 // width: 46,
+                padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: context.appColorScheme.surfaceContainerHigh.withValues(
                     alpha: context.highGraphics ? .5 : .97,
@@ -35,34 +36,46 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                 child: Stack(
                   alignment: .center,
                   children: [
-                    Builder(
-                      builder: (context) {
-                        final fromDate = context
-                            .select<OrdersViewCubit, DateTime?>(
-                              (cubit) => cubit.state.fromDate,
+                    Column(
+                      spacing: 4,
+                      children: [
+                        Text(
+                          'Tap Here to Pick Dates',
+                          style: TextStyle(
+                            color: context.appColorScheme.primary,
+                            fontWeight: .bold,
+                          ),
+                        ),
+                        Builder(
+                          builder: (context) {
+                            final fromDate = context
+                                .select<OrdersViewCubit, DateTime?>(
+                                  (cubit) => cubit.state.fromDate,
+                                );
+                            final toDate = context
+                                .select<OrdersViewCubit, DateTime?>(
+                                  (cubit) => cubit.state.toDate,
+                                );
+                            return Row(
+                              mainAxisAlignment: .spaceAround,
+                              children: [
+                                Text(
+                                  'From: ${fromDate == null ? '' : dateConversion(fromDate.toString()).substring(0, 12)}',
+                                  style: TextStyle(
+                                    color: context.appColorScheme.onSurface,
+                                  ),
+                                ),
+                                Text(
+                                  'To: ${toDate == null ? '' : dateConversion(toDate.toString()).substring(0, 12)}',
+                                  style: TextStyle(
+                                    color: context.appColorScheme.onSurface,
+                                  ),
+                                ),
+                              ],
                             );
-                        final toDate = context
-                            .select<OrdersViewCubit, DateTime?>(
-                              (cubit) => cubit.state.toDate,
-                            );
-                        return Row(
-                          mainAxisAlignment: .spaceAround,
-                          children: [
-                            Text(
-                              'From: ${fromDate == null ? '' : dateConversion(fromDate.toString()).substring(0, 12)}',
-                              style: TextStyle(
-                                color: context.appColorScheme.onSurface,
-                              ),
-                            ),
-                            Text(
-                              'To: ${toDate == null ? '' : dateConversion(toDate.toString()).substring(0, 12)}',
-                              style: TextStyle(
-                                color: context.appColorScheme.onSurface,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -83,9 +96,9 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                 ],
               ).createShader(bounds),
               child: Container(
-                height: 36,
+                height: 56,
                 decoration: BoxDecoration(
-                  borderRadius: .circular(22),
+                  borderRadius: .circular(14),
                   border: .all(color: Colors.white),
                 ),
               ),

@@ -4,6 +4,8 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/order_card/material_order_details.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/search/custom_syncfusion_date_range_dialog.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/delivery_pages/material_delivered_orders_page.dart';
@@ -74,11 +76,13 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
         onLoadMoreNotDeliveredOrders: () =>
             _onLoadMoreNotDeliveredOrders(context),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else if (index == 1) {
       result = MaterialDeliveredOrdersPage(
         onLoadMoreDeliveredOrders: () => _onLoadMoreDeliveredOrders(context),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else {
       result = MaterialSearchedOrdersPage(
@@ -89,6 +93,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
           orderId: p2,
         ),
         onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     }
     return result;
@@ -180,9 +185,9 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     }
   }
 
-  void _changeSearchState() {
+  void _changeSearchState(BuildContext context) {
     _ordersViewCubit.setSearchingState(!_ordersViewCubit.state.isSerchOpen);
-    _ordersViewCubit.setSearchFilterParameters(null, null);
+    context.read<CartBloc>().add(CartEventFlushSearchedOrders());
   }
 
   void _onBackButtonPressed(BuildContext context) {
@@ -200,6 +205,10 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       AppRoutes.support.name,
       queryParameters: {'orderId': orderId},
     );
+  }
+
+  void _onOpenCardDetails(BuildContext context, CrabOrder order) async {
+    await openOrderDetails(context, order);
   }
 
   @override
@@ -236,7 +245,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
               onPageSwiped: (index) => _onPageSwiped(index),
               pageController: _pageController,
               onPageSelected: (index) => _onPageSelected(index),
-              changeSearchState: _changeSearchState,
+              changeSearchState: () => _changeSearchState(context),
               onSearchBarPressed: () => _onSearchBarPressed(context),
             );
           },

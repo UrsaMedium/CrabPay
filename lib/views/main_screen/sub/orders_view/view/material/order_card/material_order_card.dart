@@ -6,105 +6,111 @@ import 'package:flutter/material.dart';
 class MaterialOrderCard extends StatelessWidget {
   final CrabOrder crabOrder;
   final Function(String) onSupportSendMessagePressed;
+  final VoidCallback onOrederCardPressed;
   const MaterialOrderCard({
     super.key,
     required this.onSupportSendMessagePressed,
     required this.crabOrder,
+    required this.onOrederCardPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Card(
-        color: context.appColorScheme.surfaceContainerLowest,
-        margin: .all(0),
-        shape: RoundedRectangleBorder(borderRadius: .circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Column(
-            spacing: 8,
-            children: [
-              Container(
-                margin: const .only(bottom: 8),
-                padding: const .symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: context.appColorScheme.surfaceContainerLow,
-                  borderRadius: .circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          crabOrder.orderDate,
-                          style: const TextStyle(fontWeight: .w600),
-                        ),
-                        Text('Order: ${crabOrder.orderIdToDisplay}'),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Row(
+      child: GestureDetector(
+        onTap: onOrederCardPressed,
+        child: Card(
+          color: context.appColorScheme.surfaceContainerLowest,
+          margin: .all(0),
+          shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Column(
+              spacing: 8,
+              children: [
+                Container(
+                  margin: const .only(bottom: 8),
+                  padding: const .symmetric(horizontal: 16, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: context.appColorScheme.surfaceContainerLow,
+                    borderRadius: .circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: .spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: .start,
                         children: [
                           Text(
-                            'Support  ',
-                            style: TextStyle(
-                              fontWeight: .w500,
-                              color: context.appColorScheme.onPrimaryContainer,
-                            ),
+                            crabOrder.orderDate,
+                            style: const TextStyle(fontWeight: .w600),
                           ),
-                          Icon(
-                            Icons.send_rounded,
-                            color: context.appColorScheme.onPrimaryContainer,
-                          ),
+                          Text('Order: ${crabOrder.orderIdToDisplay}'),
                         ],
                       ),
-                    ),
-                  ],
+                      IconButton(
+                        onPressed: () {},
+                        icon: Row(
+                          children: [
+                            Text(
+                              'Support  ',
+                              style: TextStyle(
+                                fontWeight: .w500,
+                                color:
+                                    context.appColorScheme.onPrimaryContainer,
+                              ),
+                            ),
+                            Icon(
+                              Icons.send_rounded,
+                              color: context.appColorScheme.onPrimaryContainer,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: .symmetric(horizontal: 8),
-                child: MaterialCustomWidgetRowOfImages(
-                  images: crabOrder.itemsToImagesMap.values.toList(),
+                Container(
+                  margin: .symmetric(horizontal: 8),
+                  child: MaterialCustomWidgetRowOfImages(
+                    images: crabOrder.itemsToImagesMap.values.toList(),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: .spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: .start,
+                        children: [
+                          Text('Delivered'),
+                          Text(' ${crabOrder.amountOfDeliveredItems}'),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: .start,
+                        children: [
+                          Text('Products'),
+                          Text(' ${crabOrder.amountOfItems}'),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: .start,
+                        children: [
+                          Text('Order Price'),
+                          Text(' \$${crabOrder.orderPrice}'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: .spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text('Delivered'),
-                        Text(' ${crabOrder.amountOfDeliveredItems}'),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text('Products'),
-                        Text(' ${crabOrder.amountOfItems}'),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text('Order Price'),
-                        Text(' \$${crabOrder.orderPrice}'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

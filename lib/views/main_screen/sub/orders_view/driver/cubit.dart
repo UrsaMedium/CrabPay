@@ -177,6 +177,7 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
 
   void setSearchingState(bool isSerchOpen) {
     emit(state.copyWith(isSerchOpen: isSerchOpen));
+    setSearchFilterParameters(null, null);
   }
 
   void setSearchFilterParameters(DateTime? fromDate, DateTime? toDate) {
