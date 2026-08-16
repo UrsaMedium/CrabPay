@@ -1,4 +1,5 @@
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,9 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final highGraphics = context.select<GlobalGraphicBloc, bool>(
+      (bloc) => bloc.state.highGraphics,
+    );
     return Material(
       borderRadius: .circular(14),
       clipBehavior: .antiAlias,
@@ -20,7 +24,7 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
       child: Stack(
         children: [
           BackdropFilter(
-            enabled: context.highGraphics,
+            enabled: highGraphics,
             filter: .blur(sigmaX: 12, sigmaY: 12),
             child: GestureDetector(
               onTap: onSearchBarPressed,
@@ -30,7 +34,7 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: context.appColorScheme.surfaceContainerHigh.withValues(
-                    alpha: context.highGraphics ? .5 : .97,
+                    alpha: highGraphics ? .5 : .97,
                   ),
                 ),
                 child: Stack(

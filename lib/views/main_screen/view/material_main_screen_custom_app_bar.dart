@@ -1,7 +1,9 @@
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MaterialMainScreenCustomAppBar extends StatelessWidget
@@ -49,22 +51,28 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
           ),
           child: Stack(
             children: [
-              Material(
-                borderRadius: .circular(24),
-                clipBehavior: .antiAlias,
-                color: Colors.transparent,
-                child: BackdropFilter(
-                  enabled: context.highGraphics,
-                  filter: .blur(sigmaX: 12, sigmaY: 12),
-                  child: Container(
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: context.appColorScheme.surfaceContainerHigh.withValues(
-                        alpha: context.highGraphics ? .5 : .97,
+              Builder(
+                builder: (context) {
+                  final highGraphics = context.select<GlobalGraphicBloc, bool>(
+                    (bloc) => bloc.state.highGraphics,
+                  );
+                  return Material(
+                    borderRadius: .circular(24),
+                    clipBehavior: .antiAlias,
+                    color: Colors.transparent,
+                    child: BackdropFilter(
+                      enabled: highGraphics,
+                      filter: .blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: context.appColorScheme.surfaceContainerHigh
+                              .withValues(alpha: highGraphics ? .5 : .97),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               ShaderMask(
                 shaderCallback: (bounds) => LinearGradient(

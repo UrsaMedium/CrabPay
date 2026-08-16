@@ -1,4 +1,3 @@
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetPage<T> extends Page<T> {
@@ -29,9 +28,7 @@ class BottomSheetPage<T> extends Page<T> {
       isScrollControlled: isScrollControlled,
       showDragHandle: showDragHandle,
       useSafeArea: useSafeArea,
-      backgroundColor: context.appColorScheme.surfaceContainer.withValues(
-        alpha: context.highGraphics ? .5 : .95,
-      ),
+      backgroundColor: Colors.transparent,
       settings: this,
     );
   }

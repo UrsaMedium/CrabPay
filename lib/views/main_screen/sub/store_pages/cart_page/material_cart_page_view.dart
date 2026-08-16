@@ -1,8 +1,10 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/widgets/cart_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialCartPageView extends StatelessWidget {
   final Function(CartItem) onACartItemDelete;
@@ -94,114 +96,124 @@ class MaterialCartPageView extends StatelessWidget {
                       left: 16,
                       child: Stack(
                         children: [
-                          Material(
-                            color: Colors.transparent,
-                            borderRadius: .circular(24),
-                            clipBehavior: .antiAlias,
-                            child: BackdropFilter(
-                              enabled: context.highGraphics,
-                              filter: .blur(sigmaX: 12, sigmaY: 12),
-                              child: Container(
-                                height: cartItemsOnPaymentState.isNotEmpty
-                                    ? 186
-                                    : 128,
-                                color: context
-                                    .appColorScheme
-                                    .surfaceContainerHigh
-                                    .withValues(
-                                      alpha: context.highGraphics ? .5 : .97,
-                                    ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 16,
-                                          left: 18,
-                                          right: 18,
+                          Builder(
+                            builder: (context) {
+                              final highGraphics = context
+                                  .select<GlobalGraphicBloc, bool>(
+                                    (bloc) => bloc.state.highGraphics,
+                                  );
+                              return Material(
+                                color: Colors.transparent,
+                                borderRadius: .circular(24),
+                                clipBehavior: .antiAlias,
+                                child: BackdropFilter(
+                                  enabled: highGraphics,
+                                  filter: .blur(sigmaX: 12, sigmaY: 12),
+                                  child: Container(
+                                    height: cartItemsOnPaymentState.isNotEmpty
+                                        ? 186
+                                        : 128,
+                                    color: context
+                                        .appColorScheme
+                                        .surfaceContainerHigh
+                                        .withValues(
+                                          alpha: highGraphics ? .5 : .97,
                                         ),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 16,
+                                              left: 18,
+                                              right: 18,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    'Total',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: .w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text('$total'),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0,
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed:
+                                                  (cartItemsToBuy.isEmpty ||
+                                                      cartItemsOnPaymentState
+                                                          .isNotEmpty)
+                                                  ? null
+                                                  : onBuyPressed,
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: context
+                                                    .appColorScheme
+                                                    .primary,
+                                                foregroundColor: context
+                                                    .appColorScheme
+                                                    .onPrimary,
+                                                minimumSize: Size(
+                                                  double.maxFinite,
+                                                  50,
+                                                ),
+                                              ),
                                               child: Text(
-                                                'Total',
+                                                'Checkout',
                                                 style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 16,
-                                                  fontWeight: .w500,
                                                 ),
                                               ),
                                             ),
-                                            Text('$total'),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                        ),
-                                        child: ElevatedButton(
-                                          onPressed:
-                                              (cartItemsToBuy.isEmpty ||
-                                                  cartItemsOnPaymentState
-                                                      .isNotEmpty)
-                                              ? null
-                                              : onBuyPressed,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                context.appColorScheme.primary,
-                                            foregroundColor: context
-                                                .appColorScheme
-                                                .onPrimary,
-                                            minimumSize: Size(
-                                              double.maxFinite,
-                                              50,
-                                            ),
                                           ),
-                                          child: Text(
-                                            'Checkout',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      if (cartItemsOnPaymentState.isNotEmpty)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 16.0,
-                                            right: 16.0,
-                                            top: 8,
-                                          ),
-                                          child: ElevatedButton(
-                                            onPressed: onShowBottonSheet,
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: context
-                                                  .appColorScheme
-                                                  .primary,
-                                              foregroundColor: context
-                                                  .appColorScheme
-                                                  .onPrimary,
-                                              minimumSize: Size(
-                                                double.maxFinite,
-                                                50,
+                                          if (cartItemsOnPaymentState
+                                              .isNotEmpty)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 16.0,
+                                                right: 16.0,
+                                                top: 8,
+                                              ),
+                                              child: ElevatedButton(
+                                                onPressed: onShowBottonSheet,
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: context
+                                                      .appColorScheme
+                                                      .primary,
+                                                  foregroundColor: context
+                                                      .appColorScheme
+                                                      .onPrimary,
+                                                  minimumSize: Size(
+                                                    double.maxFinite,
+                                                    50,
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  'You have Unpaid ${cartItemsOnPaymentState.length} Order!',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                            child: Text(
-                                              'You have Unpaid ${cartItemsOnPaymentState.length} Order!',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                           IgnorePointer(
                             child: ShaderMask(

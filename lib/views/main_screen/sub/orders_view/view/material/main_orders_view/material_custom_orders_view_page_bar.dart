@@ -1,4 +1,5 @@
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,6 +71,9 @@ class _MaterialCustomOrdersViewPageBarState
     final activePosition = page == 0 ? _tab0Position : _tab1Position;
     final activeSize = page == 0 ? _tab0Size : _tab1Size;
 
+    final highGraphics = context.select<GlobalGraphicBloc, bool>(
+      (bloc) => bloc.state.highGraphics,
+    );
     return Material(
       borderRadius: .circular(14),
       clipBehavior: .antiAlias,
@@ -77,14 +81,14 @@ class _MaterialCustomOrdersViewPageBarState
       child: Stack(
         children: [
           BackdropFilter(
-            enabled: context.highGraphics,
+            enabled: highGraphics,
             filter: .blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               height: 36,
               // width: 46,
               decoration: BoxDecoration(
                 color: context.appColorScheme.surfaceContainerHigh.withValues(
-                  alpha: context.highGraphics ? .5 : .97,
+                  alpha: highGraphics ? .5 : .97,
                 ),
               ),
               child: Stack(

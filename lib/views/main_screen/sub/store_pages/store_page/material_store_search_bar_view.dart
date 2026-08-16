@@ -1,6 +1,8 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialStoreSearchBarView extends StatefulWidget {
   final TextEditingController controller;
@@ -66,6 +68,9 @@ class _MaterialStoreSearchBarViewState
 
   @override
   Widget build(BuildContext context) {
+    final highGraphics = context.select<GlobalGraphicBloc, bool>(
+      (bloc) => bloc.state.highGraphics,
+    );
     return Positioned(
       top: MediaQuery.paddingOf(context).top + 12,
       right: 0,
@@ -83,7 +88,7 @@ class _MaterialStoreSearchBarViewState
             children: [
               widget.isSearchOpen
                   ? _expandedSearchBar(context)
-                  : _collapsedSearchBar(context),
+                  : _collapsedSearchBar(context, highGraphics),
             ],
           ),
         ),
@@ -111,7 +116,7 @@ class _MaterialStoreSearchBarViewState
     }
   }
 
-  Widget _collapsedSearchBar(BuildContext context) {
+  Widget _collapsedSearchBar(BuildContext context, bool highGraphics) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _extractPositions();
     });
@@ -126,12 +131,12 @@ class _MaterialStoreSearchBarViewState
               clipBehavior: .antiAlias,
               color: Colors.transparent,
               child: BackdropFilter(
-                enabled: context.highGraphics,
+                enabled: highGraphics,
                 filter: .blur(sigmaX: 12, sigmaY: 12),
                 child: Container(
                   key: _collapsedSearchBarKey,
                   color: context.appColorScheme.surfaceContainerHigh.withValues(
-                    alpha: context.highGraphics ? .5 : .97,
+                    alpha: highGraphics ? .5 : .97,
                   ),
                   child: Row(
                     mainAxisSize: .min,

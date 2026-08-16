@@ -1,4 +1,5 @@
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,9 @@ class MaterialProductViewAppbar extends StatelessWidget
           ),
           child: Builder(
             builder: (context) {
+              final highGraphics = context.select<GlobalGraphicBloc, bool>(
+                (bloc) => bloc.state.highGraphics,
+              );
               return Row(
                 mainAxisAlignment: .spaceBetween,
                 mainAxisSize: .max,
@@ -54,16 +58,14 @@ class MaterialProductViewAppbar extends StatelessWidget
                         clipBehavior: .antiAlias,
                         color: Colors.transparent,
                         child: BackdropFilter(
-                          enabled: context.highGraphics,
+                          enabled: highGraphics,
                           filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: Container(
                             height: 46,
                             width: 46,
                             decoration: BoxDecoration(
                               color: context.appColorScheme.surfaceContainerHigh
-                                  .withValues(
-                                    alpha: context.highGraphics ? .5 : .97,
-                                  ),
+                                  .withValues(alpha: highGraphics ? .5 : .97),
                             ),
                             child: IconButton(
                               onPressed: onBackButtonPressed,
@@ -114,7 +116,7 @@ class MaterialProductViewAppbar extends StatelessWidget
                               clipBehavior: .antiAlias,
                               color: Colors.transparent,
                               child: BackdropFilter(
-                                enabled: context.highGraphics,
+                                enabled: highGraphics,
                                 filter: .blur(sigmaX: 12, sigmaY: 12),
                                 child: Container(
                                   alignment: .centerEnd,
@@ -125,9 +127,7 @@ class MaterialProductViewAppbar extends StatelessWidget
                                         .appColorScheme
                                         .surfaceContainerHigh
                                         .withValues(
-                                          alpha: context.highGraphics
-                                              ? .5
-                                              : .97,
+                                          alpha: highGraphics ? .5 : .97,
                                         ),
                                   ),
                                   child: IconButton(
@@ -177,7 +177,7 @@ class MaterialProductViewAppbar extends StatelessWidget
                             clipBehavior: .antiAlias,
                             color: Colors.transparent,
                             child: BackdropFilter(
-                              enabled: context.highGraphics,
+                              enabled: highGraphics,
                               filter: .blur(sigmaX: 12, sigmaY: 12),
                               child: Container(
                                 alignment: .centerEnd,
@@ -188,7 +188,7 @@ class MaterialProductViewAppbar extends StatelessWidget
                                       .appColorScheme
                                       .surfaceContainerHigh
                                       .withValues(
-                                        alpha: context.highGraphics ? .5 : .97,
+                                        alpha: highGraphics ? .5 : .97,
                                       ),
                                 ),
                                 child: Builder(

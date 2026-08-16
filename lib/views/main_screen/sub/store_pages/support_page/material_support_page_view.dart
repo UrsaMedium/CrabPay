@@ -1,8 +1,10 @@
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialSupportPageView extends StatelessWidget {
   final List<ChatMessage> messages;
@@ -66,43 +68,51 @@ class MaterialSupportPageView extends StatelessWidget {
               left: 32,
               child: Stack(
                 children: [
-                  Material(
-                    color: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: .circular(cornerRadius),
-                    ),
-                    clipBehavior: .antiAlias,
-                    child: BackdropFilter(
-                      enabled: context.highGraphics,
-                      filter: .blur(sigmaX: 12, sigmaY: 12),
-                      child: Container(
-                        height: 88,
-                        color: context.appColorScheme.surfaceContainer
-                            .withValues(alpha: context.highGraphics ? .5 : .97),
-                        // height: 64,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                            vertical: 8,
-                          ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Icon(Icons.support_agent_rounded),
-                                Text(
-                                  textAlign: .center,
-                                  'Contact our support team\n for assistance',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                  Builder(
+                    builder: (context) {
+                      final highGraphics = context
+                          .select<GlobalGraphicBloc, bool>(
+                            (bloc) => bloc.state.highGraphics,
+                          );
+                      return Material(
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: .circular(cornerRadius),
+                        ),
+                        clipBehavior: .antiAlias,
+                        child: BackdropFilter(
+                          enabled: highGraphics,
+                          filter: .blur(sigmaX: 12, sigmaY: 12),
+                          child: Container(
+                            height: 98,
+                            color: context.appColorScheme.surfaceContainer
+                                .withValues(alpha: highGraphics ? .5 : .97),
+                            // height: 64,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                                vertical: 8,
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.support_agent_rounded),
+                                    Text(
+                                      textAlign: .center,
+                                      'Contact our support team\n for assistance',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                   IgnorePointer(
                     child: ShaderMask(
@@ -118,7 +128,7 @@ class MaterialSupportPageView extends StatelessWidget {
                         ],
                       ).createShader(bounds),
                       child: Container(
-                        height: 88,
+                        height: 98,
                         decoration: BoxDecoration(
                           borderRadius: .circular(cornerRadius),
                           border: .all(color: Colors.white),
@@ -157,49 +167,57 @@ class MaterialSupportPageView extends StatelessWidget {
               left: 4,
               child: Stack(
                 children: [
-                  Material(
-                    color: Colors.transparent,
-                    borderRadius: .circular(22),
-                    clipBehavior: .antiAlias,
-                    child: BackdropFilter(
-                      enabled: context.highGraphics,
-                      filter: .blur(sigmaX: 12, sigmaY: 12),
-                      child: Container(
-                        height: 48,
-                        color: context.appColorScheme.primaryContainer
-                            .withValues(alpha: context.highGraphics ? .4 : .97),
-                        child: Row(
-                          crossAxisAlignment: .end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                enabled: isChatStarted,
-                                controller: textEditingController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: 4,
-                                minLines: 1,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.transparent,
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  hint: Text('Type your question...'),
-                                  filled: true,
+                  Builder(
+                    builder: (context) {
+                      final highGraphics = context
+                          .select<GlobalGraphicBloc, bool>(
+                            (bloc) => bloc.state.highGraphics,
+                          );
+                      return Material(
+                        color: Colors.transparent,
+                        borderRadius: .circular(22),
+                        clipBehavior: .antiAlias,
+                        child: BackdropFilter(
+                          enabled: highGraphics,
+                          filter: .blur(sigmaX: 12, sigmaY: 12),
+                          child: Container(
+                            height: 48,
+                            color: context.appColorScheme.primaryContainer
+                                .withValues(alpha: highGraphics ? .4 : .97),
+                            child: Row(
+                              crossAxisAlignment: .end,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    enabled: isChatStarted,
+                                    controller: textEditingController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 4,
+                                    minLines: 1,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.transparent,
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      hint: Text('Type your question...'),
+                                      filled: true,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                IconButton(
+                                  onPressed: isChatStarted
+                                      ? () => onSendPressed()
+                                      : null,
+                                  icon: Icon(Icons.send),
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              onPressed: isChatStarted
-                                  ? () => onSendPressed()
-                                  : null,
-                              icon: Icon(Icons.send),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                   IgnorePointer(
                     child: ShaderMask(

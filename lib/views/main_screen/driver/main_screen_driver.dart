@@ -1,15 +1,16 @@
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/view/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void initState() {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver initState',
-    );
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
     );
@@ -40,9 +38,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
 
   @override
   void dispose() {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver dispose',
-    );
     _pageController.dispose();
     super.dispose();
   }
@@ -69,20 +64,12 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   ];
 
   void _onPageSwiped(int index, MainScreenCubit cubit) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onPageSwiped',
-      data: {'index': index},
-    );
     if (_isSyncingByNavBarTap) return;
     widget.navigationShell.goBranch(index);
     cubit.onPageSwipe(index);
   }
 
   void _onPageSelected(int index, MainScreenCubit cubit) async {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onPageSelected',
-      data: {'index': index},
-    );
     if (index == widget.navigationShell.currentIndex) {
       widget.navigationShell.goBranch(index, initialLocation: true);
       return;
@@ -105,10 +92,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     required BuildContext context,
     required Offset buttonCenter,
   }) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onProfileIconPressed',
-      data: {'isLoggedIn': isLoggedIn},
-    );
     if (isLoggedIn) {
       context.push(AppRoutes.profileSheet.path);
     } else {
@@ -117,16 +100,10 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   }
 
   void _onOrdersPressed(BuildContext context) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onOrdersPressed',
-    );
     context.push(AppRoutes.orders.path);
   }
 
   void _onAdminPressed(BuildContext context) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'MainScreenDriver _onAdminPressed',
-    );
     context.push(AppRoutes.adminTools.path);
   }
 
@@ -135,6 +112,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         authState.currentUser.isAnonymous);
   }
 
+  int prevPage = 0;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -142,9 +120,25 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
         return BlocProvider(
           create: (_) => MainScreenCubit(),
           child: BlocConsumer<MainScreenCubit, MainScreenState>(
-            listenWhen: (previous, current) => previous.page == 2,
             listener: (context, state) {
-              // context.read<ChatBloc>().add(ChatEventFlushData()); //TODO
+              final userId = context.read<AuthBloc>().state.currentUser.id;
+              switch (state.page) {
+                case 0:
+                  context.read<DatabaseBloc>().add(
+                    DatabaseEventFetchUserPreferences(userId: userId),
+                  );
+                  break;
+                case 1:
+                  break;
+                case 2:
+                  break;
+                case 3:
+                  context.read<CartBloc>().add(
+                    CartEventFetchCartItems(userId: userId),
+                  );
+                  break;
+                default:
+              }
             },
             builder: (context, viewState) {
               final cubit = context.read<MainScreenCubit>();

@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
 import 'package:crabpay/views/widgets/widget_factory.dart';
 import 'package:flutter/material.dart';
@@ -275,6 +276,9 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
             final isCartLoading = context.select<ProductViewCubit, bool>(
               (cubit) => cubit.state.isCartLoading,
             );
+            final highGraphics = context.select<GlobalGraphicBloc, bool>(
+              (bloc) => bloc.state.highGraphics,
+            );
             return Row(
               children: [
                 if (itemsCount > 0)
@@ -283,7 +287,7 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: .circular(30),
                       child: BackdropFilter(
-                        enabled: context.highGraphics,
+                        enabled: highGraphics,
                         filter: .blur(sigmaX: 12, sigmaY: 12),
                         child: Container(
                           height: 45,
@@ -291,7 +295,7 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                           padding: .only(left: 16, right: 16),
                           decoration: BoxDecoration(
                             color: context.appColorScheme.primary.withValues(
-                              alpha: context.highGraphics ? .5 : .95,
+                              alpha: highGraphics ? .5 : .95,
                             ),
                             borderRadius: BorderRadius.circular(30),
                             border: BoxBorder.all(
@@ -357,7 +361,7 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: .circular(30),
                     child: BackdropFilter(
-                      enabled: context.highGraphics,
+                      enabled: highGraphics,
                       filter: .blur(sigmaX: 12, sigmaY: 12),
                       child: Builder(
                         builder: (context) {
@@ -370,10 +374,10 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: isEveryFieldSatisfied
                                   ? context.appColorScheme.primary.withValues(
-                                      alpha: context.highGraphics ? .5 : .95,
+                                      alpha: highGraphics ? .5 : .95,
                                     )
                                   : context.appColorScheme.onPrimary.withValues(
-                                      alpha: context.highGraphics ? .5 : .95,
+                                      alpha: highGraphics ? .5 : .95,
                                     ),
                               foregroundColor: isEveryFieldSatisfied
                                   ? context.appColorScheme.onPrimary
@@ -382,13 +386,11 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                               side: BorderSide(
                                 color: isEveryFieldSatisfied
                                     ? context.appColorScheme.primary.withValues(
-                                        alpha: context.highGraphics ? .5 : .95,
+                                        alpha: highGraphics ? .5 : .95,
                                       )
                                     : context.appColorScheme.onPrimary
                                           .withValues(
-                                            alpha: context.highGraphics
-                                                ? .5
-                                                : .95,
+                                            alpha: highGraphics ? .5 : .95,
                                           ),
                               ),
                               shape: RoundedRectangleBorder(
@@ -428,6 +430,9 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final highGraphics = context.select<GlobalGraphicBloc, bool>(
+      (bloc) => bloc.state.highGraphics,
+    );
     return Padding(
       padding: const EdgeInsets.only(top: 8, right: 16),
       child: Row(
@@ -455,7 +460,7 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(30),
             child: BackdropFilter(
-              enabled: context.highGraphics,
+              enabled: highGraphics,
               filter: .blur(sigmaX: 12, sigmaY: 12),
               child: Builder(
                 builder: (context) {
@@ -471,19 +476,15 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: precalculatedPrice == 0
                           ? context.appColorScheme.surfaceContainerHigh
-                                .withValues(
-                                  alpha: context.highGraphics ? .5 : .95,
-                                )
+                                .withValues(alpha: highGraphics ? .5 : .95)
                           : context.appColorScheme.onPrimary.withValues(
-                              alpha: context.highGraphics ? .5 : .95,
+                              alpha: highGraphics ? .5 : .95,
                             ),
                       borderRadius: BorderRadius.circular(30),
                       border: BoxBorder.all(
                         color: precalculatedPrice == 0
                             ? context.appColorScheme.surfaceContainer
-                                  .withValues(
-                                    alpha: context.highGraphics ? .5 : .95,
-                                  )
+                                  .withValues(alpha: highGraphics ? .5 : .95)
                             : context.appColorScheme.onPrimary,
                       ),
                     ),
@@ -502,363 +503,3 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
     );
   }
 }
-
-// Scaffold(
-//       body: Container(
-//         decoration: BoxDecoration(
-//           color: context.appColorScheme.surfaceContainerHigh,
-//           borderRadius: .only(topLeft: .circular(24), topRight: .circular(24)),
-//         ),
-        
-//         child: Column(
-//           children: [
-//             if (context.read<ProductViewCubit>().state.imageField == null)
-//               Container(
-//                 color: context.appColorScheme.errorContainer.withValues(
-//                   alpha: context.highGraphics ? .5 : .98,
-//                 ),
-//                 child: Text('Critical Error, ImageField issue}'),
-//               ),
-//             Padding(
-//               padding: EdgeInsets.only(
-//                 bottom: MediaQuery.of(context).viewInsets.bottom,
-//               ),
-//               child: Stack(
-//                 children: [
-//                   Padding(
-//                     padding: const EdgeInsets.only(
-//                       right: 8.0,
-//                       left: 8,
-//                       bottom: 300,
-//                     ),
-//                     child: MaterialBuyLayerFields(
-//                       onUserInput: (p0, p1) => onUserInput(p0, p1),
-//                     ),
-//                   ),
-//                   Column(
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 8, right: 16),
-//                         child: Row(
-//                           children: [
-//                             Spacer(),
-//                             if (context.read<ProductViewCubit>().state.isAdmin)
-//                               Row(
-//                                 children: [
-//                                   IconButton(
-//                                     onPressed: onResetImageFieldPressed,
-//                                     icon: Icon(
-//                                       Icons.price_check_rounded,
-//                                       color:
-//                                           context.appColorScheme.errorContainer,
-//                                     ),
-//                                   ),
-//                                   IconButton(
-//                                     onPressed: onAddFieldPressed,
-//                                     icon: Icon(
-//                                       Icons.add,
-//                                       color:
-//                                           context.appColorScheme.errorContainer,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ClipRRect(
-//                               borderRadius: BorderRadiusGeometry.circular(30),
-//                               child: BackdropFilter(
-//                                 enabled: context.highGraphics,
-//                                 filter: .blur(sigmaX: 12, sigmaY: 12),
-//                                 child: Builder(
-//                                   builder: (context) {
-//                                     final precalculatedPrice = context
-//                                         .select<ProductViewCubit, double>(
-//                                           (cubit) =>
-//                                               cubit.state.precalculatedPrice,
-//                                         );
-//                                     return Container(
-//                                       height: 44,
-//                                       width: 100,
-//                                       alignment: .center,
-//                                       padding: .only(left: 16, right: 16),
-//                                       decoration: BoxDecoration(
-//                                         color: precalculatedPrice == 0
-//                                             ? context
-//                                                   .appColorScheme
-//                                                   .surfaceContainerHigh
-//                                                   .withValues(
-//                                                     alpha: context.highGraphics
-//                                                         ? .5
-//                                                         : .95,
-//                                                   )
-//                                             : context.appColorScheme.onPrimary
-//                                                   .withValues(
-//                                                     alpha: context.highGraphics
-//                                                         ? .5
-//                                                         : .95,
-//                                                   ),
-//                                         borderRadius: BorderRadius.circular(30),
-//                                         border: BoxBorder.all(
-//                                           color: precalculatedPrice == 0
-//                                               ? context
-//                                                     .appColorScheme
-//                                                     .surfaceContainer
-//                                                     .withValues(
-//                                                       alpha: context.highGraphics
-//                                                           ? .5
-//                                                           : .95,
-//                                                     )
-//                                               : context.appColorScheme.onPrimary,
-//                                         ),
-//                                       ),
-//                                       child: Text(
-//                                         precalculatedPrice == 0
-//                                             ? '--'
-//                                             : '\$$precalculatedPrice',
-//                                         overflow: .clip,
-//                                         style: TextStyle(
-//                                           color: context.appColorScheme.primary,
-//                                         ),
-//                                       ),
-//                                     );
-//                                   },
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: SizedBox(
-//                           height: 50,
-//                           width: double.maxFinite,
-//                           child: Builder(
-//                             builder: (context) {
-//                               final itemsCount = context
-//                                   .select<ProductViewCubit, int>(
-//                                     (cubit) => cubit.state.itemsInCart,
-//                                   );
-//                               final isCartLoading = context
-//                                   .select<ProductViewCubit, bool>(
-//                                     (cubit) => cubit.state.isCartLoading,
-//                                   );
-//                               return Row(
-//                                 children: [
-//                                   if (itemsCount > 0)
-//                                     Padding(
-//                                       padding: const EdgeInsets.only(right: 8),
-//                                       child: ClipRRect(
-//                                         borderRadius: .circular(30),
-//                                         child: BackdropFilter(
-//                                           enabled: context.highGraphics,
-//                                           filter: .blur(sigmaX: 12, sigmaY: 12),
-//                                           child: Container(
-//                                             height: 45,
-//                                             alignment: .center,
-//                                             padding: .only(left: 16, right: 16),
-//                                             decoration: BoxDecoration(
-//                                               color: context
-//                                                   .appColorScheme
-//                                                   .primary
-//                                                   .withValues(
-//                                                     alpha: context.highGraphics
-//                                                         ? .5
-//                                                         : .95,
-//                                                   ),
-//                                               borderRadius: BorderRadius.circular(
-//                                                 30,
-//                                               ),
-//                                               border: BoxBorder.all(
-//                                                 color: context
-//                                                     .appColorScheme
-//                                                     .outline,
-//                                               ),
-//                                             ),
-//                                             child: Row(
-//                                               children: [
-//                                                 isCartLoading
-//                                                     ? CircularProgressIndicator()
-//                                                     : IconButton(
-//                                                         onPressed:
-//                                                             onDeleteLastAddedItem,
-//                                                         icon: Icon(
-//                                                           Icons
-//                                                               .exposure_minus_1_rounded,
-//                                                           color: context
-//                                                               .appColorScheme
-//                                                               .onPrimary,
-//                                                         ),
-//                                                       ),
-//                                                 VerticalDivider(width: 4),
-//                                                 IconButton(
-//                                                   onPressed: onCartIconPressed,
-//                                                   icon: Badge(
-//                                                     backgroundColor: context
-//                                                         .appColorScheme
-//                                                         .onError,
-//                                                     textColor: context
-//                                                         .appColorScheme
-//                                                         .error,
-//                                                     label: AnimatedSwitcher(
-//                                                       duration: const Duration(
-//                                                         milliseconds: 250,
-//                                                       ),
-//                                                       transitionBuilder:
-//                                                           (
-//                                                             Widget child,
-//                                                             Animation<double>
-//                                                             animation,
-//                                                           ) {
-//                                                             return FadeTransition(
-//                                                               opacity: animation,
-//                                                               child: SlideTransition(
-//                                                                 position:
-//                                                                     Tween<Offset>(
-//                                                                       begin:
-//                                                                           const Offset(
-//                                                                             2,
-//                                                                             0.0,
-//                                                                           ),
-//                                                                       end: Offset
-//                                                                           .zero,
-//                                                                     ).animate(
-//                                                                       animation,
-//                                                                     ),
-//                                                                 child: child,
-//                                                               ),
-//                                                             );
-//                                                           },
-//                                                       child: Text(
-//                                                         '$itemsCount',
-//                                                         key: ValueKey<int>(
-//                                                           itemsCount,
-//                                                         ),
-//                                                       ),
-//                                                     ),
-//                                                     isLabelVisible:
-//                                                         itemsCount > 0,
-//                                                     child: Icon(
-//                                                       color: context
-//                                                           .appColorScheme
-//                                                           .onPrimary,
-//                                                       Icons
-//                                                           .shopping_cart_checkout_rounded,
-//                                                       size: 30,
-//                                                     ),
-//                                                   ),
-//                                                 ),
-//                                               ],
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   Flexible(
-//                                     child: ClipRRect(
-//                                       borderRadius: .circular(30),
-//                                       child: BackdropFilter(
-//                                         enabled: context.highGraphics,
-//                                         filter: .blur(sigmaX: 12, sigmaY: 12),
-//                                         child: Builder(
-//                                           builder: (context) {
-//                                             final isEveryFieldSatisfied = context
-//                                                 .select<ProductViewCubit, bool>(
-//                                                   (cubit) => cubit
-//                                                       .state
-//                                                       .isEveryFieldSatisfied,
-//                                                 );
-//                                             return ElevatedButton(
-//                                               onPressed: onAddCartItemPressed,
-//                                               style: ElevatedButton.styleFrom(
-//                                                 backgroundColor:
-//                                                     isEveryFieldSatisfied
-//                                                     ? context
-//                                                           .appColorScheme
-//                                                           .primary
-//                                                           .withValues(
-//                                                             alpha:
-//                                                                 context
-//                                                                     .highGraphics
-//                                                                 ? .5
-//                                                                 : .95,
-//                                                           )
-//                                                     : context
-//                                                           .appColorScheme
-//                                                           .onPrimary
-//                                                           .withValues(
-//                                                             alpha:
-//                                                                 context
-//                                                                     .highGraphics
-//                                                                 ? .5
-//                                                                 : .95,
-//                                                           ),
-//                                                 foregroundColor:
-//                                                     isEveryFieldSatisfied
-//                                                     ? context
-//                                                           .appColorScheme
-//                                                           .onPrimary
-//                                                     : context
-//                                                           .appColorScheme
-//                                                           .primary,
-//                                                 minimumSize: Size(
-//                                                   double.maxFinite,
-//                                                   45,
-//                                                 ),
-//                                                 side: BorderSide(
-//                                                   color: isEveryFieldSatisfied
-//                                                       ? context
-//                                                             .appColorScheme
-//                                                             .primary
-//                                                             .withValues(
-//                                                               alpha:
-//                                                                   context
-//                                                                       .highGraphics
-//                                                                   ? .5
-//                                                                   : .95,
-//                                                             )
-//                                                       : context
-//                                                             .appColorScheme
-//                                                             .onPrimary
-//                                                             .withValues(
-//                                                               alpha:
-//                                                                   context
-//                                                                       .highGraphics
-//                                                                   ? .5
-//                                                                   : .95,
-//                                                             ),
-//                                                 ),
-//                                                 shape: RoundedRectangleBorder(
-//                                                   borderRadius:
-//                                                       BorderRadius.circular(30),
-//                                                 ),
-//                                               ),
-//                                               child: Text(
-//                                                 isEveryFieldSatisfied
-//                                                     ? 'Add To Cart'
-//                                                     : 'Fill The Fields',
-//                                                 style: TextStyle(
-//                                                   fontWeight: FontWeight.bold,
-//                                                   fontSize: 16,
-//                                                 ),
-//                                               ),
-//                                             );
-//                                           },
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               );
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );

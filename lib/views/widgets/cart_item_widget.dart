@@ -179,7 +179,6 @@ class MaterialCartItemWidget extends StatelessWidget {
               ),
               if (isBeingDeleted)
                 BackdropFilter(
-                  enabled: context.highGraphics,
                   filter: .blur(sigmaX: 12, sigmaY: 12),
                   child: AbsorbPointer(
                     absorbing: true,
