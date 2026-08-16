@@ -50,13 +50,6 @@ class ProductCardDriver extends StatelessWidget {
       additionalSuffix: additionalSuffix,
       index: index,
     );
-    // if (context.mounted) {
-    //   context.read<CartBloc>().add(
-    //     CartEventFetchUserCartItemAmount(
-    //       userId: context.read<AuthBloc>().state.currentUser.id,
-    //     ),
-    //   );
-    // }
   }
 
   @override

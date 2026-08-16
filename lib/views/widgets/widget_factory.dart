@@ -67,7 +67,7 @@ class _RadioConstructorState extends State<RadioConstructor> {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
+      color: context.appColorScheme.surfaceContainerHigh.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
         side: BorderSide(
@@ -147,7 +147,7 @@ class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
+      color: context.appColorScheme.surfaceContainerHigh.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
 
@@ -228,7 +228,7 @@ class _InputFieldConstructorState extends State<InputFieldConstructor> {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
-      color: context.appColorScheme.surfaceContainer.withValues(alpha: .8),
+      color: context.appColorScheme.surfaceContainerHigh.withValues(alpha: .8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
         side: BorderSide(
@@ -306,7 +306,7 @@ Widget theAppWidgetBuilder({
   switch (handler) {
     case 'InputField': // pass the name of entered data
       return InputFieldConstructor(
-        collectedDataBridge: collectedDataBridge,
+        collectedDataBridge: (p0, p1) => collectedDataBridge(p0, p1),
         context: context,
         fieldName: fieldName,
         expectedData: expectedData ?? ['User data'],
@@ -315,14 +315,14 @@ Widget theAppWidgetBuilder({
     case 'RadioList': // pass map of option name : option
       return RadioConstructor(
         priceImages: priceImages,
-        collectedDataBridge: collectedDataBridge,
+        collectedDataBridge: (p0, p1) => collectedDataBridge(p0, p1),
         expectedData: expectedData ?? ['error'],
         feildName: fieldName,
         isCupertino: isCupertino,
       );
     case 'DropdownList': // pass map of option name : option
       return DropdownMenuConstructor(
-        collectedDataBridge: collectedDataBridge,
+        collectedDataBridge: (p0, p1) => collectedDataBridge(p0, p1),
         expectedData: expectedData ?? ['error'],
         fieldName: fieldName,
         isCupertino: isCupertino,

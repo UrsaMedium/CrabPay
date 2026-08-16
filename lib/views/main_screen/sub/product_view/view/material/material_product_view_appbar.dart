@@ -1,5 +1,5 @@
 import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
-import 'package:crabpay/views/main_screen/sub/card_view/product_view/driver/cubit.dart';
+import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
