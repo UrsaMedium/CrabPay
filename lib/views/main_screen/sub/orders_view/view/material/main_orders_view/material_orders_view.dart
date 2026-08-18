@@ -8,8 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialOrdersView extends StatelessWidget {
   final VoidCallback onBackButtonPressed;
-  final VoidCallback onLoadMore;
-  final Function(String) onSupportSendMessagePressed;
   final PageController pageController;
   final Function(int) onPageSwiped;
   final Function(int) onPageSelected;
@@ -19,8 +17,6 @@ class MaterialOrdersView extends StatelessWidget {
   const MaterialOrdersView({
     super.key,
     required this.onBackButtonPressed,
-    required this.onSupportSendMessagePressed,
-    required this.onLoadMore,
     required this.pageController,
     required this.onPageSwiped,
     required this.pageBuilder,

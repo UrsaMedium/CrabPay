@@ -3,7 +3,8 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/
 
 abstract class InnerChatHandler {
   Future<SupportThread?> getOrCreateThread({required String userId});
-  // Future<List<SupportThread>> getAllThreads();
+  // Future<SupportThread?> getThread({required String userId});
+  // Future<SupportThread?> createThread({required String userId});
   Stream<List<ChatMessage>> subscribeToMessages({required String threadId});
   void unsubscribeFromMessages();
   Future<void> sendMessage({
@@ -11,6 +12,11 @@ abstract class InnerChatHandler {
     required String senderId,
     required String content,
   });
-
+  Future<void> sendShadowMessage({
+    required String content,
+    required String shadowContent,
+    required String senderId,
+    required String threadId,
+  });
   Future<void> markMessagesAsRead({required String threadId});
 }

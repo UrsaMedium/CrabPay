@@ -129,8 +129,41 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       } catch (e) {
         emit(
           state.copyWith(
-            status: ChatStates.messageSendFailed,
+            status: ChatStates.messageSentFailed,
             errorMessage: 'Failed to send message',
+          ),
+        );
+        rethrow;
+      }
+    });
+
+    on<ChatEventSendShadowMessage>((event, emit) async {
+      developer.log('---');
+      developer.log('--- ChatEventSendShadowMessage fired');
+      developer.log('---');
+      emit(state.copyWith(status: ChatStates.loading));
+      try {
+        String? threadId;
+        threadId = state.activeThread?.id;
+        if (threadId == null) {
+          final thread = await _chatHandler.getOrCreateThread(
+            userId: event.senderId,
+          );
+          if (thread != null) threadId = thread.id;
+          if (threadId == null) throw Exception('no thread');
+        }
+        await _chatHandler.sendShadowMessage(
+          threadId: threadId,
+          senderId: event.senderId,
+          content: event.content,
+          shadowContent: event.shadowContent,
+        );
+        emit(state.copyWith(status: ChatStates.shadowMessageSent));
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: ChatStates.shadowMessageSentFailed,
+            errorMessage: 'Failed to send shadow message: $e',
           ),
         );
         rethrow;

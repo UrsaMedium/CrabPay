@@ -85,7 +85,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
                   : StackTrace.current,
             );
             _messagesControler.addError(error);
-          }) 
+          })
           .listen(
             (messages) {
               _messagesControler.add(messages);
@@ -221,6 +221,29 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
       );
       debugPrint('Failed to send message: $e');
       Fluttertoast.showToast(msg: 'Failed to send message. Please try again.');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendShadowMessage({
+    required String content,
+    required String shadowContent,
+    required String senderId,
+    required String threadId,
+  }) async {
+    try {
+      await retryer.retry(() async {
+        await _client.from('chat_messages').insert({
+          'thread_id': threadId,
+          'sender_id': senderId,
+          'content': content,
+          'shadow_message': shadowContent,
+        });
+      });
+      debugPrint('Sent shadow message');
+    } catch (e) {
+      debugPrint('Failed to send shadow message: $e');
       rethrow;
     }
   }

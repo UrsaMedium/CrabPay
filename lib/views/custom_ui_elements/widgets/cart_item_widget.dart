@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartItemWidgetDriver extends StatefulWidget {
   final Function(CartItem) onACartItemDelete;
@@ -24,6 +26,7 @@ class CartItemWidgetDriver extends StatefulWidget {
 class _CartItemWidgetDriverState extends State<CartItemWidgetDriver> {
   bool _isExpanded = false;
   String details = '';
+  late final Color? surfaceTintColor;
 
   @override
   void initState() {
@@ -31,6 +34,20 @@ class _CartItemWidgetDriverState extends State<CartItemWidgetDriver> {
       details += '$key: ${widget.cartItem.purchaseData[key]}\n';
     }
     details = details.trimRight();
+
+    surfaceTintColor =
+        context
+                .read<DatabaseBloc>()
+                .state
+                .cachedProductImageDominantColor?[widget.product.id] ==
+            null
+        ? null
+        : Color(
+            context
+                .read<DatabaseBloc>()
+                .state
+                .cachedProductImageDominantColor![widget.product.id]!,
+          );
     super.initState();
   }
 
@@ -50,6 +67,7 @@ class _CartItemWidgetDriverState extends State<CartItemWidgetDriver> {
       isExpanded: _isExpanded,
       setExpanded: _setExpanded,
       details: details,
+      surfaceTintColor: surfaceTintColor,
     );
   }
 }
@@ -62,6 +80,7 @@ class MaterialCartItemWidget extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback setExpanded;
   final String details;
+  final Color? surfaceTintColor;
   const MaterialCartItemWidget({
     super.key,
     required this.onACartItemDelete,
@@ -71,6 +90,7 @@ class MaterialCartItemWidget extends StatelessWidget {
     required this.isExpanded,
     required this.setExpanded,
     required this.details,
+    this.surfaceTintColor,
   });
 
   @override
@@ -81,10 +101,11 @@ class MaterialCartItemWidget extends StatelessWidget {
         onTap: setExpanded,
         child: Card(
           elevation: 3,
+          surfaceTintColor: surfaceTintColor,
           clipBehavior: Clip.antiAlias,
           color: context.appColorScheme.surfaceContainer,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(39),
             side: BorderSide(
               color: context.appColorScheme.surfaceContainerHigh,
             ),
@@ -92,17 +113,15 @@ class MaterialCartItemWidget extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(12),
                 child: AnimatedSize(
                   duration: const Duration(milliseconds: 200),
                   alignment: Alignment.topCenter,
                   curve: Curves.easeInOutCubic,
                   child: Row(
-                    crossAxisAlignment: .start,
+                    crossAxisAlignment: isExpanded ? .start : .center,
                     children: [
                       Container(
-                        height: 48,
-                        width: 48,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
@@ -111,6 +130,8 @@ class MaterialCartItemWidget extends StatelessWidget {
                           imageUrl:
                               'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                           fit: .cover,
+                          height: 54,
+                          width: 54,
                           errorWidget: (context, error, stackTrace) =>
                               Container(
                                 color: context.appColorScheme.onInverseSurface,
@@ -158,7 +179,7 @@ class MaterialCartItemWidget extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: .only(right: 6, top: 3),
+                        margin: .only(right: 14, top: isExpanded ? 7 : 0),
                         height: 40,
                         width: 40,
                         clipBehavior: Clip.antiAlias,

@@ -1,5 +1,6 @@
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/view/material/material_skeleton_order_placeholder.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/order_card/material_order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,18 +35,22 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
                         (cubit) => cubit.state.crabSearchedOrders ?? [],
                       );
 
-                  return SliverList.builder(
-                    itemCount: crabOrders.length,
-                    itemBuilder: (context, index) {
-                      return MaterialOrderCard(
-                        crabOrder: crabOrders[index],
-                        onSupportSendMessagePressed:
-                            onSupportSendMessagePressed,
-                        onOrederCardPressed: () =>
-                            onOpenCardDetails(crabOrders[index]),
-                      );
-                    },
-                  );
+                  return crabOrders.isEmpty
+                      ? SliverToBoxAdapter(
+                          child: MaterialSkeletonOrderPlaceHolder(),
+                        )
+                      : SliverList.builder(
+                          itemCount: crabOrders.length,
+                          itemBuilder: (context, index) {
+                            return MaterialOrderCard(
+                              crabOrder: crabOrders[index],
+                              onSupportSendMessagePressed: (message) =>
+                                  onSupportSendMessagePressed(message),
+                              onOrederCardPressed: () =>
+                                  onOpenCardDetails(crabOrders[index]),
+                            );
+                          },
+                        );
                 },
               ),
             ),

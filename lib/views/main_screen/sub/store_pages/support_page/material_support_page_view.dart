@@ -84,7 +84,7 @@ class MaterialSupportPageView extends StatelessWidget {
                           enabled: highGraphics,
                           filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: Container(
-                            height: 98,
+                            height: 100,
                             color: context.appColorScheme.surfaceContainer
                                 .withValues(alpha: highGraphics ? .5 : .97),
                             // height: 64,
@@ -128,7 +128,7 @@ class MaterialSupportPageView extends StatelessWidget {
                         ],
                       ).createShader(bounds),
                       child: Container(
-                        height: 98,
+                        height: 100,
                         decoration: BoxDecoration(
                           borderRadius: .circular(cornerRadius),
                           border: .all(color: Colors.white),

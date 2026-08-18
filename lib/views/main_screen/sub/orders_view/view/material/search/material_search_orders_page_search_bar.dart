@@ -29,16 +29,14 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
             child: GestureDetector(
               onTap: onSearchBarPressed,
               child: Container(
-                height: 56,
-                // width: 46,
-                padding: EdgeInsets.all(6),
+                height: 64,
+                padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: context.appColorScheme.surfaceContainerHigh.withValues(
                     alpha: highGraphics ? .5 : .97,
                   ),
                 ),
                 child: Stack(
-                  alignment: .center,
                   children: [
                     Column(
                       spacing: 4,
@@ -100,7 +98,7 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                 ],
               ).createShader(bounds),
               child: Container(
-                height: 56,
+                height: 64,
                 decoration: BoxDecoration(
                   borderRadius: .circular(14),
                   border: .all(color: Colors.white),

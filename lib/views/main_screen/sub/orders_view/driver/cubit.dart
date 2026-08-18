@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OrdersViewState {
   final int page;
@@ -20,6 +23,7 @@ class OrdersViewState {
   final bool isSerchOpen;
   final DateTime? fromDate;
   final DateTime? toDate;
+  final bool isSupportMessageSending;
 
   OrdersViewState({
     this.isLoadingMore = false,
@@ -34,6 +38,7 @@ class OrdersViewState {
     this.crabSearchedOrders,
     this.fromDate,
     this.toDate,
+    this.isSupportMessageSending = false,
   });
 
   OrdersViewState copyWith({
@@ -49,6 +54,7 @@ class OrdersViewState {
     List<CrabOrder>? crabSearchedOrders,
     DateTime? fromDate,
     DateTime? toDate,
+    bool? isSupportMessageSending,
   }) {
     return OrdersViewState(
       page: page ?? this.page,
@@ -75,18 +81,26 @@ class OrdersViewState {
           : toDate == DateTime(0)
           ? null
           : toDate,
+      isSupportMessageSending:
+          isSupportMessageSending ?? this.isSupportMessageSending,
     );
   }
 }
 
 class OrdersViewCubit extends Cubit<OrdersViewState> {
   final CartBloc _cartBloc;
+  final ChatBloc _chatBloc;
   final List<Product> _products;
   late final StreamSubscription _cartSubscription;
-  OrdersViewCubit({required CartBloc cartBloc, required List<Product> products})
-    : _products = products,
-      _cartBloc = cartBloc,
-      super(OrdersViewState()) {
+  late final StreamSubscription _chatSubscription;
+  OrdersViewCubit({
+    required CartBloc cartBloc,
+    required ChatBloc chatBloc,
+    required List<Product> products,
+  }) : _products = products,
+       _cartBloc = cartBloc,
+       _chatBloc = chatBloc,
+       super(OrdersViewState()) {
     _syncDataForNotDeliveredOrders(_cartBloc.state);
     _cartSubscription = _cartBloc.stream.listen((cartState) {
       if (cartState.states == CartStates.loadedMoreOrdersNotDeliveredOrders) {
@@ -97,6 +111,15 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
       }
       if (cartState.states == CartStates.searchedOrders) {
         _syncSearchedOrders(cartState);
+      }
+    });
+    _chatSubscription = _chatBloc.stream.listen((chatState) {
+      if (chatState.status == ChatStates.shadowMessageSent) {
+        Fluttertoast.showToast(msg: 'sent');
+        emit(state.copyWith(isSupportMessageSending: false));
+      } else if (chatState.status == ChatStates.shadowMessageSentFailed) {
+        Fluttertoast.showToast(msg: 'failed');
+        emit(state.copyWith(isSupportMessageSending: false));
       }
     });
   }
@@ -201,9 +224,14 @@ class OrdersViewCubit extends Cubit<OrdersViewState> {
     emit(state.copyWith(page: index));
   }
 
+  void setSupportMessageStateTrue() {
+    emit(state.copyWith(isSupportMessageSending: true));
+  }
+
   @override
   Future<void> close() {
     _cartSubscription.cancel();
+    _chatSubscription.cancel();
     return super.close();
   }
 }

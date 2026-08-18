@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/crab_order_model.dart';
+import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialOrderCard extends StatelessWidget {
   final CrabOrder crabOrder;
@@ -49,24 +51,41 @@ class MaterialOrderCard extends StatelessWidget {
                           Text('Order: ${crabOrder.orderIdToDisplay}'),
                         ],
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Row(
-                          children: [
-                            Text(
-                              'Support  ',
-                              style: TextStyle(
-                                fontWeight: .w500,
-                                color:
-                                    context.appColorScheme.onPrimaryContainer,
-                              ),
+                      Builder(
+                        builder: (context) {
+                          final isMessageSending = context
+                              .select<OrdersViewCubit, bool>(
+                                (cubit) => cubit.state.isSupportMessageSending,
+                              );
+                          return IconButton(
+                            onPressed: isMessageSending
+                                ? null
+                                : () => onSupportSendMessagePressed(
+                                    'The user requested help on order: \n ${crabOrder.orderId}',
+                                  ),
+                            icon: Row(
+                              children: [
+                                Text(
+                                  'Support  ',
+                                  style: TextStyle(
+                                    fontWeight: .w500,
+                                    color: context
+                                        .appColorScheme
+                                        .onPrimaryContainer,
+                                  ),
+                                ),
+                                isMessageSending
+                                    ? CircularProgressIndicator()
+                                    : Icon(
+                                        Icons.send_rounded,
+                                        color: context
+                                            .appColorScheme
+                                            .onPrimaryContainer,
+                                      ),
+                              ],
                             ),
-                            Icon(
-                              Icons.send_rounded,
-                              color: context.appColorScheme.onPrimaryContainer,
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ],
                   ),

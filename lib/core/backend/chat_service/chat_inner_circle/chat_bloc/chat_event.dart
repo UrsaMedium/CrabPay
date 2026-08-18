@@ -48,6 +48,20 @@ class ChatEventSendMessage extends ChatEvent {
   List<Object?> get props => [content, senderId, threadId];
 }
 
+class ChatEventSendShadowMessage extends ChatEvent {
+  final String content;
+  final String senderId;
+  final String shadowContent;
+  const ChatEventSendShadowMessage({
+    required this.content,
+    required this.senderId,
+    required this.shadowContent,
+  });
+
+  @override
+  List<Object?> get props => [content, senderId, shadowContent];
+}
+
 class ChatEventMarkAsRead extends ChatEvent {}
 
 class ChatEventFlushData extends ChatEvent {}

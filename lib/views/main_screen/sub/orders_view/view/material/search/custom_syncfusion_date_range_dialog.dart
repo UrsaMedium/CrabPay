@@ -72,6 +72,7 @@ class _CustomSyncfusionDateRangeDialogState
               },
             ),
             Row(
+              mainAxisAlignment: .spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: () {

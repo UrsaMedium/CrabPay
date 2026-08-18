@@ -1,3 +1,6 @@
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
+import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -13,11 +16,11 @@ import 'package:crabpay/views/main_screen/sub/orders_view/view/material/delivery
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/main_orders_view/material_orders_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/search/material_searched_orders_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 class OrdersViewDriver extends StatefulWidget {
   const OrdersViewDriver({super.key});
@@ -35,6 +38,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
   void initState() {
     _products = context.read<DatabaseBloc>().state.products ?? [];
     _ordersViewCubit = OrdersViewCubit(
+      chatBloc: context.read<ChatBloc>(),
       cartBloc: context.read<CartBloc>(),
       products: _products,
     );
@@ -75,13 +79,15 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       result = MaterialNotDeliveredOrdersPage(
         onLoadMoreNotDeliveredOrders: () =>
             _onLoadMoreNotDeliveredOrders(context),
-        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onSupportSendMessagePressed: (message) =>
+            _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else if (index == 1) {
       result = MaterialDeliveredOrdersPage(
         onLoadMoreDeliveredOrders: () => _onLoadMoreDeliveredOrders(context),
-        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onSupportSendMessagePressed: (message) =>
+            _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else {
@@ -92,7 +98,8 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
           toDate: p1,
           orderId: p2,
         ),
-        onSupportSendMessagePressed: _onSupportSendMessagePressed,
+        onSupportSendMessagePressed: (message) =>
+            _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     }
@@ -200,15 +207,28 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     }
   }
 
-  void _onSupportSendMessagePressed(String orderId) {
-    context.goNamed(
-      AppRoutes.support.name,
-      queryParameters: {'orderId': orderId},
+  void _onSupportSendMessagePressed(BuildContext context, String message) {
+    _ordersViewCubit.setSupportMessageStateTrue();
+    context.read<ChatBloc>().add(
+      ChatEventSendShadowMessage(
+        content: '',
+        senderId: context.read<AuthBloc>().state.currentUser.id,
+        shadowContent: message,
+      ),
     );
   }
 
   void _onOpenCardDetails(BuildContext context, CrabOrder order) async {
-    await openOrderDetails(context, order);
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return MaterialOrderDetails(
+          order: order,
+          onSupportSendMessagePressed: (message) =>
+              _onSupportSendMessagePressed(context, message),
+        );
+      },
+    );
   }
 
   @override
@@ -229,26 +249,31 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       },
       child: BlocProvider.value(
         value: _ordersViewCubit,
-        child: Builder(
-          builder: (context) {
-            //
-            if (defaultTargetPlatform == TargetPlatform.iOS) {
-              // return CupertinoOrdersView();
-            }
-
-            return MaterialOrdersView(
-              onLoadMore: () => _onLoadMoreNotDeliveredOrders(context),
-              onBackButtonPressed: () => _onBackButtonPressed(context),
-              onSupportSendMessagePressed: _onSupportSendMessagePressed,
-              pageBuilder: (context, index) =>
-                  _pageBuilder(context: context, index: index),
-              onPageSwiped: (index) => _onPageSwiped(index),
-              pageController: _pageController,
-              onPageSelected: (index) => _onPageSelected(index),
-              changeSearchState: () => _changeSearchState(context),
-              onSearchBarPressed: () => _onSearchBarPressed(context),
-            );
+        child: BlocListener<ChatBloc, ChatState>(
+          listenWhen: (previous, current) =>
+              current.status == ChatStates.shadowMessageSent,
+          listener: (context, state) {
+            context.go(AppRoutes.support.path);
           },
+          child: Builder(
+            builder: (context) {
+              //
+              if (defaultTargetPlatform == TargetPlatform.iOS) {
+                // return CupertinoOrdersView();
+              }
+
+              return MaterialOrdersView(
+                onBackButtonPressed: () => _onBackButtonPressed(context),
+                pageBuilder: (context, index) =>
+                    _pageBuilder(context: context, index: index),
+                onPageSwiped: (index) => _onPageSwiped(index),
+                pageController: _pageController,
+                onPageSelected: (index) => _onPageSelected(index),
+                changeSearchState: () => _changeSearchState(context),
+                onSearchBarPressed: () => _onSearchBarPressed(context),
+              );
+            },
+          ),
         ),
       ),
     );

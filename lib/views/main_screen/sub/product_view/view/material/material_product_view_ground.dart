@@ -129,6 +129,11 @@ class MaterialProductView extends StatelessWidget {
                         );
                       },
                     ),
+                    Expanded(
+                      child: Container(
+                        color: context.appColorScheme.surfaceContainerLow,
+                      ),
+                    ),
                   ],
                 ),
 
