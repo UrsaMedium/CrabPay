@@ -6,7 +6,7 @@ import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/orders_on_pa
 import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
-import 'package:crabpay/views/widgets/material_bottom_sheet_page_gorouter_interface.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/material_bottom_sheet_page_gorouter_interface.dart';
 import 'package:go_router/go_router.dart';
 
 final List<RouteBase> mainScreenShellRoutes = [

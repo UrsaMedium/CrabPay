@@ -1,8 +1,8 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
-import 'package:crabpay/views/widgets/cart_item_widget.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/cart_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -14,24 +15,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 enum ProductViewLayers { groundLayer, descriptionLayer, buyLayer }
 
 class ProductViewState extends Equatable {
+  final bool isPageReady;
   final bool isAdmin;
   final bool isAnonymous;
   final bool isFavorite;
   final String? userId;
   final Product? product;
-  final bool isLoading;
   final bool isFavoriteLoading;
   final bool isCartLoading;
   final ProductViewLayers layer;
-  final Map<ProductViewLayers, double>? descriptionLayerPositions;
-  final Map<ProductViewLayers, double>? buyLayerPositions;
   final Map<String, double>? layoutBoundries;
   final GlobalKey descriptionLayerKey;
   final double? descHeight;
-  final double descPosition;
-  final double descMinPosition;
+  final double? descPosition;
+  final double? descMinPosition;
   final Color? tintColor;
   //for buy layer
+  final bool createBuyLayer;
   final List<ProductField>? productFields;
   final ProductField? imageField;
   final Map<String, double>? priceFunction;
@@ -43,7 +43,7 @@ class ProductViewState extends Equatable {
   final int itemsInCart;
   final GlobalKey buyLayerKey;
   final double? buyLayerHeight;
-  final double buyPosition;
+  final double? buyPosition;
 
   const ProductViewState({
     this.isAdmin = false,
@@ -52,7 +52,6 @@ class ProductViewState extends Equatable {
     this.product,
     this.productFields,
     this.imageField,
-    this.isLoading = true,
     this.layer = ProductViewLayers.groundLayer,
     this.isFavorite = false,
     this.isFavoriteLoading = true,
@@ -66,28 +65,26 @@ class ProductViewState extends Equatable {
     this.isCartLoading = false,
     required this.buyLayerKey,
     this.buyLayerHeight,
-    this.descriptionLayerPositions,
     this.layoutBoundries,
-    this.buyLayerPositions,
     required this.descriptionLayerKey,
     this.descHeight,
-    this.descPosition = 1000,
-    this.buyPosition = 1000,
-    this.descMinPosition = 1000,
+    this.descPosition,
+    this.buyPosition,
+    this.descMinPosition,
     this.tintColor,
+    this.isPageReady = false,
+    this.createBuyLayer = false,
   });
 
   ProductViewState copyWith({
+    bool? isPageReady,
     bool? isAdmin,
     bool? isAnonymous,
     String? userId,
     Product? product,
-    bool? isLoading,
     ProductViewLayers? layer,
     bool? isFavorite,
     bool? isFavoriteLoading,
-    Map<ProductViewLayers, double>? descriptionLayerPositions,
-    Map<ProductViewLayers, double>? buyLayerPositions,
     Map<String, double>? layoutBoundries,
     GlobalKey? descriptionLayerKey,
     double? descHeight,
@@ -95,6 +92,7 @@ class ProductViewState extends Equatable {
     double? descMinPosition,
     Color? tintColor,
     //buy
+    bool? createBuyLayer,
     List<ProductField>? productFields,
     ProductField? imageField,
     int? amountOfRequiredFields,
@@ -110,10 +108,10 @@ class ProductViewState extends Equatable {
     double? buyPosition,
   }) {
     return ProductViewState(
+      isPageReady: isPageReady ?? this.isPageReady,
       isAdmin: isAdmin ?? this.isAdmin,
       isAnonymous: isAnonymous ?? this.isAnonymous,
       userId: userId ?? this.userId,
-      isLoading: isLoading ?? this.isLoading,
       layer: layer ?? this.layer,
       product: product ?? this.product,
       isFavorite: isFavorite ?? this.isFavorite,
@@ -124,6 +122,7 @@ class ProductViewState extends Equatable {
       descMinPosition: descMinPosition ?? this.descMinPosition,
       tintColor: tintColor ?? this.tintColor,
       //buy
+      createBuyLayer: createBuyLayer ?? this.createBuyLayer,
       productFields: productFields ?? this.productFields,
       imageField: imageField ?? this.imageField,
       priceFunction: priceFunction ?? this.priceFunction,
@@ -138,9 +137,6 @@ class ProductViewState extends Equatable {
       isCartLoading: isCartLoading ?? this.isCartLoading,
       buyLayerKey: buyLayerKey ?? this.buyLayerKey,
       buyLayerHeight: buyLayerHeight ?? this.buyLayerHeight,
-      descriptionLayerPositions:
-          descriptionLayerPositions ?? this.descriptionLayerPositions,
-      buyLayerPositions: buyLayerPositions ?? this.buyLayerPositions,
       layoutBoundries: layoutBoundries ?? this.layoutBoundries,
       buyPosition: buyPosition ?? this.buyPosition,
     );
@@ -148,15 +144,14 @@ class ProductViewState extends Equatable {
 
   @override
   List<Object?> get props => [
+    isPageReady,
     isAdmin,
     isAnonymous,
     userId,
     product,
-    isLoading,
     layer,
     isFavorite,
     isFavoriteLoading,
-    descriptionLayerPositions,
     layoutBoundries,
     descriptionLayerKey,
     descHeight,
@@ -175,13 +170,9 @@ class ProductViewState extends Equatable {
     isCartLoading,
     buyLayerKey,
     buyLayerHeight,
-    descriptionLayerPositions,
-    buyLayerPositions,
     layoutBoundries,
     buyPosition,
   ];
-
-  // List<Object>
 }
 
 class ProductViewCubit extends Cubit<ProductViewState> {
@@ -226,7 +217,6 @@ class ProductViewCubit extends Cubit<ProductViewState> {
         priceFunction: imageField?.priceImages,
         isLinearFunction: imageField?.handler == 'InputField',
         isFavoriteLoading: false,
-        isLoading: false,
         isFavorite:
             databaseBloc.state.userPreferences?.any(
               ((element) => element.id == product.id),
@@ -329,14 +319,15 @@ class ProductViewCubit extends Cubit<ProductViewState> {
             final descTopPosition =
                 state.layoutBoundries!['height']! -
                 state.layoutBoundries!['paddingBottom']! -
-                (descLayerHeight > state.descMinPosition
+                (descLayerHeight > state.descMinPosition!
                     ? descLayerHeight
-                    : state.descMinPosition) -
+                    : state.descMinPosition!) -
                 64;
             emit(
               state.copyWith(
                 layer: ProductViewLayers.descriptionLayer,
                 descPosition: descTopPosition,
+                createBuyLayer: true,
               ),
             );
           }
@@ -378,9 +369,9 @@ class ProductViewCubit extends Cubit<ProductViewState> {
             final descTopPosition =
                 state.layoutBoundries!['height']! -
                 state.layoutBoundries!['paddingBottom']! -
-                (descLayerHeight > state.descMinPosition
+                (descLayerHeight > state.descMinPosition!
                     ? descLayerHeight
-                    : state.descMinPosition) -
+                    : state.descMinPosition!) -
                 64;
             final buyTopPosition =
                 state.layoutBoundries!['height']! -
@@ -407,8 +398,9 @@ class ProductViewCubit extends Cubit<ProductViewState> {
     emit(state.copyWith(isCartLoading: true));
   }
 
-  void setLoadingStateTrue() {
-    emit(state.copyWith(isLoading: true));
+  void setPageReadyTrue() {
+    developer.log('oooooo');
+    emit(state.copyWith(isPageReady: true));
   }
 
   //buy layer ----------------------------------------------------------

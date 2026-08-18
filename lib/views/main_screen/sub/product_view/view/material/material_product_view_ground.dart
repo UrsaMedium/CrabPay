@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/hero_flight_observer.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/view/material/material_product_buy_layer.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/view/material/material_product_description_layer.dart';
@@ -17,6 +18,7 @@ class MaterialProductView extends StatelessWidget {
   final VoidCallback onDeleteLastAddedItem;
   final VoidCallback onCartIconPressed;
   final VoidCallback onAddCartItemPressed;
+  final VoidCallback onPageTransitionEnd;
   final Function(String, String) onUserInput;
   final Function(DragEndDetails) onVerticalSwipe;
   final Function(ScrollNotification) onScrollAction;
@@ -34,12 +36,13 @@ class MaterialProductView extends StatelessWidget {
     required this.onAddCartItemPressed,
     required this.onUserInput,
     required this.onScrollAction,
+    required this.onPageTransitionEnd,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.appColorScheme.surfaceContainerLowest,
+      backgroundColor: context.appColorScheme.surfaceContainerLow,
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: MaterialProductViewAppbar(
@@ -51,86 +54,105 @@ class MaterialProductView extends StatelessWidget {
         onVerticalDragEnd: (details) => onVerticalSwipe(details),
         child: Builder(
           builder: (context) {
-            final descPosition = context.select<ProductViewCubit, double>(
+            final descPosition = context.select<ProductViewCubit, double?>(
               (cubit) => cubit.state.descPosition,
             );
-            final buyPosition = context.select<ProductViewCubit, double>(
+            final buyPosition = context.select<ProductViewCubit, double?>(
               (cubit) => cubit.state.buyPosition,
+            );
+            final isPageReady = context.select<ProductViewCubit, bool>(
+              (cubit) => cubit.state.isPageReady,
             );
             return Stack(
               children: [
                 Column(
                   mainAxisAlignment: .spaceBetween,
                   children: [
-                    Hero(
-                      tag: tag,
-                      createRectTween: (begin, end) =>
-                          MaterialRectArcTween(begin: begin, end: end),
-                      child: ClipRRect(
-                        borderRadius: .zero,
-                        clipBehavior: .antiAlias,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInOutCubic,
-                          width:
-                              context
-                                  .read<ProductViewCubit>()
-                                  .state
-                                  .layoutBoundries?['width'] ??
-                              double.maxFinite,
-                          height: descPosition + 24,
-                          // alignment: .center,
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://regred-rainbowbridge.ru/crabpay/images/products/${context.read<ProductViewCubit>().state.product!.image}.png',
-                            // width: MediaQuery.widthOf(context),
-                            // height: descPosition,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, error, stackTrace) =>
-                                Container(
+                    HeroFlightObserverWithFallBack(
+                      onHeroLanded: onPageTransitionEnd,
+                      builder: (context, onFlightStarted, onFlightEnded) {
+                        return Hero(
+                          tag: tag,
+                          createRectTween: (begin, end) =>
+                              MaterialRectArcTween(begin: begin, end: end),
+                          flightShuttleBuilder:
+                              (
+                                flightContext,
+                                animation,
+                                flightDirection,
+                                fromHeroContext,
+                                toHeroContext,
+                              ) {
+                                return HeroFlightObserver(
+                                  onFlightStarted: onFlightStarted,
+                                  onFlightEnded: onFlightEnded,
+                                  child: toHeroContext.widget,
+                                );
+                              },
+                          child: ClipRRect(
+                            borderRadius: .zero,
+                            clipBehavior: .antiAlias,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeInOutCubic,
+                              width: MediaQuery.widthOf(context),
+                              height: isPageReady
+                                  ? descPosition! + 24
+                                  : MediaQuery.widthOf(context),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://regred-rainbowbridge.ru/crabpay/images/products/${context.read<ProductViewCubit>().state.product!.image}.png',
+                                fit: BoxFit.cover,
+                                errorWidget: (context, error, stackTrace) =>
+                                    Container(
+                                      color: context
+                                          .appColorScheme
+                                          .onInverseSurface,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        color: context
+                                            .appColorScheme
+                                            .inversePrimary,
+                                        size: 48,
+                                      ),
+                                    ),
+                                placeholder: (context, url) => Container(
                                   color:
                                       context.appColorScheme.onInverseSurface,
                                   alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.broken_image,
-                                    color:
-                                        context.appColorScheme.inversePrimary,
-                                    size: 48,
-                                  ),
+                                  child: const CircularProgressIndicator(),
                                 ),
-                            placeholder: (context, url) => Container(
-                              color: context.appColorScheme.onInverseSurface,
-                              alignment: Alignment.center,
-                              child: const CircularProgressIndicator(),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.heightOf(context) / 2 - 128,
-                      color: context.appColorScheme.surfaceContainerLow,
+                        );
+                      },
                     ),
                   ],
                 ),
+
                 AnimatedPositioned(
-                  top: descPosition,
+                  top: isPageReady ? descPosition : buyPosition,
                   left: 0,
                   right: 0,
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOutCubic,
                   child: MaterialProductDescriptionLayer(
+                    isPageReady: isPageReady,
                     onScrollAction: (p0) => onScrollAction(p0),
                   ),
                 ),
+
                 AnimatedPositioned(
-                  top: buyPosition,
+                  top: isPageReady ? buyPosition : MediaQuery.heightOf(context),
                   left: 0,
                   right: 0,
                   height: context.read<ProductViewCubit>().state.buyLayerHeight,
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOutCubic,
                   child: MaterialProductBuyLayer(
+                    isPageReady: isPageReady,
                     onScrollAction: (p0) => onScrollAction(p0),
                     onResetImageFieldPressed: onResetImageFieldPressed,
                     onAddFieldPressed: onAddFieldPressed,

@@ -1,4 +1,4 @@
-import 'package:crabpay/views/dialogs/generic_dialog.dart';
+import 'package:crabpay/views/custom_ui_elements/dialogs/generic_dialog.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showOnRegisterDialog(BuildContext context) {

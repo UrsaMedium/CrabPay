@@ -1,8 +1,8 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
-import 'package:crabpay/views/widgets/widget_factory.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/widget_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +13,7 @@ class MaterialProductBuyLayer extends StatelessWidget {
   final VoidCallback onDeleteLastAddedItem;
   final VoidCallback onCartIconPressed;
   final VoidCallback onAddCartItemPressed;
+  final bool isPageReady;
   final Function(String, String) onUserInput;
   final Function(ScrollNotification) onScrollAction;
   const MaterialProductBuyLayer({
@@ -24,6 +25,7 @@ class MaterialProductBuyLayer extends StatelessWidget {
     required this.onAddCartItemPressed,
     required this.onUserInput,
     required this.onScrollAction,
+    required this.isPageReady,
   });
 
   @override
@@ -35,77 +37,104 @@ class MaterialProductBuyLayer extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: .circular(24)),
       ),
       clipBehavior: .antiAlias,
+
       child: Column(
         mainAxisSize: .min,
         children: [
-          Stack(
-            children: [
-              Builder(
-                builder: (context) {
-                  final layer = context
-                      .select<ProductViewCubit, ProductViewLayers>(
-                        (value) => value.state.layer,
-                      );
-                  return Stack(
-                    alignment: .bottomCenter,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.heightOf(context) * .7,
-                        ),
-                        child: MaterialBuyLayerFields(
-                          layer: layer,
-                          onScrollAction: (p0) => onScrollAction(p0),
-                          onUserInput: (p0, p1) => onUserInput(p0, p1),
-                        ),
-                      ),
-                      if (layer == ProductViewLayers.buyLayer)
-                        Positioned(
-                          top: 0,
-                          bottom: 4,
-                          left: 8,
-                          right: 8,
-                          child: Column(
-                            mainAxisAlignment: .spaceBetween,
+          if (isPageReady)
+            Stack(
+              children: [
+                Builder(
+                  builder: (context) {
+                    final layer = context
+                        .select<ProductViewCubit, ProductViewLayers>(
+                          (value) => value.state.layer,
+                        );
+                    final createBuyLayer = context
+                        .select<ProductViewCubit, bool>(
+                          (cubit) => cubit.state.createBuyLayer,
+                        );
+                    return !createBuyLayer
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                              left: 32.0,
+                              top: 16,
+                              bottom: 8,
+                              right: 80,
+                            ),
+                            child: SizedBox(
+                              child: Text(
+                                'Read Description',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: .w700,
+                                  color: context.appColorScheme.tertiary,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Stack(
+                            alignment: .bottomCenter,
                             children: [
-                              MaterialBuyLayerCostDisplay(
-                                onAddFieldPressed: onAddFieldPressed,
-                                onResetImageFieldPressed:
-                                    onResetImageFieldPressed,
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: MediaQuery.heightOf(context) * .7,
+                                ),
+                                child: MaterialBuyLayerFields(
+                                  layer: layer,
+                                  onScrollAction: (p0) => onScrollAction(p0),
+                                  onUserInput: (p0, p1) => onUserInput(p0, p1),
+                                ),
                               ),
-                              MaterialBuyLayerButtonRow(
-                                onAddCartItemPressed: onAddCartItemPressed,
-                                onCartIconPressed: onCartIconPressed,
-                                onDeleteLastAddedItem: onDeleteLastAddedItem,
-                              ),
+                              if (layer == ProductViewLayers.buyLayer)
+                                Positioned(
+                                  top: 0,
+                                  bottom: 4,
+                                  left: 8,
+                                  right: 8,
+                                  child: Column(
+                                    mainAxisAlignment: .spaceBetween,
+                                    children: [
+                                      MaterialBuyLayerCostDisplay(
+                                        onAddFieldPressed: onAddFieldPressed,
+                                        onResetImageFieldPressed:
+                                            onResetImageFieldPressed,
+                                      ),
+                                      MaterialBuyLayerButtonRow(
+                                        onAddCartItemPressed:
+                                            onAddCartItemPressed,
+                                        onCartIconPressed: onCartIconPressed,
+                                        onDeleteLastAddedItem:
+                                            onDeleteLastAddedItem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
-                          ),
-                        ),
+                          );
+                  },
+                ),
+                ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    begin: .topCenter,
+                    end: .bottomCenter,
+                    colors: [
+                      context.appColorScheme.outline.withValues(alpha: .6),
+                      context.appColorScheme.outline.withValues(alpha: .3),
+                      Colors.transparent,
+                      Colors.transparent,
                     ],
-                  );
-                },
-              ),
-              ShaderMask(
-                shaderCallback: (bounds) => LinearGradient(
-                  begin: .topCenter,
-                  end: .bottomCenter,
-                  colors: [
-                    context.appColorScheme.outline.withValues(alpha: .6),
-                    context.appColorScheme.outline.withValues(alpha: .3),
-                    Colors.transparent,
-                    Colors.transparent,
-                  ],
-                ).createShader(bounds),
-                child: Container(
-                  height: 46,
-                  decoration: BoxDecoration(
-                    borderRadius: .circular(22),
-                    border: .all(color: Colors.white, width: 2),
+                  ).createShader(bounds),
+                  child: Container(
+                    height: 46,
+                    decoration: BoxDecoration(
+                      borderRadius: .circular(22),
+                      border: .all(color: Colors.white, width: 2),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );

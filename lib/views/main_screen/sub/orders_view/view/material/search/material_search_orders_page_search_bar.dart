@@ -1,4 +1,4 @@
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';

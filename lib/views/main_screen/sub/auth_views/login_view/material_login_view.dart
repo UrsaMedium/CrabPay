@@ -1,4 +1,4 @@
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:flutter/material.dart';
 
 class MaterialLoginView extends StatelessWidget {

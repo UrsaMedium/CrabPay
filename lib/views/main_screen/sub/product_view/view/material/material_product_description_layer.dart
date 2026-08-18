@@ -1,4 +1,4 @@
-import 'package:crabpay/core/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/sub/product_view/driver/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +8,11 @@ import 'package:markdown/markdown.dart' as md;
 
 class MaterialProductDescriptionLayer extends StatelessWidget {
   final Function(ScrollNotification) onScrollAction;
+  final bool isPageReady;
   const MaterialProductDescriptionLayer({
     super.key,
     required this.onScrollAction,
+    required this.isPageReady,
   });
 
   @override
@@ -42,46 +44,47 @@ class MaterialProductDescriptionLayer extends StatelessWidget {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: .topLeft,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.heightOf(context) * .5,
-                      minHeight: MediaQuery.heightOf(context) * .3,
-                    ),
-                    child: NotificationListener(
-                      onNotification: (ScrollNotification notification) {
-                        onScrollAction(notification);
-                        return false;
-                      },
-                      child: SingleChildScrollView(
-                        child: Column(
-                          spacing: 8,
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              '   Description',
-                              style: TextStyle(fontWeight: .bold),
-                            ),
-                            MarkdownBody(
-                              selectable: true,
-                              data: context
-                                  .read<ProductViewCubit>()
-                                  .state
-                                  .product!
-                                  .description,
-                              builders: {'latex': LatexElementBuilder()},
-                              extensionSet: md.ExtensionSet(
-                                [LatexBlockSyntax()],
-                                [LatexInlineSyntax()],
+                if (isPageReady)
+                  Align(
+                    alignment: .topLeft,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.heightOf(context) * .5,
+                        minHeight: MediaQuery.heightOf(context) * .3,
+                      ),
+                      child: NotificationListener(
+                        onNotification: (ScrollNotification notification) {
+                          onScrollAction(notification);
+                          return false;
+                        },
+                        child: SingleChildScrollView(
+                          child: Column(
+                            spacing: 8,
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                '   Description',
+                                style: TextStyle(fontWeight: .bold),
                               ),
-                            ),
-                          ],
+                              MarkdownBody(
+                                selectable: true,
+                                data: context
+                                    .read<ProductViewCubit>()
+                                    .state
+                                    .product!
+                                    .description,
+                                builders: {'latex': LatexElementBuilder()},
+                                extensionSet: md.ExtensionSet(
+                                  [LatexBlockSyntax()],
+                                  [LatexInlineSyntax()],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

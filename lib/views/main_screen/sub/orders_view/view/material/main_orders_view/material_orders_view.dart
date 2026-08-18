@@ -1,4 +1,4 @@
-import 'package:crabpay/core/custom_ui_elements/custom_faster_page_scroll_physics.dart';
+import 'package:crabpay/views/custom_ui_elements/custom_faster_page_scroll_physics.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/driver/cubit.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/main_orders_view/material_custom_orders_view_appbar.dart';
 import 'package:crabpay/views/main_screen/sub/orders_view/view/material/main_orders_view/material_custom_orders_view_page_bar.dart';

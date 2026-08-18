@@ -134,7 +134,9 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       if ((details.primaryVelocity ?? 0) < -200) {
         _productViewCubit.setLayer(true);
       } else if ((details.primaryVelocity ?? 0) > 200) {
-        if (_productViewCubit.state.layer == ProductViewLayers.groundLayer) {
+        if (_productViewCubit.state.layer ==
+                ProductViewLayers.descriptionLayer ||
+            _productViewCubit.state.layer == ProductViewLayers.groundLayer) {
           context.pop();
         }
         _productViewCubit.setLayer(false);
@@ -155,19 +157,11 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
 
   void _onFavoritePressed(BuildContext context) {
     _productViewCubit.setFavoriteLoadingStateTrue();
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'ProductViewDriver onFavoritePressed',
-      data: {
-        'isAnonymous': _productViewCubit.state.isAnonymous,
-        'isBeingLoaded': _productViewCubit.state.isLoading,
-        'isFavorite': _productViewCubit.state.isFavorite,
-      },
-    );
     if (_productViewCubit.state.isAnonymous) {
       Fluttertoast.showToast(msg: 'Sign In');
       return;
     }
-    if (_productViewCubit.state.isLoading) {
+    if (_productViewCubit.state.isFavoriteLoading) {
       Fluttertoast.showToast(msg: 'Please, wait');
       return;
     }
@@ -251,6 +245,10 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
     }
   }
 
+  void _onPageTransitionEnd() {
+    _productViewCubit.setPageReadyTrue();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -286,6 +284,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
               onUserInput: (p0, p1) =>
                   _onUserInput(context: context, fieldName: p0, inputData: p1),
               onScrollAction: (p0) => _scrollAction(p0, context),
+              onPageTransitionEnd: _onPageTransitionEnd,
             );
           },
         ),
