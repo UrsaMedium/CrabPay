@@ -3,12 +3,12 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/home_page/home_page_driver.dart';
-import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_driver.dart';
-import 'package:crabpay/views/main_screen/view/material_main_screen_view.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/store_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/home_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/cart_page_driver.dart';
+import 'package:crabpay/views/main_screen/view/material/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
