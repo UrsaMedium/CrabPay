@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crabpay/views/custom_ui_elements/hero_flight_observer.dart';
-import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/utilities/hero_flight_observer.dart';
+import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/driver/product_cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/view/material/material_product_buy_layer.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/view/material/material_product_description_layer.dart';

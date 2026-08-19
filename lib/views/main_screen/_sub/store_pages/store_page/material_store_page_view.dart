@@ -1,6 +1,6 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/utilities.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/store_search_bar_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/store_page_search/store_search_bar_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 
