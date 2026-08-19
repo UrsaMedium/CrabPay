@@ -1,21 +1,18 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
+import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialAppNavBar extends StatelessWidget {
-  final int currentIndex;
   final Function(int) onTap;
-  const MaterialAppNavBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+  const MaterialAppNavBar({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = context.select<MainScreenCubit, int>(
+      (cubit) => cubit.state.page,
+    );
     final double alignmentByX = -1 + (currentIndex * (2 / 3));
     return Stack(
       children: [
@@ -127,9 +124,12 @@ class MaterialAppNavBar extends StatelessWidget {
                           isSelected: currentIndex == 2,
                           onTap: () => onTap(2),
                         ),
-                        BlocBuilder<CartBloc, CartState>(
-                          builder: (context, state) {
-                            final itemsCount = state.userCartItemAmount ?? 0;
+                        Builder(
+                          builder: (context) {
+                            final itemsCount = context
+                                .select<MainScreenCubit, int>(
+                                  (cubit) => cubit.state.userCartItemAmount,
+                                );
                             return Badge(
                               alignment: .center,
                               offset: Offset(16, -20),

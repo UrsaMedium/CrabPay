@@ -1,8 +1,8 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
+import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/support_page/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/main_screen/sub/store_pages/store_page/store_page_driver.dart';
@@ -11,6 +11,7 @@ import 'package:crabpay/views/main_screen/sub/store_pages/cart_page/cart_page_dr
 import 'package:crabpay/views/main_screen/view/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,17 @@ class MainScreenDriver extends StatefulWidget {
 
 class _MainScreenDriverState extends State<MainScreenDriver> {
   late final PageController _pageController;
-  bool _isSyncingByNavBarTap = false;
-  final GlobalKey profileIconButtonKey = GlobalKey();
+  late final MainScreenCubit _mainScreenCubit;
 
   @override
   void initState() {
     _pageController = PageController(
       initialPage: widget.navigationShell.currentIndex,
+    );
+    _mainScreenCubit = MainScreenCubit(
+      globalKey: GlobalKey(),
+      authBloc: context.read<AuthBloc>(),
+      cartBloc: context.read<CartBloc>(),
     );
     super.initState();
   }
@@ -39,6 +44,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   @override
   void dispose() {
     _pageController.dispose();
+    _mainScreenCubit.close();
     super.dispose();
   }
 
@@ -47,7 +53,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     super.didUpdateWidget(oldWidget);
     if (_pageController.hasClients &&
         _pageController.page?.round() != widget.navigationShell.currentIndex &&
-        !_isSyncingByNavBarTap) {
+        !_mainScreenCubit.state.isSyncingByNavBarTap) {
       _pageController.animateToPage(
         widget.navigationShell.currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -63,39 +69,46 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     CartPageDriver(),
   ];
 
-  void _onPageSwiped(int index, MainScreenCubit cubit) {
-    if (_isSyncingByNavBarTap) return;
+  void _onPageSwiped(int index) {
+    if (_mainScreenCubit.state.isSyncingByNavBarTap) return;
     widget.navigationShell.goBranch(index);
-    cubit.onPageSwipe(index);
+    _mainScreenCubit.onPageSwipe(index);
   }
 
-  void _onPageSelected(int index, MainScreenCubit cubit) async {
+  void _onPageSelected(int index) async {
     if (index == widget.navigationShell.currentIndex) {
       widget.navigationShell.goBranch(index, initialLocation: true);
       return;
     }
-    setState(() => _isSyncingByNavBarTap = true);
+    _mainScreenCubit.setSyncByNavBarState(true);
     widget.navigationShell.goBranch(index);
-    cubit.onPageSwipe(index);
+    _mainScreenCubit.onPageSwipe(index);
     await _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-    if (mounted) {
-      setState(() => _isSyncingByNavBarTap = false);
-    }
+    _mainScreenCubit.setSyncByNavBarState(false);
   }
 
-  void _onProfileIconPressed({
-    required bool isLoggedIn,
-    required BuildContext context,
-    required Offset buttonCenter,
-  }) {
-    if (isLoggedIn) {
+  void _onProfileIconPressed({required BuildContext context}) {
+    if (_mainScreenCubit.state.isLoggedIn) {
       context.push(AppRoutes.profileSheet.path);
     } else {
-      context.push(AppRoutes.login.path, extra: buttonCenter);
+      final renderBox =
+          _mainScreenCubit.state.profileIconButtonKey.currentContext
+                  ?.findRenderObject()
+              as RenderBox?;
+      if (renderBox == null) {
+        Fluttertoast.showToast(msg: 'Login Button Error');
+        return;
+      }
+      final position = renderBox.localToGlobal(Offset.zero);
+      final centerOffset = Offset(
+        position.dx + (renderBox.size.width / 2),
+        position.dy + (renderBox.size.height / 2),
+      );
+      context.push(AppRoutes.login.path, extra: centerOffset);
     }
   }
 
@@ -107,92 +120,53 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     context.push(AppRoutes.adminTools.path);
   }
 
-  bool _isLoggedIn(AuthState authState) {
-    return !(authState.currentUser.email == null ||
-        authState.currentUser.isAnonymous);
-  }
-
-  int prevPage = 0;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        return BlocProvider(
-          create: (_) => MainScreenCubit(),
-          child: BlocConsumer<MainScreenCubit, MainScreenState>(
-            listener: (context, state) {
-              final userId = context.read<AuthBloc>().state.currentUser.id;
-              switch (state.page) {
-                case 0:
-                  context.read<DatabaseBloc>().add(
-                    DatabaseEventFetchUserPreferences(userId: userId),
-                  );
-                  break;
-                case 1:
-                  break;
-                case 2:
-                  break;
-                case 3:
-                  context.read<CartBloc>().add(
-                    CartEventFetchCartItems(userId: userId),
-                  );
-                  break;
-                default:
-              }
-            },
-            builder: (context, viewState) {
-              final cubit = context.read<MainScreenCubit>();
-              final itemsCount = context.select<CartBloc, int>(
-                (bloc) => bloc.state.userCartItemAmount ?? 0,
-              );
-
-              if (defaultTargetPlatform == TargetPlatform.iOS) {
-                // cupertino
-              }
-              return MaterialMainScreenView(
-                itemsCount: itemsCount,
-                onPageSelected: (index) => _onPageSelected(index, cubit),
-                onPageSwiped: (index) => _onPageSwiped(index, cubit),
-                onProfileIconPressed: (Offset center) => _onProfileIconPressed(
-                  isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
-                  context: context,
-                  buttonCenter: center,
-                ),
-                pageController: _pageController,
-                pageIndex: viewState.page,
-                pages: _pages,
-                isLoggedIn: _isLoggedIn(context.read<AuthBloc>().state),
-                onOrdersPressed: () => _onOrdersPressed(context),
-                onAdminPressed: () => _onAdminPressed(context),
-                isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
-                profileIconButtonKey: profileIconButtonKey,
-              );
-            },
-          ),
-        );
-      },
+    return BlocProvider.value(
+      value: _mainScreenCubit,
+      child: BlocListener<MainScreenCubit, MainScreenState>(
+        listenWhen: (previous, current) => current.page != previous.page,
+        listener: (context, state) {
+          if (state.currentUser != null) {
+            switch (state.page) {
+              case 0:
+                context.read<DatabaseBloc>().add(
+                  DatabaseEventFetchUserPreferences(
+                    userId: state.currentUser!.id,
+                  ),
+                );
+                break;
+              case 1:
+                break;
+              case 2:
+                break;
+              case 3:
+                context.read<CartBloc>().add(
+                  CartEventFetchCartItems(userId: state.currentUser!.id),
+                );
+                break;
+              default:
+            }
+          }
+        },
+        child: Builder(
+          builder: (context) {
+            if (defaultTargetPlatform == TargetPlatform.iOS) {
+              // cupertino
+            }
+            return MaterialMainScreenView(
+              onPageSelected: (index) => _onPageSelected(index),
+              onPageSwiped: (index) => _onPageSwiped(index),
+              onProfileIconPressed: () =>
+                  _onProfileIconPressed(context: context),
+              pageController: _pageController,
+              pages: _pages,
+              onOrdersPressed: () => _onOrdersPressed(context),
+              onAdminPressed: () => _onAdminPressed(context),
+            );
+          },
+        ),
+      ),
     );
-  }
-}
-
-@immutable
-class MainScreenState {
-  final int page;
-
-  const MainScreenState({this.page = 0});
-
-  MainScreenState copyWith({int? page}) {
-    return MainScreenState(page: page ?? this.page);
-  }
-}
-
-class MainScreenCubit extends Cubit<MainScreenState> {
-  MainScreenCubit({int initialPage = 0})
-    : super(MainScreenState(page: initialPage));
-
-  void onPageSwipe(int index) {
-    if (state.page != index) {
-      emit(state.copyWith(page: index));
-    }
   }
 }

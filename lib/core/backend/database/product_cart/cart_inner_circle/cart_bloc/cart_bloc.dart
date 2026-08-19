@@ -61,6 +61,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(
         state.copyWith(
           isCartStreaming: IsCartStreaming.yes,
+          states: CartStates.updatedUserCartItemCount,
           userCartItemAmount: event.amount,
         ),
       );

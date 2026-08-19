@@ -1,29 +1,21 @@
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
-import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MaterialMainScreenCustomAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final double height;
-  final bool isAdmin;
-  final bool isLoggedIn;
   final VoidCallback onAdminPressed;
   final VoidCallback onOrdersPressed;
-  final Function(Offset) onProfileIconPressed;
-  final GlobalKey profileIconButtonKey;
+  final VoidCallback onProfileIconPressed;
   const MaterialMainScreenCustomAppBar({
     super.key,
     this.height = kToolbarHeight,
-    required this.isAdmin,
-    required this.isLoggedIn,
     required this.onAdminPressed,
     required this.onOrdersPressed,
     required this.onProfileIconPressed,
-    required this.profileIconButtonKey,
   });
 
   @override
@@ -94,62 +86,56 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      '🦀 Crab Pay',
-                      style: TextStyle(
-                        color: context.appColorScheme.primary,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  Spacer(flex: 1),
-                  if (isAdmin)
-                    IconButton(
-                      onPressed: onAdminPressed,
-                      icon: Icon(Icons.settings),
-                    ),
-                  if (isLoggedIn)
-                    IconButton(
-                      onPressed: onOrdersPressed,
-                      icon: Icon(Icons.cases_rounded),
-                    ),
-                  isLoggedIn
-                      ? IconButton(
-                          onPressed: () => onProfileIconPressed(Offset(0, 0)),
-                          icon: Icon(Icons.account_circle_rounded),
-                        )
-                      : IconButton(
-                          key: profileIconButtonKey,
-                          onPressed: () {
-                            final renderBox =
-                                profileIconButtonKey.currentContext
-                                        ?.findRenderObject()
-                                    as RenderBox?;
-                            if (renderBox == null) {
-                              getIt<InnerLoggerHandler>().logInfo(
-                                message: 'Login Button Error',
-                              );
-                              Fluttertoast.showToast(msg: 'Login Button Error');
-                              return;
-                            }
-                            final position = renderBox.localToGlobal(
-                              Offset.zero,
-                            );
-                            final centerOffset = Offset(
-                              position.dx + (renderBox.size.width / 2),
-                              position.dy + (renderBox.size.height / 2),
-                            );
-                            onProfileIconPressed(centerOffset);
-                          },
-                          icon: Icon(Icons.account_circle_outlined),
+              Builder(
+                builder: (context) {
+                  final isAdmin = context.select<MainScreenCubit, bool>(
+                    (cubit) => cubit.state.isAdmin,
+                  );
+                  final isLoggedIn = context.select<MainScreenCubit, bool>(
+                    (cubit) => cubit.state.isLoggedIn,
+                  );
+                  final profileIconButtonKey = context
+                      .read<MainScreenCubit>()
+                      .state
+                      .profileIconButtonKey;
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          '🦀 Crab Pay',
+                          style: TextStyle(
+                            color: context.appColorScheme.primary,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                  SizedBox(width: 8),
-                ],
+                      ),
+                      Spacer(flex: 1),
+                      if (isAdmin)
+                        IconButton(
+                          onPressed: onAdminPressed,
+                          icon: Icon(Icons.settings),
+                        ),
+                      if (isLoggedIn)
+                        IconButton(
+                          onPressed: onOrdersPressed,
+                          icon: Icon(Icons.cases_rounded),
+                        ),
+                      isLoggedIn
+                          ? IconButton(
+                              onPressed: onProfileIconPressed,
+                              icon: Icon(Icons.account_circle_rounded),
+                            )
+                          : IconButton(
+                              key: profileIconButtonKey,
+                              onPressed: onProfileIconPressed,
+                              icon: Icon(Icons.account_circle_outlined),
+                            ),
+                      SizedBox(width: 8),
+                    ],
+                  );
+                },
               ),
             ],
           ),

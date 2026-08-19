@@ -4,43 +4,30 @@ import 'package:crabpay/views/main_screen/view/material_main_screen_custom_app_b
 import 'package:flutter/material.dart';
 
 class MaterialMainScreenView extends StatelessWidget {
-  final int itemsCount;
-  final int pageIndex;
-  final Function(Offset) onProfileIconPressed;
+  final VoidCallback onProfileIconPressed;
   final VoidCallback onOrdersPressed;
   final VoidCallback onAdminPressed;
   final Function(int) onPageSelected;
   final Function(int) onPageSwiped;
   final PageController pageController;
   final List<Widget> pages;
-  final bool isLoggedIn;
-  final bool isAdmin;
-  final GlobalKey profileIconButtonKey;
   const MaterialMainScreenView({
     super.key,
     required this.onProfileIconPressed,
-    required this.pageIndex,
     required this.onPageSelected,
-    required this.itemsCount,
     required this.pageController,
     required this.onPageSwiped,
     required this.pages,
-    required this.isLoggedIn,
     required this.onOrdersPressed,
     required this.onAdminPressed,
-    required this.isAdmin,
-    required this.profileIconButtonKey,
   });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MaterialMainScreenCustomAppBar(
-        isAdmin: isAdmin,
-        isLoggedIn: isLoggedIn,
         onAdminPressed: onAdminPressed,
         onOrdersPressed: onOrdersPressed,
         onProfileIconPressed: onProfileIconPressed,
-        profileIconButtonKey: profileIconButtonKey,
       ),
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -57,10 +44,7 @@ class MaterialMainScreenView extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: MaterialAppNavBar(
-        currentIndex: pageIndex,
-        onTap: onPageSelected,
-      ),
+      bottomNavigationBar: MaterialAppNavBar(onTap: onPageSelected),
     );
   }
 }

@@ -18,11 +18,12 @@ enum CartStates {
   signedOutUserCheckouts,
   fetchedProductCartItemCount,
   fetchedUserCartItemCount,
+  updatedUserCartItemCount,
   faildFetchedProductCartItemCount,
   faildToFetchUserCartItemCount,
   deletedLastAddedProductCartItem,
   failedToDeleteLastAddedProductCartItem,
-  searchedOrders
+  searchedOrders,
 }
 
 enum IsCartStreaming { yes, no }
