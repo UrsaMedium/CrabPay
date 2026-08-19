@@ -30,11 +30,7 @@ class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDri
 
   @override
   void initState() {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'StoreSearchBarDriver initState',
-    );
     _universalController = TextEditingController();
-
     _keyboardDetectionController = KeyboardDetectionController(
       onChanged: (state) => _keyboardState = state,
     );

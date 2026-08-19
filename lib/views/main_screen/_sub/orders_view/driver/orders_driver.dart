@@ -3,7 +3,6 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/ch
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
@@ -31,16 +30,14 @@ class OrdersViewDriver extends StatefulWidget {
 
 class _OrdersViewDriverState extends State<OrdersViewDriver> {
   late final OrdersViewCubit _ordersViewCubit;
-  late final List<Product> _products;
   late final PageController _pageController;
 
   @override
   void initState() {
-    _products = context.read<DatabaseBloc>().state.products ?? [];
     _ordersViewCubit = OrdersViewCubit(
       chatBloc: context.read<ChatBloc>(),
       cartBloc: context.read<CartBloc>(),
-      products: _products,
+      products: context.read<DatabaseBloc>().state.products ?? [],
     );
     context.read<CartBloc>().add(CartEventFlushOrders());
     context.read<CartBloc>().add(
@@ -259,7 +256,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
             builder: (context) {
               //
               if (defaultTargetPlatform == TargetPlatform.iOS) {
-                // return CupertinoOrdersView(); 
+                // return CupertinoOrdersView();
               }
 
               return MaterialOrdersView(

@@ -72,6 +72,8 @@ class SupportPageCubit extends Cubit<SupportPageState> {
            currentUser: user,
          ),
        ) {
+    final msgs = chatBloc.state.messages;
+    emit(state.copyWith(messages: msgs));
     _chatSubscription = _chatBloc.stream.listen((chatState) {
       if (chatState.status == ChatStates.messagesUpdated) {
         _onNewMessage(chatState.messages ?? []);

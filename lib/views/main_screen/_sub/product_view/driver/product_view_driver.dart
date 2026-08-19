@@ -46,10 +46,6 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
         .firstOrNull;
 
     if (theProduct == null) {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'ProductViewDriver product not found',
-        data: {'productId': widget.productId},
-      );
       context.go(AppRoutes.home.path);
     }
 
@@ -217,7 +213,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
         productId: _productViewCubit.state.product?.id ?? 'error',
         productName: _productViewCubit.state.product?.name ?? 'error',
         purchaseData: _productViewCubit.state.retrievedData ?? {},
-        currency: 'rebDefault',
+        currency: 'rubDefault',
         checkoutPrice: _productViewCubit.state.precalculatedPrice,
         status: 'created',
         createdAt: DateTime.now(),
@@ -251,43 +247,27 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        getIt<InnerLoggerHandler>().logBreadcrumb(
-          message: 'ProductViewDriver onPopInvokedWithResult',
-          data: {'didPop': didPop, 'result': result},
-        );
-        if (didPop) {
-          return;
-        }
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
-      },
-      child: BlocProvider.value(
-        value: _productViewCubit,
-        child: Builder(
-          builder: (context) {
-            return MaterialProductView(
-              tag: heroTag,
-              onAdminProductPanelPressed: _onAdminProductPanelPressed,
-              onBackButtonPressed: _onBackButtonPressed,
-              onFavoritePressed: () => _onFavoritePressed(context),
-              onVerticalSwipe: (p0) => _onVerticalSwipe(p0, context),
-              onAddCartItemPressed: () => _onAddCartItemPressed(context),
-              onAddFieldPressed: () => _onAddFieldPressed(context),
-              onCartIconPressed: () => _onCartIconPressed(context),
-              onDeleteLastAddedItem: () => _onDeleteLastAddedItem(context),
-              onResetImageFieldPressed: () =>
-                  _onResetImageFieldPressed(context),
-              onUserInput: (p0, p1) =>
-                  _onUserInput(context: context, fieldName: p0, inputData: p1),
-              onScrollAction: (p0) => _scrollAction(p0, context),
-              onPageTransitionEnd: _onPageTransitionEnd,
-            );
-          },
-        ),
+    return BlocProvider.value(
+      value: _productViewCubit,
+      child: Builder(
+        builder: (context) {
+          return MaterialProductView(
+            tag: heroTag,
+            onAdminProductPanelPressed: _onAdminProductPanelPressed,
+            onBackButtonPressed: _onBackButtonPressed,
+            onFavoritePressed: () => _onFavoritePressed(context),
+            onVerticalSwipe: (p0) => _onVerticalSwipe(p0, context),
+            onAddCartItemPressed: () => _onAddCartItemPressed(context),
+            onAddFieldPressed: () => _onAddFieldPressed(context),
+            onCartIconPressed: () => _onCartIconPressed(context),
+            onDeleteLastAddedItem: () => _onDeleteLastAddedItem(context),
+            onResetImageFieldPressed: () => _onResetImageFieldPressed(context),
+            onUserInput: (p0, p1) =>
+                _onUserInput(context: context, fieldName: p0, inputData: p1),
+            onScrollAction: (p0) => _scrollAction(p0, context),
+            onPageTransitionEnd: _onPageTransitionEnd,
+          );
+        },
       ),
     );
   }

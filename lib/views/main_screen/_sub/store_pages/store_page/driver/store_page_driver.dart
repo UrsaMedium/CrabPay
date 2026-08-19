@@ -1,13 +1,11 @@
 import 'dart:async';
-
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/material_store_page_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,29 +18,26 @@ class StorePageDriver extends StatefulWidget {
 
 class _StorePageDriverState extends State<StorePageDriver>
     with AutomaticKeepAliveClientMixin {
-  Completer<void>? _refreshCompleter;
-  List<Product>? products;
-  List<Product>? filterdProductList;
-
   @override
   bool get wantKeepAlive => true;
 
+  late final StorePageCubit _storePageCubit;
+  Completer<void>? _refreshCompleter;
+
+  @override
+  void initState() {
+    _storePageCubit = StorePageCubit(dbBLoc: context.read<DatabaseBloc>());
+    super.initState();
+  }
+
   Future<void> _reFresher(BuildContext context) async {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'StorePageDriver _reFresher',
-    );
     _refreshCompleter = Completer();
     context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
     await _refreshCompleter!.future;
   }
 
   void _onSearchSubmitedCallBack(List<Product> filteredList) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'StorePageDriver _onSearchSubmitedCallBack',
-    );
-    setState(() {
-      filterdProductList = filteredList;
-    });
+    _storePageCubit.setFilteredList(filteredList);
   }
 
   @override
@@ -57,25 +52,13 @@ class _StorePageDriverState extends State<StorePageDriver>
           _refreshCompleter!.complete();
         }
       },
-      child: BlocProvider(
-        create: (_) => StorePageCubit(),
-        child: BlocBuilder<StorePageCubit, StorePageState>(
-          builder: (context, viewState) {
-            products = context.select<DatabaseBloc, List<Product>>(
-              (bloc) => bloc.state.products ?? [],
-            );
-
-            if (defaultTargetPlatform == TargetPlatform.iOS) {
-              // cupertino
-            }
-
+      child: BlocProvider.value(
+        value: _storePageCubit,
+        child: Builder(
+          builder: (context) {
             return MaterialStorePageView(
               onOpenProductCardCallBack: openProductCardCallBack,
-              products: (filterdProductList?.isEmpty ?? true)
-                  ? products ?? []
-                  : filterdProductList!,
               reFresher: () => _reFresher(context),
-              // filterdProductList: filterdProductList ?? [],
               onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
             );
           },
@@ -83,20 +66,4 @@ class _StorePageDriverState extends State<StorePageDriver>
       ),
     );
   }
-}
-
-class StorePageState {
-  final List<Product>? filterdProductList;
-
-  StorePageState({this.filterdProductList});
-
-  StorePageState copyWith({List<Product>? filterdProductList}) {
-    return StorePageState(
-      filterdProductList: filterdProductList ?? this.filterdProductList,
-    );
-  }
-}
-
-class StorePageCubit extends Cubit<StorePageState> {
-  StorePageCubit() : super(StorePageState());
 }

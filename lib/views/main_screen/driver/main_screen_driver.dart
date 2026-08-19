@@ -5,7 +5,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/driver/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/store_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/view/material/material_main_screen_view.dart';
