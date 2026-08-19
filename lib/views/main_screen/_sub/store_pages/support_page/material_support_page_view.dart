@@ -1,43 +1,43 @@
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/views/custom_ui_elements/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/chat_bubble.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/driver/support_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialSupportPageView extends StatelessWidget {
-  final List<ChatMessage> messages;
-  final TextEditingController textEditingController;
-  final ScrollController scrollController;
   final VoidCallback onSendPressed;
-  final AppAuthUser currentUser;
-  final bool showDownArrow;
   final VoidCallback onDonwArrowPressed;
   final VoidCallback onStartChatPressed;
-  final bool isChatStarted;
   const MaterialSupportPageView({
     super.key,
-    required this.messages,
-    required this.textEditingController,
     required this.onSendPressed,
-    required this.currentUser,
-    required this.scrollController,
-    required this.showDownArrow,
     required this.onDonwArrowPressed,
     required this.onStartChatPressed,
-    required this.isChatStarted,
   });
 
   @override
   Widget build(BuildContext context) {
+    final messages = context.select<SupportPageCubit, List<ChatMessage>>(
+      (cubit) => cubit.state.messages ?? [],
+    );
+    final isChatStarted = context.select<SupportPageCubit, bool>(
+      (cubit) => cubit.state.isSubscribed,
+    );
+    final showDownArrow = context.select<SupportPageCubit, bool>(
+      (cubit) => cubit.state.showDownScrollArrow,
+    );
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(left: 4, right: 4),
         child: Stack(
           children: [
             ListView.builder(
-              controller: scrollController,
+              controller: context
+                  .read<SupportPageCubit>()
+                  .state
+                  .scrollController,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               // addAutomaticKeepAlives: true,
               reverse: true,
@@ -51,7 +51,7 @@ class MaterialSupportPageView extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ChatBubbleDriver(
                   message: messages[messages.length - 1 - index],
-                  author: currentUser,
+                  author: context.read<SupportPageCubit>().state.currentUser,
                 );
               },
             ),
@@ -190,7 +190,10 @@ class MaterialSupportPageView extends StatelessWidget {
                                 Expanded(
                                   child: TextField(
                                     enabled: isChatStarted,
-                                    controller: textEditingController,
+                                    controller: context
+                                        .read<SupportPageCubit>()
+                                        .state
+                                        .messageInputController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     minLines: 1,

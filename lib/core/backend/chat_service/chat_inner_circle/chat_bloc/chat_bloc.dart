@@ -43,16 +43,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(
         state.copyWith(isSubscribed: false, status: ChatStates.unsubscribed),
       );
-      _messagesSubscription = _chatHandler
-          .subscribeToMessages(threadId: event.threadId)
-          .listen(
-            (messages) {
-              add(ChatEventMessagesUpdated(messages: messages));
-            },
-            onError: (error) {
-              developer.log('Chat stream error: $error');
-            },
-          );
+      try {
+        _messagesSubscription = _chatHandler
+            .subscribeToMessages(threadId: event.threadId)
+            .listen(
+              (messages) {
+                add(ChatEventMessagesUpdated(messages: messages));
+              },
+              onError: (error) {
+                developer.log('Chat stream error: $error');
+              },
+            );
+        emit(state.copyWith(isSubscribed: true, status: ChatStates.subscribed));
+      } catch (e) {
+        emit(
+          state.copyWith(isSubscribed: false, status: ChatStates.unsubscribed),
+        );
+        rethrow;
+      }
     });
 
     // Handle Incoming Stream Updates ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
