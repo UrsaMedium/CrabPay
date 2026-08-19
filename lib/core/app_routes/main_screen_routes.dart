@@ -3,7 +3,7 @@ import 'package:crabpay/views/main_screen/driver/main_screen_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/profile_sheet.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/orders_on_payment_sheet.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/home_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/driver/support_page_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_bottom_sheet_page_gorouter_interface.dart';
