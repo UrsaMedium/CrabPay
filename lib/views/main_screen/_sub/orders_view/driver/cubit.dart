@@ -7,10 +7,11 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/crab_order_model.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class OrdersViewState {
+class OrdersViewState extends Equatable {
   final int page;
   final bool isSyncingPages;
   final bool isLoadingMore;
@@ -25,7 +26,7 @@ class OrdersViewState {
   final DateTime? toDate;
   final bool isSupportMessageSending;
 
-  OrdersViewState({
+  const OrdersViewState({
     this.isLoadingMore = false,
     this.hasMoreNotDeliveredOrders = true,
     this.crabNotDeliveredOrders,
@@ -85,6 +86,23 @@ class OrdersViewState {
           isSupportMessageSending ?? this.isSupportMessageSending,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    isLoadingMore,
+    hasMoreNotDeliveredOrders,
+    crabNotDeliveredOrders,
+    page,
+    hasMoreDeliveredOrders,
+    crabDeliveredOrders,
+    isSyncingPages,
+    isSerchOpen,
+    hasMoreSearchedOrders,
+    crabSearchedOrders,
+    fromDate,
+    toDate,
+    isSupportMessageSending,
+  ];
 }
 
 class OrdersViewCubit extends Cubit<OrdersViewState> {

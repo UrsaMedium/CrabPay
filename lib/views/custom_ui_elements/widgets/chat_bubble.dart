@@ -23,6 +23,7 @@ class _ChatBubbleDriverState extends State<ChatBubbleDriver> {
       content: widget.message.content,
       isMe: widget.message.senderId == widget.author.id,
       createdAt: widget.message.createdAt,
+      sending: widget.message.sending ?? false,
     );
   }
 }
@@ -31,11 +32,13 @@ class MaterialChatBubble extends StatelessWidget {
   final bool isMe;
   final String content;
   final DateTime createdAt;
+  final bool sending;
   const MaterialChatBubble({
     super.key,
     required this.isMe,
     required this.content,
     required this.createdAt,
+    required this.sending,
   });
 
   @override
@@ -82,6 +85,14 @@ class MaterialChatBubble extends StatelessWidget {
                     fontSize: 10,
                   ),
                 ),
+                if (sending)
+                  Text(
+                    '◴',
+                    style: TextStyle(
+                      color: context.appColorScheme.onPrimary,
+                      fontSize: 13,
+                    ),
+                  ),
               ],
             ),
           ),

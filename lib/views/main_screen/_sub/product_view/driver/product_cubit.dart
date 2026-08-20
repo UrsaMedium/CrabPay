@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 enum ProductViewLayers { groundLayer, descriptionLayer, buyLayer }
 
+@immutable
 class ProductViewState extends Equatable {
   final bool isPageReady;
   final bool isAdmin;

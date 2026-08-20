@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 enum CartStates {
@@ -29,7 +30,7 @@ enum CartStates {
 enum IsCartStreaming { yes, no }
 
 @immutable
-class CartState {
+class CartState extends Equatable {
   final IsCartStreaming isCartStreaming;
   final List<CartItem>? cartItemsToBuy;
   final List<CartItem>? cartItemsOnPaymentState;
@@ -136,4 +137,21 @@ class CartState {
           : cartItemsOnPaymentState,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    cartItemsToBuy,
+    states,
+    cartItemToPush,
+    isCartStreaming,
+    productCartItemAmount,
+    userCartItemAmount,
+    notDeliveredOrders,
+    itemsOfNotDeliveredOrders,
+    cartItemsOnPaymentState,
+    deliveredOrders,
+    itemsOfDeliveredOrders,
+    searchedOrders,
+    itemsOfSearchedOrders,
+  ];
 }

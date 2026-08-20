@@ -7,6 +7,7 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 @immutable
 class SupportPageState extends Equatable {
@@ -16,6 +17,9 @@ class SupportPageState extends Equatable {
   final bool isSubscribed;
   final AppAuthUser currentUser;
   final List<ChatMessage>? messages;
+  final ChatMessage? sentMessage;
+  final bool isGettingThread;
+  final bool isSenndingMessage;
 
   const SupportPageState({
     this.showDownScrollArrow = false,
@@ -24,6 +28,9 @@ class SupportPageState extends Equatable {
     this.isSubscribed = false,
     required this.currentUser,
     this.messages,
+    this.isGettingThread = false,
+    this.isSenndingMessage = false,
+    this.sentMessage,
   });
 
   SupportPageState copyWith({
@@ -33,6 +40,9 @@ class SupportPageState extends Equatable {
     bool? isSubscribed,
     AppAuthUser? currentUser,
     List<ChatMessage>? messages,
+    bool? isGettingThread,
+    bool? isSendingMessage,
+    ChatMessage? sentMessage,
   }) {
     return SupportPageState(
       showDownScrollArrow: showDownScrollArrow ?? this.showDownScrollArrow,
@@ -42,6 +52,9 @@ class SupportPageState extends Equatable {
       isSubscribed: isSubscribed ?? this.isSubscribed,
       currentUser: currentUser ?? this.currentUser,
       messages: messages ?? this.messages,
+      isGettingThread: isGettingThread ?? this.isGettingThread,
+      isSenndingMessage: isSendingMessage ?? isSenndingMessage,
+      sentMessage: sentMessage ?? this.sentMessage,
     );
   }
 
@@ -52,7 +65,10 @@ class SupportPageState extends Equatable {
     messageInputController,
     isSubscribed,
     currentUser,
+    isGettingThread,
     messages,
+    sentMessage,
+    isSenndingMessage,
   ];
 }
 
@@ -75,16 +91,43 @@ class SupportPageCubit extends Cubit<SupportPageState> {
     final msgs = chatBloc.state.messages;
     emit(state.copyWith(messages: msgs));
     _chatSubscription = _chatBloc.stream.listen((chatState) {
-      if (chatState.status == ChatStates.messagesUpdated) {
-        _onNewMessage(chatState.messages ?? []);
-      }
-      _whatchSubStatus(chatState);
+      _syncChatBloc(chatState);
     });
+  }
+
+  void _syncChatBloc(ChatState chatState) {
+    if (chatState.status == ChatStates.messagesUpdated) {
+      _onNewMessage(chatState.messages ?? []);
+    }
+    _whatchSubStatus(chatState);
+    if (chatState.status == ChatStates.messageSent ||
+        chatState.status == ChatStates.shadowMessageSent) {
+      final msgs = state.messages == null
+          ? <ChatMessage>[]
+          : [...state.messages!];
+      if (state.sentMessage != null) {
+        msgs.add(state.sentMessage!);
+        emit(state.copyWith(isSendingMessage: false, messages: msgs));
+      } else {
+        emit(state.copyWith(isSendingMessage: false));
+      }
+    } else if (chatState.status == ChatStates.messageSentFailed ||
+        chatState.status == ChatStates.shadowMessageSentFailed) {
+      emit(state.copyWith(isSendingMessage: false));
+      Fluttertoast.showToast(msg: 'Failed to send the message :(');
+    }
   }
 
   void _whatchSubStatus(ChatState chatState) {
     if (state.isSubscribed != chatState.isSubscribed) {
-      emit(state.copyWith(isSubscribed: chatState.isSubscribed));
+      emit(
+        state.copyWith(
+          isSubscribed: chatState.isSubscribed,
+          isGettingThread: false,
+        ),
+      );
+    } else if (chatState.status == ChatStates.error) {
+      emit(state.copyWith(isGettingThread: false));
     }
   }
 
@@ -115,6 +158,28 @@ class SupportPageCubit extends Cubit<SupportPageState> {
 
   void _setArrowState(bool doShow) {
     emit(state.copyWith(showDownScrollArrow: doShow));
+  }
+
+  void setGettingThreadState(bool isGettingThread) {
+    emit(state.copyWith(isGettingThread: isGettingThread));
+  }
+
+  void setSendingMessageState(bool isSenndingMessage, String message) {
+    final thread = state.messages?.last.threadId ?? '';
+    emit(
+      state.copyWith(
+        isSendingMessage: isSenndingMessage,
+        sentMessage: ChatMessage(
+          id: 'sending',
+          threadId: thread,
+          senderId: state.currentUser.id,
+          content: message,
+          isRead: false,
+          createdAt: DateTime.now(),
+          sending: true,
+        ),
+      ),
+    );
   }
 
   @override

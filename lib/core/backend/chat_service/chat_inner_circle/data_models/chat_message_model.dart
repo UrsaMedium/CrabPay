@@ -5,6 +5,7 @@ class ChatMessage {
   final String content;
   final bool isRead;
   final DateTime createdAt;
+  final bool? sending;
 
   ChatMessage({
     required this.id,
@@ -13,6 +14,7 @@ class ChatMessage {
     required this.content,
     required this.isRead,
     required this.createdAt,
+    this.sending,
   });
 
   factory ChatMessage.intial() => ChatMessage(

@@ -41,17 +41,23 @@ class _SupportPageDriverState extends State<SupportPageDriver>
   }
 
   void _onSendPressed(BuildContext context) {
-    if (context.read<ChatBloc>().state.activeThread != null) {
-      context.read<ChatBloc>().add(
-        ChatEventSendMessage(
-          threadId: context.read<ChatBloc>().state.activeThread!.id,
-          content: _supportPageCubit.state.messageInputController.text.trim(),
-          senderId: _supportPageCubit.state.currentUser.id,
-        ),
+    if (_supportPageCubit.state.messageInputController.text.trim().isNotEmpty) {
+      _supportPageCubit.setSendingMessageState(
+        true,
+        _supportPageCubit.state.messageInputController.text.trim(),
       );
-      _supportPageCubit.state.messageInputController.clear();
-    } else {
-      Fluttertoast.showToast(msg: 'Oops, no chat thread');
+      if (context.read<ChatBloc>().state.activeThread != null) {
+        context.read<ChatBloc>().add(
+          ChatEventSendMessage(
+            threadId: context.read<ChatBloc>().state.activeThread!.id,
+            content: _supportPageCubit.state.messageInputController.text.trim(),
+            senderId: _supportPageCubit.state.currentUser.id,
+          ),
+        );
+        _supportPageCubit.state.messageInputController.clear();
+      } else {
+        Fluttertoast.showToast(msg: 'Oops, no chat thread');
+      }
     }
   }
 
@@ -60,6 +66,7 @@ class _SupportPageDriverState extends State<SupportPageDriver>
   }
 
   void _onStartChatPressed(BuildContext context) {
+    _supportPageCubit.setGettingThreadState(true);
     context.read<ChatBloc>().add(
       ChatEventInitializeThread(userId: _supportPageCubit.state.currentUser.id),
     );

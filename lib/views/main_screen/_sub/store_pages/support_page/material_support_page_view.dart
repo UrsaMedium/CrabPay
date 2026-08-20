@@ -28,6 +28,9 @@ class MaterialSupportPageView extends StatelessWidget {
     final showDownArrow = context.select<SupportPageCubit, bool>(
       (cubit) => cubit.state.showDownScrollArrow,
     );
+    final isGettingThread = context.select<SupportPageCubit, bool>(
+      (cubit) => cubit.state.isGettingThread,
+    );
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(left: 4, right: 4),
@@ -55,13 +58,14 @@ class MaterialSupportPageView extends StatelessWidget {
                 );
               },
             ),
-            if (!isChatStarted)
+            if (!isChatStarted && !isGettingThread)
               Center(
                 child: TextButton(
                   onPressed: () => onStartChatPressed(),
                   child: Text('Start The Chat'),
                 ),
               ),
+            if (isGettingThread) Center(child: CircularProgressIndicator()),
             Positioned(
               top: MediaQuery.paddingOf(context).top + 8,
               right: 32,
@@ -209,11 +213,24 @@ class MaterialSupportPageView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: isChatStarted
-                                      ? () => onSendPressed()
-                                      : null,
-                                  icon: Icon(Icons.send),
+                                Builder(
+                                  builder: (context) {
+                                    final isSendingMessage = context
+                                        .select<SupportPageCubit, bool>(
+                                          (cubit) =>
+                                              cubit.state.isSenndingMessage,
+                                        );
+                                    return IconButton(
+                                      onPressed: !isChatStarted
+                                          ? null
+                                          : isSendingMessage
+                                          ? null
+                                          : onSendPressed,
+                                      icon: isSendingMessage
+                                          ? CircularProgressIndicator()
+                                          : Icon(Icons.send),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -247,16 +264,6 @@ class MaterialSupportPageView extends StatelessWidget {
                 ],
               ),
             ),
-            // Positioned(
-            //   bottom: MediaQuery.paddingOf(context).bottom - cornerRadius,
-            //   left: 2 * cornerRadius,
-            //   right: 2 * cornerRadius,
-            //   child: Text(
-            //     '🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀',
-            //     maxLines: 1,
-            //     style: TextStyle(fontSize: 18),
-            //   ),
-            // ),
           ],
         ),
       ),
