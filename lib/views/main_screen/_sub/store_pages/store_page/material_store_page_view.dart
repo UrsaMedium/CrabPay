@@ -53,7 +53,15 @@ class MaterialStorePageView extends StatelessWidget {
                                   product: products[index * 2],
                                   additionalSuffix: 'store',
                                   openProductCardCallBack:
-                                      onOpenProductCardCallBack,
+                                      ({
+                                        required additionalSuffix,
+                                        required index,
+                                        required productId,
+                                      }) => onOpenProductCardCallBack(
+                                        additionalSuffix: additionalSuffix,
+                                        index: index,
+                                        productId: productId,
+                                      ),
                                   index: index,
                                   height: 256,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
@@ -74,7 +82,15 @@ class MaterialStorePageView extends StatelessWidget {
                                   product: products[index * 2 + 1],
                                   additionalSuffix: 'store',
                                   openProductCardCallBack:
-                                      onOpenProductCardCallBack,
+                                      ({
+                                        required additionalSuffix,
+                                        required index,
+                                        required productId,
+                                      }) => onOpenProductCardCallBack(
+                                        additionalSuffix: additionalSuffix,
+                                        index: index,
+                                        productId: productId,
+                                      ),
                                   index: index,
                                   height: 256,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
@@ -98,7 +114,16 @@ class MaterialStorePageView extends StatelessWidget {
               );
               return MaterialStoreSearchBarDriver(
                 products: products,
-                openProductCardCallBack: openProductCardCallBack,
+                openProductCardCallBack:
+                    ({
+                      required additionalSuffix,
+                      required index,
+                      required productId,
+                    }) => onOpenProductCardCallBack(
+                      additionalSuffix: additionalSuffix,
+                      index: index,
+                      productId: productId,
+                    ),
                 onSearchSubmitedCallBack: (prdcts) =>
                     onSearchSubmitedCallBack(prdcts),
               );

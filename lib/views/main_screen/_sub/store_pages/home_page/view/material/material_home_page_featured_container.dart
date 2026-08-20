@@ -63,7 +63,16 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                         ),
                       ),
                       ProductCardDriver(
-                        openProductCardCallBack: openProductCardCallBack,
+                        openProductCardCallBack:
+                            ({
+                              required additionalSuffix,
+                              required index,
+                              required productId,
+                            }) => onOpenProductCardCallBack(
+                              additionalSuffix: additionalSuffix,
+                              index: index,
+                              productId: productId,
+                            ),
                         product: featuredProducts[0],
                         additionalSuffix: 'featuredProduct',
                         index: 0,
@@ -82,7 +91,16 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                       crossAxisAlignment: .start,
                       children: [
                         ProductCardDriver(
-                          openProductCardCallBack: openProductCardCallBack,
+                          openProductCardCallBack:
+                              ({
+                                required additionalSuffix,
+                                required index,
+                                required productId,
+                              }) => onOpenProductCardCallBack(
+                                additionalSuffix: additionalSuffix,
+                                index: index,
+                                productId: productId,
+                              ),
                           product: featuredProducts[1],
                           additionalSuffix: 'featuredProduct',
                           index: 1,
@@ -95,7 +113,16 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                         ),
                         if (featuredProducts.length > 2)
                           ProductCardDriver(
-                            openProductCardCallBack: openProductCardCallBack,
+                            openProductCardCallBack:
+                                ({
+                                  required additionalSuffix,
+                                  required index,
+                                  required productId,
+                                }) => onOpenProductCardCallBack(
+                                  additionalSuffix: additionalSuffix,
+                                  index: index,
+                                  productId: productId,
+                                ),
                             product: featuredProducts[2],
                             additionalSuffix: 'featuredProduct',
                             index: 2,

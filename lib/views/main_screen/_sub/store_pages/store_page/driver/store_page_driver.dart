@@ -40,6 +40,22 @@ class _StorePageDriverState extends State<StorePageDriver>
     _storePageCubit.setFilteredList(filteredList);
   }
 
+  Future<void> _onOpenProductCardCallBack({
+    required BuildContext context,
+    required String productId,
+    required String additionalSuffix,
+    required int index,
+  }) async {
+    await openProductCardCallBack(
+      additionalSuffix: additionalSuffix,
+      context: context,
+      index: index,
+      productId: productId,
+    );
+    if (mounted) {
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -57,7 +73,17 @@ class _StorePageDriverState extends State<StorePageDriver>
         child: Builder(
           builder: (context) {
             return MaterialStorePageView(
-              onOpenProductCardCallBack: openProductCardCallBack,
+              onOpenProductCardCallBack:
+                  ({
+                    required additionalSuffix,
+                    required index,
+                    required productId,
+                  }) => _onOpenProductCardCallBack(
+                    additionalSuffix: additionalSuffix,
+                    context: context,
+                    index: index,
+                    productId: productId,
+                  ),
               reFresher: () => _reFresher(context),
               onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
             );

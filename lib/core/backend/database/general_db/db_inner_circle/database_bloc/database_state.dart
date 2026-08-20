@@ -1,6 +1,7 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/currencies_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:flutter/widgets.dart';
 
@@ -41,7 +42,7 @@ enum DatabaseStates {
 }
 
 @immutable
-class DatabaseState {
+class DatabaseState extends Equatable {
   final List<Product>? products;
   final List<Currencies>? currencies;
   // final List<ProductField>? productFields;
@@ -92,4 +93,15 @@ class DatabaseState {
           this.cachedProductImageDominantColor,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    products,
+    currencies,
+    states,
+    featuredProducts,
+    userPreferences,
+    cachedProductFields,
+    cachedProductImageDominantColor,
+  ];
 }

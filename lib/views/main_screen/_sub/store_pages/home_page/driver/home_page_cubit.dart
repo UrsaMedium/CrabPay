@@ -13,12 +13,14 @@ class HomePageState extends Equatable {
   final List<Product>? userPreferences;
   final bool isLoading;
   final double containerHalfWidth;
+  final bool isInitialized;
 
   const HomePageState({
     this.featuredProducts,
     this.userPreferences,
     this.isLoading = true,
     this.containerHalfWidth = 300,
+    this.isInitialized = false,
   });
 
   HomePageState copyWith({
@@ -26,15 +28,23 @@ class HomePageState extends Equatable {
     List<Product>? userPreferences,
     double? containerHalfWidth,
     bool? isLoading,
+    bool? isInitialized,
   }) => HomePageState(
     featuredProducts: featuredProducts ?? this.featuredProducts,
     userPreferences: userPreferences ?? this.userPreferences,
     containerHalfWidth: containerHalfWidth ?? this.containerHalfWidth,
     isLoading: isLoading ?? this.isLoading,
+    isInitialized: isInitialized ?? this.isInitialized,
   );
 
   @override
-  List<Object?> get props => [featuredProducts, userPreferences];
+  List<Object?> get props => [
+    featuredProducts,
+    userPreferences,
+    isLoading,
+    isInitialized,
+    containerHalfWidth,
+  ];
 }
 
 class HomePageCubit extends Cubit<HomePageState> {
@@ -44,21 +54,16 @@ class HomePageCubit extends Cubit<HomePageState> {
     : _dbBloc = dbBloc,
       super(const HomePageState()) {
     _dbSubscription = _dbBloc.stream.listen((dbState) {
-      if (dbState.states == DatabaseStates.featuedProductsFetched) {
-        emit(state.copyWith(featuredProducts: dbState.featuredProducts));
-      }
-      if (dbState.states == DatabaseStates.featuedProductsFetched) {
-        emit(state.copyWith(featuredProducts: dbState.featuredProducts));
-      }
-      if (dbState.states == DatabaseStates.initialized) {
-        emit(
-          state.copyWith(
-            featuredProducts: dbState.featuredProducts,
-            userPreferences: dbState.userPreferences,
-          ),
-        );
-      }
+      _syncDabaseData(dbState);
     });
+  }
+
+  void _syncDabaseData(DatabaseState dbState) {
+    if (dbState.states == DatabaseStates.initialized) {
+      emit(state.copyWith(isInitialized: true));
+    }
+    emit(state.copyWith(featuredProducts: _dbBloc.state.featuredProducts));
+    emit(state.copyWith(userPreferences: _dbBloc.state.userPreferences));
   }
 
   void setLayouts({required double containerHalfWidth}) {

@@ -40,7 +40,6 @@ class ProductCardDriver extends StatelessWidget {
       ),
     );
     openProductCardCallBack(
-      context: context,
       productId: product.id,
       additionalSuffix: additionalSuffix,
       index: index,

@@ -18,10 +18,12 @@ class MaterialStoreSearchBarDriver extends StatefulWidget {
   });
 
   @override
-  State<MaterialStoreSearchBarDriver> createState() => _MaterialStoreSearchBarDriverState();
+  State<MaterialStoreSearchBarDriver> createState() =>
+      _MaterialStoreSearchBarDriverState();
 }
 
-class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDriver> {
+class _MaterialStoreSearchBarDriverState
+    extends State<MaterialStoreSearchBarDriver> {
   late KeyboardDetectionController _keyboardDetectionController;
   late final TextEditingController _universalController;
   KeyboardState _keyboardState = KeyboardState.hidden;
@@ -95,16 +97,12 @@ class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDri
   }
 
   void _onProductSelected(BuildContext context, Product product, int index) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'StoreSearchBarDriver _onProductSelected',
-    );
     _keyBoardEventCanBeTriggered = false;
     _universalController.clear();
     setState(() {
       _isSearchOpen = false;
     });
     widget.openProductCardCallBack(
-      context: context,
       productId: product.id,
       additionalSuffix: 'storeSearch',
       index: index,
@@ -126,7 +124,8 @@ class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDri
         onOpenSearch: _onOpenSearch,
         onClear: _onClear,
         onSubmitted: _onSubmitted,
-        onProductSelected: _onProductSelected,
+        onProductSelected: (product, index) =>
+            _onProductSelected(context, product, index),
       ),
     );
   }

@@ -46,6 +46,23 @@ class _HomePageDriverState extends State<HomePageDriver>
     super.dispose();
   }
 
+  Future<void> _onOpenProductCardCallBack({
+    required BuildContext context,
+    required String productId,
+    required String additionalSuffix,
+    required int index,
+  }) async {
+    await openProductCardCallBack(
+      additionalSuffix: additionalSuffix,
+      context: context,
+      index: index,
+      productId: productId,
+    );
+    // if (mounted) {
+    //   _homePageCubit._syncDabaseData();
+    // }
+  }
+
   Future<void> _reFresher(BuildContext context) async {
     _refreshCompleter = Completer();
     context.read<DatabaseBloc>().add(
@@ -77,7 +94,17 @@ class _HomePageDriverState extends State<HomePageDriver>
             }
 
             return MaterialHomePageView(
-              onOpenProductCardCallBack: openProductCardCallBack,
+              onOpenProductCardCallBack:
+                  ({
+                    required additionalSuffix,
+                    required index,
+                    required productId,
+                  }) => _onOpenProductCardCallBack(
+                    additionalSuffix: additionalSuffix,
+                    context: context,
+                    index: index,
+                    productId: productId,
+                  ),
               reFresher: () => _reFresher(context),
             );
           },

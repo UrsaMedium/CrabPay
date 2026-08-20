@@ -19,6 +19,9 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
     final userPreferences = context.select<HomePageCubit, List<Product>>(
       (cubit) => cubit.state.userPreferences ?? [],
     );
+    final isInitialized = context.select<HomePageCubit, bool>(
+      (cubit) => cubit.state.isInitialized,
+    );
     return Container(
       decoration: BoxDecoration(
         color: context.appColorScheme.surfaceContainer,
@@ -42,8 +45,17 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                           padding: EdgeInsets.only(top: index == 0 ? 0 : 8.0),
                           child: ProductCardDriver(
                             product: userPreferences[index * 2],
-                            additionalSuffix: 'favorite',
-                            openProductCardCallBack: onOpenProductCardCallBack,
+                            additionalSuffix: 'favorite?',
+                            openProductCardCallBack:
+                                ({
+                                  required additionalSuffix,
+                                  required index,
+                                  required productId,
+                                }) => onOpenProductCardCallBack(
+                                  additionalSuffix: additionalSuffix,
+                                  index: index,
+                                  productId: productId,
+                                ),
                             index: index,
                             height: 256,
                             width: context
@@ -56,13 +68,17 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       ),
                     ],
                   )
-                : _PlaceHolder(),
+                : !isInitialized
+                ? _PlaceHolder()
+                : SizedBox(),
             Column(
               mainAxisSize: .min,
               children: [
                 Container(
                   width: context.read<HomePageCubit>().state.containerHalfWidth,
-                  margin: .only(bottom: 8),
+                  margin: .only(
+                    bottom: (isInitialized && userPreferences.isEmpty) ? 0 : 8,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: .circular(16),
                     color: context.appColorScheme.surfaceContainerHighest,
@@ -71,7 +87,9 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Favorite',
+                        (isInitialized && userPreferences.isEmpty)
+                            ? 'Favorite? :('
+                            : 'Favorite',
                         textAlign: .center,
                         style: TextStyle(
                           fontSize: 18,
@@ -90,7 +108,16 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       child: ProductCardDriver(
                         product: userPreferences[index * 2 + 1],
                         additionalSuffix: 'favorite',
-                        openProductCardCallBack: onOpenProductCardCallBack,
+                        openProductCardCallBack:
+                            ({
+                              required additionalSuffix,
+                              required index,
+                              required productId,
+                            }) => onOpenProductCardCallBack(
+                              additionalSuffix: additionalSuffix,
+                              index: index,
+                              productId: productId,
+                            ),
                         index: index,
                         height: 256,
                         width: context
@@ -101,7 +128,7 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (userPreferences.isEmpty) _PlaceHolder(),
+                if (userPreferences.isEmpty && !isInitialized) _PlaceHolder(),
               ],
             ),
           ],

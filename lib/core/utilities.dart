@@ -62,8 +62,7 @@ String dateConversion(String date) {
 }
 
 typedef OnOpenProductCardCallBack =
-    Future<void> Function({
-      required BuildContext context,
+    Function({
       required String productId,
       required String additionalSuffix,
       required int index,

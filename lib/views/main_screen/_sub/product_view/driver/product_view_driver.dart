@@ -4,8 +4,6 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/databas
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/driver/product_cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/view/material/material_product_view_ground.dart';
@@ -100,9 +98,6 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
 
   // admin
   void _onAdminProductPanelPressed() {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'ProductViewDriver onAdminProductPanelPressed',
-    );
     context.pushNamed(
       AppRoutes.updateProduct.name,
       pathParameters: {'productId': widget.productId},
@@ -141,9 +136,6 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
   }
 
   void _onBackButtonPressed() {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'ProductViewDriver onBackButtonPressed',
-    );
     if (GoRouter.of(context).canPop()) {
       context.pop();
     } else {
@@ -152,7 +144,6 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
   }
 
   void _onFavoritePressed(BuildContext context) {
-    _productViewCubit.setFavoriteLoadingStateTrue();
     if (_productViewCubit.state.isAnonymous) {
       Fluttertoast.showToast(msg: 'Sign In');
       return;
@@ -161,6 +152,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       Fluttertoast.showToast(msg: 'Please, wait');
       return;
     }
+    _productViewCubit.setFavoriteLoadingStateTrue();
     if (_productViewCubit.state.isFavorite) {
       context.read<DatabaseBloc>().add(
         DatabaseEventDeleteUserPreference(

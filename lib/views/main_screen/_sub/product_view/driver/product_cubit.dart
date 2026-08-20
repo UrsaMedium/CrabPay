@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -399,7 +398,6 @@ class ProductViewCubit extends Cubit<ProductViewState> {
   }
 
   void setPageReadyTrue() {
-    developer.log('oooooo');
     emit(state.copyWith(isPageReady: true));
   }
 

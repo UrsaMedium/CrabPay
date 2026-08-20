@@ -31,14 +31,32 @@ class MaterialHomePageView extends StatelessWidget {
             child: Column(
               children: [
                 MaterialHomePageFeaturedContainer(
-                  onOpenProductCardCallBack: onOpenProductCardCallBack,
+                  onOpenProductCardCallBack:
+                      ({
+                        required additionalSuffix,
+                        required index,
+                        required productId,
+                      }) => onOpenProductCardCallBack(
+                        additionalSuffix: additionalSuffix,
+                        index: index,
+                        productId: productId,
+                      ),
                 ),
                 Padding(
                   padding: .symmetric(horizontal: 22, vertical: 6),
                   child: Divider(),
                 ),
                 MaterialHomePageFavoriteContainer(
-                  onOpenProductCardCallBack: onOpenProductCardCallBack,
+                  onOpenProductCardCallBack:
+                      ({
+                        required additionalSuffix,
+                        required index,
+                        required productId,
+                      }) => onOpenProductCardCallBack(
+                        additionalSuffix: additionalSuffix,
+                        index: index,
+                        productId: productId,
+                      ),
                 ),
               ],
             ),
