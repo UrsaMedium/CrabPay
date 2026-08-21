@@ -7,6 +7,8 @@ import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner
 import 'package:crabpay/core/backend/authentication/auth_outer_circle/supabase_outer_auth_interface.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
 import 'package:crabpay/core/backend/chat_service/chat_outer_circle/outer_chat_handler.dart';
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/inner_connection_monitor.dart';
+import 'package:crabpay/core/backend/connection_monitoring/outer_monitor/connection_monitor_to_supabase_at_regred.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
 import 'package:crabpay/core/backend/database/general_db/db_outer_circle/outer_database_handler_with_supabase.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
@@ -21,10 +23,16 @@ void setupDependencies() {
   getIt.registerSingleton<InnerLoggerHandler>(OuterLoggerHandler());
   getIt.registerSingleton<AuthInnerInterface>(SupabaseOuterAuthInterface());
   getIt.registerSingleton<AppLifecycleService>(AppLifecycleService());
+  getIt.registerSingleton<InnerConnectionMonitor>(
+    ConnectionMonitorToSupabaseAtRegred(
+      appLifecycleService: getIt<AppLifecycleService>(),
+    ),
+  );
   //
   getIt.registerLazySingleton<InnerChatHandler>(
     () => OuterChatHandlerWithSupabase(
       appLifecycleService: getIt<AppLifecycleService>(),
+      connectionMonitor: getIt<InnerConnectionMonitor>(),
     ),
   );
   getIt.registerLazySingleton<AdminInnerChatHandler>(
@@ -41,6 +49,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<InnerCartHandler>(
     () => OuterCartHandlerWithSupabase(
       appLifecycleService: getIt<AppLifecycleService>(),
+      connectionMonitor: getIt<ConnectionMonitorToSupabaseAtRegred>(),
     ),
   );
   //

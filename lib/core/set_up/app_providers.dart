@@ -3,6 +3,9 @@ import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/admin_inner_chat_handler.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_inner_database_handler.dart';
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/connection_monitor_cubit.dart';
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/inner_connection_monitor.dart';
+import 'package:crabpay/core/backend/connection_monitoring/outer_monitor/connection_monitor_to_supabase_at_regred.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_database_handler.dart';
@@ -48,6 +51,12 @@ class AppProviders extends StatelessWidget {
         RepositoryProvider<PaymentOuterHandler>(
           create: (_) => getIt<PaymentOuterHandler>(),
         ),
+        RepositoryProvider<InnerConnectionMonitor>(
+          create: (context) => ConnectionMonitorToSupabaseAtRegred(
+            appLifecycleService: getIt<AppLifecycleService>(),
+          ),
+          dispose: (repo) => repo.dispose(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -92,6 +101,11 @@ class AppProviders extends StatelessWidget {
                 PaymentBloc(context.read<PaymentOuterHandler>()),
           ),
           BlocProvider(create: (context) => GlobalGraphicBloc()),
+          BlocProvider(
+            create: (context) => ConnectionMonitorCubit(
+              connectionMonitor: context.read<InnerConnectionMonitor>(),
+            ),
+          ),
         ],
         child: child,
       ),

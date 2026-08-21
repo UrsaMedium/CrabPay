@@ -4,6 +4,7 @@ import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/support_thread_model.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_handler.dart';
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/inner_connection_monitor.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -19,6 +20,9 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
   );
 
   //streaming--------------------------------------------------------------------
+  final InnerConnectionMonitor _connectionMonitor;
+  late final StreamSubscription<ServerConnectionStatus> _statusSub;
+
   StreamSubscription? _appLifecycleSub;
   StreamSubscription? _messagesSub;
   String? _threadId;
@@ -29,7 +33,10 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
   final AppLifecycleService _appLifecycleService;
   OuterChatHandlerWithSupabase({
     required AppLifecycleService appLifecycleService,
-  }) : _appLifecycleService = appLifecycleService {
+    required InnerConnectionMonitor connectionMonitor,
+  }) : _appLifecycleService = appLifecycleService,
+       _connectionMonitor = connectionMonitor {
+    _initConncetionMonitor();
     _initAppLifecycleService();
   }
 
@@ -38,6 +45,18 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
       if (state == AppState.active && _threadId != null && keepAlive) {
         _connectToSupabase(_threadId!);
       } else if (state == AppState.paused) {
+        _disconnectFromSupabase();
+      }
+    });
+  }
+
+  void _initConncetionMonitor() {
+    _statusSub = _connectionMonitor.statusStream.listen((connectionStatus) {
+      if (connectionStatus == ServerConnectionStatus.online &&
+          _threadId != null &&
+          keepAlive) {
+        _connectToSupabase(_threadId!);
+      } else if (connectionStatus == ServerConnectionStatus.offline) {
         _disconnectFromSupabase();
       }
     });
@@ -118,6 +137,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
     _disconnectFromSupabase();
     _appLifecycleSub?.cancel();
     _messagesControler.close();
+    _statusSub.cancel();
   }
 
   //streaming--------------------------------------------------------------------

@@ -1,3 +1,4 @@
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/connection_monitor_cubit.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
@@ -23,6 +24,16 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = context.select<MainScreenCubit, bool>(
+      (cubit) => cubit.state.isLoggedIn,
+    );
+    final profileIconButtonKey = context
+        .read<MainScreenCubit>()
+        .state
+        .profileIconButtonKey;
+    final connectionStatus = context.select<ConnectionMonitorCubit, bool>(
+      (cubit) => cubit.state.isOnline,
+    );
     return Stack(
       children: [
         Container(
@@ -58,8 +69,13 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                       child: Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color: context.appColorScheme.surfaceContainerHigh
-                              .withValues(alpha: highGraphics ? .5 : .97),
+                          color:
+                              (connectionStatus
+                                      ? context
+                                            .appColorScheme
+                                            .surfaceContainerHigh
+                                      : context.appColorScheme.errorContainer)
+                                  .withValues(alpha: highGraphics ? .5 : .97),
                         ),
                       ),
                     ),
@@ -86,53 +102,54 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                   ),
                 ),
               ),
-              Builder(
-                builder: (context) {
-                  final isLoggedIn = context.select<MainScreenCubit, bool>(
-                    (cubit) => cubit.state.isLoggedIn,
-                  );
-                  final profileIconButtonKey = context
-                      .read<MainScreenCubit>()
-                      .state
-                      .profileIconButtonKey;
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Text(
-                          '🦀 Crab Pay',
-                          style: TextStyle(
-                            color: context.appColorScheme.primary,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
+              !connectionStatus
+                  ? Center(
+                      heightFactor: 1.3,
+                      child: Text(
+                        'No Connection :(',
+                        style: TextStyle(
+                          color: context.appColorScheme.onErrorContainer,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Text(
+                            '🦀 Crab Pay',
+                            style: TextStyle(
+                              color: context.appColorScheme.primary,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
-                      ),
-                      Spacer(flex: 1),
-                      IconButton(
-                        onPressed: onSettingsPressed,
-                        icon: Icon(Icons.settings),
-                      ),
-                      if (isLoggedIn)
+                        Spacer(flex: 1),
                         IconButton(
-                          onPressed: onOrdersPressed,
-                          icon: Icon(Icons.cases_rounded),
+                          onPressed: onSettingsPressed,
+                          icon: Icon(Icons.settings),
                         ),
-                      isLoggedIn
-                          ? IconButton(
-                              onPressed: onProfileIconPressed,
-                              icon: Icon(Icons.account_circle_rounded),
-                            )
-                          : IconButton(
-                              key: profileIconButtonKey,
-                              onPressed: onProfileIconPressed,
-                              icon: Icon(Icons.account_circle_outlined),
-                            ),
-                      SizedBox(width: 8),
-                    ],
-                  );
-                },
-              ),
+                        if (isLoggedIn)
+                          IconButton(
+                            onPressed: onOrdersPressed,
+                            icon: Icon(Icons.cases_rounded),
+                          ),
+                        isLoggedIn
+                            ? IconButton(
+                                onPressed: onProfileIconPressed,
+                                icon: Icon(Icons.account_circle_rounded),
+                              )
+                            : IconButton(
+                                key: profileIconButtonKey,
+                                onPressed: onProfileIconPressed,
+                                icon: Icon(Icons.account_circle_outlined),
+                              ),
+                        SizedBox(width: 8),
+                      ],
+                    ),
             ],
           ),
         ),

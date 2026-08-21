@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
+import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/inner_connection_monitor.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
@@ -24,6 +25,8 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
   //streaming---------------------------------------------
   StreamSubscription? _appLifecycleSub;
+  final InnerConnectionMonitor _connectionMonitor;
+  late final StreamSubscription<ServerConnectionStatus> _statusSub;
   StreamSubscription? _supabaseSubToStreamUserCartItemAmount;
   StreamSubscription? _pendingOrderSub;
   String? _activeUserId;
@@ -35,7 +38,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   final AppLifecycleService _appLifecycleService;
   OuterCartHandlerWithSupabase({
     required AppLifecycleService appLifecycleService,
-  }) : _appLifecycleService = appLifecycleService {
+
+    required InnerConnectionMonitor connectionMonitor,
+  }) : _appLifecycleService = appLifecycleService,
+       _connectionMonitor = connectionMonitor {
+    _initConncetionMonitor();
     _initAppLifecycleService();
   }
 
@@ -45,6 +52,19 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         _connectToPendingOrder(_activeUserId!);
         _connectToSupabase(_activeUserId!);
       } else if (state == AppState.paused) {
+        _disconnectFromSupabase();
+        _closeSubPendingOrders();
+      }
+    });
+  }
+
+  void _initConncetionMonitor() {
+    _statusSub = _connectionMonitor.statusStream.listen((connectionStatus) {
+      if (connectionStatus == ServerConnectionStatus.online &&
+          _activeUserId != null) {
+        _connectToPendingOrder(_activeUserId!);
+        _connectToSupabase(_activeUserId!);
+      } else if (connectionStatus == ServerConnectionStatus.offline) {
         _disconnectFromSupabase();
         _closeSubPendingOrders();
       }
@@ -160,6 +180,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     _pendingOrderController.close();
     _pendingOrderSub?.cancel();
     _supabaseSubToStreamUserCartItemAmount?.cancel();
+    _statusSub.cancel();
   }
   //streaming---------------------------------------------
 
