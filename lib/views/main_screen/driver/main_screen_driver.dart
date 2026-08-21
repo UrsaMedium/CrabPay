@@ -5,7 +5,7 @@ import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/driver/s
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home_page_driver.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/cart_page_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/view/material/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,7 +135,9 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                 break;
               case 3:
                 context.read<CartBloc>().add(
-                  CartEventFetchCartItems(userId: state.currentUser!.id),
+                  CartEventFetchCartItems(
+                    userId: context.read<AuthBloc>().state.currentUser.id,
+                  ),
                 );
                 break;
               default:

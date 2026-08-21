@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
@@ -27,13 +28,14 @@ enum CartStates {
   searchedOrders,
 }
 
-enum IsCartStreaming { yes, no }
+enum IsCartStreamingUserCarItemAmount { yes, no }
+
+enum PendingOrdersState { streaming, notStreaming, updated, error }
 
 @immutable
 class CartState extends Equatable {
-  final IsCartStreaming isCartStreaming;
+  final IsCartStreamingUserCarItemAmount isCartStreaming;
   final List<CartItem>? cartItemsToBuy;
-  final List<CartItem>? cartItemsOnPaymentState;
   final PaginatedResult<String>? notDeliveredOrders;
   final PaginatedResult<String>? deliveredOrders;
   final PaginatedResult<String>? searchedOrders;
@@ -44,25 +46,29 @@ class CartState extends Equatable {
   final CartStates states;
   final int? productCartItemAmount;
   final int? userCartItemAmount;
+  //pending oredrs
+  final PendingOrdersState pendingOrdersState;
+  final List<PendingOrder>? pendingOrders;
+
   const CartState({
     this.cartItemsToBuy,
     this.states = CartStates.empty,
     this.cartItemToPush,
-    this.isCartStreaming = IsCartStreaming.no,
+    this.isCartStreaming = IsCartStreamingUserCarItemAmount.no,
     this.productCartItemAmount,
     this.userCartItemAmount,
     this.notDeliveredOrders,
     this.itemsOfNotDeliveredOrders,
-    this.cartItemsOnPaymentState,
     this.deliveredOrders,
     this.itemsOfDeliveredOrders,
     this.searchedOrders,
     this.itemsOfSearchedOrders,
+    this.pendingOrdersState = PendingOrdersState.notStreaming,
+    this.pendingOrders,
   });
 
   CartState copyWith({
     List<CartItem>? cartItemsToBuy,
-    List<CartItem>? cartItemsOnPaymentState,
     List<CartItem>? cartItemsFromSignedOutUser,
     PaginatedResult<String>? notDeliveredOrders,
     PaginatedResult<String>? deliveredOrders,
@@ -72,13 +78,16 @@ class CartState extends Equatable {
     Map<String, List<CartItem>>? itemsOfSearchedOrders,
     CartStates? states,
     CartItem? cartItemToPush,
-    IsCartStreaming? isCartStreaming,
+    IsCartStreamingUserCarItemAmount? isCartStreaming,
     int? productCartItemAmount,
     int? userCartItemAmount,
+    PendingOrdersState? pendingOrdersState,
+    List<PendingOrder>? pendingOrders,
   }) {
     return CartState(
       states: states ?? this.states,
       isCartStreaming: isCartStreaming ?? this.isCartStreaming,
+      pendingOrdersState: pendingOrdersState ?? this.pendingOrdersState,
       //
       cartItemsToBuy: cartItemsToBuy == null
           ? this.cartItemsToBuy
@@ -130,11 +139,11 @@ class CartState extends Equatable {
           : itemsOfSearchedOrders.isEmpty
           ? null
           : itemsOfSearchedOrders,
-      cartItemsOnPaymentState: cartItemsOnPaymentState == null
-          ? this.cartItemsOnPaymentState
-          : cartItemsOnPaymentState.isEmpty
+      pendingOrders: pendingOrders == null
+          ? this.pendingOrders
+          : pendingOrders.isEmpty
           ? null
-          : cartItemsOnPaymentState,
+          : pendingOrders,
     );
   }
 
@@ -148,10 +157,11 @@ class CartState extends Equatable {
     userCartItemAmount,
     notDeliveredOrders,
     itemsOfNotDeliveredOrders,
-    cartItemsOnPaymentState,
     deliveredOrders,
     itemsOfDeliveredOrders,
     searchedOrders,
     itemsOfSearchedOrders,
+    pendingOrders,
+    pendingOrdersState,
   ];
 }

@@ -17,6 +17,7 @@ class MainScreenState extends Equatable {
   final int userCartItemAmount;
   final bool isSyncingByNavBarTap;
   final GlobalKey profileIconButtonKey;
+  final int amountOfPendingOrders;
 
   const MainScreenState({
     this.page = 0,
@@ -26,6 +27,7 @@ class MainScreenState extends Equatable {
     this.isAdmin = false,
     this.isSyncingByNavBarTap = false,
     required this.profileIconButtonKey,
+    this.amountOfPendingOrders = 0,
   });
 
   MainScreenState copyWith({
@@ -36,6 +38,7 @@ class MainScreenState extends Equatable {
     bool? isAdmin,
     bool? isSyncingByNavBarTap,
     GlobalKey? profileIconButtonKey,
+    int? amountOfPendingOrders,
   }) {
     return MainScreenState(
       page: page ?? this.page,
@@ -45,6 +48,8 @@ class MainScreenState extends Equatable {
       isAdmin: isAdmin ?? this.isAdmin,
       isSyncingByNavBarTap: isSyncingByNavBarTap ?? this.isSyncingByNavBarTap,
       profileIconButtonKey: profileIconButtonKey ?? this.profileIconButtonKey,
+      amountOfPendingOrders:
+          amountOfPendingOrders ?? this.amountOfPendingOrders,
     );
   }
 
@@ -56,6 +61,7 @@ class MainScreenState extends Equatable {
     isLoggedIn,
     isAdmin,
     isSyncingByNavBarTap,
+    amountOfPendingOrders,
   ];
 }
 
@@ -86,6 +92,13 @@ class MainScreenCubit extends Cubit<MainScreenState> {
     _cartSubscription = _cartBloc.stream.listen((cartState) {
       if (cartState.states == CartStates.updatedUserCartItemCount) {
         emit(state.copyWith(userCartItemAmount: cartState.userCartItemAmount));
+      }
+      if (cartState.pendingOrdersState == PendingOrdersState.updated) {
+        emit(
+          state.copyWith(
+            amountOfPendingOrders: cartState.pendingOrders?.length ?? 0,
+          ),
+        );
       }
     });
   }

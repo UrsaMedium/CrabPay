@@ -1,24 +1,32 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
+import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_inner_interface.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_state.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   final AuthInnerInterface _authInterface;
   late final StreamSubscription<AppAuthUser> _authSubscription;
   StreamSubscription? _userCartItemAmountSub;
+  StreamSubscription? _pendingOrdersSub;
   String? _activeUserId;
+  final AppLifecycleService _appLifecycleService;
+
+  late final StreamSubscription _appLifecycleSub;
 
   CartBloc({
     required InnerCartHandler cartHandler,
     required AuthInnerInterface authInterface,
-  }) : _authInterface = authInterface,
+    required AppLifecycleService appLifecycleService,
+  }) : _appLifecycleService = appLifecycleService,
+       _authInterface = authInterface,
        super(const CartState()) {
     //streaming---------------------------------------------------------------------------------
 
@@ -33,10 +41,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       if (user.id.isNotEmpty) {
         add(CartEventStartStreamUserCartItemAmount(userId: user.id));
+        add(CartEventStartStreamPendingOrders(userId: user.id));
+      }
+    });
+
+    _appLifecycleSub = _appLifecycleService.appStateStream.listen((appState) {
+      if (appState == AppState.active) {
+        if (_activeUserId != null) {
+          add(CartEventFetchCartItems(userId: _activeUserId!));
+        }
       }
     });
 
     on<CartEventStartStreamUserCartItemAmount>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventStartStreamUserCartItemAmount fired');
+      developer.log('----');
       if (_activeUserId == event.userId && _userCartItemAmountSub != null) {
         return;
       }
@@ -60,11 +80,79 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       emit(
         state.copyWith(
-          isCartStreaming: IsCartStreaming.yes,
+          isCartStreaming: IsCartStreamingUserCarItemAmount.yes,
           states: CartStates.updatedUserCartItemCount,
           userCartItemAmount: event.amount,
         ),
       );
+    });
+
+    on<CartEventStartStreamPendingOrders>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventStartStreamPendingOrders fired');
+      developer.log('----');
+      // add(CartEventFetchCartItems(userId: event.userId));
+      if (_activeUserId == event.userId && _pendingOrdersSub != null) return;
+
+      try {
+        await _pendingOrdersSub?.cancel();
+        _activeUserId = event.userId;
+        _pendingOrdersSub = cartHandler
+            .streamPendingOrders(_activeUserId!)
+            .listen(
+              (pendingOrders) => add(
+                CartEventUpdatePendingOrders(pendingOrders: pendingOrders),
+              ),
+            );
+      } catch (e) {
+        emit(state.copyWith(pendingOrdersState: PendingOrdersState.error));
+        rethrow;
+      }
+    });
+
+    on<CartEventUpdatePendingOrders>((event, emit) async {
+      developer.log('----');
+      developer.log('CartEventUpdatePendingOrders fired');
+      developer.log('----');
+      if (_activeUserId != null) {
+        add(CartEventFetchCartItems(userId: _activeUserId!));
+      }
+      try {
+        List<PendingOrder> pendingOrders = [];
+        for (var order in event.pendingOrders) {
+          final cartItems = await cartHandler.fetchPendingCartItems(
+            order.paymentId,
+          );
+          final totalPrice = cartItems.fold(
+            .0,
+            (sum, item) => sum + item.checkoutPrice,
+          );
+          pendingOrders.add(
+            PendingOrder(
+              paymentId: order.paymentId,
+              userId: order.userId,
+              paymentLink: order.paymentLink,
+              totalPrice: totalPrice,
+              cartItems: cartItems,
+            ),
+          );
+        }
+
+        emit(
+          state.copyWith(
+            pendingOrdersState: PendingOrdersState.updated,
+            pendingOrders: pendingOrders,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(
+            pendingOrdersState: PendingOrdersState.updated,
+            pendingOrders: event.pendingOrders,
+          ),
+        );
+        rethrow;
+      }
     });
     //streaming---------------------------------------------------------------------------------
 
@@ -269,27 +357,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
-    on<CartEventFetchCartItemsOnPaymentState>((event, emit) async {
-      developer.log('----');
-      developer.log('CartEventFetchCartItemsOnPaymentState fired');
-      developer.log('----');
-      try {
-        emit(state.copyWith(states: CartStates.loading));
-        final cartItemsOnPaymentState = await cartHandler
-            .fetchCartItemsOnPyamentState(event.userId);
-
-        emit(
-          state.copyWith(
-            cartItemsOnPaymentState: cartItemsOnPaymentState,
-            states: CartStates.got,
-          ),
-        );
-      } catch (e) {
-        state.copyWith(states: CartStates.failedToGet);
-        rethrow;
-      }
-    });
-
     on<CartEventFlushData>((event, emit) {
       developer.log('----');
       developer.log('CartEventFlushData fired');
@@ -307,8 +374,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           cartItemsFromSignedOutUser: [],
           productCartItemAmount: -1,
           userCartItemAmount: -1,
-          isCartStreaming: IsCartStreaming.no,
+          isCartStreaming: IsCartStreamingUserCarItemAmount.no,
           states: CartStates.empty,
+          pendingOrdersState: PendingOrdersState.notStreaming,
+          pendingOrders: [],
         ),
       );
     });
@@ -404,6 +473,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Future<void> close() {
     _authSubscription.cancel();
     _userCartItemAmountSub?.cancel();
+    _appLifecycleSub.cancel();
     return super.close();
   }
 }

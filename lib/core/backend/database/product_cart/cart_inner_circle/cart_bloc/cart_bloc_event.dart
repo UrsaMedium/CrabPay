@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
 
 abstract class CartEvent {
   const CartEvent();
@@ -52,6 +53,16 @@ class CartEventUpdateUserCartItemAmountFromStream extends CartEvent {
   CartEventUpdateUserCartItemAmountFromStream({required this.amount});
 }
 
+class CartEventStartStreamPendingOrders extends CartEvent {
+  final String userId;
+  CartEventStartStreamPendingOrders({required this.userId});
+}
+
+class CartEventUpdatePendingOrders extends CartEvent {
+  final List<PendingOrder> pendingOrders;
+  CartEventUpdatePendingOrders({required this.pendingOrders});
+}
+
 // fetch orders from orders view which are not delivered
 class CartEventFetchNotDeliveredOrders extends CartEvent {
   final String userId;
@@ -90,12 +101,6 @@ class CartEventFetchSearchedOrders extends CartEvent {
 
 // flush orders
 class CartEventFlushOrders extends CartEvent {}
-
-// fetch items that are waiting for a payment
-class CartEventFetchCartItemsOnPaymentState extends CartEvent {
-  final String userId;
-  CartEventFetchCartItemsOnPaymentState({required this.userId});
-}
 
 // delete last added item of a certain product
 class CartEventDeleteLastAddedProductCartItem extends CartEvent {

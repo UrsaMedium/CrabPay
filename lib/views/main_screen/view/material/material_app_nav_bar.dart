@@ -130,19 +130,35 @@ class MaterialAppNavBar extends StatelessWidget {
                                 .select<MainScreenCubit, int>(
                                   (cubit) => cubit.state.userCartItemAmount,
                                 );
+                            final pendingOrders = context
+                                .select<MainScreenCubit, int>(
+                                  (cubit) => cubit.state.amountOfPendingOrders,
+                                );
                             return Badge(
                               alignment: .center,
-                              offset: Offset(16, -20),
-                              backgroundColor: context.appColorScheme.error,
-                              textColor: context.appColorScheme.onError,
+                              offset: Offset(-16, 0),
+                              backgroundColor: context.appColorScheme.secondary,
+                              textColor: context.appColorScheme.onSecondary,
                               label: Text(
-                                itemsCount > 0 ? itemsCount.toString() : '',
+                                pendingOrders > 0
+                                    ? pendingOrders.toString()
+                                    : '',
                               ),
-                              isLabelVisible: itemsCount > 0,
-                              child: MaterialAppNavBarItem(
-                                icon: Icons.shopping_cart_checkout_rounded,
-                                isSelected: currentIndex == 3,
-                                onTap: () => onTap(3),
+                              isLabelVisible: pendingOrders > 0,
+                              child: Badge(
+                                alignment: .center,
+                                offset: Offset(16, -20),
+                                backgroundColor: context.appColorScheme.error,
+                                textColor: context.appColorScheme.onError,
+                                label: Text(
+                                  itemsCount > 0 ? itemsCount.toString() : '',
+                                ),
+                                isLabelVisible: itemsCount > 0,
+                                child: MaterialAppNavBarItem(
+                                  icon: Icons.shopping_cart_checkout_rounded,
+                                  isSelected: currentIndex == 3,
+                                  onTap: () => onTap(3),
+                                ),
                               ),
                             );
                           },

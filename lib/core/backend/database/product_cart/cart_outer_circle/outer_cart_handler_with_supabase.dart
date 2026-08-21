@@ -4,6 +4,7 @@ import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/common/paginated_result_data_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
+import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/inner_cart_handler.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/core/backend/supabase/supabase_graphql_client.dart';
@@ -24,9 +25,12 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   //streaming---------------------------------------------
   StreamSubscription? _appLifecycleSub;
   StreamSubscription? _supabaseSubToStreamUserCartItemAmount;
+  StreamSubscription? _pendingOrderSub;
   String? _activeUserId;
 
   final _userCartItemAmountController = StreamController<int>.broadcast();
+  final _pendingOrderController =
+      StreamController<List<PendingOrder>>.broadcast();
 
   final AppLifecycleService _appLifecycleService;
   OuterCartHandlerWithSupabase({
@@ -38,11 +42,64 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   void _initAppLifecycleService() {
     _appLifecycleSub = _appLifecycleService.appStateStream.listen((state) {
       if (state == AppState.active && _activeUserId != null) {
+        _connectToPendingOrder(_activeUserId!);
         _connectToSupabase(_activeUserId!);
       } else if (state == AppState.paused) {
         _disconnectFromSupabase();
+        _closeSubPendingOrders();
       }
     });
+  }
+
+  @override
+  Stream<List<PendingOrder>> streamPendingOrders(String userId) {
+    _activeUserId = userId;
+    _closeSubPendingOrders();
+    _connectToPendingOrder(userId);
+
+    return _pendingOrderController.stream;
+  }
+
+  void _connectToPendingOrder(String userId) {
+    if (_pendingOrderSub != null) return;
+
+    try {
+      final supabase = Supabase.instance.client;
+      _pendingOrderSub = supabase
+          .from('user_pending_payments_table')
+          .stream(primaryKey: ['paymentId', 'userId'])
+          .eq('userId', userId)
+          .map<List<PendingOrder>>((rows) {
+            if (rows.isEmpty) return [];
+            List<PendingOrder> pendingOrders = [];
+            for (var row in rows) {
+              pendingOrders.add(
+                PendingOrder(
+                  paymentId: row['paymentId'],
+                  userId: row['userId'],
+                  paymentLink: row['paymentLink'],
+                  totalPrice: 0,
+                  cartItems: [],
+                ),
+              );
+            }
+            return pendingOrders;
+          })
+          .handleError(
+            (Object error) => _userCartItemAmountController.addError(error),
+          )
+          .listen(
+            (pendingOrders) => _pendingOrderController.add(pendingOrders),
+            onError: (e) => _pendingOrderController.addError(e),
+          );
+    } catch (e) {
+      _pendingOrderController.addError(e);
+    }
+  }
+
+  void _closeSubPendingOrders() {
+    _pendingOrderSub?.cancel();
+    _pendingOrderSub = null;
   }
 
   @override
@@ -59,12 +116,6 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     if (_supabaseSubToStreamUserCartItemAmount != null) return;
 
     try {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'exe: Start User Cart Item Amount Stream',
-        category: 'Cart Service',
-        data: {'userId': userId},
-      );
-
       final supabase = Supabase.instance.client;
 
       _supabaseSubToStreamUserCartItemAmount = supabase
@@ -92,11 +143,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
               _userCartItemAmountController.addError(error);
             },
           );
-    } catch (e, s) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'Failed synchronous setup: userCartItemAmountStream',
-        stackTrace: s,
-      );
+    } catch (e) {
       _userCartItemAmountController.addError(e);
     }
   }
@@ -110,6 +157,9 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     _disconnectFromSupabase();
     _appLifecycleSub?.cancel();
     _userCartItemAmountController.close();
+    _pendingOrderController.close();
+    _pendingOrderSub?.cancel();
+    _supabaseSubToStreamUserCartItemAmount?.cancel();
   }
   //streaming---------------------------------------------
 
@@ -301,7 +351,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
     }
   }
 
- @override
+  @override
   Future<PaginatedResult<String>> fetchSearchedOrdersIds({
     required String userId,
     String? pageToken,
@@ -327,9 +377,11 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         currentOffset = int.tryParse(pageToken) ?? 0;
       }
 
-      final StringBuffer signatureVariables = StringBuffer('\$userId: String!, \$offset: Int!');
+      final StringBuffer signatureVariables = StringBuffer(
+        '\$userId: String!, \$offset: Int!',
+      );
       final StringBuffer filterBlock = StringBuffer('userId: { eq: \$userId }');
-      
+
       final Map<String, dynamic> variables = {
         'userId': userId,
         'offset': currentOffset,
@@ -343,24 +395,25 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
       if (fromDate != null || toDate != null) {
         filterBlock.write(', latestCreatedAt: { ');
-        
+
         if (fromDate != null) {
           signatureVariables.write(', \$fromDate: Datetime!');
           filterBlock.write('gte: \$fromDate ');
           variables['fromDate'] = fromDate.toUtc().toIso8601String();
         }
-        
+
         if (toDate != null) {
           if (fromDate != null) filterBlock.write(', ');
           signatureVariables.write(', \$toDate: Datetime!');
           filterBlock.write('lte: \$toDate ');
           variables['toDate'] = toDate.toUtc().toIso8601String();
         }
-        
+
         filterBlock.write('}');
       }
 
-      final String queryDocument = '''
+      final String queryDocument =
+          '''
         query(${signatureVariables.toString()}) {
           userUniquePaymentCollection(
             first: 500,
@@ -753,22 +806,16 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   }
 
   @override
-  Future<List<CartItem>> fetchCartItemsOnPyamentState(String userId) async {
+  Future<List<CartItem>> fetchPendingCartItems(String paymentId) async {
     try {
-      getIt<InnerLoggerHandler>().logBreadcrumb(
-        message: 'Fetching cart items On Pyament State',
-        category: 'Cart Items',
-        data: {'userId': userId},
-      );
       final QueryOptions options = QueryOptions(
         document: gql(r'''
-          query($userId: String!) {
+          query($paymentId: String!) {
             cartItemCollection(
               first: 128, 
               orderBy: [{ createdAt: DescNullsLast }],
               filter: { 
-                userId: { eq: $userId }, 
-                status: { eq: "waiting for the payment" } 
+                paymentId: { eq: $paymentId },
               }
             ) {
               edges {
@@ -777,7 +824,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
             }
           }
         '''),
-        variables: {'userId': userId},
+        variables: {'paymentId': paymentId},
         fetchPolicy: FetchPolicy.networkOnly,
       );
 
@@ -787,13 +834,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
       return _dataCasting(nodes);
     } catch (e) {
-      getIt<InnerLoggerHandler>().recordException(
-        error: 'Failed to fetch cart items On Pyament State',
-        stackTrace: StackTrace.fromString(e.toString()),
-      );
-      Fluttertoast.showToast(
-        msg: 'Failed to fetch cart items On Pyament State',
-      );
+      Fluttertoast.showToast(msg: 'Failed to fetch pending orders cart items');
       rethrow;
     }
   }

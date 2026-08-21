@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,13 +11,13 @@ class CartItemWidgetDriver extends StatefulWidget {
   final Function(CartItem) onACartItemDelete;
   final Product product;
   final CartItem cartItem;
-  final bool isBeingDeleted;
+  // final bool isBeingDeleted;
   const CartItemWidgetDriver({
     super.key,
     required this.onACartItemDelete,
     required this.product,
     required this.cartItem,
-    required this.isBeingDeleted,
+    // required this.isBeingDeleted,
   });
 
   @override
@@ -61,7 +62,7 @@ class _CartItemWidgetDriverState extends State<CartItemWidgetDriver> {
   Widget build(BuildContext context) {
     return MaterialCartItemWidget(
       cartItem: widget.cartItem,
-      isBeingDeleted: widget.isBeingDeleted,
+      // isBeingDeleted: widget.isBeingDeleted,
       onACartItemDelete: widget.onACartItemDelete,
       product: widget.product,
       isExpanded: _isExpanded,
@@ -76,7 +77,7 @@ class MaterialCartItemWidget extends StatelessWidget {
   final Function(CartItem) onACartItemDelete;
   final Product product;
   final CartItem cartItem;
-  final bool isBeingDeleted;
+  // final bool isBeingDeleted;
   final bool isExpanded;
   final VoidCallback setExpanded;
   final String details;
@@ -86,7 +87,7 @@ class MaterialCartItemWidget extends StatelessWidget {
     required this.onACartItemDelete,
     required this.product,
     required this.cartItem,
-    required this.isBeingDeleted,
+    // required this.isBeingDeleted,
     required this.isExpanded,
     required this.setExpanded,
     required this.details,
@@ -95,6 +96,10 @@ class MaterialCartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final toDelete = context.select<CartPageCubit, CartItem?>(
+      (cubit) => cubit.state.itemToDelete,
+    );
+    final isBeingDeleted = cartItem.id == toDelete?.id;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GestureDetector(

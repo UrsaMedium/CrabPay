@@ -1,3 +1,4 @@
+import 'package:crabpay/core/app_services/app_lifecycle.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/admin_inner_chat_handler.dart';
@@ -83,6 +84,7 @@ class AppProviders extends StatelessWidget {
             create: (context) => CartBloc(
               cartHandler: context.read<InnerCartHandler>(),
               authInterface: context.read<AuthInnerInterface>(),
+              appLifecycleService: getIt<AppLifecycleService>(),
             ),
           ),
           BlocProvider<PaymentBloc>(

@@ -14,15 +14,3 @@ class PaymentEventReturnToProvider extends PaymentEvent {
   final String link;
   PaymentEventReturnToProvider({required this.link});
 }
-
-class PaymentEventListen extends PaymentEvent {
-  final List<CartItem> cartItems;
-  PaymentEventListen({required this.cartItems});
-}
-
-class PaymentEventOnAppBackToLive extends PaymentEvent {
-  final List<String> cartItemIds;
-  PaymentEventOnAppBackToLive({required this.cartItemIds});
-}
-
-class PaymentEventSilence extends PaymentEvent {}
