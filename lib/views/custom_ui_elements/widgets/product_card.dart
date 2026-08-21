@@ -6,6 +6,7 @@ import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/car
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -132,17 +133,15 @@ class MaterialProductCard extends StatelessWidget {
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
                         alignment: Alignment.center,
-                        child: Icon(
-                          Icons.broken_image,
-                          color: context.appColorScheme.inversePrimary,
-                          size: 48,
-                        ),
+                        child: Text('🦀'),
                       ),
-                      placeholder: (context, url) => Container(
-                        color: context.appColorScheme.onInverseSurface,
-                        alignment: .center,
-                        child: const CircularProgressIndicator(),
-                      ),
+                      placeholder: (context, url) =>
+                          MaterialShimeringPlaceHolder(
+                            width: width - 8,
+                            height: height - 110,
+                            cornerRadius: cornerRadius - 4,
+                            color: context.appColorScheme.surfaceContainerHigh,
+                          ),
                     ),
                   ),
                 ),

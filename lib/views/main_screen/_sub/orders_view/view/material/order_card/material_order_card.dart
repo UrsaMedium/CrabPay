@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
@@ -157,16 +158,13 @@ class MaterialCustomWidgetRowOfImages extends StatelessWidget {
             errorWidget: (context, error, stackTrace) => Container(
               color: context.appColorScheme.onInverseSurface,
               alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.broken_image,
-                    color: context.appColorScheme.inversePrimary,
-                    size: 16,
-                  ),
-                  Text(error),
-                ],
-              ),
+              child: Text('🦀'),
+            ),
+            placeholder: (context, url) => MaterialShimeringPlaceHolder(
+              width: 40,
+              height: 40,
+              cornerRadius: 4,
+              color: context.appColorScheme.surfaceContainerHigh,
             ),
           ),
         ),

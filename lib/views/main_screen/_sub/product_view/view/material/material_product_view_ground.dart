@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/hero_flight_observer.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/driver/product_cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/view/material/material_product_buy_layer.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/view/material/material_product_description_layer.dart';
@@ -109,20 +110,19 @@ class MaterialProductView extends StatelessWidget {
                                           .appColorScheme
                                           .onInverseSurface,
                                       alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        color: context
-                                            .appColorScheme
-                                            .inversePrimary,
-                                        size: 48,
-                                      ),
+                                      child: Text('🦀'),
                                     ),
-                                placeholder: (context, url) => Container(
-                                  color:
-                                      context.appColorScheme.onInverseSurface,
-                                  alignment: Alignment.center,
-                                  child: const CircularProgressIndicator(),
-                                ),
+                                placeholder: (context, url) =>
+                                    MaterialShimeringPlaceHolder(
+                                      width: MediaQuery.widthOf(context),
+                                      height: isPageReady
+                                          ? descPosition! + 24
+                                          : MediaQuery.widthOf(context),
+                                      cornerRadius: 0,
+                                      color: context
+                                          .appColorScheme
+                                          .surfaceContainerHigh,
+                                    ),
                               ),
                             ),
                           ),

@@ -3,6 +3,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_mo
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,23 +142,16 @@ class MaterialCartItemWidget extends StatelessWidget {
                               Container(
                                 color: context.appColorScheme.onInverseSurface,
                                 alignment: Alignment.center,
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.broken_image,
-                                      color:
-                                          context.appColorScheme.inversePrimary,
-                                      size: 48,
-                                    ),
-                                    Text(error),
-                                  ],
-                                ),
+                                child: Text('🦀'),
                               ),
-                          placeholder: (context, url) => Container(
-                            color: context.appColorScheme.onInverseSurface,
-                            alignment: .center,
-                            child: const CircularProgressIndicator(),
-                          ),
+                          placeholder: (context, url) =>
+                              MaterialShimeringPlaceHolder(
+                                width: 54,
+                                height: 54,
+                                cornerRadius: 30,
+                                color:
+                                    context.appColorScheme.surfaceContainerHigh,
+                              ),
                         ),
                       ),
                       Expanded(
