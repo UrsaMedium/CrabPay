@@ -1,11 +1,10 @@
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
-import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,46 +16,38 @@ class ProfileSheetDriver extends StatefulWidget {
 }
 
 class _ProfileSheetDriverState extends State<ProfileSheetDriver> {
-  final List<bool> isSelected = [false, true];
-
   void _onSignOutPressed(BuildContext context) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(message: 'User signed out');
     context.read<AuthBloc>().add(AuthEventLogOut());
     if (context.canPop()) {
       context.pop();
     }
   }
 
-  void _onGraphicsToggle(BuildContext context, bool isHigh) {
-    if (isHigh) {
-      context.read<GlobalGraphicBloc>().add(GlobalGraphicEventSetHigh());
-    } else {
-      context.read<GlobalGraphicBloc>().add(GlobalGraphicEventSetLow());
-    }
+  void _onAdminPressed(BuildContext context) {
+    context.push(AppRoutes.adminTools.path);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialProfileSheet(
-      isSelected: isSelected,
+    return _MaterialProfileSheet(
       user: context.read<AuthBloc>().state.currentUser,
       onSignOutPressed: () => _onSignOutPressed(context),
-      onGraphicsToggle: (p0) => _onGraphicsToggle(context, p0),
+      onAdminPressed: () => _onAdminPressed(context),
+      isAdmin: context.read<AuthBloc>().state.currentUser.isAdmin,
     );
   }
 }
 
-class MaterialProfileSheet extends StatelessWidget {
-  final List<bool> isSelected;
+class _MaterialProfileSheet extends StatelessWidget {
+  final bool isAdmin;
   final VoidCallback onSignOutPressed;
-  final Function(bool) onGraphicsToggle;
+  final VoidCallback onAdminPressed;
   final AppAuthUser user;
-  const MaterialProfileSheet({
-    super.key,
+  const _MaterialProfileSheet({
     required this.user,
     required this.onSignOutPressed,
-    required this.isSelected,
-    required this.onGraphicsToggle,
+    required this.isAdmin,
+    required this.onAdminPressed,
   });
 
   @override
@@ -66,94 +57,122 @@ class MaterialProfileSheet extends StatelessWidget {
     );
     return Wrap(
       children: [
-        Material(
-          borderRadius: BorderRadius.vertical(top: .circular(24)),
-          clipBehavior: .antiAlias,
-          color: Colors.transparent,
-          child: BackdropFilter(
-            enabled: highGraphics,
-            filter: .blur(sigmaX: 12, sigmaY: 12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: context.appColorScheme.surfaceContainer.withValues(
-                  alpha: highGraphics ? .5 : .95,
-                ),
-              ),
-              height: 200,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Row(
+        Stack(
+          children: [
+            Material(
+              borderRadius: BorderRadius.vertical(top: .circular(24)),
+              clipBehavior: .antiAlias,
+              color: Colors.transparent,
+              child: BackdropFilter(
+                enabled: highGraphics,
+                filter: .blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: context.appColorScheme.surfaceContainer.withValues(
+                      alpha: highGraphics ? .5 : .95,
+                    ),
+                  ),
+                  height: 200,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Your profile:',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: context.appColorScheme.primary,
+                                      ),
+                                    ),
+                                    Text('${user.email}'),
+                                  ],
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: onSignOutPressed,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      context.appColorScheme.primary,
+                                  foregroundColor:
+                                      context.appColorScheme.onPrimary,
+                                  minimumSize: Size(0, 50),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.logout_outlined),
+                                    Text(
+                                      '  Sign Out',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: context.appColorScheme.outline,
+                          ),
+                          if (isAdmin)
+                            Row(
+                              mainAxisAlignment: .spaceBetween,
                               children: [
                                 Text(
-                                  'Your profile:',
+                                  'Admin Menu',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: context.appColorScheme.primary,
+                                    color: context.appColorScheme.onSurface,
                                   ),
                                 ),
-                                Text('${user.email}'),
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: onSignOutPressed,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: context.appColorScheme.primary,
-                              foregroundColor: context.appColorScheme.onPrimary,
-                              minimumSize: Size(0, 50),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.logout_outlined),
-                                Text(
-                                  '  Sign Out',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
+                                IconButton(
+                                  onPressed: onAdminPressed,
+                                  icon: Icon(Icons.settings),
                                 ),
                               ],
                             ),
-                          ),
                         ],
                       ),
-                      Divider(
-                        thickness: 1,
-                        color: context.appColorScheme.outline,
-                      ),
-                      Row(
-                        mainAxisAlignment: .spaceBetween,
-                        children: [
-                          Text(
-                            'High Graphics',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: context.appColorScheme.onSurface,
-                            ),
-                          ),
-                          Switch(
-                            value: highGraphics,
-                            onChanged: (bool newValue) =>
-                                onGraphicsToggle(newValue),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+            SizedBox(
+              height: 200,
+              child: ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  begin: .topCenter,
+                  end: .bottomCenter,
+                  colors: [
+                    context.appColorScheme.outline.withValues(alpha: .2),
+                    context.appColorScheme.outline.withValues(alpha: .1),
+                    Colors.transparent,
+                    Colors.transparent,
+                    context.appColorScheme.outline.withValues(alpha: .1),
+                  ],
+                ).createShader(bounds),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: .circular(27),
+                    border: .all(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -9,6 +9,7 @@ enum AppRoutes {
   support('/support', 'support'),
   cart('/cart', 'cart'),
   profileSheet('/profile_sheet', 'profileSheet'),
+  settingsSheet('/settings_sheet', 'settingsSheet'),
   itemsOnPaymentSheet('/items_on_payment_sheet', 'itemsOnPaymentSheet'),
   orders('/orders_view', 'orders'),
 

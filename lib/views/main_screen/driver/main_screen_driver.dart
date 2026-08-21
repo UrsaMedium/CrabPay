@@ -114,8 +114,8 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     context.push(AppRoutes.orders.path);
   }
 
-  void _onAdminPressed(BuildContext context) {
-    context.push(AppRoutes.adminTools.path);
+  void _onSettingsPressed(BuildContext context) {
+    context.push(AppRoutes.settingsSheet.path);
   }
 
   @override
@@ -157,7 +157,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
               pageController: _pageController,
               pages: _pages,
               onOrdersPressed: () => _onOrdersPressed(context),
-              onAdminPressed: () => _onAdminPressed(context),
+              onSettingsPressed: () => _onSettingsPressed(context),
             );
           },
         ),

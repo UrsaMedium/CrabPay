@@ -1,4 +1,5 @@
 import 'package:crabpay/core/app_routes/app_routes.dart';
+import 'package:crabpay/views/main_screen/_sub/settings_sheet.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/profile_sheet.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_driver.dart';
@@ -15,6 +16,12 @@ final List<RouteBase> mainScreenShellRoutes = [
     name: AppRoutes.profileSheet.name,
     pageBuilder: (context, state) =>
         BottomSheetPage(key: state.pageKey, child: const ProfileSheetDriver()),
+  ),
+  GoRoute(
+    path: AppRoutes.settingsSheet.path,
+    name: AppRoutes.settingsSheet.name,
+    pageBuilder: (context, state) =>
+        BottomSheetPage(key: state.pageKey, child: const SettingsSheetDriver()),
   ),
   GoRoute(
     path: AppRoutes.itemsOnPaymentSheet.path,

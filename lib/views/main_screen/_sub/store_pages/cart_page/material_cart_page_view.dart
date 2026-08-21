@@ -83,7 +83,18 @@ class _ListOfCartItemsWidget extends StatelessWidget {
           child: Text('Confirm the purchase', textAlign: .left),
         ),
         cartItemsToBuy.isEmpty
-            ? const Center(child: Text('...'))
+            ? Center(
+                child: Padding(
+                  padding: const .symmetric(vertical: 16),
+                  child: Text(
+                    'Hey, You haven\'t pick anything',
+                    style: TextStyle(
+                      color: context.appColorScheme.secondary,
+                      fontWeight: .bold,
+                    ),
+                  ),
+                ),
+              )
             : ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: cartItemsToBuy.length,
@@ -213,7 +224,9 @@ class _BuyPannelWidget extends StatelessWidget {
                               minimumSize: Size(double.maxFinite, 50),
                             ),
                             child: Text(
-                              'You have Unpaid ${pendingOrders.length} Order!',
+                              pendingOrders.length == 1
+                                  ? 'You have 1 Unpaid Order!'
+                                  : 'You have ${pendingOrders.length} Unpaid Orders!',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,

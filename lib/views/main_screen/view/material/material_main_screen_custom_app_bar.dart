@@ -7,13 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MaterialMainScreenCustomAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final double height;
-  final VoidCallback onAdminPressed;
+  final VoidCallback onSettingsPressed;
   final VoidCallback onOrdersPressed;
   final VoidCallback onProfileIconPressed;
   const MaterialMainScreenCustomAppBar({
     super.key,
     this.height = kToolbarHeight,
-    required this.onAdminPressed,
+    required this.onSettingsPressed,
     required this.onOrdersPressed,
     required this.onProfileIconPressed,
   });
@@ -88,9 +88,6 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
               ),
               Builder(
                 builder: (context) {
-                  final isAdmin = context.select<MainScreenCubit, bool>(
-                    (cubit) => cubit.state.isAdmin,
-                  );
                   final isLoggedIn = context.select<MainScreenCubit, bool>(
                     (cubit) => cubit.state.isLoggedIn,
                   );
@@ -112,11 +109,10 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                         ),
                       ),
                       Spacer(flex: 1),
-                      if (isAdmin)
-                        IconButton(
-                          onPressed: onAdminPressed,
-                          icon: Icon(Icons.settings),
-                        ),
+                      IconButton(
+                        onPressed: onSettingsPressed,
+                        icon: Icon(Icons.settings),
+                      ),
                       if (isLoggedIn)
                         IconButton(
                           onPressed: onOrdersPressed,

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class MaterialMainScreenView extends StatelessWidget {
   final VoidCallback onProfileIconPressed;
   final VoidCallback onOrdersPressed;
-  final VoidCallback onAdminPressed;
+  final VoidCallback onSettingsPressed;
   final Function(int) onPageSelected;
   final Function(int) onPageSwiped;
   final PageController pageController;
@@ -19,13 +19,13 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.onPageSwiped,
     required this.pages,
     required this.onOrdersPressed,
-    required this.onAdminPressed,
+    required this.onSettingsPressed,
   });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MaterialMainScreenCustomAppBar(
-        onAdminPressed: onAdminPressed,
+        onSettingsPressed: onSettingsPressed,
         onOrdersPressed: onOrdersPressed,
         onProfileIconPressed: onProfileIconPressed,
       ),

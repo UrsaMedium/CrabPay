@@ -78,18 +78,21 @@ class MaterialOrdersOnPaymentSheet extends StatelessWidget {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: orders.length,
-                itemExtent: 100,
-                itemBuilder: (context, index) =>
-                    OrderContainerForOrdersOnPaymentSheet(
-                      order: orders[index].paymentId.substring(0, 7),
-                      total: orders[index].totalPrice,
-                      link: orders[index].paymentLink,
-                      onPaymentLinkPressed: onPaymentLinkPressed,
-                    ),
+            Padding(
+              padding: const .only(bottom: 16),
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: orders.length,
+                  itemExtent: 100,
+                  itemBuilder: (context, index) =>
+                      OrderContainerForOrdersOnPaymentSheet(
+                        order: orders[index].paymentId.substring(0, 7),
+                        total: orders[index].totalPrice,
+                        link: orders[index].paymentLink,
+                        onPaymentLinkPressed: onPaymentLinkPressed,
+                      ),
+                ),
               ),
             ),
           ],
@@ -115,7 +118,7 @@ class OrderContainerForOrdersOnPaymentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const .only(left: 36, right: 36, bottom: 16),
+      margin: const .only(left: 36, right: 36, bottom: 8),
       decoration: BoxDecoration(
         borderRadius: .circular(24),
         color: context.appColorScheme.surfaceContainerHighest,
