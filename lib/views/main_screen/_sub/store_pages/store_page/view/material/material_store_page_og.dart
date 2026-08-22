@@ -1,21 +1,17 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_cubit.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/store_page_search/driver/store_search_bar_driver.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/_sub/store_page_search/driver/store_search_bar_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MaterialStorePageView extends StatelessWidget {
-  final OnOpenProductCardCallBack onOpenProductCardCallBack;
+class MaterialStorePageOG extends StatelessWidget {
   final Future<void> Function() reFresher;
   final Function(List<Product>) onSearchSubmitedCallBack;
-  const MaterialStorePageView({
+  const MaterialStorePageOG({
     super.key,
     required this.reFresher,
-    required this.onOpenProductCardCallBack,
     required this.onSearchSubmitedCallBack,
-    // required this.filterdProductList,
   });
 
   @override
@@ -51,18 +47,7 @@ class MaterialStorePageView extends StatelessWidget {
                                 padding: const EdgeInsets.only(top: 8),
                                 child: ProductCardDriver(
                                   product: products[index * 2],
-                                  additionalSuffix: 'store',
-                                  openProductCardCallBack:
-                                      ({
-                                        required additionalSuffix,
-                                        required index,
-                                        required productId,
-                                      }) => onOpenProductCardCallBack(
-                                        additionalSuffix: additionalSuffix,
-                                        index: index,
-                                        productId: productId,
-                                      ),
-                                  index: index,
+                                  tag: '${products[index * 2].id}-store-$index',
                                   height: 256,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
                                   cornerRadius: 16,
@@ -80,18 +65,8 @@ class MaterialStorePageView extends StatelessWidget {
                                 ),
                                 child: ProductCardDriver(
                                   product: products[index * 2 + 1],
-                                  additionalSuffix: 'store',
-                                  openProductCardCallBack:
-                                      ({
-                                        required additionalSuffix,
-                                        required index,
-                                        required productId,
-                                      }) => onOpenProductCardCallBack(
-                                        additionalSuffix: additionalSuffix,
-                                        index: index,
-                                        productId: productId,
-                                      ),
-                                  index: index,
+                                  tag:
+                                      '${products[index * 2 + 1].id}-store-$index',
                                   height: 256,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
                                   cornerRadius: 16,
@@ -114,16 +89,6 @@ class MaterialStorePageView extends StatelessWidget {
               );
               return MaterialStoreSearchBarDriver(
                 products: products,
-                openProductCardCallBack:
-                    ({
-                      required additionalSuffix,
-                      required index,
-                      required productId,
-                    }) => onOpenProductCardCallBack(
-                      additionalSuffix: additionalSuffix,
-                      index: index,
-                      productId: productId,
-                    ),
                 onSearchSubmitedCallBack: (prdcts) =>
                     onSearchSubmitedCallBack(prdcts),
               );

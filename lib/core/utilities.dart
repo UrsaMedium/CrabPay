@@ -61,20 +61,15 @@ String dateConversion(String date) {
   // return stripedDate.substring(5, 7);
 }
 
-typedef OnOpenProductCardCallBack =
-    Function({
-      required String productId,
-      required String additionalSuffix,
-      required int index,
-    });
+// typedef OnOpenProductCardCallBack =
+//     Function({required String productId, required String tag});
 
-Future<void> openProductCardCallBack({
+Future<void> globalOpenProductCardCallBack({
   required BuildContext context,
   required String productId,
-  required String additionalSuffix,
-  required int index,
+  required String tag,
 }) async {
-  developer.log('pushed $productId + $additionalSuffix + $index');
+  developer.log(tag);
   if (context
           .read<DatabaseBloc>()
           .state
@@ -94,11 +89,7 @@ Future<void> openProductCardCallBack({
   //
   await context.pushNamed(
     AppRoutes.productCard.name,
-    pathParameters: {
-      'productId': productId,
-      'additionalSuffix': additionalSuffix,
-      'index': '$index',
-    },
+    pathParameters: {'productId': productId, 'tag': tag},
   );
   if (context.mounted) {
     context.read<DatabaseBloc>().add(

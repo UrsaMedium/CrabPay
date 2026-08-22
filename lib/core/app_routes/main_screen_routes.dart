@@ -1,5 +1,6 @@
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/views/main_screen/_sub/settings_sheet.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/_sub/store_category_view.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/profile_sheet.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_driver.dart';
@@ -23,6 +24,13 @@ final List<RouteBase> mainScreenShellRoutes = [
     pageBuilder: (context, state) =>
         BottomSheetPage(key: state.pageKey, child: const SettingsSheetDriver()),
   ),
+  // GoRoute(
+  //   path: AppRoutes.storeCategoryView.path,
+  //   name: AppRoutes.storeCategoryView.name,
+  //   builder: (context, state) {
+  //     return StoreCategoryViewDriver(tag: state.pathParameters['tag'] ?? '');
+  //   },
+  // ),
   GoRoute(
     path: AppRoutes.itemsOnPaymentSheet.path,
     name: AppRoutes.itemsOnPaymentSheet.name,
@@ -51,6 +59,17 @@ final List<RouteBase> mainScreenShellRoutes = [
             path: AppRoutes.store.path,
             name: AppRoutes.store.name,
             builder: (context, state) => const StorePageDriver(),
+            routes: [
+              GoRoute(
+                path: AppRoutes.storeCategoryView.path,
+                name: AppRoutes.storeCategoryView.name,
+                builder: (context, state) {
+                  return StoreCategoryViewDriver(
+                    tag: state.pathParameters['tag'] ?? '',
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

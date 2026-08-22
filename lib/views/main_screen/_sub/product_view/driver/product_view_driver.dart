@@ -15,13 +15,11 @@ import 'package:go_router/go_router.dart';
 class ProductViewDriver extends StatefulWidget {
   static const routeName = 'card_view';
   final String productId; //also tag identoty
-  final String additionalSuffix; //tag identoty
-  final String index; //tag identoty
+  final String tag;
   const ProductViewDriver({
     super.key,
     required this.productId,
-    required this.additionalSuffix,
-    required this.index,
+    required this.tag,
   });
 
   @override
@@ -34,8 +32,8 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
 
   @override
   void initState() {
-    heroTag =
-        'card-hero-${widget.productId}-${widget.additionalSuffix}-${widget.index}';
+    heroTag = widget.tag;
+        // 'card-hero-${widget.productId}-${widget.additionalSuffix}-${widget.index}';
     final theProduct = context
         .read<DatabaseBloc>()
         .state

@@ -86,6 +86,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         image: state.appProduct!.image,
         description: state.appProduct!.description,
         currencies: state.appProduct!.currencies,
+        category: ''
       );
       try {
         event.context.read<DatabaseBlocAdmin>().add(

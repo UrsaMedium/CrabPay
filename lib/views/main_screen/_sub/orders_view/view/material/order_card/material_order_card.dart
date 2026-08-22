@@ -93,7 +93,7 @@ class MaterialOrderCard extends StatelessWidget {
                 ),
                 Container(
                   margin: .symmetric(horizontal: 8),
-                  child: MaterialCustomWidgetRowOfImages(
+                  child: _MaterialCustomWidgetRowOfImages(
                     images: crabOrder.itemsToImagesMap.values.toList(),
                   ),
                 ),
@@ -138,9 +138,9 @@ class MaterialOrderCard extends StatelessWidget {
   }
 }
 
-class MaterialCustomWidgetRowOfImages extends StatelessWidget {
+class _MaterialCustomWidgetRowOfImages extends StatelessWidget {
   final List<String> images;
-  const MaterialCustomWidgetRowOfImages({super.key, required this.images});
+  const _MaterialCustomWidgetRowOfImages({required this.images});
 
   List<Widget> _rowOfImages(BuildContext context) {
     List<Widget> result = [];

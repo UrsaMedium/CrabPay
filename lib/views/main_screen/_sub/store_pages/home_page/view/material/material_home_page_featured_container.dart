@@ -4,15 +4,10 @@ import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class MaterialHomePageFeaturedContainer extends StatelessWidget {
-  final OnOpenProductCardCallBack onOpenProductCardCallBack;
-  const MaterialHomePageFeaturedContainer({
-    super.key,
-    required this.onOpenProductCardCallBack,
-  });
+  const MaterialHomePageFeaturedContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +58,8 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                         ),
                       ),
                       ProductCardDriver(
-                        openProductCardCallBack:
-                            ({
-                              required additionalSuffix,
-                              required index,
-                              required productId,
-                            }) => onOpenProductCardCallBack(
-                              additionalSuffix: additionalSuffix,
-                              index: index,
-                              productId: productId,
-                            ),
                         product: featuredProducts[0],
-                        additionalSuffix: 'featuredProduct',
-                        index: 0,
+                        tag: '${featuredProducts[0].id}-featuredProduct-0',
                         width: context
                             .read<HomePageCubit>()
                             .state
@@ -91,19 +75,8 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                       crossAxisAlignment: .start,
                       children: [
                         ProductCardDriver(
-                          openProductCardCallBack:
-                              ({
-                                required additionalSuffix,
-                                required index,
-                                required productId,
-                              }) => onOpenProductCardCallBack(
-                                additionalSuffix: additionalSuffix,
-                                index: index,
-                                productId: productId,
-                              ),
                           product: featuredProducts[1],
-                          additionalSuffix: 'featuredProduct',
-                          index: 1,
+                          tag: '${featuredProducts[1].id}-featuredProduct-1',
                           width: context
                               .read<HomePageCubit>()
                               .state
@@ -113,19 +86,8 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                         ),
                         if (featuredProducts.length > 2)
                           ProductCardDriver(
-                            openProductCardCallBack:
-                                ({
-                                  required additionalSuffix,
-                                  required index,
-                                  required productId,
-                                }) => onOpenProductCardCallBack(
-                                  additionalSuffix: additionalSuffix,
-                                  index: index,
-                                  productId: productId,
-                                ),
                             product: featuredProducts[2],
-                            additionalSuffix: 'featuredProduct',
-                            index: 2,
+                            tag: '${featuredProducts[2].id}-featuredProduct-2',
                             width: context
                                 .read<HomePageCubit>()
                                 .state

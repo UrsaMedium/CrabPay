@@ -323,7 +323,9 @@ class _UpdateProductAdminPanelViewState
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: _selectedProduct != null && state.states != DatabaseStatesAdmin.dbLoading
+                    onPressed:
+                        _selectedProduct != null &&
+                            state.states != DatabaseStatesAdmin.dbLoading
                         ? () {
                             getIt<InnerLoggerHandler>().logBreadcrumb(
                               message:
@@ -348,6 +350,7 @@ class _UpdateProductAdminPanelViewState
                                   ? _selectedProduct!.description
                                   : _descriptionText,
                               currencies: '',
+                              category: '',
                             );
                             context.read<DatabaseBlocAdmin>().add(
                               DatabaseEventUpdateProductAdmin(

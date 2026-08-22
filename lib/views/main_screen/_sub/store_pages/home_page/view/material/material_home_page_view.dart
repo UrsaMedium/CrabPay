@@ -1,4 +1,3 @@
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/view/material/material_home_page_favorite_container.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/view/material/material_home_page_featured_container.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +5,7 @@ import 'dart:async';
 
 class MaterialHomePageView extends StatelessWidget {
   final Future<void> Function() reFresher;
-  final OnOpenProductCardCallBack onOpenProductCardCallBack;
-  const MaterialHomePageView({
-    super.key,
-    required this.reFresher,
-    required this.onOpenProductCardCallBack,
-  });
+  const MaterialHomePageView({super.key, required this.reFresher});
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +24,12 @@ class MaterialHomePageView extends StatelessWidget {
             ),
             child: Column(
               children: [
-                MaterialHomePageFeaturedContainer(
-                  onOpenProductCardCallBack:
-                      ({
-                        required additionalSuffix,
-                        required index,
-                        required productId,
-                      }) => onOpenProductCardCallBack(
-                        additionalSuffix: additionalSuffix,
-                        index: index,
-                        productId: productId,
-                      ),
-                ),
+                MaterialHomePageFeaturedContainer(),
                 Padding(
                   padding: .symmetric(horizontal: 22, vertical: 6),
                   child: Divider(),
                 ),
-                MaterialHomePageFavoriteContainer(
-                  onOpenProductCardCallBack:
-                      ({
-                        required additionalSuffix,
-                        required index,
-                        required productId,
-                      }) => onOpenProductCardCallBack(
-                        additionalSuffix: additionalSuffix,
-                        index: index,
-                        productId: productId,
-                      ),
-                ),
+                MaterialHomePageFavoriteContainer(),
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
@@ -8,11 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MaterialHomePageFavoriteContainer extends StatelessWidget {
-  final OnOpenProductCardCallBack onOpenProductCardCallBack;
-  const MaterialHomePageFavoriteContainer({
-    super.key,
-    required this.onOpenProductCardCallBack,
-  });
+  const MaterialHomePageFavoriteContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +40,8 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                           padding: EdgeInsets.only(top: index == 0 ? 0 : 8.0),
                           child: ProductCardDriver(
                             product: userPreferences[index * 2],
-                            additionalSuffix: 'favorite?',
-                            openProductCardCallBack:
-                                ({
-                                  required additionalSuffix,
-                                  required index,
-                                  required productId,
-                                }) => onOpenProductCardCallBack(
-                                  additionalSuffix: additionalSuffix,
-                                  index: index,
-                                  productId: productId,
-                                ),
-                            index: index,
+                            tag:
+                                '${userPreferences[index * 2].id}-favorite-$index',
                             height: 256,
                             width: context
                                 .read<HomePageCubit>()
@@ -107,18 +92,8 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       padding: EdgeInsets.only(top: index == 0 ? 0 : 8.0),
                       child: ProductCardDriver(
                         product: userPreferences[index * 2 + 1],
-                        additionalSuffix: 'favorite',
-                        openProductCardCallBack:
-                            ({
-                              required additionalSuffix,
-                              required index,
-                              required productId,
-                            }) => onOpenProductCardCallBack(
-                              additionalSuffix: additionalSuffix,
-                              index: index,
-                              productId: productId,
-                            ),
-                        index: index,
+                        tag:
+                            '${userPreferences[index * 2 + 1].id}-favorite-$index',
                         height: 256,
                         width: context
                             .read<HomePageCubit>()

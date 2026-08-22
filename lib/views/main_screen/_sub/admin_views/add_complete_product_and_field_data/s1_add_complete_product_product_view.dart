@@ -62,6 +62,7 @@ class _AddCompleteProductProductViewState
         image: _imageUrl!,
         description: _description!,
         currencies: 'rubDefault',
+        category: '',
       );
     } else {
       return null;
@@ -228,7 +229,9 @@ class _AddCompleteProductProductViewState
                                   appProduct: collectedAppProduct,
                                 ),
                               );
-                              context.pushNamed(AppRoutes.addProductFields.name);
+                              context.pushNamed(
+                                AppRoutes.addProductFields.name,
+                              );
                             } else {
                               Fluttertoast.showToast(msg: 'Not enough data');
                             }
@@ -243,6 +246,7 @@ class _AddCompleteProductProductViewState
                               image: 'pubg',
                               description: 'Mock description',
                               currencies: 'rubDefault',
+                              category: '',
                             );
                             context.read<AdminBloc>().add(
                               AdminEventPushProductEmidiatly(
@@ -273,6 +277,7 @@ class _AddCompleteProductProductViewState
                           image: 'lib/assets/images/gas-gas-gas.jpg',
                           description: 'Mock description',
                           currencies: 'rubDefault',
+                          category: '',
                         );
                         context.read<AdminBloc>().add(
                           AdminEventSubmitsProduct(

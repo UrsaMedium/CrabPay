@@ -6,6 +6,7 @@ enum AppRoutes {
   // Main screen and pages
   home('/home', 'home'),
   store('/store', 'store'),
+  storeCategoryView('category/:tag', 'category'),
   support('/support', 'support'),
   cart('/cart', 'cart'),
   profileSheet('/profile_sheet', 'profileSheet'),
@@ -14,7 +15,7 @@ enum AppRoutes {
   orders('/orders_view', 'orders'),
 
   // Product View
-  productCard('/card_view/:productId/:additionalSuffix/:index', 'card_view'),
+  productCard('/card_view/:productId/:tag', 'card_view'),
 
   // Auth
   login('/login_view', 'login'),

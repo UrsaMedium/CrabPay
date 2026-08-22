@@ -11,7 +11,7 @@ class MaterialStoreSearchBarView extends StatefulWidget {
   final VoidCallback onOpenSearch;
   final VoidCallback onClear;
   final ValueChanged<String> onSubmitted;
-  final Function(Product, int) onProductSelected;
+  final Function(Product, String) onProductSelected;
 
   const MaterialStoreSearchBarView({
     super.key,
@@ -227,7 +227,10 @@ class _MaterialStoreSearchBarViewState
                     onTap: () {
                       final index = widget.products.indexOf(option);
                       controller.closeView(option.name);
-                      widget.onProductSelected(option, index);
+                      widget.onProductSelected(
+                        option,
+                        '${option.id}-store-search-$index',
+                      );
                     },
                   ),
                 );

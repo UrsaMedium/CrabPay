@@ -4,6 +4,7 @@ class Product {
   final String image;
   final String description;
   final String currencies;
+  final String category;
 
   Product({
     required this.id,
@@ -11,6 +12,7 @@ class Product {
     required this.image,
     required this.description,
     required this.currencies,
+    required this.category,
   });
 
   factory Product.intial() => Product(
@@ -19,5 +21,6 @@ class Product {
     image: '',
     description: '',
     currencies: '',
+    category: '',
   );
 }

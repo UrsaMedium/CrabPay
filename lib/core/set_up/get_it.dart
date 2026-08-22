@@ -49,7 +49,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<InnerCartHandler>(
     () => OuterCartHandlerWithSupabase(
       appLifecycleService: getIt<AppLifecycleService>(),
-      connectionMonitor: getIt<ConnectionMonitorToSupabaseAtRegred>(),
+      connectionMonitor: getIt<InnerConnectionMonitor>(),
     ),
   );
   //

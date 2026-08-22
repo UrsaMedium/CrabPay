@@ -1,9 +1,6 @@
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
-import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
@@ -12,40 +9,21 @@ import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
 
 class ProductCardDriver extends StatelessWidget {
-  final OnOpenProductCardCallBack openProductCardCallBack;
   final Product product; //also tag identoty
-  final String additionalSuffix; //tag identoty
-  final int index; //tag identoty
+  final String tag;
   final double height;
   final double width;
   final double cornerRadius;
+  final String? optionalTag;
   const ProductCardDriver({
     super.key,
-    required this.openProductCardCallBack,
     required this.product,
-    required this.additionalSuffix,
-    required this.index,
+    required this.tag,
     required this.height,
     required this.width,
     required this.cornerRadius,
+    this.optionalTag,
   });
-
-  void _onProductCardPressed(BuildContext context) {
-    context.read<DatabaseBloc>().add(
-      DatabaseEventFetchProductFields(productId: product.id),
-    );
-    context.read<CartBloc>().add(
-      CartEventFetchProductCartItemAmount(
-        userId: context.read<AuthBloc>().state.currentUser.id,
-        productId: product.id,
-      ),
-    );
-    openProductCardCallBack(
-      productId: product.id,
-      additionalSuffix: additionalSuffix,
-      index: index,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +38,11 @@ class ProductCardDriver extends StatelessWidget {
           );
         }
         return MaterialProductCard(
+          id: product.id,
           imageUrl: product.image,
           productName: product.name,
           description: product.description,
-          onProductCardPressed: () => _onProductCardPressed(context),
-          tag: 'card-hero-${product.id}-$additionalSuffix-$index',
+          tag: tag,
           height: height,
           width: width,
           cornerRadius: cornerRadius,
@@ -76,7 +54,7 @@ class ProductCardDriver extends StatelessWidget {
 }
 
 class MaterialProductCard extends StatelessWidget {
-  final VoidCallback onProductCardPressed;
+  final String id;
   final String tag;
   final String imageUrl;
   final String productName;
@@ -87,7 +65,6 @@ class MaterialProductCard extends StatelessWidget {
   final Color? cardTintColor;
   const MaterialProductCard({
     super.key,
-    required this.onProductCardPressed,
     required this.imageUrl,
     required this.productName,
     required this.description,
@@ -96,6 +73,7 @@ class MaterialProductCard extends StatelessWidget {
     required this.width,
     required this.cornerRadius,
     this.cardTintColor,
+    required this.id,
   });
 
   @override
@@ -111,7 +89,11 @@ class MaterialProductCard extends StatelessWidget {
         elevation: 5,
         surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
         child: GestureDetector(
-          onTap: onProductCardPressed,
+          onTap: () => globalOpenProductCardCallBack(
+            context: context,
+            productId: id,
+            tag: tag,
+          ),
           child: Column(
             crossAxisAlignment: .start,
             children: [

@@ -49,7 +49,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
           query {
             productCollection {
               edges {
-                node { id, name, description, imageUrl, currencies }
+                node { id, name, description, imageUrl, currencies, category }
               }
             }
           }
@@ -69,6 +69,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
           image: node['imageUrl'],
           description: node['description'],
           currencies: node['currencies'],
+          category: node['category'],
         );
       }).toList();
     } catch (e) {

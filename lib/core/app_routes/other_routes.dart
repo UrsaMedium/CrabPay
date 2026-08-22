@@ -15,16 +15,11 @@ final List<RouteBase> otherRoutes = [
     name: AppRoutes.productCard.name,
     pageBuilder: (context, state) {
       final productId = state.pathParameters['productId'] ?? '0';
-      final suffix = state.pathParameters['additionalSuffix'] ?? '0';
-      final index = state.pathParameters['index'] ?? '0';
+      final tag = state.pathParameters['tag'] ?? '0';
 
       return CustomTransitionPage(
         key: state.pageKey,
-        child: ProductViewDriver(
-          productId: productId,
-          additionalSuffix: suffix,
-          index: index,
-        ),
+        child: ProductViewDriver(productId: productId, tag: tag),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
