@@ -70,6 +70,7 @@ class _CategoryCard extends StatelessWidget {
           )
           .toList(),
     );
+    final subTag = index == 0 ? 'Mobile Game' : 'Service';
     return Card(
       margin: .only(bottom: 32),
       shape: RoundedRectangleBorder(borderRadius: .circular(16)),
@@ -82,7 +83,7 @@ class _CategoryCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  index == 0 ? 'Mobile Games' : 'Services',
+                  '${subTag}s',
                   style: TextStyle(
                     color: context.appColorScheme.secondary,
                     fontSize: 20,
@@ -104,10 +105,8 @@ class _CategoryCard extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: products.length,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => _ProductImage(
-                      product: products[index],
-                      tag: index == 0 ? 'Mobile Game' : 'Service',
-                    ),
+                    itemBuilder: (context, index) =>
+                        _ProductImage(product: products[index], tag: subTag),
                   ),
                 ),
                 Padding(
@@ -126,9 +125,7 @@ class _CategoryCard extends StatelessWidget {
                           enabled: highGraphics,
                           filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: GestureDetector(
-                            onTap: () => onCategoryViewOpen(
-                              index == 0 ? 'Mobile Game' : 'Service',
-                            ),
+                            onTap: () => onCategoryViewOpen(subTag),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: context.appColorScheme.secondaryContainer

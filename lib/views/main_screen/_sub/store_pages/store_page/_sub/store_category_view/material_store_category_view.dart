@@ -1,34 +1,6 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
-import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class StoreCategoryViewDriver extends StatefulWidget {
-  static const String routeName = 'category';
-  final String tag;
-  const StoreCategoryViewDriver({super.key, required this.tag});
-
-  @override
-  State<StoreCategoryViewDriver> createState() =>
-      _StoreCategoryViewDriverState();
-}
-
-class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
-  late final List<Product> products;
-  @override
-  void initState() {
-    products = (context.read<DatabaseBloc>().state.products ?? [])
-        .where((element) => element.category == widget.tag)
-        .toList();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialStoreCategoryView(tag: widget.tag, products: products);
-  }
-}
 
 class MaterialStoreCategoryView extends StatelessWidget {
   final String tag;

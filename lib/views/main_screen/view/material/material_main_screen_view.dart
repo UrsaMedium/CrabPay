@@ -1,9 +1,11 @@
-import 'package:crabpay/views/main_screen/view/material/material_app_nav_bar.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/custom_faster_page_scroll_physics.dart';
+import 'package:crabpay/views/main_screen/view/material/material_app_nav_bar.dart';
 import 'package:crabpay/views/main_screen/view/material/material_main_screen_custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MaterialMainScreenView extends StatelessWidget {
+  final StatefulNavigationShell navigationShell;
   final VoidCallback onProfileIconPressed;
   final VoidCallback onOrdersPressed;
   final VoidCallback onSettingsPressed;
@@ -20,6 +22,7 @@ class MaterialMainScreenView extends StatelessWidget {
     required this.pages,
     required this.onOrdersPressed,
     required this.onSettingsPressed,
+    required this.navigationShell,
   });
   @override
   Widget build(BuildContext context) {
@@ -33,14 +36,11 @@ class MaterialMainScreenView extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          PageView.builder(
-            itemCount: pages.length,
-            physics: const CustomFasterPageScrollPhysics(),
+          PageView(
             controller: pageController,
             onPageChanged: onPageSwiped,
-            itemBuilder: (context, index) {
-              return pages[index];
-            },
+            physics: const CustomFasterPageScrollPhysics(),
+            children: pages,
           ),
         ],
       ),

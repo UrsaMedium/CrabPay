@@ -1,11 +1,7 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/support_page/driver/support_page_driver.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_driver.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home_page_driver.dart';
-import 'package:crabpay/views/main_screen/_sub/store_pages/cart_page/driver/cart_page_driver.dart';
 import 'package:crabpay/views/main_screen/view/material/material_main_screen_view.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +12,12 @@ import 'package:flutter/material.dart';
 
 class MainScreenDriver extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
-  const MainScreenDriver({super.key, required this.navigationShell});
+  final List<Widget> children;
+  const MainScreenDriver({
+    super.key,
+    required this.navigationShell,
+    required this.children,
+  });
 
   @override
   State<MainScreenDriver> createState() => _MainScreenDriverState();
@@ -52,6 +53,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (_pageController.hasClients &&
         _pageController.page?.round() != widget.navigationShell.currentIndex &&
         !_mainScreenCubit.state.isSyncingByNavBarTap) {
+      _mainScreenCubit.onPageSwipe(widget.navigationShell.currentIndex);
       _pageController.animateToPage(
         widget.navigationShell.currentIndex,
         duration: const Duration(milliseconds: 300),
@@ -59,13 +61,6 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
       );
     }
   }
-
-  final List<Widget> _pages = const [
-    HomePageDriver(),
-    StorePageDriver(),
-    SupportPageDriver(),
-    CartPageDriver(),
-  ];
 
   void _onPageSwiped(int index) {
     if (_mainScreenCubit.state.isSyncingByNavBarTap) return;
@@ -150,12 +145,13 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
               // cupertino
             }
             return MaterialMainScreenView(
+              navigationShell: widget.navigationShell,
               onPageSelected: (index) => _onPageSelected(index),
               onPageSwiped: (index) => _onPageSwiped(index),
               onProfileIconPressed: () =>
                   _onProfileIconPressed(context: context),
               pageController: _pageController,
-              pages: _pages,
+              pages: widget.children,
               onOrdersPressed: () => _onOrdersPressed(context),
               onSettingsPressed: () => _onSettingsPressed(context),
             );
