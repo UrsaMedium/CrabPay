@@ -38,6 +38,7 @@ class _HeroFlightObserverState extends State<HeroFlightObserver> {
 
 class HeroFlightObserverWithFallBack extends StatefulWidget {
   final VoidCallback onHeroLanded;
+  final VoidCallback onHeroFlightStarted;
   final Widget Function(
     BuildContext context,
     VoidCallback onFlightStarted,
@@ -48,6 +49,7 @@ class HeroFlightObserverWithFallBack extends StatefulWidget {
     super.key,
     required this.onHeroLanded,
     required this.builder,
+    required this.onHeroFlightStarted,
   });
 
   @override
@@ -97,6 +99,7 @@ class _HeroFlightObserverWithFallBackState
 
   void _onFlightStarted() {
     _flightStarted = true;
+    widget.onHeroFlightStarted();
   }
 
   void _onFlightEnded() {

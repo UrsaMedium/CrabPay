@@ -33,7 +33,6 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
   @override
   void initState() {
     heroTag = widget.tag;
-        // 'card-hero-${widget.productId}-${widget.additionalSuffix}-${widget.index}';
     final theProduct = context
         .read<DatabaseBloc>()
         .state

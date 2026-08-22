@@ -117,32 +117,41 @@ class _CategoryCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Spacer(),
-                      Material(
-                        color: Colors.transparent,
-                        borderRadius: .circular(24),
-                        clipBehavior: .antiAlias,
-                        child: BackdropFilter(
-                          enabled: highGraphics,
-                          filter: .blur(sigmaX: 12, sigmaY: 12),
-                          child: GestureDetector(
-                            onTap: () => onCategoryViewOpen(subTag),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: context.appColorScheme.secondaryContainer
-                                    .withValues(alpha: highGraphics ? .4 : .9),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 8,
+                      Hero(
+                        tag: subTag,
+                        createRectTween: (begin, end) =>
+                            MaterialRectArcTween(begin: begin, end: end),
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: .circular(24),
+                          clipBehavior: .antiAlias,
+                          child: BackdropFilter(
+                            enabled: highGraphics,
+                            filter: .blur(sigmaX: 12, sigmaY: 12),
+                            child: GestureDetector(
+                              onTap: () => onCategoryViewOpen(subTag),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context
+                                      .appColorScheme
+                                      .secondaryContainer
+                                      .withValues(
+                                        alpha: highGraphics ? .4 : .9,
+                                      ),
                                 ),
-                                child: Text(
-                                  'More',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: context
-                                        .appColorScheme
-                                        .onSecondaryContainer,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 8,
+                                  ),
+                                  child: Text(
+                                    'More',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: context
+                                          .appColorScheme
+                                          .onSecondaryContainer,
+                                    ),
                                   ),
                                 ),
                               ),

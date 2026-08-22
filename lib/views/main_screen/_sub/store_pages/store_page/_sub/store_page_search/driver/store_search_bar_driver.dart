@@ -77,10 +77,6 @@ class _MaterialStoreSearchBarDriverState
   }
 
   void _onSubmitted(String query) {
-    getIt<InnerLoggerHandler>().logBreadcrumb(
-      message: 'StoreSearchBarDriver _onSubmitted',
-      data: {'query': query},
-    );
     _keyBoardEventCanBeTriggered = false;
     setState(() {
       _isSearchOpen = false;

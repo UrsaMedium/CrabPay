@@ -16,6 +16,7 @@ class StoreCategoryViewDriver extends StatefulWidget {
 
 class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
   late final List<Product> products;
+  List<Product> filteredProducts = [];
   @override
   void initState() {
     products = (context.read<DatabaseBloc>().state.products ?? [])
@@ -24,8 +25,17 @@ class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
     super.initState();
   }
 
+  void _onSearchSubmitedCallBack(List<Product> productsFromSearch) {
+    filteredProducts = productsFromSearch;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialStoreCategoryView(tag: widget.tag, products: products);
+    return MaterialStoreCategoryView(
+      tag: widget.tag,
+      products: filteredProducts.isEmpty ? products : filteredProducts,
+      onSearchSubmitedCallBack: (prdcts) => _onSearchSubmitedCallBack(prdcts),
+    );
   }
 }

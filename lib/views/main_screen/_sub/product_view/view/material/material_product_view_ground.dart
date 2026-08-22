@@ -71,6 +71,7 @@ class MaterialProductView extends StatelessWidget {
                   children: [
                     HeroFlightObserverWithFallBack(
                       onHeroLanded: onPageTransitionEnd,
+                      onHeroFlightStarted: () {},
                       builder: (context, onFlightStarted, onFlightEnded) {
                         return Hero(
                           tag: tag,

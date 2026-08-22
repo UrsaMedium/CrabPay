@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @immutable
 class StorePageState extends Equatable {
+  final bool isHeroFlies;
+  final String? whoFlies;
   final List<Product>? filterdProductList;
   final List<Product>? products;
   final List<Product>? productsToShow;
@@ -17,22 +19,38 @@ class StorePageState extends Equatable {
     this.filterdProductList,
     this.products,
     this.productsToShow,
+    this.isHeroFlies = false,
+    this.whoFlies,
   });
 
   StorePageState copyWith({
     List<Product>? filterdProductList,
     List<Product>? products,
     List<Product>? productsToShow,
+    bool? isHeroFlies,
+    String? whoFlies,
   }) {
     return StorePageState(
       filterdProductList: filterdProductList ?? this.filterdProductList,
       products: products ?? this.products,
       productsToShow: productsToShow ?? this.productsToShow,
+      isHeroFlies: isHeroFlies ?? this.isHeroFlies,
+      whoFlies: whoFlies == null
+          ? this.whoFlies
+          : whoFlies.isEmpty
+          ? null
+          : whoFlies,
     );
   }
 
   @override
-  List<Object?> get props => [filterdProductList, products, productsToShow];
+  List<Object?> get props => [
+    filterdProductList,
+    products,
+    productsToShow,
+    isHeroFlies,
+    whoFlies,
+  ];
 }
 
 class StorePageCubit extends Cubit<StorePageState> {
@@ -63,6 +81,14 @@ class StorePageCubit extends Cubit<StorePageState> {
     } else {
       emit(state.copyWith(productsToShow: filteredList));
     }
+  }
+
+  void setHeroFlightTrue(String whoFlies) {
+    emit(state.copyWith(isHeroFlies: true, whoFlies: whoFlies));
+  }
+
+  void setHeroFlightFalse() {
+    emit(state.copyWith(isHeroFlies: false, whoFlies: ''));
   }
 
   @override
