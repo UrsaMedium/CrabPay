@@ -18,6 +18,7 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/inner_chat_h
 import 'package:crabpay/core/backend/pyament_services/payment_bloc/payment_bloc.dart';
 import 'package:crabpay/core/backend/pyament_services/payment_service.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
+import 'package:crabpay/core/global_language_driver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,7 @@ class AppProviders extends StatelessWidget {
                 PaymentBloc(context.read<PaymentOuterHandler>()),
           ),
           BlocProvider(create: (context) => GlobalGraphicBloc()),
+          BlocProvider(create: (context) => GlobalLanguageCubit()),
           BlocProvider(
             create: (context) => ConnectionMonitorCubit(
               connectionMonitor: context.read<InnerConnectionMonitor>(),

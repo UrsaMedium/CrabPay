@@ -1,0 +1,371 @@
+{
+  "@@locale": "en",
+  "failedToGetOrCreate": "Failed to get or create support thread",
+  "failedToSendMessagePlease": "Failed to send message. Please try again.",
+  "failedToFetchAllThreads": "Failed to fetch all threads",
+  "failedToAddTheProduct": "Failed to add the product",
+  "failedToDeleteTheProduct": "Failed to delete the product",
+  "failedToAddTheField": "Failed to add the field",
+  "failedToDeleteTheField": "Failed to delete the field",
+  "failedToAddTheCurrencies": "Failed to add the currencies",
+  "failedToDeleteTheCurrencies": "Failed to delete the currencies",
+  "failedToAddFeaturedProduct": "Failed to add Featured Product",
+  "failedToDeleteFeaturedProduct": "Failed to delete Featured Product",
+  "failedToFetchProducts": "Failed to fetch products",
+  "failedToFetchFields": "Failed to fetch fields",
+  "failedToFetchCurrencies": "Failed to fetch currencies",
+  "failedToFetchFeaturedProducts": "Failed to fetch Featured Products",
+  "failedToAddUserPreference": "Failed to add User Preference",
+  "failedToFetchUserPreference": "Failed to fetch User Preference",
+  "failedToDeleteUserPreference": "Failed to delete User Preference",
+  "failedToFetchCartItems": "Failed to fetch cart items",
+  "failedToLoadOrderHistory": "Failed to load order history",
+  "failedToFilterOrderHistory": "Failed to filter order history",
+  "failedToDeleteTheCart": "Failed to delete the cart item",
+  "failedToAddTheCart": "Failed to add the cart item",
+  "failedToFetchPendingOrders": "Failed to fetch pending orders cart items",
+  "registrationFailed": "Registration failed",
+  "registerToBuy": "Register to Buy",
+  "email": "Email*",
+  "password": "Password*",
+  "register": "Register",
+  "dismiss": "Dismiss",
+  "emptyKey": "🦀",
+  "deleting": "Deleting",
+  "battlePassCredits": "Battle Pass & Credits",
+  
+  "price249": "$2.49",
+  "error": "ERROR",
+  "loginButtonError": "Login Button Error",
+  "noConnection": "No Connection :(",
+  "crabPay": "🦀 Crab Pay",
+  "eeeeeh": "eeeeeh",
+  "boo": "BOO",
+
+  "productNameUi": "Product Name: {productName}",
+  "@productNameUi": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "back": "Back",
+  "notEnoughData": "Not enough data",
+  "next": "Next",
+  "addImediatly": "Add imediatly",
+  "mockData": "Mock Data",
+  "inputfield": "InputField",
+  "radiolist": "RadioList",
+  "dropdownlist": "DropdownList",
+  "nameTheFielddata": "Name The Field/Data",
+  "handler": "Handler",
+  "aFieldWithTheSame": "A field with the same name already exists",
+  "addTheField": "Add The Field",
+  "nameTheOption": "Name The Option",
+  "errorNoAppproduct": "ERROR no AppProduct",
+  "errorAFieldWithThe": "ERROR A field with the same name already exists",
+  "everyFieldMustHasA": "Every field must has a name and a handler",
+  "noFieldsIsCreated": "No fields is created",
+  "howComeThereIsNot": "How come there is not just one image field",
+  "fillThePriceOptions": "Fill the price options",
+  "noData": "no data",
+  "sendData": "Send Data",
+
+  "fieldName": "Field Name: {fieldName}",
+  "@fieldName": {
+    "placeholders": {
+      "fieldName": { "type": "String" }
+    }
+  },
+
+  "attributes": "Attributes",
+  "expectedData": "Expected Data",
+  "order": "Order",
+  "productData": "Product Data",
+  "name": "Name",
+  "imageUrl": "Image Url",
+  "description": "   Description",
+  "wrongInput": "wrong input",
+  "addTheFeaturedProductId": "Add The Featured Product Id",
+  "deleteTheFeaturedProductId": "Delete The Featured Product Id",
+  "dbErrorTryAgain": "Db error, try again",
+  "adminPanel": "Admin Panel",
+  "boop": "Boop",
+  "somethingWrongWithTheFields": "Something wrong with the fields",
+  "pushTheFields": "Push The Fields",
+  "somethingWentWronNoProduct": "Something went wron. No product id :()",
+  "typeYourQuestion": "Type your question...",
+  "fetchAllThreads": "Fetch all threads",
+
+  "chatWithUser": "Chat with user {userId}",
+  "@chatWithUser": {
+    "placeholders": {
+      "userId": { "type": "String" }
+    }
+  },
+
+  "fetchData": "fetch data",
+  "addCompleteProduct": "Add complete product",
+  "deleteInstancesFromDb": "Delete instances from DB",
+  "addFeaturedProduct": "Add Featured Product",
+  "answerToUsers": "Answer to users",
+  "testLogger": "Test logger",
+  "hey": "Hey :)",
+
+  "userInfoDebug": "Id: {id}\nemail: {email}\nver: {isEmailVerified}\nanon: {isAnonymous}\nadmin: {isAdmin}\nlimbo: {isLimbo}",
+  "@userInfoDebug": {
+    "placeholders": {
+      "id": { "type": "String" },
+      "email": { "type": "String" },
+      "isEmailVerified": { "type": "String" },
+      "isAnonymous": { "type": "String" },
+      "isAdmin": { "type": "String" },
+      "isLimbo": { "type": "String" }
+    }
+  },
+
+  "product": "product",
+  "field": "Field",
+  "strangeErrorNoFieldsDetected": "Strange error. No fields detected",
+  "setNewPriceImage": "Set new price image",
+  "failedToPassFieldData": "Failed to pass field data",
+  "delete": "Delete",
+  "pleaseWait": "Please, wait",
+  "phew": "Phew",
+
+  "editField": "Edit The Field: its id - {fieldId}",
+  "@editField": {
+    "placeholders": {
+      "fieldId": { "type": "String" }
+    }
+  },
+
+  "fieldNameOg": "Field Name. OG name: {fieldName}",
+  "@fieldNameOg": {
+    "placeholders": {
+      "fieldName": { "type": "String" }
+    }
+  },
+
+  "theNameWillBe": "The name will be {nameText}",
+  "@theNameWillBe": {
+    "placeholders": {
+      "nameText": { "type": "String" }
+    }
+  },
+
+  "orderOfTheFieldOg": "Order of the field. OG order: {order}",
+  "@orderOfTheFieldOg": {
+    "placeholders": {
+      "order": { "type": "String" }
+    }
+  },
+
+  "mustBeInteger": "Must be integer",
+
+  "theOrderWillBe": "The order will be {orderText}",
+  "@theOrderWillBe": {
+    "placeholders": {
+      "orderText": { "type": "String" }
+    }
+  },
+
+  "happilyEverAfter": "Happily ever after",
+  "failed": "failed",
+  "updateTheField": "Update The Field",
+  "someErrorNoFieldFound": "Some error - no field found",
+  "modifyPrices": "Modify prices",
+  "wait": "Wait",
+  "failedToUpdate": "Failed to update",
+  "imageName": "Image name",
+
+  "currentImageName": "Current image name: {imageName}",
+  "@currentImageName": {
+    "placeholders": {
+      "imageName": { "type": "String" }
+    }
+  },
+
+  "productName": "Product name",
+
+  "currentProductName": "Current product name: {productName}",
+  "@currentProductName": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "currentDescription": "Current description: {description}",
+  "@currentDescription": {
+    "placeholders": {
+      "description": { "type": "String" }
+    }
+  },
+
+  "chooseAproductToModify": "Choose aproduct to modify",
+  "pushTheChanges": "Push the changes",
+  "wrongCredentialsPleaseTryAgain": "Wrong credentials. Please try again.",
+  "pleaseSignIn": "Please, Sign In",
+  "authorizationWillBeHappeningHere": "Authorization will be happening here",
+  "forgotPassword": "Forgot Password?",
+  "signIn": "Sign In",
+  "dontHaveAnAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+  "resetPassword": "Reset Password",
+  "enterYourEmailAddressAnd": "Enter your email address and we\\",
+  "sendResetLink": "Send Reset Link",
+  "createAccount": "Create Account",
+  "createAnAccountToShop": "Create an account to shop, top up your ballance, and get support.",
+  "submit": "Submit",
+  "youHaveOneAlreadyThen": "You have one already? Then",
+
+  "registrationFailedDetailed": "Registration failed: {error}",
+  "@registrationFailedDetailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "sent": "sent",
+  "beingDelivered": "Being Delivered",
+  "delivered": "Delivered",
+  "wer23Qf322343": "wer 23, qf32 | 23:43",
+  "orderEijslo93ie": "Order: eijslo93ie",
+  "support": "Support  ",
+  "number2": "2",
+  "products": "Products",
+  "orderPrice": "Order Price",
+  "number3": "3",
+
+  "orderIdDisplay": "Order: {orderId}",
+  "@orderIdDisplay": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+
+  "orderAmountDeliveredItems": " {amount}",
+  "@orderAmountDeliveredItems": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderAmountOfItems": " {amount}",
+  "@orderAmountOfItems": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderPriceDisplay": " ${price}",
+  "@orderPriceDisplay": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "imagesPlusMore": "+{count}",
+  "@imagesPlusMore": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+
+  "orderIdDisplayAlt": "Order: {orderId}",
+  "@orderIdDisplayAlt": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+
+  "orderAmountDeliveredItemsAlt": " {amount}",
+  "@orderAmountDeliveredItemsAlt": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderAmountOfItemsAlt": " {amount}",
+  "@orderAmountOfItemsAlt": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderPriceDisplayAlt": " ${price}",
+  "@orderPriceDisplayAlt": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "cancel": "Cancel",
+  "search": "Search",
+  "yourSearchedOrders": "Your Searched Orders",
+  "tapHereToPickDates": "Tap Here to Pick Dates",
+
+  "fromDate": "From: {date}",
+  "@fromDate": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "toDate": "To: {date}",
+  "@toDate": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "fillAllTheFields": "Fill All The Fields",
+  "readDescription": "Read Description",
+  "addToCart": "Add To Cart",
+  "yourProfile": "Your profile:",
+  "signOut": "  Sign Out",
+  "adminMenu": "Admin Menu",
+  "highGraphics": "High Graphics",
+  "youMustRegisterToBuy": "You must register to buy",
+  "shoppingCart": "Shopping Cart",
+  "confirmThePurchase": "Confirm the purchase",
+  "heyYouHaven": "Hey, You haven\\",
+  "total": "Total",
+  "checkout": "Checkout",
+
+  "orderPaymentId": "Order: {paymentId}",
+  "@orderPaymentId": {
+    "placeholders": {
+      "paymentId": { "type": "String" }
+    }
+  },
+
+  "totalOrderPrice": "Total: {totalPrice}",
+  "@totalOrderPrice": {
+    "placeholders": {
+      "totalPrice": { "type": "String" }
+    }
+  },
+
+  "pay": "Pay",
+
+  "orderCartItemsLength": " {count}",
+  "@orderCartItemsLength": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+
+  "orderTotalPriceAlt": " ${price}",
+  "@orderTotalPriceAlt": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "featuredndeals": "Featured\nDeals",
+  "more": "More",
+  "failedToSendTheMessage": "Failed to send the message :(",
+  "oopsNoChatThread": "Oops, no chat thread",
+  "startTheChat": "Start The Chat"
+}

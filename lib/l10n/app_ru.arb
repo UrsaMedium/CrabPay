@@ -1,0 +1,371 @@
+{
+  "@@locale": "ru",
+  "failedToGetOrCreate": "Не удалось получить или создать чат поддержки",
+  "failedToSendMessagePlease": "Не удалось отправить сообщение. Пожалуйста, попробуйте снова.",
+  "failedToFetchAllThreads": "Не удалось загрузить все чаты",
+  "failedToAddTheProduct": "Не удалось добавить товар",
+  "failedToDeleteTheProduct": "Не удалось удалить товар",
+  "failedToAddTheField": "Не удалось добавить поле",
+  "failedToDeleteTheField": "Не удалось удалить поле",
+  "failedToAddTheCurrencies": "Не удалось добавить валюты",
+  "failedToDeleteTheCurrencies": "Не удалось удалить валюты",
+  "failedToAddFeaturedProduct": "Не удалось добавить рекомендуемый товар",
+  "failedToDeleteFeaturedProduct": "Не удалось удалить рекомендуемый товар",
+  "failedToFetchProducts": "Не удалось загрузить товары",
+  "failedToFetchFields": "Не удалось загрузить поля",
+  "failedToFetchCurrencies": "Не удалось загрузить валюты",
+  "failedToFetchFeaturedProducts": "Не удалось загрузить рекомендуемые товары",
+  "failedToAddUserPreference": "Не удалось добавить настройки пользователя",
+  "failedToFetchUserPreference": "Не удалось загрузить настройки пользователя",
+  "failedToDeleteUserPreference": "Не удалось удалить настройки пользователя",
+  "failedToFetchCartItems": "Не удалось загрузить товары в корзине",
+  "failedToLoadOrderHistory": "Не удалось загрузить историю заказов",
+  "failedToFilterOrderHistory": "Не удалось отфильтровать историю заказов",
+  "failedToDeleteTheCart": "Не удалось удалить товар из корзины",
+  "failedToAddTheCart": "Не удалось добавить товар в корзину",
+  "failedToFetchPendingOrders": "Не удалось загрузить ожидающие заказы",
+  "registrationFailed": "Ошибка регистрации",
+  "registerToBuy": "Зарегистрируйтесь для покупки",
+  "email": "Email*",
+  "password": "Пароль*",
+  "register": "Зарегистрироваться",
+  "dismiss": "Скрыть",
+  "emptyKey": "🦀",
+  "deleting": "Удаление",
+  "battlePassCredits": "Боевой пропуск и кредиты",
+  
+  "price249": "$2.49",
+  "error": "ОШИБКА",
+  "loginButtonError": "Ошибка кнопки входа",
+  "noConnection": "Нет подключения :(",
+  "crabPay": "🦀 Crab Pay",
+  "eeeeeh": "э-э-э",
+  "boo": "БУ",
+
+  "productNameUi": "Название товара: {productName}",
+  "@productNameUi": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "back": "Назад",
+  "notEnoughData": "Недостаточно данных",
+  "next": "Далее",
+  "addImediatly": "Добавить немедленно",
+  "mockData": "Моковые данные",
+  "inputfield": "Поле ввода",
+  "radiolist": "Список радиокнопок",
+  "dropdownlist": "Выпадающий список",
+  "nameTheFielddata": "Назовите поле/данные",
+  "handler": "Обработчик",
+  "aFieldWithTheSame": "Поле с таким именем уже существует",
+  "addTheField": "Добавить поле",
+  "nameTheOption": "Назовите опцию",
+  "errorNoAppproduct": "ОШИБКА нет AppProduct",
+  "errorAFieldWithThe": "ОШИБКА Поле с таким именем уже существует",
+  "everyFieldMustHasA": "Каждое поле должно иметь имя и обработчик",
+  "noFieldsIsCreated": "Поля не созданы",
+  "howComeThereIsNot": "Как так вышло, что нет ни одного поля с изображением",
+  "fillThePriceOptions": "Заполните варианты цен",
+  "noData": "нет данных",
+  "sendData": "Отправить данные",
+
+  "fieldName": "Имя поля: {fieldName}",
+  "@fieldName": {
+    "placeholders": {
+      "fieldName": { "type": "String" }
+    }
+  },
+
+  "attributes": "Атрибуты",
+  "expectedData": "Ожидаемые данные",
+  "order": "Порядок",
+  "productData": "Данные товара",
+  "name": "Название",
+  "imageUrl": "URL изображения",
+  "description": "   Описание",
+  "wrongInput": "неверный ввод",
+  "addTheFeaturedProductId": "Добавить ID рекомендуемого товара",
+  "deleteTheFeaturedProductId": "Удалить ID рекомендуемого товара",
+  "dbErrorTryAgain": "Ошибка БД, попробуйте снова",
+  "adminPanel": "Панель администратора",
+  "boop": "Буп",
+  "somethingWrongWithTheFields": "Что-то не так с полями",
+  "pushTheFields": "Отправить поля",
+  "somethingWentWronNoProduct": "Что-то пошло не так. Нет id товара :()",
+  "typeYourQuestion": "Введите ваш вопрос...",
+  "fetchAllThreads": "Загрузить все чаты",
+
+  "chatWithUser": "Чат с пользователем {userId}",
+  "@chatWithUser": {
+    "placeholders": {
+      "userId": { "type": "String" }
+    }
+  },
+
+  "fetchData": "получить данные",
+  "addCompleteProduct": "Добавить товар целиком",
+  "deleteInstancesFromDb": "Удалить записи из БД",
+  "addFeaturedProduct": "Добавить рекомендуемый товар",
+  "answerToUsers": "Ответить пользователям",
+  "testLogger": "Тестовый логгер",
+  "hey": "Привет :)",
+
+  "userInfoDebug": "Id: {id}\nemail: {email}\nver: {isEmailVerified}\nanon: {isAnonymous}\nadmin: {isAdmin}\nlimbo: {isLimbo}",
+  "@userInfoDebug": {
+    "placeholders": {
+      "id": { "type": "String" },
+      "email": { "type": "String" },
+      "isEmailVerified": { "type": "String" },
+      "isAnonymous": { "type": "String" },
+      "isAdmin": { "type": "String" },
+      "isLimbo": { "type": "String" }
+    }
+  },
+
+  "product": "товар",
+  "field": "Поле",
+  "strangeErrorNoFieldsDetected": "Странная ошибка. Поля не обнаружены",
+  "setNewPriceImage": "Установить новое изображение цены",
+  "failedToPassFieldData": "Не удалось передать данные поля",
+  "delete": "Удалить",
+  "pleaseWait": "Пожалуйста, подождите",
+  "phew": "Фух",
+
+  "editField": "Редактировать поле: его id - {fieldId}",
+  "@editField": {
+    "placeholders": {
+      "fieldId": { "type": "String" }
+    }
+  },
+
+  "fieldNameOg": "Имя поля. Ориг. имя: {fieldName}",
+  "@fieldNameOg": {
+    "placeholders": {
+      "fieldName": { "type": "String" }
+    }
+  },
+
+  "theNameWillBe": "Имя будет {nameText}",
+  "@theNameWillBe": {
+    "placeholders": {
+      "nameText": { "type": "String" }
+    }
+  },
+
+  "orderOfTheFieldOg": "Порядок поля. Ориг. порядок: {order}",
+  "@orderOfTheFieldOg": {
+    "placeholders": {
+      "order": { "type": "String" }
+    }
+  },
+
+  "mustBeInteger": "Должно быть целым числом",
+
+  "theOrderWillBe": "Порядок будет {orderText}",
+  "@theOrderWillBe": {
+    "placeholders": {
+      "orderText": { "type": "String" }
+    }
+  },
+
+  "happilyEverAfter": "Долго и счастливо",
+  "failed": "ошибка",
+  "updateTheField": "Обновить поле",
+  "someErrorNoFieldFound": "Какая-то ошибка - поле не найдено",
+  "modifyPrices": "Изменить цены",
+  "wait": "Подождите",
+  "failedToUpdate": "Не удалось обновить",
+  "imageName": "Имя изображения",
+
+  "currentImageName": "Текущее имя изображения: {imageName}",
+  "@currentImageName": {
+    "placeholders": {
+      "imageName": { "type": "String" }
+    }
+  },
+
+  "productName": "Название товара",
+
+  "currentProductName": "Текущее название товара: {productName}",
+  "@currentProductName": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "currentDescription": "Текущее описание: {description}",
+  "@currentDescription": {
+    "placeholders": {
+      "description": { "type": "String" }
+    }
+  },
+
+  "chooseAproductToModify": "Выберите товар для изменения",
+  "pushTheChanges": "Применить изменения",
+  "wrongCredentialsPleaseTryAgain": "Неверные учетные данные. Пожалуйста, попробуйте снова.",
+  "pleaseSignIn": "Пожалуйста, войдите",
+  "authorizationWillBeHappeningHere": "Здесь будет проходить авторизация",
+  "forgotPassword": "Забыли пароль?",
+  "signIn": "Войти",
+  "dontHaveAnAccount": "Нет аккаунта?",
+  "signUp": "Регистрация",
+  "resetPassword": "Сбросить пароль",
+  "enterYourEmailAddressAnd": "Введите ваш email, и мы\\",
+  "sendResetLink": "Отправить ссылку для сброса",
+  "createAccount": "Создать аккаунт",
+  "createAnAccountToShop": "Создайте аккаунт, чтобы совершать покупки, пополнять баланс и получать поддержку.",
+  "submit": "Подтвердить",
+  "youHaveOneAlreadyThen": "Уже есть аккаунт? Тогда",
+
+  "registrationFailedDetailed": "Ошибка регистрации: {error}",
+  "@registrationFailedDetailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "sent": "отправлен",
+  "beingDelivered": "Доставляется",
+  "delivered": "Доставлен",
+  "wer23Qf322343": "wer 23, qf32 | 23:43",
+  "orderEijslo93ie": "Заказ: eijslo93ie",
+  "support": "Поддержка  ",
+  "number2": "2",
+  "products": "Товары",
+  "orderPrice": "Сумма заказа",
+  "number3": "3",
+
+  "orderIdDisplay": "Заказ: {orderId}",
+  "@orderIdDisplay": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+
+  "orderAmountDeliveredItems": " {amount}",
+  "@orderAmountDeliveredItems": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderAmountOfItems": " {amount}",
+  "@orderAmountOfItems": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderPriceDisplay": " ${price}",
+  "@orderPriceDisplay": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "imagesPlusMore": "+{count}",
+  "@imagesPlusMore": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+
+  "orderIdDisplayAlt": "Заказ: {orderId}",
+  "@orderIdDisplayAlt": {
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+
+  "orderAmountDeliveredItemsAlt": " {amount}",
+  "@orderAmountDeliveredItemsAlt": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderAmountOfItemsAlt": " {amount}",
+  "@orderAmountOfItemsAlt": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+
+  "orderPriceDisplayAlt": " ${price}",
+  "@orderPriceDisplayAlt": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "cancel": "Отмена",
+  "search": "Поиск",
+  "yourSearchedOrders": "Найденные заказы",
+  "tapHereToPickDates": "Нажмите здесь, чтобы выбрать даты",
+
+  "fromDate": "С: {date}",
+  "@fromDate": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "toDate": "По: {date}",
+  "@toDate": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "fillAllTheFields": "Заполните все поля",
+  "readDescription": "Читать описание",
+  "addToCart": "В корзину",
+  "yourProfile": "Ваш профиль:",
+  "signOut": "  Выйти",
+  "adminMenu": "Меню администратора",
+  "highGraphics": "Высокая графика",
+  "youMustRegisterToBuy": "Вам нужно зарегистрироваться для покупки",
+  "shoppingCart": "Корзина",
+  "confirmThePurchase": "Подтвердите покупку",
+  "heyYouHaven": "Эй, вы не\\",
+  "total": "Итого",
+  "checkout": "Оформить заказ",
+
+  "orderPaymentId": "Заказ: {paymentId}",
+  "@orderPaymentId": {
+    "placeholders": {
+      "paymentId": { "type": "String" }
+    }
+  },
+
+  "totalOrderPrice": "Итого: {totalPrice}",
+  "@totalOrderPrice": {
+    "placeholders": {
+      "totalPrice": { "type": "String" }
+    }
+  },
+
+  "pay": "Оплатить",
+
+  "orderCartItemsLength": " {count}",
+  "@orderCartItemsLength": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+
+  "orderTotalPriceAlt": " ${price}",
+  "@orderTotalPriceAlt": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "featuredndeals": "Рекомендуемые\nпредложения",
+  "more": "Ещё",
+  "failedToSendTheMessage": "Не удалось отправить сообщение :(",
+  "oopsNoChatThread": "Упс, нет ветки чата",
+  "startTheChat": "Начать чат"
+}

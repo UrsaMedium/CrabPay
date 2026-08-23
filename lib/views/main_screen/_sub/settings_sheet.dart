@@ -1,4 +1,5 @@
 import 'package:crabpay/core/global_graphic_driver.dart';
+import 'package:crabpay/core/global_language_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,22 +20,34 @@ class _SettingsSheetDriverState extends State<SettingsSheetDriver> {
     }
   }
 
+  void _onLangChange(BuildContext context, bool isRu) {
+    context.read<GlobalLanguageCubit>().setRuLang(isRu: isRu);
+  }
+
   @override
   Widget build(BuildContext context) {
     return _MaterialSettingsSheet(
       onGraphicsToggled: (toggle) => _onGraphicsToggled(context, toggle),
+      onLangChange: (isRu) => _onLangChange(context, isRu),
     );
   }
 }
 
 class _MaterialSettingsSheet extends StatelessWidget {
   final Function(bool) onGraphicsToggled;
-  const _MaterialSettingsSheet({required this.onGraphicsToggled});
+  final Function(bool) onLangChange;
+  const _MaterialSettingsSheet({
+    required this.onGraphicsToggled,
+    required this.onLangChange,
+  });
 
   @override
   Widget build(BuildContext context) {
     final highGraphics = context.select<GlobalGraphicBloc, bool>(
       (bloc) => bloc.state.highGraphics,
+    );
+    final isRu = context.select<GlobalLanguageCubit, bool>(
+      (bloc) => bloc.state.isRu,
     );
     return Wrap(
       children: [
@@ -88,6 +101,16 @@ class _MaterialSettingsSheet extends StatelessWidget {
                               Switch(
                                 value: highGraphics,
                                 onChanged: (value) => onGraphicsToggled(value),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: .spaceBetween,
+                            children: [
+                              Text('Turn On Russian'),
+                              Switch(
+                                value: isRu,
+                                onChanged: (value) => onLangChange(value),
                               ),
                             ],
                           ),
