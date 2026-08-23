@@ -72,6 +72,7 @@ class _StorePageDriverState extends State<StorePageDriver>
               return MaterialStorePage(
                 reFresher: () => _reFresher(context),
                 onCategoryViewOpen: (tag) => _onCategoryViewOpen(context, tag),
+                onSearchSubmitedCallBack: (p0) => _onSearchSubmitedCallBack(p0),
               );
             }
 

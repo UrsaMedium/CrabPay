@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
+import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/_sub/store_page_search/driver/store_search_bar_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,10 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MaterialStorePage extends StatelessWidget {
   final Future<void> Function() reFresher;
   final Function(String) onCategoryViewOpen;
+  final Function(List<Product>) onSearchSubmitedCallBack;
   const MaterialStorePage({
     super.key,
     required this.reFresher,
     required this.onCategoryViewOpen,
+    required this.onSearchSubmitedCallBack,
   });
 
   @override
@@ -31,8 +35,8 @@ class MaterialStorePage extends StatelessWidget {
                 slivers: [
                   SliverPadding(
                     padding: .only(
-                      top: 32,
-                      bottom: MediaQuery.paddingOf(context).bottom + 32,
+                      top: 44,
+                      bottom: MediaQuery.paddingOf(context).bottom + 52,
                     ),
                   ),
                   SliverList.builder(
@@ -44,6 +48,15 @@ class MaterialStorePage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.paddingOf(context).top + 12,
+            right: 0,
+            child: MaterialStoreSearchBarDriver(
+              products: context.read<DatabaseBloc>().state.products ?? [],
+              onSearchSubmitedCallBack: (prdcts) =>
+                  onSearchSubmitedCallBack(prdcts),
             ),
           ),
         ],
