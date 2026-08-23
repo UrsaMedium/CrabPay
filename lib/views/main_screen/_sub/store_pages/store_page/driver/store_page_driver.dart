@@ -27,6 +27,8 @@ class _StorePageDriverState extends State<StorePageDriver>
   late final StorePageCubit _storePageCubit;
   Completer<void>? _refreshCompleter;
 
+  bool oldView = false;
+
   @override
   void initState() {
     _storePageCubit = StorePageCubit(dbBLoc: context.read<DatabaseBloc>());
@@ -67,19 +69,46 @@ class _StorePageDriverState extends State<StorePageDriver>
         value: _storePageCubit,
         child: Builder(
           builder: (context) {
-            final newPage = 2 == 2;
-            if (newPage) {
-              return MaterialStorePage(
-                reFresher: () => _reFresher(context),
-                onCategoryViewOpen: (tag) => _onCategoryViewOpen(context, tag),
-                onSearchSubmitedCallBack: (p0) => _onSearchSubmitedCallBack(p0),
-              );
-            }
-
-            return MaterialStorePageOG(
-              reFresher: () => _reFresher(context),
-              onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
+            return Scaffold(
+              body: Stack(
+                children: [
+                  oldView
+                      ? MaterialStorePageOG(
+                          reFresher: () => _reFresher(context),
+                          onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
+                        )
+                      : MaterialStorePage(
+                          reFresher: () => _reFresher(context),
+                          onCategoryViewOpen: (tag) =>
+                              _onCategoryViewOpen(context, tag),
+                          onSearchSubmitedCallBack: (p0) =>
+                              _onSearchSubmitedCallBack(p0),
+                        ),
+                  Positioned(
+                    bottom: MediaQuery.paddingOf(context).bottom,
+                    right: 2,
+                    child: ElevatedButton(
+                      onPressed: () => setState(() {
+                        oldView = !oldView;
+                      }),
+                      child: Text(oldView ? 'New View' : 'Old View'),
+                    ),
+                  ),
+                ],
+              ),
             );
+            // if (newPage) {
+            //   return MaterialStorePage(
+            //     reFresher: () => _reFresher(context),
+            //     onCategoryViewOpen: (tag) => _onCategoryViewOpen(context, tag),
+            //     onSearchSubmitedCallBack: (p0) => _onSearchSubmitedCallBack(p0),
+            //   );
+            // }
+
+            // return MaterialStorePageOG(
+            //   reFresher: () => _reFresher(context),
+            //   onSearchSubmitedCallBack: _onSearchSubmitedCallBack,
+            // );
           },
         ),
       ),

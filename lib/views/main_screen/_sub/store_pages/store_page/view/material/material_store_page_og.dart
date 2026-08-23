@@ -82,17 +82,21 @@ class MaterialStorePageOG extends StatelessWidget {
               ],
             ),
           ),
-          Builder(
-            builder: (context) {
-              final products = context.select<StorePageCubit, List<Product>>(
-                (cubit) => cubit.state.products ?? [],
-              );
-              return MaterialStoreSearchBarDriver(
-                products: products,
-                onSearchSubmitedCallBack: (prdcts) =>
-                    onSearchSubmitedCallBack(prdcts),
-              );
-            },
+          Positioned(
+            top: MediaQuery.paddingOf(context).top + 8,
+            right: 8,
+            child: Builder(
+              builder: (context) {
+                final products = context.select<StorePageCubit, List<Product>>(
+                  (cubit) => cubit.state.products ?? [],
+                );
+                return MaterialStoreSearchBarDriver(
+                  products: products,
+                  onSearchSubmitedCallBack: (prdcts) =>
+                      onSearchSubmitedCallBack(prdcts),
+                );
+              },
+            ),
           ),
         ],
       ),

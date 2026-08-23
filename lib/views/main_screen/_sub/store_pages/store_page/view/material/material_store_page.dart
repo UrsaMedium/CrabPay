@@ -25,6 +25,7 @@ class MaterialStorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        alignment: .topRight,
         children: [
           RefreshIndicator(
             edgeOffset: MediaQuery.paddingOf(context).top,
@@ -36,7 +37,7 @@ class MaterialStorePage extends StatelessWidget {
                   SliverPadding(
                     padding: .only(
                       top: 44,
-                      bottom: MediaQuery.paddingOf(context).bottom + 52,
+                      bottom: MediaQuery.paddingOf(context).bottom + 56,
                     ),
                   ),
                   SliverList.builder(
@@ -50,9 +51,11 @@ class MaterialStorePage extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: MediaQuery.paddingOf(context).top + 12,
-            right: 0,
+          Padding(
+            padding: .only(
+              top: MediaQuery.paddingOf(context).top + 16,
+              left: 16,
+            ),
             child: MaterialStoreSearchBarDriver(
               products: context.read<DatabaseBloc>().state.products ?? [],
               onSearchSubmitedCallBack: (prdcts) =>

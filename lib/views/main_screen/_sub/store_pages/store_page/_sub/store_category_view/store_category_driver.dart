@@ -17,6 +17,8 @@ class StoreCategoryViewDriver extends StatefulWidget {
 class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
   late final List<Product> products;
   List<Product> filteredProducts = [];
+  bool _canPop = false;
+
   @override
   void initState() {
     products = (context.read<DatabaseBloc>().state.products ?? [])
@@ -30,9 +32,17 @@ class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
     setState(() {});
   }
 
+  void _setCanPopState(bool canPop) {
+    setState(() {
+      _canPop = canPop;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialStoreCategoryView(
+      canPop: _canPop,
+      setCanPopState: (p0) => _setCanPopState(p0),
       tag: widget.tag,
       products: filteredProducts.isEmpty ? products : filteredProducts,
       onSearchSubmitedCallBack: (prdcts) => _onSearchSubmitedCallBack(prdcts),

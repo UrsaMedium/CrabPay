@@ -42,7 +42,9 @@ class MaterialProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.viewInsetsOf(context).bottom;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: context.appColorScheme.surfaceContainerLow,
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -64,6 +66,7 @@ class MaterialProductView extends StatelessWidget {
             final isPageReady = context.select<ProductViewCubit, bool>(
               (cubit) => cubit.state.isPageReady,
             );
+
             return Stack(
               children: [
                 Column(
@@ -139,7 +142,13 @@ class MaterialProductView extends StatelessWidget {
                 ),
 
                 AnimatedPositioned(
-                  top: isPageReady ? descPosition : buyPosition,
+                  top:
+                      (isPageReady ? descPosition : buyPosition)! -
+                              keyboardHeight <
+                          MediaQuery.paddingOf(context).top
+                      ? MediaQuery.paddingOf(context).top
+                      : (isPageReady ? descPosition : buyPosition)! -
+                            keyboardHeight,
                   left: 0,
                   right: 0,
                   duration: const Duration(milliseconds: 250),
@@ -151,7 +160,17 @@ class MaterialProductView extends StatelessWidget {
                 ),
 
                 AnimatedPositioned(
-                  top: isPageReady ? buyPosition : MediaQuery.heightOf(context),
+                  top:
+                      (isPageReady
+                                  ? buyPosition
+                                  : MediaQuery.heightOf(context))! -
+                              keyboardHeight <
+                          MediaQuery.paddingOf(context).top
+                      ? MediaQuery.paddingOf(context).top + 54
+                      : (isPageReady
+                                ? buyPosition
+                                : MediaQuery.heightOf(context))! -
+                            keyboardHeight,
                   left: 0,
                   right: 0,
                   height: context.read<ProductViewCubit>().state.buyLayerHeight,

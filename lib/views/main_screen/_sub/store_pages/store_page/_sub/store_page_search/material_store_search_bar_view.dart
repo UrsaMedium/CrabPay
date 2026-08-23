@@ -71,26 +71,22 @@ class _MaterialStoreSearchBarViewState
     final highGraphics = context.select<GlobalGraphicBloc, bool>(
       (bloc) => bloc.state.highGraphics,
     );
-    return Positioned(
-      top: MediaQuery.paddingOf(context).top + 12,
-      right: 0,
-      child: AnimatedSize(
-        onEnd: () {
-          if (widget.isSearchOpen && !_materialSearchController.isOpen) {
-            _materialSearchController.openView();
-          }
-        },
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.linearToEaseOut,
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 150),
-          layoutBuilder: (currentChild, previousChildren) => Stack(
-            children: [
-              widget.isSearchOpen
-                  ? _expandedSearchBar(context)
-                  : _collapsedSearchBar(context, highGraphics),
-            ],
-          ),
+    return AnimatedSize(
+      onEnd: () {
+        if (widget.isSearchOpen && !_materialSearchController.isOpen) {
+          _materialSearchController.openView();
+        }
+      },
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.linearToEaseOut,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 150),
+        layoutBuilder: (currentChild, previousChildren) => Stack(
+          children: [
+            widget.isSearchOpen
+                ? _expandedSearchBar(context)
+                : _collapsedSearchBar(context, highGraphics),
+          ],
         ),
       ),
     );
