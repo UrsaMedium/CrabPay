@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/admin_chat_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_chat_service/admin_chat_inner_circle/chat_bloc/adminchat_event.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
@@ -37,9 +38,11 @@ class ChooseThreadView extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                context.read<ChatBlocAdmin>().add(ChatEventFetchAllThreadsAdmin());
+                context.read<ChatBlocAdmin>().add(
+                  ChatEventFetchAllThreadsAdmin(),
+                );
               },
-              child: Text('Fetch all threads'),
+              child: Text(context.l10n.fetchAllThreads),
             ),
             if (allThreads != null)
               Expanded(

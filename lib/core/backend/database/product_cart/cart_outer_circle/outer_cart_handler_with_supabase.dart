@@ -299,7 +299,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to fetch cart items',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch cart items');
+      Fluttertoast.showToast(msg: 'failedToFetchCartItems');
       rethrow;
     }
   }
@@ -367,7 +367,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to fetch unique payment IDs',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to load order history');
+      Fluttertoast.showToast(msg: 'failedToLoadOrderHistory');
       rethrow;
     }
   }
@@ -485,7 +485,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to fetch filtered unique payment IDs',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to filter order history');
+      Fluttertoast.showToast(msg: 'failedToFilterOrderHistory');
       rethrow;
     }
   }
@@ -553,7 +553,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to fetch unique payment IDs',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to load order history');
+      Fluttertoast.showToast(msg: 'failedToLoadOrderHistory');
       rethrow;
     }
   }
@@ -614,7 +614,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to fetch cart items',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch cart items');
+      Fluttertoast.showToast(msg: 'failedToFetchCartItems');
       rethrow;
     }
   }
@@ -639,7 +639,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to delete cart items',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete the cart item');
+      Fluttertoast.showToast(msg: 'failedToDeleteTheCart');
       rethrow;
     }
   }
@@ -674,7 +674,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         error: 'Failed to add cart items',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add the cart item');
+      Fluttertoast.showToast(msg: 'failedToAddTheCart');
       rethrow;
     }
   }
@@ -855,7 +855,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final nodes = result.data?['cartItemCollection']['edges'] as List? ?? [];
       return _dataCasting(nodes);
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to fetch pending orders cart items');
+      Fluttertoast.showToast(msg: 'failedToFetchPendingOrders');
       rethrow;
     }
   }

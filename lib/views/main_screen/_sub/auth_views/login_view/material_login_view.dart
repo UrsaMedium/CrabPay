@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,7 @@ class MaterialLoginView extends StatelessWidget {
           crossAxisAlignment: .stretch,
           children: [
             Text(
-              'Please, Sign In',
+              context.l10n.pleaseSignIn,
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 30,
@@ -54,7 +55,7 @@ class MaterialLoginView extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Authorization will be happening here',
+              context.l10n.authorizationWillBeHappeningHere,
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 40),
@@ -79,7 +80,7 @@ class MaterialLoginView extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
-                labelText: 'Email',
+                labelText: context.l10n.email,
                 filled: true,
               ),
             ),
@@ -105,7 +106,7 @@ class MaterialLoginView extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
-                labelText: 'Password',
+                labelText: context.l10n.password,
                 filled: true,
               ),
             ),
@@ -115,7 +116,7 @@ class MaterialLoginView extends StatelessWidget {
                 onPressed: () {
                   onForgotPassword();
                 },
-                child: Text('Forgot Password?'),
+                child: Text(context.l10n.forgotPassword),
               ),
             ),
             SizedBox(height: 40),
@@ -128,8 +129,8 @@ class MaterialLoginView extends StatelessWidget {
               ),
               child: isSubmitting
                   ? const CircularProgressIndicator()
-                  : const Text(
-                      'Sign In',
+                  :  Text(
+                      context.l10n.signIn,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -140,9 +141,9 @@ class MaterialLoginView extends StatelessWidget {
             Row(
               children: [
                 Expanded(child: Divider(color: context.appColorScheme.outline)),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text("Don't have an account?"),
+                  child: Text(context.l10n.dontHaveAnAccount),
                 ),
                 Expanded(child: Divider(color: context.appColorScheme.outline)),
               ],
@@ -153,8 +154,8 @@ class MaterialLoginView extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text(
-                'Sign Up',
+              child: Text(
+                context.l10n.signUp,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),

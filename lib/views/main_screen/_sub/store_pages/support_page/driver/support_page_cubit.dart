@@ -114,7 +114,7 @@ class SupportPageCubit extends Cubit<SupportPageState> {
     } else if (chatState.status == ChatStates.messageSentFailed ||
         chatState.status == ChatStates.shadowMessageSentFailed) {
       emit(state.copyWith(isSendingMessage: false));
-      Fluttertoast.showToast(msg: 'Failed to send the message :(');
+      Fluttertoast.showToast(msg: 'failedToSendTheMessage');
     }
   }
 

@@ -21,7 +21,8 @@ class ProductField {
 
   set makeThemImage(bool isItThough) => isPriceImage = isItThough;
 
-  set giveImageToAttributes(Map<String, double> pricaImage) => priceImages = pricaImage;
+  set giveImageToAttributes(Map<String, double> pricaImage) =>
+      priceImages = pricaImage;
 
   factory ProductField.intial() => ProductField(
     id: '',
@@ -31,5 +32,4 @@ class ProductField {
     handler: '',
     isPriceImage: false,
   );
-
 }

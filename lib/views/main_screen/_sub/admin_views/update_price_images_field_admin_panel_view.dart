@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -37,7 +38,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
   @override
   void initState() {
     if (widget.fieldId == null || widget.productId == null) {
-      Fluttertoast.showToast(msg: 'Failed to pass field data');
+      Fluttertoast.showToast(msg: context.l10n.failedToPassFieldData);
       getIt<InnerLoggerHandler>().logBreadcrumb(
         message:
             'UpdatePriceImagesFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
@@ -93,7 +94,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
             },
             icon: Icon(Icons.arrow_back),
           ),
-          title: Text('Admin Panel'),
+          title: Text(context.l10n.adminPanel),
           actions: [
             if (_currentField != null)
               Padding(
@@ -104,12 +105,14 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                         state.states == DatabaseStatesAdmin.dbLoading;
                     return Row(
                       children: [
-                        Text('Delete'),
+                        Text(context.l10n.delete),
                         IconButton(
                           iconSize: 32,
                           onPressed: () async {
                             if (beingLoaded) {
-                              Fluttertoast.showToast(msg: 'Please, wait');
+                              Fluttertoast.showToast(
+                                msg: context.l10n.pleaseWait,
+                              );
                             } else {
                               getIt<InnerLoggerHandler>().logBreadcrumb(
                                 message:
@@ -120,14 +123,16 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                                   await showOnDatabaseItemDelete(context) ??
                                   false;
                               if (delete && context.mounted) {
-                                Fluttertoast.showToast(msg: 'Deleting');
+                                Fluttertoast.showToast(
+                                  msg: context.l10n.deleting,
+                                );
                                 context.read<DatabaseBlocAdmin>().add(
                                   DatabaseEventDeleteProductFieldAdmin(
                                     productField: _currentField!,
                                   ),
                                 );
                               } else {
-                                Fluttertoast.showToast(msg: 'Phew');
+                                Fluttertoast.showToast(msg: 'phew');
                               }
                             }
                           },
@@ -159,7 +164,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                             child: Column(
                               children: [
                                 Divider(thickness: 3),
-                                Text('Modify prices'),
+                                Text(context.l10n.modifyPrices),
                                 _everyPriceFunction(context),
                               ],
                             ),
@@ -216,15 +221,15 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                                   ),
                                 );
                                 Fluttertoast.showToast(
-                                  msg: 'Happily ever after',
+                                  msg: context.l10n.happilyEverAfter,
                                 );
                                 context.go(AppRoutes.home.path);
                               } else {
-                                Fluttertoast.showToast(msg: 'Wait');
+                                Fluttertoast.showToast(msg: context.l10n.wait);
                               }
                             },
                             child: state.states != DatabaseStatesAdmin.dbLoading
-                                ? Text('Update The Field')
+                                ? Text(context.l10n.updateTheField)
                                 : CircularProgressIndicator(),
                           );
                         },
@@ -232,7 +237,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                     ),
                   ],
                 )
-              : Text('Some error - no field found'),
+              : Text(context.l10n.someErrorNoFieldFound),
         ),
       ),
     );
@@ -314,7 +319,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
         collapsedBackgroundColor: context.appColorScheme.onPrimaryFixedVariant,
 
         title: Text(_currentField!.fieldName),
-        subtitle: Text('Fill the price options'),
+        subtitle: Text(context.l10n.fillThePriceOptions),
         children: _priceRangeListWidgetGenerator(),
       ),
     );

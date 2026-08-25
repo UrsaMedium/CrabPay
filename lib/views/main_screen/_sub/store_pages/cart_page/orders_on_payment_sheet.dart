@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -93,8 +94,8 @@ class MaterialOrdersOnPaymentSheet extends StatelessWidget {
                 child: Center(
                   child: Text(
                     orders.isEmpty
-                        ? 'How Did You Get Here!?'
-                        : 'Waiting Your Payment',
+                        ? context.l10n.howDidYouGEtHere
+                        : context.l10n.waitingYourPayment,
                     style: TextStyle(
                       color: context.appColorScheme.onSecondary,
                       fontSize: 16,
@@ -159,7 +160,7 @@ class OrderContainerForOrdersOnPaymentSheet extends StatelessWidget {
               spacing: 6,
               children: [
                 Text(
-                  'Order: ${order.paymentId.substring(0, 7)}',
+                  '${context.l10n.order}: ${order.paymentId.substring(0, 7)}',
                   style: TextStyle(
                     color: context.appColorScheme.onSurface,
                     fontSize: 15,
@@ -167,7 +168,7 @@ class OrderContainerForOrdersOnPaymentSheet extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Total: ${order.totalPrice}',
+                  '${context.l10n.total}: ${order.totalPrice}',
                   style: TextStyle(
                     color: context.appColorScheme.onSurface,
                     fontSize: 15,
@@ -185,7 +186,7 @@ class OrderContainerForOrdersOnPaymentSheet extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () => onPaymentLinkPressed(order.paymentLink),
-                  child: Text('Pay'),
+                  child: Text(context.l10n.pay),
                 ),
               ],
             ),
@@ -242,7 +243,7 @@ class _OrderDetails extends StatelessWidget {
                               ),
                               style: const TextStyle(fontWeight: .w600),
                             ),
-                            Text('Order: ${order.paymentId.substring(0, 7)}'),
+                            Text('${context.l10n.order}: ${order.paymentId.substring(0, 7)}'),
                           ],
                         ),
                       ],
@@ -258,14 +259,14 @@ class _OrderDetails extends StatelessWidget {
                           Row(
                             crossAxisAlignment: .start,
                             children: [
-                              Text('Products'),
+                              Text(context.l10n.products),
                               Text(' ${order.cartItems.length}'),
                             ],
                           ),
                           Row(
                             crossAxisAlignment: .start,
                             children: [
-                              Text('Order Price'),
+                              Text(context.l10n.orderPrice),
                               Text(' \$${order.totalPrice}'),
                             ],
                           ),
@@ -315,7 +316,7 @@ class _OrderDetails extends StatelessWidget {
                                               .appColorScheme
                                               .onInverseSurface,
                                           alignment: Alignment.center,
-                                          child: Text('🦀'),
+                                          child: Text(context.l10n.emptyKey),
                                         ),
                                     placeholder: (context, url) =>
                                         MaterialShimeringPlaceHolder(

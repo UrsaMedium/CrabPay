@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -115,7 +116,7 @@ class MaterialProductCard extends StatelessWidget {
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
                         alignment: Alignment.center,
-                        child: Text('🦀'),
+                        child: Text(context.l10n.emptyKey),
                       ),
                       placeholder: (context, url) =>
                           MaterialShimeringPlaceHolder(

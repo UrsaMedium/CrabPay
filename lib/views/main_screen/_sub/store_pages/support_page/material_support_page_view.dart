@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/chat_message_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
@@ -62,7 +63,7 @@ class MaterialSupportPageView extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: () => onStartChatPressed(),
-                  child: Text('Start The Chat'),
+                  child: Text(context.l10n.startTheChat),
                 ),
               ),
             if (isGettingThread) Center(child: CircularProgressIndicator()),
@@ -102,8 +103,8 @@ class MaterialSupportPageView extends StatelessWidget {
                                   children: [
                                     Icon(Icons.support_agent_rounded),
                                     Text(
+                                      context.l10n.contctOurSupportTeamFoAssistance,
                                       textAlign: .center,
-                                      'Contact our support team\n for assistance',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
@@ -208,7 +209,7 @@ class MaterialSupportPageView extends StatelessWidget {
                                       focusedBorder: InputBorder.none,
                                       errorBorder: InputBorder.none,
                                       disabledBorder: InputBorder.none,
-                                      hint: Text('Type your question...'),
+                                      hint: Text(context.l10n.typeYourQuestion),
                                       filled: true,
                                     ),
                                   ),

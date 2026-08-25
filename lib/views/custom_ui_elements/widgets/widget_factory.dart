@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/logger/logger_inner_handler/inner_logger_handler.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -328,6 +329,6 @@ Widget theAppWidgetBuilder({
         isCupertino: isCupertino,
       );
     default:
-      return Text('ERROR');
+      return Text(context.l10n.error);
   }
 }

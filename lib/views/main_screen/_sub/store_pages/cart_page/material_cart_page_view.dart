@@ -1,5 +1,6 @@
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/pending_order_model.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/cart_item_widget.dart';
@@ -69,7 +70,7 @@ class _ListOfCartItemsWidget extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 8, left: 16),
           child: Text(
-            'Shopping Cart',
+            context.l10n.shoppingCart,
             textAlign: .left,
             style: TextStyle(
               color: context.appColorScheme.primaryFixedDim,
@@ -78,16 +79,16 @@ class _ListOfCartItemsWidget extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 16, bottom: 4.0),
-          child: Text('Confirm the purchase', textAlign: .left),
+          child: Text(context.l10n.confirmThePurchase, textAlign: .left),
         ),
         cartItemsToBuy.isEmpty
             ? Center(
                 child: Padding(
                   padding: const .symmetric(vertical: 16),
                   child: Text(
-                    'Hey, You haven\'t pick anything',
+                    context.l10n.heyYouHaven,
                     style: TextStyle(
                       color: context.appColorScheme.secondary,
                       fontWeight: .bold,
@@ -176,7 +177,7 @@ class _BuyPannelWidget extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                'Total',
+                                context.l10n.total,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: .w500,
@@ -201,7 +202,7 @@ class _BuyPannelWidget extends StatelessWidget {
                             minimumSize: Size(double.maxFinite, 50),
                           ),
                           child: Text(
-                            'Checkout',
+                            context.l10n.checkout,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -225,8 +226,8 @@ class _BuyPannelWidget extends StatelessWidget {
                             ),
                             child: Text(
                               pendingOrders.length == 1
-                                  ? 'You have 1 Unpaid Order!'
-                                  : 'You have ${pendingOrders.length} Unpaid Orders!',
+                                  ? context.l10n.youHave1UnpaidOrder
+                                  : '${context.l10n.youHavenUnpaidOrdersSTART} ${pendingOrders.length} ${context.l10n.youHavenUnpaidOrdersEND}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,

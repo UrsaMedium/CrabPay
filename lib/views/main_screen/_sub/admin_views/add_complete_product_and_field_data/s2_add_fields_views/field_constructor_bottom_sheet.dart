@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +22,25 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
   String? handler;
   String? fieldName;
   TextEditingController fieldNameController = TextEditingController();
-  final List<DropdownMenuItem<String>> _handlersList = [
-    DropdownMenuItem(value: 'InputField', child: Text('InputField')),
-    DropdownMenuItem(value: 'RadioList', child: Text('RadioList')),
-    DropdownMenuItem(value: 'DropdownList', child: Text('DropdownList')),
-  ];
+  late final List<DropdownMenuItem<String>> _handlersList;
   final List<Widget> _optionsFields = [];
   final Map<OptionField, String> expetedDataBoundToAField = {};
+
+  @override
+  void initState() {
+    _handlersList = [
+      DropdownMenuItem(
+        value: 'InputField',
+        child: Text(context.l10n.inputfield),
+      ),
+      DropdownMenuItem(value: 'RadioList', child: Text(context.l10n.radiolist)),
+      DropdownMenuItem(
+        value: 'DropdownList',
+        child: Text(context.l10n.dropdownlist),
+      ),
+    ];
+    super.initState();
+  }
 
   void _onOptionFieldDelete(OptionField fieldToDelte) {
     setState(() {
@@ -172,7 +185,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                       context.pop();
                     } else {
                       Fluttertoast.showToast(
-                        msg: 'A field with the same name already exists',
+                        msg: context.l10n.aFieldWithTheSame,
                       );
                     }
                   }

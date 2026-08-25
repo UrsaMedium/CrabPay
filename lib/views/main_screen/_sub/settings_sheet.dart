@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/global_language_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -97,7 +98,7 @@ class _MaterialSettingsSheet extends StatelessWidget {
                           Row(
                             mainAxisAlignment: .spaceBetween,
                             children: [
-                              Text('High Graphics'),
+                              Text(context.l10n.highGraphics),
                               Switch(
                                 value: highGraphics,
                                 onChanged: (value) => onGraphicsToggled(value),
@@ -107,10 +108,11 @@ class _MaterialSettingsSheet extends StatelessWidget {
                           Row(
                             mainAxisAlignment: .spaceBetween,
                             children: [
-                              Text('Turn On Russian'),
+                              Text(context.l10n.turnOnRussian),
                               Switch(
                                 value: isRu,
-                                onChanged: (value) => onLangChange(value),
+                                onChanged:
+                                    null, //(value) => onLangChange(value),
                               ),
                             ],
                           ),

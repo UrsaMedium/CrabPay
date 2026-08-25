@@ -4,7 +4,9 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/
 abstract class AdminInnerChatHandler {
   Future<SupportThread?> getOrCreateThreadAdmin({required String userId});
   Future<List<SupportThread>> getAllThreadsAdmin();
-  Stream<List<ChatMessage>> subscribeToMessagesAdmin({required String threadId});
+  Stream<List<ChatMessage>> subscribeToMessagesAdmin({
+    required String threadId,
+  });
   Future<void> sendMessageAdmin({
     required String threadId,
     required String senderId,

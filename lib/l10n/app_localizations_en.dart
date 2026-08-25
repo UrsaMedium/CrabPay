@@ -12,6 +12,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToGetOrCreate => 'Failed to get or create support thread';
 
   @override
+  String get favorite => 'Favorite';
+
+  @override
+  String get favoriteEmpty => 'Favorite? :(';
+
+  @override
   String get failedToSendMessagePlease =>
       'Failed to send message. Please try again.';
 
@@ -85,6 +91,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to fetch pending orders cart items';
 
   @override
+  String get orders => 'Orders';
+
+  @override
+  String get from_date => 'From';
+
+  @override
+  String get to_date => 'To';
+
+  @override
   String get registrationFailed => 'Registration failed';
 
   @override
@@ -133,9 +148,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boo => 'BOO';
 
   @override
+  String get turnOnRussian => 'Turn on Russian';
+
+  @override
   String productNameUi(String productName) {
     return 'Product Name: $productName';
   }
+
+  @override
+  String get mobileGames => 'Mobile Games';
+
+  @override
+  String get services => 'Services';
 
   @override
   String get back => 'Back';
@@ -322,6 +346,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseWait => 'Please, wait';
 
   @override
+  String get waitingYourPayment => 'Waiting Your Payment';
+
+  @override
   String get phew => 'Phew';
 
   @override
@@ -393,6 +420,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String currentDescription(String description) {
     return 'Current description: $description';
   }
+
+  @override
+  String get somethingWentWrongWithDescription =>
+      'Oh-oh. Something went wrong with the description';
 
   @override
   String get chooseAproductToModify => 'Choose aproduct to modify';
@@ -578,7 +609,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmThePurchase => 'Confirm the purchase';
 
   @override
-  String get heyYouHaven => 'Hey, You haven\\';
+  String get contctOurSupportTeamFoAssistance =>
+      'Contact our support team\n for assistance';
+
+  @override
+  String get heyYouHaven => 'Hey, You haven\'t picked anything yet';
+
+  @override
+  String get youHave1UnpaidOrder => 'You have 1 Unpaid Order!';
+
+  @override
+  String get youHavenUnpaidOrdersSTART => 'You have';
+
+  @override
+  String get youHavenUnpaidOrdersEND => 'Unpaid Orders!';
+
+  @override
+  String get howDidYouGEtHere => 'How did you get here?!';
 
   @override
   String get total => 'Total';

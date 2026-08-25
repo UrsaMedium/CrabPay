@@ -68,7 +68,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Add Product',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add the product');
+      Fluttertoast.showToast(msg: 'failedToAddTheProduct');
     }
   }
 
@@ -94,7 +94,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Delete Product',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete the product');
+      Fluttertoast.showToast(msg: 'failedToDeleteTheProduct');
     }
   }
 
@@ -170,7 +170,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Add Product Field',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add the field');
+      Fluttertoast.showToast(msg: 'failedToAddTheField');
       rethrow;
     }
   }
@@ -197,7 +197,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Delete Product Field',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete the field');
+      Fluttertoast.showToast(msg: 'failedToDeleteTheField');
       rethrow;
     }
   }
@@ -271,7 +271,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Add Currencies',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add the currencies');
+      Fluttertoast.showToast(msg: 'failedToAddTheCurrencies');
       rethrow;
     }
   }
@@ -296,7 +296,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Delete Currencies',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete the currencies');
+      Fluttertoast.showToast(msg: 'failedToDeleteTheCurrencies');
       rethrow;
     }
   }
@@ -323,7 +323,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Add Featured Product',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add Featured Product');
+      Fluttertoast.showToast(msg: 'failedToAddFeaturedProduct');
       rethrow;
     }
   }
@@ -348,7 +348,7 @@ class AdminOuterDatabaseHandlerWithSupabase
         error: 'Failed To Delete Featured Product',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete Featured Product');
+      Fluttertoast.showToast(msg: 'failedToDeleteFeaturedProduct');
       rethrow;
     }
   }

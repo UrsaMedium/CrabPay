@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
@@ -49,7 +50,7 @@ class MaterialOrderCard extends StatelessWidget {
                             crabOrder.orderDate,
                             style: const TextStyle(fontWeight: .w600),
                           ),
-                          Text('Order: ${crabOrder.orderIdToDisplay}'),
+                          Text('${context.l10n.order}: ${crabOrder.orderIdToDisplay}'),
                         ],
                       ),
                       Builder(
@@ -67,7 +68,7 @@ class MaterialOrderCard extends StatelessWidget {
                             icon: Row(
                               children: [
                                 Text(
-                                  'Support  ',
+                                  context.l10n.support,
                                   style: TextStyle(
                                     fontWeight: .w500,
                                     color: context
@@ -108,21 +109,21 @@ class MaterialOrderCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: .start,
                         children: [
-                          Text('Delivered'),
+                          Text(context.l10n.delivered),
                           Text(' ${crabOrder.amountOfDeliveredItems}'),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: .start,
                         children: [
-                          Text('Products'),
+                          Text(context.l10n.products),
                           Text(' ${crabOrder.amountOfItems}'),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: .start,
                         children: [
-                          Text('Order Price'),
+                          Text(context.l10n.orderPrice),
                           Text(' \$${crabOrder.orderPrice}'),
                         ],
                       ),
@@ -158,7 +159,7 @@ class _MaterialCustomWidgetRowOfImages extends StatelessWidget {
             errorWidget: (context, error, stackTrace) => Container(
               color: context.appColorScheme.onInverseSurface,
               alignment: Alignment.center,
-              child: Text('🦀'),
+              child: Text(context.l10n.emptyKey),
             ),
             placeholder: (context, url) => MaterialShimeringPlaceHolder(
               width: 40,

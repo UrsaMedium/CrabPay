@@ -13,6 +13,12 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось получить или создать чат поддержки';
 
   @override
+  String get favorite => 'Избранное';
+
+  @override
+  String get favoriteEmpty => 'Избранное? :(';
+
+  @override
   String get failedToSendMessagePlease =>
       'Не удалось отправить сообщение. Пожалуйста, попробуйте снова.';
 
@@ -91,6 +97,15 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось загрузить ожидающие заказы';
 
   @override
+  String get orders => 'Заказы';
+
+  @override
+  String get from_date => 'От';
+
+  @override
+  String get to_date => 'До';
+
+  @override
   String get registrationFailed => 'Ошибка регистрации';
 
   @override
@@ -139,9 +154,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get boo => 'БУ';
 
   @override
+  String get turnOnRussian => 'Использовать Русский';
+
+  @override
   String productNameUi(String productName) {
     return 'Название товара: $productName';
   }
+
+  @override
+  String get mobileGames => 'Мобильные игры';
+
+  @override
+  String get services => 'Сервисы';
 
   @override
   String get back => 'Назад';
@@ -219,7 +243,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get expectedData => 'Ожидаемые данные';
 
   @override
-  String get order => 'Порядок';
+  String get order => 'Заказ';
 
   @override
   String get productData => 'Данные товара';
@@ -328,6 +352,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pleaseWait => 'Пожалуйста, подождите';
 
   @override
+  String get waitingYourPayment => 'Ожидают вашей оплаты';
+
+  @override
   String get phew => 'Фух';
 
   @override
@@ -399,6 +426,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String currentDescription(String description) {
     return 'Текущее описание: $description';
   }
+
+  @override
+  String get somethingWentWrongWithDescription =>
+      'Ой-йойю Что-то пошло не так с описанием';
 
   @override
   String get chooseAproductToModify => 'Выберите товар для изменения';
@@ -557,7 +588,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fillAllTheFields => 'Заполните все поля';
 
   @override
-  String get readDescription => 'Читать описание';
+  String get readDescription => 'Прочтите описание';
 
   @override
   String get addToCart => 'В корзину';
@@ -584,7 +615,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmThePurchase => 'Подтвердите покупку';
 
   @override
-  String get heyYouHaven => 'Эй, вы не\\';
+  String get contctOurSupportTeamFoAssistance =>
+      'Свяжитесь с поддержкой\n для помощи';
+
+  @override
+  String get heyYouHaven => 'Эй, вы не выбрали ничего';
+
+  @override
+  String get youHave1UnpaidOrder => 'У вас 1 неоплаченный заказ!';
+
+  @override
+  String get youHavenUnpaidOrdersSTART => 'У вас';
+
+  @override
+  String get youHavenUnpaidOrdersEND => 'Неоплаченных заказов!';
+
+  @override
+  String get howDidYouGEtHere => 'Как вы сюда попали?!';
 
   @override
   String get total => 'Итого';

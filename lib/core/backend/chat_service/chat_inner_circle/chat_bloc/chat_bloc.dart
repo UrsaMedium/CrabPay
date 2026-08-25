@@ -56,9 +56,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             );
         emit(state.copyWith(isSubscribed: true, status: ChatStates.subscribed));
       } catch (e) {
-        emit(
-          state.copyWith(isSubscribed: false, status: ChatStates.error,),
-        );
+        emit(state.copyWith(isSubscribed: false, status: ChatStates.error));
         rethrow;
       }
     });

@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/crab_order_model.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/cubit.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/view/material/material_skeleton_order_placeholder.dart';
@@ -68,7 +69,7 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
                     child: SizedBox.shrink(
                       child: isLoadingMore
                           ? CircularProgressIndicator()
-                          : Text('Your Searched Orders'),
+                          : Text(context.l10n.yourSearchedOrders),
                     ),
                   );
                 },

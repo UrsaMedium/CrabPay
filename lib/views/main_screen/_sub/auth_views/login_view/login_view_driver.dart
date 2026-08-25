@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -52,7 +53,9 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
+        !Navigator.of(context).canPop()
+            ? context.go(AppRoutes.home.path)
+            : context.pop();
       },
       child: BlocProvider(
         create: (_) => LoginViewCubit(),
@@ -63,12 +66,12 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
               data: {'authState': authState},
             );
             if (authState is AuthStateLoggedIn) {
-              context.go(AppRoutes.home.path);
+              context.push(AppRoutes.home.path);
             }
             if (authState is AuthStateLoggedOut) {
               if (authState.bloodyAuthException != null) {
                 Fluttertoast.showToast(
-                  msg: 'Wrong credentials. Please try again.',
+                  msg: context.l10n.wrongCredentialsPleaseTryAgain,
                   toastLength: Toast.LENGTH_LONG,
                 );
                 context.read<LoginViewCubit>().setErrors(
@@ -120,7 +123,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
                   message: 'LoginViewDriver onSignUpPressed',
                 );
                 context.read<LoginViewCubit>().clearErrors();
-                context.push(AppRoutes.register.path);
+                context.pushNamed(AppRoutes.register.name);
               }
 
               void onForgotPasswordPressed() {
@@ -128,7 +131,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
                   message: 'LoginViewDriver onForgotPasswordPressed',
                 );
                 context.read<LoginViewCubit>().clearErrors();
-                context.push(AppRoutes.resetPassword.path);
+                context.pushNamed(AppRoutes.resetPassword.name);
               }
 
               if (defaultTargetPlatform == TargetPlatform.iOS && !kIsWeb) {

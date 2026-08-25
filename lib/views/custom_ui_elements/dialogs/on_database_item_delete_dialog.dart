@@ -6,9 +6,6 @@ Future<bool?> showOnDatabaseItemDelete(BuildContext context) {
     context: context,
     title: 'Confirmation',
     message: 'Are you sure you want to delete the item?',
-    optionBuilder: () => {
-      'Delete': true,
-      'Cancel': false,
-    },
+    optionBuilder: () => {'Delete': true, 'Cancel': false},
   ).then((onValue) => onValue ?? false);
 }

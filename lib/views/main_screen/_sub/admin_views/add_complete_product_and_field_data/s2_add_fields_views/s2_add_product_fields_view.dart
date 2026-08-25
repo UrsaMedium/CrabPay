@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
@@ -28,7 +29,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
   void initState() {
     _appProduct = context.read<AdminBloc>().state.appProduct;
     if (_appProduct == null) {
-      Fluttertoast.showToast(msg: 'ERROR no AppProduct');
+      Fluttertoast.showToast(msg: context.l10n.errorNoAppproduct);
       context.pop();
     }
     super.initState();
@@ -48,9 +49,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
         );
       });
     } else {
-      Fluttertoast.showToast(
-        msg: 'ERROR A field with the same name already exists',
-      );
+      Fluttertoast.showToast(msg: context.l10n.errorAFieldWithThe);
     }
   }
 
@@ -198,7 +197,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                                 context.pop();
                               }
                             },
-                            child: Text('Back'),
+                            child: Text(context.l10n.back),
                           ),
                         ),
                         Padding(
@@ -213,15 +212,16 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                                     appProductFields: collectFields,
                                   ),
                                 );
-                                context.pushNamed(AppRoutes.priceSpaceFill.name);
+                                context.pushNamed(
+                                  AppRoutes.priceSpaceFill.name,
+                                );
                               } else {
                                 Fluttertoast.showToast(
-                                  msg:
-                                      'Every field must has a name and a handler',
+                                  msg: context.l10n.everyFieldMustHasA,
                                 );
                               }
                             },
-                            child: Text('Next'),
+                            child: Text(context.l10n.next),
                           ),
                         ),
                       ],

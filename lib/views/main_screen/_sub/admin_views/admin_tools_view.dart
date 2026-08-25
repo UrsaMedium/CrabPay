@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -64,25 +65,26 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                         DatabaseEventFetchAllProducts(),
                       );
                     },
-                    child: Text('fetch data'),
+                    child: Text(context.l10n.fetchData),
                   ),
                   ElevatedButton(
                     onPressed: () =>
                         context.pushNamed(AppRoutes.addCompleteProduct.name),
-                    child: Text('Add complete product'),
+                    child: Text(context.l10n.addCompleteProduct),
                   ),
                   ElevatedButton(
                     onPressed: () => context.pushNamed(AppRoutes.deleting.name),
-                    child: Text('Delete instances from DB'),
+                    child: Text(context.l10n.deleteInstancesFromDb),
                   ),
                   ElevatedButton(
                     onPressed: () =>
                         context.pushNamed(AppRoutes.addFeaturedProduct.name),
-                    child: Text('Add Featured Product'),
+                    child: Text(context.l10n.addFeaturedProduct),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.pushNamed(AppRoutes.chooseThread.name),
-                    child: Text('Answer to users'),
+                    onPressed: () =>
+                        context.pushNamed(AppRoutes.chooseThread.name),
+                    child: Text(context.l10n.answerToUsers),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -94,7 +96,7 @@ class _AdminToolsViewState extends State<AdminToolsView> {
 
                       throw Exception('GlitchTip Integration Test Crash!');
                     },
-                    child: Text('Test logger'),
+                    child: Text(context.l10n.testLogger),
                   ),
                 ],
               ),
@@ -110,7 +112,7 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                           user = context.read<AuthBloc>().state.currentUser;
                           setState(() {});
                         },
-                        child: Text('Hey :)'),
+                        child: Text(context.l10n.hey),
                       ),
                     ),
                   ),

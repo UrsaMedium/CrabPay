@@ -7,9 +7,7 @@ class SupabaseGraphQLClient {
     // Point to your Nginx proxy GraphQL endpoint
     final HttpLink httpLink = HttpLink(
       '${supabaseAccessConf['url']}/graphql/v1',
-      defaultHeaders: {
-        'apiKey': supabaseAccessConf['publishableKey']!,
-      },
+      defaultHeaders: {'apiKey': supabaseAccessConf['publishableKey']!},
     );
 
     // Dynamically fetch the current session token for RLS
@@ -17,8 +15,8 @@ class SupabaseGraphQLClient {
       getToken: () async {
         final session = Supabase.instance.client.auth.currentSession;
         // Fallback to the publishable anon key if the user is not logged in
-        return session != null 
-            ? 'Bearer ${session.accessToken}' 
+        return session != null
+            ? 'Bearer ${session.accessToken}'
             : 'Bearer ${supabaseAccessConf['publishableKey']!}';
       },
     );

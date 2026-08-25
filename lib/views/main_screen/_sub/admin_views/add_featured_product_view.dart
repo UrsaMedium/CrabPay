@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
@@ -111,10 +112,10 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
+                  Fluttertoast.showToast(msg: context.l10n.wrongInput);
                 }
               },
-              child: Text('Add The Featured Product Id'),
+              child: Text(context.l10n.addTheFeaturedProductId),
             ),
             ElevatedButton(
               onPressed: () {
@@ -124,10 +125,10 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
                   );
                   // Fluttertoast.showToast(msg: '$_productId');
                 } else {
-                  Fluttertoast.showToast(msg: 'wrong input');
+                  Fluttertoast.showToast(msg: context.l10n.wrongInput);
                 }
               },
-              child: Text('Delete The Featured Product Id'),
+              child: Text(context.l10n.deleteTheFeaturedProductId),
             ),
           ],
         ),

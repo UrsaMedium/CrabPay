@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -53,7 +54,7 @@ class MaterialStorePage extends StatelessWidget {
           ),
           Padding(
             padding: .only(
-              top: MediaQuery.paddingOf(context).top + 16,
+              top: MediaQuery.paddingOf(context).top + 8,
               left: 16,
             ),
             child: MaterialStoreSearchBarDriver(
@@ -99,7 +100,7 @@ class _CategoryCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '${subTag}s',
+                  index == 0 ? context.l10n.mobileGames : context.l10n.services,
                   style: TextStyle(
                     color: context.appColorScheme.secondary,
                     fontSize: 20,
@@ -161,7 +162,7 @@ class _CategoryCard extends StatelessWidget {
                                     vertical: 8,
                                   ),
                                   child: Text(
-                                    'More',
+                                    context.l10n.more,
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: context
@@ -218,7 +219,7 @@ class _ProductImage extends StatelessWidget {
             errorWidget: (context, error, stackTrace) => Container(
               color: context.appColorScheme.onInverseSurface,
               alignment: Alignment.center,
-              child: Text('🦀'),
+              child: Text(context.l10n.emptyKey),
             ),
             placeholder: (context, url) => MaterialShimeringPlaceHolder(
               width: 40,

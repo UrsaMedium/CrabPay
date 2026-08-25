@@ -33,7 +33,7 @@
   "emptyKey": "🦀",
   "deleting": "Удаление",
   "battlePassCredits": "Боевой пропуск и кредиты",
-  
+  "turnOnRussian": "Использовать Русский",
   "price249": "$2.49",
   "error": "ОШИБКА",
   "loginButtonError": "Ошибка кнопки входа",
@@ -41,14 +41,14 @@
   "crabPay": "🦀 Crab Pay",
   "eeeeeh": "э-э-э",
   "boo": "БУ",
-
   "productNameUi": "Название товара: {productName}",
   "@productNameUi": {
     "placeholders": {
-      "productName": { "type": "String" }
+      "productName": {
+        "type": "String"
+      }
     }
   },
-
   "back": "Назад",
   "notEnoughData": "Недостаточно данных",
   "next": "Далее",
@@ -70,17 +70,18 @@
   "fillThePriceOptions": "Заполните варианты цен",
   "noData": "нет данных",
   "sendData": "Отправить данные",
-
   "fieldName": "Имя поля: {fieldName}",
   "@fieldName": {
     "placeholders": {
-      "fieldName": { "type": "String" }
+      "fieldName": {
+        "type": "String"
+      }
     }
   },
-
   "attributes": "Атрибуты",
   "expectedData": "Ожидаемые данные",
-  "order": "Порядок",
+  "order": "Заказ",
+  "somethingWentWrongWithDescription": "Ой-йойю Что-то пошло не так с описанием",
   "productData": "Данные товара",
   "name": "Название",
   "imageUrl": "URL изображения",
@@ -96,14 +97,14 @@
   "somethingWentWronNoProduct": "Что-то пошло не так. Нет id товара :()",
   "typeYourQuestion": "Введите ваш вопрос...",
   "fetchAllThreads": "Загрузить все чаты",
-
   "chatWithUser": "Чат с пользователем {userId}",
   "@chatWithUser": {
     "placeholders": {
-      "userId": { "type": "String" }
+      "userId": {
+        "type": "String"
+      }
     }
   },
-
   "fetchData": "получить данные",
   "addCompleteProduct": "Добавить товар целиком",
   "deleteInstancesFromDb": "Удалить записи из БД",
@@ -111,19 +112,29 @@
   "answerToUsers": "Ответить пользователям",
   "testLogger": "Тестовый логгер",
   "hey": "Привет :)",
-
   "userInfoDebug": "Id: {id}\nemail: {email}\nver: {isEmailVerified}\nanon: {isAnonymous}\nadmin: {isAdmin}\nlimbo: {isLimbo}",
   "@userInfoDebug": {
     "placeholders": {
-      "id": { "type": "String" },
-      "email": { "type": "String" },
-      "isEmailVerified": { "type": "String" },
-      "isAnonymous": { "type": "String" },
-      "isAdmin": { "type": "String" },
-      "isLimbo": { "type": "String" }
+      "id": {
+        "type": "String"
+      },
+      "email": {
+        "type": "String"
+      },
+      "isEmailVerified": {
+        "type": "String"
+      },
+      "isAnonymous": {
+        "type": "String"
+      },
+      "isAdmin": {
+        "type": "String"
+      },
+      "isLimbo": {
+        "type": "String"
+      }
     }
   },
-
   "product": "товар",
   "field": "Поле",
   "strangeErrorNoFieldsDetected": "Странная ошибка. Поля не обнаружены",
@@ -132,44 +143,47 @@
   "delete": "Удалить",
   "pleaseWait": "Пожалуйста, подождите",
   "phew": "Фух",
-
   "editField": "Редактировать поле: его id - {fieldId}",
   "@editField": {
     "placeholders": {
-      "fieldId": { "type": "String" }
+      "fieldId": {
+        "type": "String"
+      }
     }
   },
-
   "fieldNameOg": "Имя поля. Ориг. имя: {fieldName}",
   "@fieldNameOg": {
     "placeholders": {
-      "fieldName": { "type": "String" }
+      "fieldName": {
+        "type": "String"
+      }
     }
   },
-
   "theNameWillBe": "Имя будет {nameText}",
   "@theNameWillBe": {
     "placeholders": {
-      "nameText": { "type": "String" }
+      "nameText": {
+        "type": "String"
+      }
     }
   },
-
   "orderOfTheFieldOg": "Порядок поля. Ориг. порядок: {order}",
   "@orderOfTheFieldOg": {
     "placeholders": {
-      "order": { "type": "String" }
+      "order": {
+        "type": "String"
+      }
     }
   },
-
   "mustBeInteger": "Должно быть целым числом",
-
   "theOrderWillBe": "Порядок будет {orderText}",
   "@theOrderWillBe": {
     "placeholders": {
-      "orderText": { "type": "String" }
+      "orderText": {
+        "type": "String"
+      }
     }
   },
-
   "happilyEverAfter": "Долго и счастливо",
   "failed": "ошибка",
   "updateTheField": "Обновить поле",
@@ -178,30 +192,31 @@
   "wait": "Подождите",
   "failedToUpdate": "Не удалось обновить",
   "imageName": "Имя изображения",
-
   "currentImageName": "Текущее имя изображения: {imageName}",
   "@currentImageName": {
     "placeholders": {
-      "imageName": { "type": "String" }
+      "imageName": {
+        "type": "String"
+      }
     }
   },
-
   "productName": "Название товара",
-
   "currentProductName": "Текущее название товара: {productName}",
   "@currentProductName": {
     "placeholders": {
-      "productName": { "type": "String" }
+      "productName": {
+        "type": "String"
+      }
     }
   },
-
   "currentDescription": "Текущее описание: {description}",
   "@currentDescription": {
     "placeholders": {
-      "description": { "type": "String" }
+      "description": {
+        "type": "String"
+      }
     }
   },
-
   "chooseAproductToModify": "Выберите товар для изменения",
   "pushTheChanges": "Применить изменения",
   "wrongCredentialsPleaseTryAgain": "Неверные учетные данные. Пожалуйста, попробуйте снова.",
@@ -218,14 +233,17 @@
   "createAnAccountToShop": "Создайте аккаунт, чтобы совершать покупки, пополнять баланс и получать поддержку.",
   "submit": "Подтвердить",
   "youHaveOneAlreadyThen": "Уже есть аккаунт? Тогда",
-
   "registrationFailedDetailed": "Ошибка регистрации: {error}",
   "@registrationFailedDetailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
-
+  "from_date": "От",
+  "@from_date": {},
+  "to_date": "До",
   "sent": "отправлен",
   "beingDelivered": "Доставляется",
   "delivered": "Доставлен",
@@ -236,133 +254,155 @@
   "products": "Товары",
   "orderPrice": "Сумма заказа",
   "number3": "3",
-
   "orderIdDisplay": "Заказ: {orderId}",
   "@orderIdDisplay": {
     "placeholders": {
-      "orderId": { "type": "String" }
+      "orderId": {
+        "type": "String"
+      }
     }
   },
-
   "orderAmountDeliveredItems": " {amount}",
   "@orderAmountDeliveredItems": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
-
   "orderAmountOfItems": " {amount}",
   "@orderAmountOfItems": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
-
   "orderPriceDisplay": " ${price}",
   "@orderPriceDisplay": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
-
   "imagesPlusMore": "+{count}",
   "@imagesPlusMore": {
     "placeholders": {
-      "count": { "type": "String" }
+      "count": {
+        "type": "String"
+      }
     }
   },
-
   "orderIdDisplayAlt": "Заказ: {orderId}",
   "@orderIdDisplayAlt": {
     "placeholders": {
-      "orderId": { "type": "String" }
+      "orderId": {
+        "type": "String"
+      }
     }
   },
-
   "orderAmountDeliveredItemsAlt": " {amount}",
   "@orderAmountDeliveredItemsAlt": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
-
   "orderAmountOfItemsAlt": " {amount}",
   "@orderAmountOfItemsAlt": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
-
   "orderPriceDisplayAlt": " ${price}",
   "@orderPriceDisplayAlt": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
-
   "cancel": "Отмена",
   "search": "Поиск",
   "yourSearchedOrders": "Найденные заказы",
   "tapHereToPickDates": "Нажмите здесь, чтобы выбрать даты",
-
   "fromDate": "С: {date}",
   "@fromDate": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
-
   "toDate": "По: {date}",
   "@toDate": {
     "placeholders": {
-      "date": { "type": "String" }
+      "date": {
+        "type": "String"
+      }
     }
   },
-
+  "contctOurSupportTeamFoAssistance": "Свяжитесь с поддержкой\n для помощи",
+  "favorite": "Избранное",
+  "favoriteEmpty": "Избранное? :(",
+  "mobileGames": "Мобильные игры",
+  "services": "Сервисы",
   "fillAllTheFields": "Заполните все поля",
-  "readDescription": "Читать описание",
+  "readDescription": "Прочтите описание",
+  "orders": "Заказы",
   "addToCart": "В корзину",
   "yourProfile": "Ваш профиль:",
+  "howDidYouGEtHere": "Как вы сюда попали?!",
+  "waitingYourPayment": "Ожидают вашей оплаты",
   "signOut": "  Выйти",
   "adminMenu": "Меню администратора",
   "highGraphics": "Высокая графика",
   "youMustRegisterToBuy": "Вам нужно зарегистрироваться для покупки",
   "shoppingCart": "Корзина",
   "confirmThePurchase": "Подтвердите покупку",
-  "heyYouHaven": "Эй, вы не\\",
+  "heyYouHaven": "Эй, вы не выбрали ничего",
   "total": "Итого",
+  "youHave1UnpaidOrder": "У вас 1 неоплаченный заказ!",
+  "youHavenUnpaidOrdersSTART": "У вас",
+  "youHavenUnpaidOrdersEND": "Неоплаченных заказов!",
   "checkout": "Оформить заказ",
-
   "orderPaymentId": "Заказ: {paymentId}",
   "@orderPaymentId": {
     "placeholders": {
-      "paymentId": { "type": "String" }
+      "paymentId": {
+        "type": "String"
+      }
     }
   },
-
   "totalOrderPrice": "Итого: {totalPrice}",
   "@totalOrderPrice": {
     "placeholders": {
-      "totalPrice": { "type": "String" }
+      "totalPrice": {
+        "type": "String"
+      }
     }
   },
-
   "pay": "Оплатить",
-
   "orderCartItemsLength": " {count}",
   "@orderCartItemsLength": {
     "placeholders": {
-      "count": { "type": "String" }
+      "count": {
+        "type": "String"
+      }
     }
   },
-
   "orderTotalPriceAlt": " ${price}",
   "@orderTotalPriceAlt": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
-
   "featuredndeals": "Рекомендуемые\nпредложения",
   "more": "Ещё",
   "failedToSendTheMessage": "Не удалось отправить сообщение :(",

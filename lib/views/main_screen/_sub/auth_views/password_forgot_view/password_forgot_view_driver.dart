@@ -1,3 +1,4 @@
+import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class PasswordForgotViewDriver extends StatefulWidget {
+  static final routeName = AppRoutes.resetPassword.name;
   const PasswordForgotViewDriver({super.key});
 
   @override

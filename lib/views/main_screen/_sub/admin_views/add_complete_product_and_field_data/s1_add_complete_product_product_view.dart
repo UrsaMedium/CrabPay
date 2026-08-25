@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
@@ -218,7 +219,7 @@ class _AddCompleteProductProductViewState
                               context.pop();
                             }
                           },
-                          child: Text('Back'),
+                          child: Text(context.l10n.back),
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -233,10 +234,12 @@ class _AddCompleteProductProductViewState
                                 AppRoutes.addProductFields.name,
                               );
                             } else {
-                              Fluttertoast.showToast(msg: 'Not enough data');
+                              Fluttertoast.showToast(
+                                msg: context.l10n.notEnoughData,
+                              );
                             }
                           },
-                          child: Text('Next'),
+                          child: Text(context.l10n.next),
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -265,7 +268,7 @@ class _AddCompleteProductProductViewState
                             // }
                             context.pop();
                           },
-                          child: Text('Add imediatly'),
+                          child: Text(context.l10n.addImediatly),
                         ),
                       ],
                     ),
@@ -286,7 +289,7 @@ class _AddCompleteProductProductViewState
                         );
                         context.pushNamed(AppRoutes.addProductFields.name);
                       },
-                      child: Text('Mock Data'),
+                      child: Text(context.l10n.mockData),
                     ),
                   ],
                 ),

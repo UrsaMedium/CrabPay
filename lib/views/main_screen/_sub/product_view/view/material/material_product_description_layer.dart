@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/product_view/driver/product_cubit.dart';
 import 'package:flutter/material.dart';
@@ -63,8 +64,8 @@ class MaterialProductDescriptionLayer extends StatelessWidget {
                             crossAxisAlignment: .start,
                             children: [
                               Text(
-                                '   Description',
-                                style: TextStyle(fontWeight: .bold),
+                                context.l10n.description,
+                                style: TextStyle(fontWeight: .bold, fontSize: 18),
                               ),
                               MarkdownBody(
                                 selectable: true,
@@ -75,7 +76,7 @@ class MaterialProductDescriptionLayer extends StatelessWidget {
                                         .product!
                                         .description
                                         .isEmpty
-                                    ? 'Uhmm. Something went wrong: no description'
+                                    ? context.l10n.somethingWentWrongWithDescription
                                     : context
                                           .read<ProductViewCubit>()
                                           .state

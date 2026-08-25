@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
@@ -73,8 +74,8 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         (isInitialized && userPreferences.isEmpty)
-                            ? 'Favorite? :('
-                            : 'Favorite',
+                            ? context.l10n.favoriteEmpty
+                            : context.l10n.favorite,
                         textAlign: .center,
                         style: TextStyle(
                           fontSize: 18,

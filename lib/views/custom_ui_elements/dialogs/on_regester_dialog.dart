@@ -6,8 +6,6 @@ Future<void> showOnRegisterDialog(BuildContext context) {
     context: context,
     title: 'Verification Needed',
     message: 'We have sent you the verification link to your email',
-    optionBuilder: () => {
-      'OK': null,
-    },
+    optionBuilder: () => {'OK': null},
   );
 }

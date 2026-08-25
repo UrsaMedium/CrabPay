@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -121,7 +122,7 @@ class _UpdateProductAdminPanelViewState
             },
             icon: Icon(Icons.arrow_back),
           ),
-          title: Text('Admin Panel'),
+          title: Text(context.l10n.adminPanel),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
@@ -142,20 +143,26 @@ class _UpdateProductAdminPanelViewState
                                   data: {'selectedProduct': _selectedProduct},
                                 );
                                 if (beingLoaded) {
-                                  Fluttertoast.showToast(msg: 'Please, wait');
+                                  Fluttertoast.showToast(
+                                    msg: context.l10n.pleaseWait,
+                                  );
                                 } else {
                                   final delete =
                                       await showOnDatabaseItemDelete(context) ??
                                       false;
                                   if (delete && context.mounted) {
-                                    Fluttertoast.showToast(msg: 'Deleting');
+                                    Fluttertoast.showToast(
+                                      msg: context.l10n.deleting,
+                                    );
                                     context.read<DatabaseBlocAdmin>().add(
                                       DatabaseEventDeleteProductAdmin(
                                         product: _selectedProduct!,
                                       ),
                                     );
                                   } else {
-                                    Fluttertoast.showToast(msg: 'Phew');
+                                    Fluttertoast.showToast(
+                                      msg: 'phew',
+                                    );
                                   }
                                 }
                               }
@@ -181,7 +188,7 @@ class _UpdateProductAdminPanelViewState
             if (!_ignoreStates) {
               if (state.states == DatabaseStatesAdmin.productsNotUpdated) {
                 _ignoreStates = true;
-                Fluttertoast.showToast(msg: 'Failed to update');
+                Fluttertoast.showToast(msg: context.l10n.failedToUpdate);
               } else if (state.states == DatabaseStatesAdmin.productsUpdated) {
                 context.read<DatabaseBloc>().add(
                   DatabaseEventFetchAllProducts(),
@@ -235,7 +242,7 @@ class _UpdateProductAdminPanelViewState
                                       child: Column(
                                         children: [
                                           Divider(),
-                                          Text('Image name'),
+                                          Text(context.l10n.imageName),
                                           TextField(
                                             controller: _imageNameController,
                                             onChanged: (value) {
@@ -263,7 +270,7 @@ class _UpdateProductAdminPanelViewState
                                       child: Column(
                                         children: [
                                           Divider(),
-                                          Text('Product name'),
+                                          Text(context.l10n.productName),
                                           TextField(
                                             controller: _productNameController,
                                             onChanged: (value) {
@@ -319,7 +326,7 @@ class _UpdateProductAdminPanelViewState
                           ],
                         ),
                       )
-                    : Text('Choose aproduct to modify'),
+                    : Text(context.l10n.chooseAproductToModify),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
@@ -361,7 +368,7 @@ class _UpdateProductAdminPanelViewState
                         : null,
                     child: state.states == DatabaseStatesAdmin.dbLoading
                         ? CircularProgressIndicator()
-                        : Text('Push the changes'),
+                        : Text(context.l10n.pushTheChanges),
                   ),
                 ),
               ],

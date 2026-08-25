@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_event.dart';
@@ -56,7 +57,7 @@ class _SupportPageDriverState extends State<SupportPageDriver>
         );
         _supportPageCubit.state.messageInputController.clear();
       } else {
-        Fluttertoast.showToast(msg: 'Oops, no chat thread');
+        Fluttertoast.showToast(msg: context.l10n.oopsNoChatThread);
       }
     }
   }

@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/cubit.dart';
@@ -119,7 +120,7 @@ class _MaterialCustomOrdersViewPageBarState
                         key: _tab0Key,
                         onTap: () => widget.onPageSelected(0),
                         child: Text(
-                          'Being Delivered',
+                          context.l10n.beingDelivered,
                           style: TextStyle(
                             color: page == 0
                                 ? context.appColorScheme.primary
@@ -131,7 +132,7 @@ class _MaterialCustomOrdersViewPageBarState
                         key: _tab1Key,
                         onTap: () => widget.onPageSelected(1),
                         child: Text(
-                          'Delivered',
+                          context.l10n.delivered,
                           style: TextStyle(
                             color: page == 1
                                 ? context.appColorScheme.primary

@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/cart_bloc/cart_bloc_event.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
@@ -93,7 +94,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
                   ?.findRenderObject()
               as RenderBox?;
       if (renderBox == null) {
-        Fluttertoast.showToast(msg: 'Login Button Error');
+        Fluttertoast.showToast(msg: context.l10n.loginButtonError);
         return;
       }
       final position = renderBox.localToGlobal(Offset.zero);

@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -46,7 +47,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
         _fieldNames.add(field.fieldName);
       }
     } else {
-      Fluttertoast.showToast(msg: 'Db error, try again');
+      Fluttertoast.showToast(msg: context.l10n.dbErrorTryAgain);
       context.read<DatabaseBloc>().add(
         DatabaseEventFetchProductFields(productId: widget.productId!),
       );
@@ -108,9 +109,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
         );
       });
     } else {
-      Fluttertoast.showToast(
-        msg: 'ERROR A field with the same name already exists',
-      );
+      Fluttertoast.showToast(msg: context.l10n.errorAFieldWithThe);
     }
   }
 
@@ -140,7 +139,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
             },
             icon: Icon(Icons.arrow_back),
           ),
-          title: Text('Admin Panel'),
+          title: Text(context.l10n.adminPanel),
         ),
         body: widget.productId != null
             ? Padding(
@@ -221,67 +220,83 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
-                                    builder: (context, state) {
-                                      return ElevatedButton(
-                                        onPressed: () {
-                                          final collectFields =
-                                              _collectFields();
-                                          if (collectFields != null) {
-                                            getIt<InnerLoggerHandler>()
-                                                .logBreadcrumb(
-                                                  message:
-                                                      'AddFieldAdminPanelView: onPressed: collectFields: $collectFields',
+                                  child:
+                                      BlocBuilder<
+                                        DatabaseBlocAdmin,
+                                        DatabaseStateAdmin
+                                      >(
+                                        builder: (context, state) {
+                                          return ElevatedButton(
+                                            onPressed: () {
+                                              final collectFields =
+                                                  _collectFields();
+                                              if (collectFields != null) {
+                                                getIt<InnerLoggerHandler>()
+                                                    .logBreadcrumb(
+                                                      message:
+                                                          'AddFieldAdminPanelView: onPressed: collectFields: $collectFields',
+                                                    );
+                                                Fluttertoast.showToast(
+                                                  msg: context.l10n.boop,
                                                 );
-                                            Fluttertoast.showToast(msg: 'Boop');
-                                            try {
-                                              for (var field in collectFields) {
-                                                final fieldToPush =
-                                                    ProductField(
-                                                      id: '',
-                                                      productId:
-                                                          widget.productId!,
-                                                      order: field.order,
-                                                      fieldName:
-                                                          field.fieldName,
-                                                      isPriceImage:
-                                                          field.isPriceImage,
-                                                      handler: field.handler,
-                                                      priceImages:
-                                                          field.priceImages,
-                                                      expectedData:
-                                                          field.expectedData,
-                                                    );
-                                                context
-                                                    .read<DatabaseBlocAdmin>()
-                                                    .add(
-                                                      DatabaseEventAddProductFieldAdmin(
-                                                        productField:
-                                                            fieldToPush,
-                                                      ),
-                                                    );
+                                                try {
+                                                  for (var field
+                                                      in collectFields) {
+                                                    final fieldToPush =
+                                                        ProductField(
+                                                          id: '',
+                                                          productId:
+                                                              widget.productId!,
+                                                          order: field.order,
+                                                          fieldName:
+                                                              field.fieldName,
+                                                          isPriceImage: field
+                                                              .isPriceImage,
+                                                          handler:
+                                                              field.handler,
+                                                          priceImages:
+                                                              field.priceImages,
+                                                          expectedData: field
+                                                              .expectedData,
+                                                        );
+                                                    context
+                                                        .read<
+                                                          DatabaseBlocAdmin
+                                                        >()
+                                                        .add(
+                                                          DatabaseEventAddProductFieldAdmin(
+                                                            productField:
+                                                                fieldToPush,
+                                                          ),
+                                                        );
+                                                  }
+                                                  context.go(
+                                                    AppRoutes.home.path,
+                                                  );
+                                                } catch (e) {
+                                                  Fluttertoast.showToast(
+                                                    msg: context.l10n.boo,
+                                                  );
+                                                }
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                  msg: context
+                                                      .l10n
+                                                      .somethingWrongWithTheFields,
+                                                );
                                               }
-                                              context.go(AppRoutes.home.path);
-                                            } catch (e) {
-                                              Fluttertoast.showToast(
-                                                msg: 'BOO',
-                                              );
-                                            }
-                                          } else {
-                                            Fluttertoast.showToast(
-                                              msg:
-                                                  'Something wrong with the fields',
-                                            );
-                                          }
+                                            },
+                                            child:
+                                                state.states !=
+                                                    DatabaseStatesAdmin
+                                                        .dbLoading
+                                                ? Text(
+                                                    context.l10n.pushTheFields,
+                                                  )
+                                                : CircularProgressIndicator(),
+                                          );
                                         },
-                                        child:
-                                            state.states !=
-                                                DatabaseStatesAdmin.dbLoading
-                                            ? Text('Push The Fields')
-                                            : CircularProgressIndicator(),
-                                      );
-                                    },
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -292,7 +307,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                   ],
                 ),
               )
-            : Text('Something went wron. No product id :()'),
+            : Text(context.l10n.somethingWentWronNoProduct),
       ),
     );
   }

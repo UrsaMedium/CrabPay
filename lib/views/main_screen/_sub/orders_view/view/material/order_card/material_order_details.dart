@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/product_cart/cart_inner_circle/data_models/cart_item_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -30,7 +31,7 @@ class MaterialOrderDetails extends StatelessWidget {
       child: Container(
         margin: .all(4),
         height: 360,
-        width: 308,
+        width: MediaQuery.widthOf(context) - 16,
         child: Column(
           spacing: 4,
           crossAxisAlignment: .start,
@@ -53,7 +54,9 @@ class MaterialOrderDetails extends StatelessWidget {
                               order.orderDate,
                               style: const TextStyle(fontWeight: .w600),
                             ),
-                            Text('Order: ${order.orderIdToDisplay}'),
+                            Text(
+                              '${context.l10n.order}: ${order.orderIdToDisplay}',
+                            ),
                           ],
                         ),
                         IconButton(
@@ -66,7 +69,7 @@ class MaterialOrderDetails extends StatelessWidget {
                           icon: Row(
                             children: [
                               Text(
-                                'Support  ',
+                                context.l10n.support,
                                 style: TextStyle(
                                   fontWeight: .w500,
                                   color:
@@ -94,21 +97,21 @@ class MaterialOrderDetails extends StatelessWidget {
                           Column(
                             crossAxisAlignment: .start,
                             children: [
-                              Text('Delivered'),
+                              Text(context.l10n.delivered),
                               Text(' ${order.amountOfDeliveredItems}'),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: .start,
                             children: [
-                              Text('Products'),
+                              Text(context.l10n.products),
                               Text(' ${order.amountOfItems}'),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: .start,
                             children: [
-                              Text('Order Price'),
+                              Text(context.l10n.orderPrice),
                               Text(' \$${order.orderPrice}'),
                             ],
                           ),
@@ -158,7 +161,7 @@ class MaterialOrderDetails extends StatelessWidget {
                                               .appColorScheme
                                               .onInverseSurface,
                                           alignment: Alignment.center,
-                                          child: Text('🦀'),
+                                          child: Text(context.l10n.emptyKey),
                                         ),
                                     placeholder: (context, url) =>
                                         MaterialShimeringPlaceHolder(
@@ -221,7 +224,7 @@ class MaterialOrderDetails extends StatelessWidget {
                                   icon: Row(
                                     children: [
                                       Text(
-                                        'Support  ',
+                                        context.l10n.support,
                                         style: TextStyle(
                                           fontWeight: .w500,
                                           color: context

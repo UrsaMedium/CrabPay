@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
@@ -20,7 +21,7 @@ class DataAndWidgetsPreperation {
     productFields = context.read<AdminBloc>().state.appProductFields;
 
     if (productFields == null) {
-      Fluttertoast.showToast(msg: 'No fields is created');
+      Fluttertoast.showToast(msg: context.l10n.noFieldsIsCreated);
       context.pop();
     }
 
@@ -33,7 +34,7 @@ class DataAndWidgetsPreperation {
     }
 
     if (imageChecker != 1) {
-      Fluttertoast.showToast(msg: 'How come there is not just one image field');
+      Fluttertoast.showToast(msg: context.l10n.howComeThereIsNot);
       context.pop();
     }
 
@@ -123,7 +124,7 @@ class DataAndWidgetsPreperation {
         collapsedBackgroundColor: context.appColorScheme.onPrimaryFixedVariant,
 
         title: Text(imageField!.fieldName),
-        subtitle: Text('Fill the price options'),
+        subtitle: Text(context.l10n.fillThePriceOptions),
         children: _priceRangeListWidgetGenerator(),
       ),
     );

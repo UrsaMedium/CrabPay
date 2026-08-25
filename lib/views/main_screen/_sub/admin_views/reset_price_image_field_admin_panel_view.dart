@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -38,7 +39,7 @@ class _ResetPriceImageFieldAdminPanelViewState
         .state
         .cachedProductFields?[widget.productId];
     if (_productFields == null) {
-      Fluttertoast.showToast(msg: 'Strange error. No fields detected');
+      Fluttertoast.showToast(msg: context.l10n.strangeErrorNoFieldsDetected);
       context.read<DatabaseBloc>().add(
         DatabaseEventFetchProductFields(productId: widget.productId!),
       );
@@ -124,7 +125,7 @@ class _ResetPriceImageFieldAdminPanelViewState
             },
             icon: Icon(Icons.arrow_back),
           ),
-          title: Text('Admin Panel'),
+          title: Text(context.l10n.adminPanel),
         ),
         body: Column(
           children: [
@@ -163,7 +164,7 @@ class _ResetPriceImageFieldAdminPanelViewState
                         );
                         _execute(context: context, newImageField: _groupValue!);
                       },
-                child: Text('Set new price image'),
+                child: Text(context.l10n.setNewPriceImage),
               ),
             ),
           ],

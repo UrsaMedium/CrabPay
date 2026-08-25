@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,7 @@ class _MaterialStoreSearchBarViewState
                           child: Text(
                             maxLines: 1,
                             _isUserInputEmpty()
-                                ? 'Search'
+                                ? context.l10n.search
                                 : widget.controller.text,
                             overflow: .ellipsis,
                             style: const TextStyle(fontWeight: .w500),

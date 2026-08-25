@@ -17,16 +17,12 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
   DatabaseBlocAdmin({
     required AdminInnerDatabaseHandler databaseHandlerAdmin,
     required AuthInnerInterface authInnerface,
-  }) : 
-  // _authInterface = authInnerface,
+  }) : // _authInterface = authInnerface,
        super(const DatabaseStateAdmin()) {
     //
     // final _uuid = Uuid();
 
-   
-
     // Products------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- 
 
     // add Product
     on<DatabaseEventAddProductAdmin>((event, emit) async {
@@ -36,17 +32,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.addProductAdmin(product: event.product);
-        emit(
-          state.copyWith(
-            states: DatabaseStatesAdmin.productsAdded,
-          ),
-        );
+        emit(state.copyWith(states: DatabaseStatesAdmin.productsAdded));
       } catch (e) {
-        emit(
-          state.copyWith(
-            states: DatabaseStatesAdmin.productsNotAdded,
-          ),
-        );
+        emit(state.copyWith(states: DatabaseStatesAdmin.productsNotAdded));
         rethrow;
       }
     });
@@ -83,9 +71,6 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
 
     // Fields------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
     // add Product Field
     on<DatabaseEventAddProductFieldAdmin>((event, emit) async {
       developer.log('---');
@@ -93,7 +78,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
-        await databaseHandlerAdmin.addProductFieldAdmin(field: event.productField);
+        await databaseHandlerAdmin.addProductFieldAdmin(
+          field: event.productField,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsNotAdded));
@@ -108,7 +95,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
-        await databaseHandlerAdmin.deleteProductFieldAdmin(field: event.productField);
+        await databaseHandlerAdmin.deleteProductFieldAdmin(
+          field: event.productField,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsNotDeleted));
@@ -147,7 +136,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
             expectedData: event.oldImageField!.expectedData,
             priceImages: null,
           );
-          await databaseHandlerAdmin.updateProductFieldAdmin(field: oldChangedField);
+          await databaseHandlerAdmin.updateProductFieldAdmin(
+            field: oldChangedField,
+          );
         }
         final newChangedField = ProductField(
           id: event.newImageField.id,
@@ -159,7 +150,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
           expectedData: event.newImageField.expectedData,
           priceImages: null,
         );
-        await databaseHandlerAdmin.updateProductFieldAdmin(field: newChangedField);
+        await databaseHandlerAdmin.updateProductFieldAdmin(
+          field: newChangedField,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsUpdated));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStatesAdmin.fieldsNotUpdated));
@@ -175,8 +168,10 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('--- DatabaseEventAddCurrencies fired');
       developer.log('---');
       try {
-        emit(state.copyWith(states: DatabaseStatesAdmin .dbLoading));
-        await databaseHandlerAdmin.addCurrenciesAdmin(currencies: event.currencies);
+        emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
+        await databaseHandlerAdmin.addCurrenciesAdmin(
+          currencies: event.currencies,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.currenciesAdded));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStatesAdmin.currenciesNotAdded));
@@ -190,7 +185,9 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
-        await databaseHandlerAdmin.deleteCurrenciesAdmin(currencies: event.currencies);
+        await databaseHandlerAdmin.deleteCurrenciesAdmin(
+          currencies: event.currencies,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.currenciesDeleted));
       } catch (e) {
         emit(state.copyWith(states: DatabaseStatesAdmin.currenciesNotDeleted));
@@ -201,7 +198,6 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
     //Featured Products ---------------------------------------------------------------------------------------------------------------
     //fetch all featured products
 
-
     //add featured product
     on<DatabaseEventAddFeaturedProductAdmin>((event, emit) async {
       developer.log('---');
@@ -209,10 +205,14 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
-        await databaseHandlerAdmin.addFeaturedProductAdmin(productId: event.product.id);
+        await databaseHandlerAdmin.addFeaturedProductAdmin(
+          productId: event.product.id,
+        );
         emit(state.copyWith(states: DatabaseStatesAdmin.featuedProductsAdded));
       } catch (e) {
-        emit(state.copyWith(states: DatabaseStatesAdmin.featuedProductsNotAdded));
+        emit(
+          state.copyWith(states: DatabaseStatesAdmin.featuedProductsNotAdded),
+        );
         rethrow;
       }
     });
@@ -222,13 +222,17 @@ class DatabaseBlocAdmin extends Bloc<DatabaseEventAdmin, DatabaseStateAdmin> {
       developer.log('--- DatabaseEventDeleteFeaturedProduct fired');
       developer.log('---');
       try {
-        emit(state.copyWith(states: DatabaseStatesAdmin .dbLoading));
+        emit(state.copyWith(states: DatabaseStatesAdmin.dbLoading));
         await databaseHandlerAdmin.deleteFeaturedProductAdmin(
           productId: event.product.id,
         );
-        emit(state.copyWith(states: DatabaseStatesAdmin .featuedProductsDeleted));
+        emit(
+          state.copyWith(states: DatabaseStatesAdmin.featuedProductsDeleted),
+        );
       } catch (e) {
-        emit(state.copyWith(states: DatabaseStatesAdmin.featuedProductsNotDeleted));
+        emit(
+          state.copyWith(states: DatabaseStatesAdmin.featuedProductsNotDeleted),
+        );
         rethrow;
       }
     });

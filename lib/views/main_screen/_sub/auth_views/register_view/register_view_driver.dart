@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterViewDriver extends StatefulWidget {
+  static final routeName = AppRoutes.register.name;
   const RegisterViewDriver({super.key});
 
   @override

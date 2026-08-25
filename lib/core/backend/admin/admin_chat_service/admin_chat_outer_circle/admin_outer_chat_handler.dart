@@ -16,7 +16,9 @@ class AdminOuterChatHandlerWithSupabase implements AdminInnerChatHandler {
   );
 
   @override
-  Future<SupportThread?> getOrCreateThreadAdmin({required String userId}) async {
+  Future<SupportThread?> getOrCreateThreadAdmin({
+    required String userId,
+  }) async {
     try {
       getIt<InnerLoggerHandler>().logBreadcrumb(
         message: 'Get Or Create Thread',
@@ -56,7 +58,7 @@ class AdminOuterChatHandlerWithSupabase implements AdminInnerChatHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to get or create support thread: $e');
-      Fluttertoast.showToast(msg: 'Failed to get or create support thread');
+      Fluttertoast.showToast(msg: 'failedToGetOrCreate');
       rethrow;
     }
   }
@@ -113,13 +115,15 @@ class AdminOuterChatHandlerWithSupabase implements AdminInnerChatHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to send message: $e');
-      Fluttertoast.showToast(msg: 'Failed to send message. Please try again.');
+      Fluttertoast.showToast(msg: 'failedToSendMessagePlease');
       rethrow;
     }
   }
 
   @override
-  Stream<List<ChatMessage>> subscribeToMessagesAdmin({required String threadId}) {
+  Stream<List<ChatMessage>> subscribeToMessagesAdmin({
+    required String threadId,
+  }) {
     try {
       getIt<InnerLoggerHandler>().logBreadcrumb(
         message: 'exe: Subscribe To Messages',
@@ -181,10 +185,10 @@ class AdminOuterChatHandlerWithSupabase implements AdminInnerChatHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to fetch all threads: $e');
-      Fluttertoast.showToast(msg: 'Failed to fetch all threads');
+      Fluttertoast.showToast(msg: 'failedToFetchAllThreads');
       rethrow;
     }
   }
 }
 
-      // await _client.auth.refreshSession();
+// await _client.auth.refreshSession();

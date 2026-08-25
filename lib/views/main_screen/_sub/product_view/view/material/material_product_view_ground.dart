@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/hero_flight_observer.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -114,7 +115,7 @@ class MaterialProductView extends StatelessWidget {
                                           .appColorScheme
                                           .onInverseSurface,
                                       alignment: Alignment.center,
-                                      child: Text('🦀'),
+                                      child: Text(context.l10n.emptyKey),
                                     ),
                                 placeholder: (context, url) =>
                                     MaterialShimeringPlaceHolder(

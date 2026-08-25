@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
@@ -142,11 +143,11 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
 
   void _onFavoritePressed(BuildContext context) {
     if (_productViewCubit.state.isAnonymous) {
-      Fluttertoast.showToast(msg: 'Sign In');
+      Fluttertoast.showToast(msg: context.l10n.signIn);
       return;
     }
     if (_productViewCubit.state.isFavoriteLoading) {
-      Fluttertoast.showToast(msg: 'Please, wait');
+      Fluttertoast.showToast(msg: context.l10n.pleaseWait);
       return;
     }
     _productViewCubit.setFavoriteLoadingStateTrue();
@@ -214,7 +215,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
         ),
       );
     } else {
-      Fluttertoast.showToast(msg: 'Fill All The Fields');
+      Fluttertoast.showToast(msg: context.l10n.fillAllTheFields);
     }
   }
 

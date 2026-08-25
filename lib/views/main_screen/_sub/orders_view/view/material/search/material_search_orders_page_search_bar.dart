@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/core/utilities.dart';
@@ -42,7 +43,7 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                       spacing: 4,
                       children: [
                         Text(
-                          'Tap Here to Pick Dates',
+                          context.l10n.tapHereToPickDates,
                           style: TextStyle(
                             color: context.appColorScheme.primary,
                             fontWeight: .bold,
@@ -62,13 +63,13 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                               mainAxisAlignment: .spaceAround,
                               children: [
                                 Text(
-                                  'From: ${fromDate == null ? '' : dateConversion(fromDate.toString()).substring(0, 12)}',
+                                  '${context.l10n.from_date}: ${fromDate == null ? '' : dateConversion(fromDate.toString()).substring(0, 12)}',
                                   style: TextStyle(
                                     color: context.appColorScheme.onSurface,
                                   ),
                                 ),
                                 Text(
-                                  'To: ${toDate == null ? '' : dateConversion(toDate.toString()).substring(0, 12)}',
+                                  '${context.l10n.to_date}: ${toDate == null ? '' : dateConversion(toDate.toString()).substring(0, 12)}',
                                   style: TextStyle(
                                     color: context.appColorScheme.onSurface,
                                   ),

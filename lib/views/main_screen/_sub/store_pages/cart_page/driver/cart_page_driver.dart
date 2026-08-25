@@ -82,7 +82,7 @@ class _CartPageDriverState extends State<CartPageDriver>
           );
           // _cartPageCubit.flushCartItems();
         }
-        Fluttertoast.showToast(msg: 'You must register to buy');
+        Fluttertoast.showToast(msg: 'youMustRegisterToBuy');
         return;
       } else {
         context.read<PaymentBloc>().add(

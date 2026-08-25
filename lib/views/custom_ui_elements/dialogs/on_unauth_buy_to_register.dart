@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
@@ -27,7 +28,7 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
           if (authState is AuthStateLoggedOut ||
               authState.currentUser.isAnonymous) {
             Fluttertoast.showToast(
-              msg: 'Registration failed',
+              msg: context.l10n.registrationFailed,
               toastLength: Toast.LENGTH_LONG,
             );
           }
@@ -64,7 +65,7 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
-                    label: Text('Email*'),
+                    label: Text(context.l10n.email),
                     filled: true,
                   ),
                 ),
@@ -86,7 +87,7 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
-                    label: Text('Password*'),
+                    label: Text(context.l10n.password),
                     filled: true,
                   ),
                 ),
@@ -109,14 +110,14 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
                     ),
                   );
                 },
-                child: const Text('Register'),
+                child: Text(context.l10n.register),
               ),
             ),
             SizedBox(
               width: 100.0,
               child: TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Dismiss'),
+                child: Text(context.l10n.dismiss),
               ),
             ),
           ],

@@ -78,7 +78,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to fetch: $e');
-      Fluttertoast.showToast(msg: 'Failed to fetch products');
+      Fluttertoast.showToast(msg: 'failedToFetchProducts');
       return null;
     }
   }
@@ -151,7 +151,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Fetch Product Fields',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch fields');
+      Fluttertoast.showToast(msg: 'failedToFetchFields');
       rethrow;
     }
   }
@@ -192,7 +192,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Fetch All Curencies',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch currencies');
+      Fluttertoast.showToast(msg: 'failedToFetchCurrencies');
       rethrow;
     }
   }
@@ -223,7 +223,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Fetch All Featured Products',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch Featured Products');
+      Fluttertoast.showToast(msg: 'failedToFetchFeaturedProducts');
       rethrow;
     }
   }
@@ -251,7 +251,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Add User Preference',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to add User Preference');
+      Fluttertoast.showToast(msg: 'failedToAddUserPreference');
       rethrow;
     }
   }
@@ -282,7 +282,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Fetch User Preferences',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to fetch User Preference');
+      Fluttertoast.showToast(msg: 'failedToFetchUserPreference');
       rethrow;
     }
   }
@@ -310,7 +310,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         error: 'Failed To Delete User Preference',
         stackTrace: StackTrace.fromString(e.toString()),
       );
-      Fluttertoast.showToast(msg: 'Failed to delete User Preference');
+      Fluttertoast.showToast(msg: 'failedToDeleteUserPreference');
       rethrow;
     }
   }

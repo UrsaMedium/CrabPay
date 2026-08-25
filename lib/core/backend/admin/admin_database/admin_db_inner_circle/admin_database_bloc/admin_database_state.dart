@@ -64,15 +64,9 @@ enum DatabaseStatesAdmin {
 class DatabaseStateAdmin {
   final DatabaseStatesAdmin states;
 
-  const DatabaseStateAdmin({
-    this.states = DatabaseStatesAdmin.initialized,
-  });
+  const DatabaseStateAdmin({this.states = DatabaseStatesAdmin.initialized});
 
-  DatabaseStateAdmin copyWith({
-    DatabaseStatesAdmin? states,
-  }) {
-    return DatabaseStateAdmin(
-      states: states ?? this.states,
-    );
+  DatabaseStateAdmin copyWith({DatabaseStatesAdmin? states}) {
+    return DatabaseStateAdmin(states: states ?? this.states);
   }
 }

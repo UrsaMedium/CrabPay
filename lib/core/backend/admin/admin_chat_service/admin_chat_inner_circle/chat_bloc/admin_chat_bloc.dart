@@ -49,7 +49,10 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
         }
       } catch (e) {
         emit(
-          state.copyWith(status: ChatStatesAdmin.error, errorMessage: e.toString()),
+          state.copyWith(
+            status: ChatStatesAdmin.error,
+            errorMessage: e.toString(),
+          ),
         );
         rethrow;
       }
@@ -160,7 +163,9 @@ class ChatBlocAdmin extends Bloc<ChatEventAdmin, ChatStateAdmin> {
 
   @override
   Future<void> close() {
-    developer.log('--- ChatBloc closing: canceling real-time message stream ---');
+    developer.log(
+      '--- ChatBloc closing: canceling real-time message stream ---',
+    );
     _messagesSubscription?.cancel();
     _authSubscription.cancel();
     return super.close();

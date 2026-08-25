@@ -183,7 +183,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to get or create support thread: $e');
-      Fluttertoast.showToast(msg: 'Failed to get or create support thread');
+      Fluttertoast.showToast(msg: 'failedToGetOrCreate');
       rethrow;
     }
   }
@@ -240,7 +240,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
         stackTrace: StackTrace.fromString(e.toString()),
       );
       debugPrint('Failed to send message: $e');
-      Fluttertoast.showToast(msg: 'Failed to send message. Please try again.');
+      Fluttertoast.showToast(msg: 'failedToSendMessagePlease');
       rethrow;
     }
   }

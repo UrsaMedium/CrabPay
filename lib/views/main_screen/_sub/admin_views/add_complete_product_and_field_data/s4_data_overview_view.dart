@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -28,10 +29,8 @@ class DataOverviewView extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body:
-          !(appProductFields != null &&
-              appProduct != null)
-          ? Text('no data')
+      body: !(appProductFields != null && appProduct != null)
+          ? Text(context.l10n.noData)
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: SingleChildScrollView(
@@ -57,7 +56,7 @@ class DataOverviewView extends StatelessWidget {
                             AdminEventPushesData(context: context),
                           );
                         },
-                        child: Text('Send Data'),
+                        child: Text(context.l10n.sendData),
                       ),
                     ),
                   ],
@@ -103,7 +102,7 @@ Widget _fieldsOverview(
                       child: Row(
                         mainAxisAlignment: .spaceBetween,
                         children: [
-                          Text('Handler'),
+                          Text(context.l10n.handler),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 180),
                             child: Text(field.handler),
@@ -118,7 +117,7 @@ Widget _fieldsOverview(
                       child: Row(
                         mainAxisAlignment: .spaceBetween,
                         children: [
-                          Text('Attributes'),
+                          Text(context.l10n.attributes),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 180),
                             child: Text("${field.priceImages}"),
@@ -133,7 +132,7 @@ Widget _fieldsOverview(
                       child: Row(
                         mainAxisAlignment: .spaceBetween,
                         children: [
-                          Text('Expected Data'),
+                          Text(context.l10n.expectedData),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 180),
                             child: Text("${field.expectedData}"),
@@ -148,7 +147,7 @@ Widget _fieldsOverview(
                       child: Row(
                         mainAxisAlignment: .spaceBetween,
                         children: [
-                          Text('Order'),
+                          Text(context.l10n.order),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 180),
                             child: Text("${field.order}"),
@@ -183,7 +182,7 @@ Widget _fieldsOverview(
                   horizontal: 12.0,
                   vertical: 2,
                 ),
-                child: Text('Product Data'),
+                child: Text(context.l10n.productData),
               ),
             ),
             ...fields,
@@ -213,7 +212,7 @@ Widget _productOverview(BuildContext context, Product appProduct) {
                   horizontal: 12.0,
                   vertical: 2,
                 ),
-                child: Text('Product Data'),
+                child: Text(context.l10n.productData),
               ),
             ),
             Column(
@@ -225,7 +224,7 @@ Widget _productOverview(BuildContext context, Product appProduct) {
                     child: Row(
                       mainAxisAlignment: .spaceBetween,
                       children: [
-                        Text('Name'),
+                        Text(context.l10n.name),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 180),
                           child: Text(appProduct.name),
@@ -240,7 +239,7 @@ Widget _productOverview(BuildContext context, Product appProduct) {
                     child: Row(
                       mainAxisAlignment: .spaceBetween,
                       children: [
-                        Text('Image Url'),
+                        Text(context.l10n.imageUrl),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 180),
                           child: Text(appProduct.image),

@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Failed to get or create support thread'**
   String get failedToGetOrCreate;
 
+  /// No description provided for @favorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get favorite;
+
+  /// No description provided for @favoriteEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite? :('**
+  String get favoriteEmpty;
+
   /// No description provided for @failedToSendMessagePlease.
   ///
   /// In en, this message translates to:
@@ -242,6 +254,24 @@ abstract class AppLocalizations {
   /// **'Failed to fetch pending orders cart items'**
   String get failedToFetchPendingOrders;
 
+  /// No description provided for @orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get orders;
+
+  /// No description provided for @from_date.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from_date;
+
+  /// No description provided for @to_date.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get to_date;
+
   /// No description provided for @registrationFailed.
   ///
   /// In en, this message translates to:
@@ -338,11 +368,29 @@ abstract class AppLocalizations {
   /// **'BOO'**
   String get boo;
 
+  /// No description provided for @turnOnRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Russian'**
+  String get turnOnRussian;
+
   /// No description provided for @productNameUi.
   ///
   /// In en, this message translates to:
   /// **'Product Name: {productName}'**
   String productNameUi(String productName);
+
+  /// No description provided for @mobileGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Games'**
+  String get mobileGames;
+
+  /// No description provided for @services.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get services;
 
   /// No description provided for @back.
   ///
@@ -687,6 +735,12 @@ abstract class AppLocalizations {
   /// **'Please, wait'**
   String get pleaseWait;
 
+  /// No description provided for @waitingYourPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting Your Payment'**
+  String get waitingYourPayment;
+
   /// No description provided for @phew.
   ///
   /// In en, this message translates to:
@@ -800,6 +854,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Current description: {description}'**
   String currentDescription(String description);
+
+  /// No description provided for @somethingWentWrongWithDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh-oh. Something went wrong with the description'**
+  String get somethingWentWrongWithDescription;
 
   /// No description provided for @chooseAproductToModify.
   ///
@@ -1113,11 +1173,41 @@ abstract class AppLocalizations {
   /// **'Confirm the purchase'**
   String get confirmThePurchase;
 
+  /// No description provided for @contctOurSupportTeamFoAssistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact our support team\n for assistance'**
+  String get contctOurSupportTeamFoAssistance;
+
   /// No description provided for @heyYouHaven.
   ///
   /// In en, this message translates to:
-  /// **'Hey, You haven\\'**
+  /// **'Hey, You haven\'t picked anything yet'**
   String get heyYouHaven;
+
+  /// No description provided for @youHave1UnpaidOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 1 Unpaid Order!'**
+  String get youHave1UnpaidOrder;
+
+  /// No description provided for @youHavenUnpaidOrdersSTART.
+  ///
+  /// In en, this message translates to:
+  /// **'You have'**
+  String get youHavenUnpaidOrdersSTART;
+
+  /// No description provided for @youHavenUnpaidOrdersEND.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid Orders!'**
+  String get youHavenUnpaidOrdersEND;
+
+  /// No description provided for @howDidYouGEtHere.
+  ///
+  /// In en, this message translates to:
+  /// **'How did you get here?!'**
+  String get howDidYouGEtHere;
 
   /// No description provided for @total.
   ///

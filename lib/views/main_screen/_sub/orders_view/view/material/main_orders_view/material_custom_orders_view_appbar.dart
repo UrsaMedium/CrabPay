@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/orders_view/driver/cubit.dart';
@@ -128,7 +129,7 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                               child: Align(
                                 alignment: .centerLeft,
                                 child: Text(
-                                  isSearchOpen ? 'Search' : 'Orders',
+                                  isSearchOpen ? context.l10n.search : context.l10n.orders,
                                   style: TextStyle(
                                     color: context.appColorScheme.primary,
                                     fontSize: 26,

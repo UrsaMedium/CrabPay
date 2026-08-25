@@ -1,10 +1,11 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:convert';
 
 void main() async {
   final libDir = Directory('lib');
   if (!libDir.existsSync()) {
-    print('Error: run this from the root of your project.');
+    developer.log('Error: run this from the root of your project.');
     return;
   }
 
@@ -44,7 +45,7 @@ void main() async {
     const JsonEncoder.withIndent('  ').convert(extractedStrings),
   );
 
-  print('Success: Extracted $count strings to lib/l10n/app_en.arb');
+  developer.log('Success: Extracted $count strings to lib/l10n/app_en.arb');
 }
 
 /// Converts "Hello World!" into "helloWorld"

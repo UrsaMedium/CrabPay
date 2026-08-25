@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_state.dart';
@@ -66,7 +67,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                           context.pop();
                         }
                       },
-                      child: Text('Back'),
+                      child: Text(context.l10n.back),
                     ),
                   ),
                   Padding(
@@ -89,7 +90,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                           context.pushNamed(AppRoutes.dataOverview.name);
                         }
                       },
-                      child: Text('Next'),
+                      child: Text(context.l10n.next),
                     ),
                   ),
                 ],

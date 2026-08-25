@@ -2,6 +2,7 @@ import 'package:crabpay/core/app_routes/app_routes.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_events.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,7 +106,7 @@ class _MaterialProfileSheet extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Your profile:',
+                                      context.l10n.yourProfile,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -130,7 +131,7 @@ class _MaterialProfileSheet extends StatelessWidget {
                                   children: [
                                     Icon(Icons.logout_outlined),
                                     Text(
-                                      '  Sign Out',
+                                      context.l10n.signOut,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,

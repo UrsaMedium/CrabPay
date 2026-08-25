@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -36,7 +37,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
   @override
   void initState() {
     if (widget.fieldId == null || widget.productId == null) {
-      Fluttertoast.showToast(msg: 'Failed to pass field data');
+      Fluttertoast.showToast(msg: context.l10n.failedToPassFieldData);
       getIt<InnerLoggerHandler>().logBreadcrumb(
         message:
             'UpdateFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
@@ -84,7 +85,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
             },
             icon: Icon(Icons.arrow_back),
           ),
-          title: Text('Admin Panel'),
+          title: Text(context.l10n.adminPanel),
           actions: [
             if (_currentField != null)
               Padding(
@@ -95,7 +96,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                         state.states == DatabaseStatesAdmin.dbLoading;
                     return Row(
                       children: [
-                        Text('Delete'),
+                        Text(context.l10n.delete),
                         IconButton(
                           iconSize: 32,
                           onPressed: () async {
@@ -108,13 +109,17 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                               },
                             );
                             if (beingLoaded) {
-                              Fluttertoast.showToast(msg: 'Please, wait');
+                              Fluttertoast.showToast(
+                                msg: context.l10n.pleaseWait,
+                              );
                             } else {
                               final delete =
                                   await showOnDatabaseItemDelete(context) ??
                                   false;
                               if (delete && context.mounted) {
-                                Fluttertoast.showToast(msg: 'Deleting');
+                                Fluttertoast.showToast(
+                                  msg: context.l10n.deleting,
+                                );
                                 context.read<DatabaseBlocAdmin>().add(
                                   DatabaseEventDeleteProductFieldAdmin(
                                     productField: _currentField!,
@@ -122,7 +127,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 );
                                 context.go(AppRoutes.home.path);
                               } else {
-                                Fluttertoast.showToast(msg: 'Phew');
+                                Fluttertoast.showToast(msg: 'phew');
                               }
                             }
                           },
@@ -184,7 +189,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                               Text(
                                 'Order of the field. OG order: ${_currentField?.order}',
                               ),
-                              Text('Must be integer'),
+                              Text(context.l10n.mustBeInteger),
                               TextField(
                                 controller: _fieldOrder,
                                 onChanged: (value) => setState(() {}),
@@ -255,7 +260,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                   ),
                                 );
                                 Fluttertoast.showToast(
-                                  msg: 'Happily ever after',
+                                  msg: context.l10n.happilyEverAfter,
                                 );
                                 context.go(AppRoutes.home.path);
                               } else {
@@ -263,7 +268,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                               }
                             },
                             child: state.states != DatabaseStatesAdmin.dbLoading
-                                ? Text('Update The Field')
+                                ? Text(context.l10n.updateTheField)
                                 : CircularProgressIndicator(),
                           );
                         },
@@ -271,7 +276,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                     ),
                   ],
                 )
-              : Text('Some error - no field found'),
+              : Text(context.l10n.someErrorNoFieldFound),
         ),
       ),
     );

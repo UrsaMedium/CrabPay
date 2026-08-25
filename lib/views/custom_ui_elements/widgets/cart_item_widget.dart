@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
@@ -142,7 +143,7 @@ class MaterialCartItemWidget extends StatelessWidget {
                               Container(
                                 color: context.appColorScheme.onInverseSurface,
                                 alignment: Alignment.center,
-                                child: Text('🦀'),
+                                child: Text(context.l10n.emptyKey),
                               ),
                           placeholder: (context, url) =>
                               MaterialShimeringPlaceHolder(
@@ -204,7 +205,7 @@ class MaterialCartItemWidget extends StatelessWidget {
                     absorbing: true,
                     child: ClipRRect(
                       borderRadius: .circular(50),
-                      child: Center(child: Text('Deleting')),
+                      child: Center(child: Text(context.l10n.deleting)),
                     ),
                   ),
                 ),

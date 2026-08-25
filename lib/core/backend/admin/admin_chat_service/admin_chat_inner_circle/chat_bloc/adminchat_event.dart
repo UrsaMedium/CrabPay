@@ -2,7 +2,7 @@ import 'package:crabpay/core/backend/chat_service/chat_inner_circle/data_models/
 import 'package:equatable/equatable.dart';
 
 abstract class ChatEventAdmin extends Equatable {
-  const ChatEventAdmin  ();
+  const ChatEventAdmin();
 
   @override
   List<Object?> get props => [];

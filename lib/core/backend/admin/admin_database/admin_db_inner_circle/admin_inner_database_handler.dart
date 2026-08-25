@@ -21,5 +21,4 @@ abstract class AdminInnerDatabaseHandler {
   //featured products
   Future<void> addFeaturedProductAdmin({required String productId});
   Future<void> deleteFeaturedProductAdmin({required String productId});
-
 }

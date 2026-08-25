@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_bloc.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_event.dart';
 import 'package:crabpay/core/backend/admin/admin_database/admin_db_inner_circle/admin_database_bloc/admin_database_state.dart';
@@ -98,7 +99,7 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
             children: [
               Column(
                 children: [
-                  Text('product'),
+                  Text(context.l10n.product),
                   Row(
                     children: [
                       Flexible(

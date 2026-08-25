@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/connection_monitor_cubit.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
@@ -106,7 +107,7 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                   ? Center(
                       heightFactor: 1.3,
                       child: Text(
-                        'No Connection :(',
+                        context.l10n.noConnection,
                         style: TextStyle(
                           color: context.appColorScheme.onErrorContainer,
                           fontSize: 26,

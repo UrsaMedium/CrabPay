@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_user.dart';
 import 'package:crabpay/core/backend/chat_service/chat_inner_circle/chat_bloc/chat_bloc.dart';
@@ -172,7 +173,7 @@ class MaterialAdminSupportPageView extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
-                        hint: Text('Type your question...'),
+                        hint: Text(context.l10n.typeYourQuestion),
                         filled: true,
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home_page_cubit.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -46,7 +47,7 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'Featured\nDeals',
+                              context.l10n.featuredndeals,
                               textAlign: .center,
                               style: TextStyle(
                                 fontSize: 18,

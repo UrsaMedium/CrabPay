@@ -1,4 +1,5 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_fields_model.dart';
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
@@ -65,7 +66,7 @@ class MaterialProductBuyLayer extends StatelessWidget {
                             ),
                             child: SizedBox(
                               child: Text(
-                                'Read Description',
+                                context.l10n.readDescription,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: .w700,
@@ -186,8 +187,8 @@ class MaterialBuyLayerFields extends StatelessWidget {
           child: SizedBox(
             child: Text(
               layer != ProductViewLayers.buyLayer
-                  ? 'Read Description'
-                  : 'Fill Every Field',
+                  ? context.l10n.readDescription
+                  : context.l10n.fillAllTheFields,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: .w700,
@@ -443,7 +444,7 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              'Add To Cart',
+                              context.l10n.addToCart,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,

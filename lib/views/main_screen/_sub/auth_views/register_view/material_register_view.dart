@@ -1,3 +1,4 @@
+import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_bloc.dart';
 import 'package:crabpay/core/backend/authentication/auth_inner_circle/auth_bloc/auth_states.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
@@ -79,7 +80,7 @@ class MaterialRegisterView extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
-                    label: Text('Email*'),
+                    label: Text(context.l10n.email),
                     filled: true,
                   ),
                 );
@@ -110,7 +111,7 @@ class MaterialRegisterView extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
-                    label: Text('Password*'),
+                    label: Text(context.l10n.password),
                     filled: true,
                   ),
                 );
@@ -142,7 +143,7 @@ class MaterialRegisterView extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('You have one already? Then'),
+                  child: Text(context.l10n.youHaveOneAlreadyThen),
                 ),
                 Expanded(
                   child: Divider(

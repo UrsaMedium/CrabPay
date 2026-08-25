@@ -72,7 +72,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
           DatabaseEventAddProductAdmin(product: event.appProduct),
         );
       } catch (e) {
-        Fluttertoast.showToast(msg: 'eeeeeh');
+        Fluttertoast.showToast(msg: "eeeh");
         rethrow;
       }
     });
@@ -86,7 +86,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
         image: state.appProduct!.image,
         description: state.appProduct!.description,
         currencies: state.appProduct!.currencies,
-        category: ''
+        category: '',
       );
       try {
         event.context.read<DatabaseBlocAdmin>().add(
@@ -118,7 +118,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
           message: 'AdminEventPushesData: error pushing product and fields',
           data: {'error': e.toString()},
         );
-        Fluttertoast.showToast(msg: 'BOO');
+        Fluttertoast.showToast(msg: 'boo');
       }
     });
   }
