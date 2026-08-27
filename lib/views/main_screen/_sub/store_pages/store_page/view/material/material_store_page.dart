@@ -1,11 +1,9 @@
 import 'package:crabpay/core/extensions/l10n_extension.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_bloc.dart';
 import 'package:crabpay/core/global_graphic_driver.dart';
-import 'package:crabpay/core/utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
-import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/product_card_image_only.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/_sub/store_page_search/driver/store_search_bar_driver.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/store_page/driver/store_page_cubit.dart';
 import 'package:flutter/material.dart';
@@ -117,19 +115,25 @@ class _CategoryCard extends StatelessWidget {
               alignment: .bottomCenter,
               children: [
                 SizedBox(
-                  height: 128,
+                  height: 64,
                   width: MediaQuery.widthOf(context) - 32,
                   child: ListView.builder(
                     itemCount: products.length,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>
-                        _ProductImage(product: products[index], tag: subTag),
+                    itemBuilder: (context, index) => ProductCardImageOnly(
+                      product: products[index],
+                      tag: subTag,
+                      width: 64,
+                      height: 128,
+                      cornerRadius: 4,
+                      margin: 4,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 10,
+                    vertical: 2,
                   ),
                   child: Row(
                     children: [
@@ -183,52 +187,6 @@ class _CategoryCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ProductImage extends StatelessWidget {
-  final Product product;
-  final String tag;
-  const _ProductImage({required this.product, required this.tag});
-
-  @override
-  Widget build(BuildContext context) {
-    final heroTag = '${product.id}-$tag';
-    return GestureDetector(
-      onTap: () => globalOpenProductCardCallBack(
-        context: context,
-        productId: product.id,
-        tag: heroTag,
-      ),
-      child: Container(
-        margin: .symmetric(horizontal: 4),
-        height: 40,
-        width: 64,
-        decoration: BoxDecoration(borderRadius: .circular(4)),
-        clipBehavior: .antiAlias,
-        child: Hero(
-          tag: heroTag,
-          createRectTween: (begin, end) =>
-              MaterialRectArcTween(begin: begin, end: end),
-          child: CachedNetworkImage(
-            imageUrl:
-                'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
-            fit: .cover,
-            errorWidget: (context, error, stackTrace) => Container(
-              color: context.appColorScheme.onInverseSurface,
-              alignment: Alignment.center,
-              child: Text(context.l10n.emptyKey),
-            ),
-            placeholder: (context, url) => MaterialShimeringPlaceHolder(
-              width: 40,
-              height: 40,
-              cornerRadius: 4,
-              color: context.appColorScheme.surfaceContainerHigh,
-            ),
-          ),
-        ),
       ),
     );
   }
