@@ -15,15 +15,15 @@ class ProductCardSmallDriver extends StatelessWidget {
   final double width;
   final double cornerRadius;
   final double padding;
-  final String? optionalTag;
+  final double? margin;
   const ProductCardSmallDriver({
     super.key,
     required this.product,
     required this.tag,
     required this.width,
     required this.cornerRadius,
-    this.optionalTag,
     required this.padding,
+    this.margin,
   });
 
   @override
@@ -38,13 +38,15 @@ class ProductCardSmallDriver extends StatelessWidget {
             DatabaseEventGetProductCardTintColor(product: product),
           );
         }
+        final finalTag = '${product.id}-$tag';
         return _MaterialProductCardSmall(
           id: product.id,
           imageUrl: product.image,
           productName: product.name,
           description: product.description,
-          tag: tag,
+          tag: finalTag,
           width: width,
+          margin: margin,
           cornerRadius: cornerRadius,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
           padding: padding,
@@ -62,6 +64,7 @@ class _MaterialProductCardSmall extends StatelessWidget {
   final String description;
   final double width;
   final double padding;
+  final double? margin;
   final double cornerRadius;
   final Color? cardTintColor;
   const _MaterialProductCardSmall({
@@ -74,73 +77,81 @@ class _MaterialProductCardSmall extends StatelessWidget {
     this.cardTintColor,
     required this.id,
     required this.padding,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: width * 1.25,
-      width: width,
-      child: Material(
-        clipBehavior: .antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
-        color: context.appColorScheme.surfaceContainer,
-        elevation: 5,
-        surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
-        child: GestureDetector(
-          onTap: () => globalOpenProductCardCallBack(
-            context: context,
-            productId: id,
-            tag: tag,
-          ),
-          child: Column(
-            crossAxisAlignment: .start,
-            spacing: padding,
-            children: [
-              Padding(
-                padding: .all(padding),
-                child: Hero(
-                  tag: tag,
-                  createRectTween: (begin, end) =>
-                      MaterialRectArcTween(begin: begin, end: end),
-                  child: Material(
-                    borderRadius: .circular(cornerRadius - padding),
-                    clipBehavior: .antiAlias,
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                      width: width - padding * 2,
-                      height: width - padding * 2,
-                      fit: .cover,
-                      errorWidget: (context, error, stackTrace) => Container(
-                        color: context.appColorScheme.onInverseSurface,
-                        alignment: .center,
-                        child: Text(context.l10n.emptyKey),
+    return Padding(
+      padding: .all(margin ?? 0),
+      child: SizedBox(
+        height: width * 1.25,
+        width: width,
+        child: Material(
+          clipBehavior: .antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
+          color: context.appColorScheme.surfaceContainer,
+          elevation: 5,
+          surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
+          child: GestureDetector(
+            onTap: () => globalOpenProductCardCallBack(
+              context: context,
+              productId: id,
+              tag: tag,
+            ),
+            child: Column(
+              crossAxisAlignment: .start,
+              spacing: padding + 1,
+              children: [
+                Padding(
+                  padding: .all(padding),
+                  child: Hero(
+                    tag: tag,
+                    createRectTween: (begin, end) =>
+                        MaterialRectArcTween(begin: begin, end: end),
+                    child: Material(
+                      borderRadius: .circular(cornerRadius - padding),
+                      clipBehavior: .antiAlias,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                        width: width - padding * 2,
+                        height: width - padding * 2,
+                        fit: .cover,
+                        errorWidget: (context, error, stackTrace) => Container(
+                          color: context.appColorScheme.onInverseSurface,
+                          alignment: .center,
+                          child: Text(context.l10n.emptyKey),
+                        ),
+                        placeholder: (context, url) =>
+                            MaterialShimeringPlaceHolder(
+                              width: width - 8,
+                              height: width - 8,
+                              cornerRadius: cornerRadius - 4,
+                              color:
+                                  context.appColorScheme.surfaceContainerHigh,
+                            ),
                       ),
-                      placeholder: (context, url) =>
-                          MaterialShimeringPlaceHolder(
-                            width: width - 8,
-                            height: width - 8,
-                            cornerRadius: cornerRadius - 4,
-                            color: context.appColorScheme.surfaceContainerHigh,
-                          ),
                     ),
                   ),
                 ),
-              ),
-              Center(
-                child: Text(
-                  productName,
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: width / 7,
-                    fontWeight: .w700,
-                    color: context.appColorScheme.onPrimaryContainer,
+                Padding(
+                  padding: .symmetric(horizontal: 2.0),
+                  child: Center(
+                    child: Text(
+                      productName,
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                      style: TextStyle(
+                        fontSize: width / 7,
+                        fontWeight: .w700,
+                        color: context.appColorScheme.onPrimaryContainer,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
