@@ -110,7 +110,7 @@ class _MaterialProductCard extends StatelessWidget {
                       imageUrl:
                           'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                       width: width - 8,
-                      height: height - 110,
+                      height:width - 8,
                       fit: .cover,
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
@@ -120,7 +120,7 @@ class _MaterialProductCard extends StatelessWidget {
                       placeholder: (context, url) =>
                           MaterialShimeringPlaceHolder(
                             width: width - 8,
-                            height: height - 110,
+                            height: width - 8,
                             cornerRadius: cornerRadius - 4,
                             color: context.appColorScheme.surfaceContainerHigh,
                           ),

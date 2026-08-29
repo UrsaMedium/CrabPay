@@ -43,7 +43,7 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                             product: userPreferences[index * 2],
                             tag:
                                 '${userPreferences[index * 2].id}-favorite-$index',
-                            height: 256,
+                            height: 258,
                             width: context
                                 .read<HomePageCubit>()
                                 .state
@@ -95,7 +95,7 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                         product: userPreferences[index * 2 + 1],
                         tag:
                             '${userPreferences[index * 2 + 1].id}-favorite-$index',
-                        height: 256,
+                        height: 258,
                         width: context
                             .read<HomePageCubit>()
                             .state

@@ -100,8 +100,6 @@ class _MaterialProductCardSmall extends StatelessWidget {
               tag: tag,
             ),
             child: Column(
-              crossAxisAlignment: .start,
-              spacing: padding + 1,
               children: [
                 Padding(
                   padding: .all(padding),
@@ -135,17 +133,19 @@ class _MaterialProductCardSmall extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: .symmetric(horizontal: 2.0),
+                Expanded(
                   child: Center(
-                    child: Text(
-                      productName,
-                      maxLines: 1,
-                      overflow: .ellipsis,
-                      style: TextStyle(
-                        fontSize: width / 7,
-                        fontWeight: .w700,
-                        color: context.appColorScheme.onPrimaryContainer,
+                    child: Padding(
+                      padding: const .symmetric(horizontal: 2),
+                      child: Text(
+                        productName,
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        style: TextStyle(
+                          fontSize: width / 8,
+                          fontWeight: .w700,
+                          color: context.appColorScheme.onPrimaryContainer,
+                        ),
                       ),
                     ),
                   ),

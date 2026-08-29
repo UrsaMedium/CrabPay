@@ -78,24 +78,22 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: Card(
-        margin: EdgeInsets.all(0),
-        clipBehavior: .antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
-        color: context.appColorScheme.surfaceContainer,
-        elevation: 5,
-        surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
+    return Material(
+      clipBehavior: .antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
+      color: context.appColorScheme.surfaceContainer,
+      elevation: 5,
+      surfaceTintColor: cardTintColor ?? context.appColorScheme.primary,
+      child: SizedBox(
+        height: height,
+        width: width,
         child: GestureDetector(
           onTap: () => globalOpenProductCardCallBack(
             context: context,
             productId: id,
             tag: tag,
           ),
-          child: Column(
-            crossAxisAlignment: .start,
+          child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -109,8 +107,8 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl:
                           'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                      width: width - 8,
-                      height: height - 110,
+                      width: height - 8,
+                      height: height - 8,
                       fit: .cover,
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
@@ -128,51 +126,59 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 2,
-                ),
-                child: Text(
-                  productName,
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: .w700,
-                    color: context.appColorScheme.onPrimaryContainer,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text(
-                  'Battle Pass & Credits',
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: .w400,
-                    color: context.appColorScheme.onSurface.withValues(
-                      alpha: .7,
+              SizedBox(
+                width: width - height - 8 - 4,
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        productName,
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: .w700,
+                          color: context.appColorScheme.onPrimaryContainer,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 4,
-                ),
-                child: Text(
-                  '\$2.49',
-                  maxLines: 1,
-                  overflow: .ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: .w900,
-                    color: context.appColorScheme.onSurface,
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Battle Pass & Credits',
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: .w400,
+                          color: context.appColorScheme.onSurface.withValues(
+                            alpha: .7,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4,
+                      ),
+                      child: Text(
+                        '\$2.49',
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: .w900,
+                          color: context.appColorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

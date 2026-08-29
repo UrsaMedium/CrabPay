@@ -1,6 +1,8 @@
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/data_models/product_model.dart';
 import 'package:crabpay/core/extensions/l10n_extension.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/material_shimering_place_holder.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/product_card_horizontal.dart';
+import 'package:crabpay/views/custom_ui_elements/widgets/product_card_small.dart';
 import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/driver/home_page_cubit.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/custom_ui_elements/widgets/product_card.dart';
@@ -20,7 +22,7 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
         color: context.appColorScheme.tertiaryContainer,
         borderRadius: .circular(24),
       ),
-      height: 370,
+      height: 445,
       width: double.maxFinite,
       child: featuredProducts.isNotEmpty
           ? Padding(
@@ -65,7 +67,17 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                             .read<HomePageCubit>()
                             .state
                             .containerHalfWidth,
-                        height: 278,
+                        height: 269,
+                        cornerRadius: 16,
+                      ),
+                      ProductCardHorizontalDriver(
+                        product: featuredProducts[1],
+                        tag: '${featuredProducts[1].id}-featuredProduct-1',
+                        height: 75,
+                        width: context
+                            .read<HomePageCubit>()
+                            .state
+                            .containerHalfWidth,
                         cornerRadius: 16,
                       ),
                     ],
@@ -75,25 +87,27 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
                       spacing: 8,
                       crossAxisAlignment: .start,
                       children: [
-                        ProductCardDriver(
-                          product: featuredProducts[1],
-                          tag: '${featuredProducts[1].id}-featuredProduct-1',
+                        ProductCardSmallDriver(
+                          margin: 0,
+                          padding: 4,
+                          product: featuredProducts[2],
+                          tag: '${featuredProducts[2].id}-featuredProduct-2',
                           width: context
                               .read<HomePageCubit>()
                               .state
                               .containerHalfWidth,
-                          height: 173,
                           cornerRadius: 16,
                         ),
                         if (featuredProducts.length > 2)
-                          ProductCardDriver(
-                            product: featuredProducts[2],
-                            tag: '${featuredProducts[2].id}-featuredProduct-2',
+                          ProductCardSmallDriver(
+                            margin: 0,
+                            padding: 4,
+                            product: featuredProducts[3],
+                            tag: '${featuredProducts[3].id}-featuredProduct-3',
                             width: context
                                 .read<HomePageCubit>()
                                 .state
                                 .containerHalfWidth,
-                            height: 173,
                             cornerRadius: 16,
                           ),
                       ],
@@ -135,7 +149,7 @@ class _PlaceHolder extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Featured\nDeals',
+                        context.l10n.featuredndeals,
                         textAlign: .center,
                         style: TextStyle(
                           fontSize: 18,
@@ -151,7 +165,15 @@ class _PlaceHolder extends StatelessWidget {
                   shimeringColor: context.appColorScheme.outline,
                   cycleLongevityFactor: 278 * 10,
                   cornerRadius: 16,
-                  height: 278,
+                  height: 270,
+                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                ),
+                MaterialShimeringPlaceHolder(
+                  color: context.appColorScheme.surfaceContainerHigh,
+                  shimeringColor: context.appColorScheme.outline,
+                  cycleLongevityFactor: 278 * 10,
+                  cornerRadius: 16,
+                  height: 75,
                   width: context.read<HomePageCubit>().state.containerHalfWidth,
                 ),
               ],
@@ -165,7 +187,9 @@ class _PlaceHolder extends StatelessWidget {
                   shimeringColor: context.appColorScheme.outline,
                   cycleLongevityFactor: 173 * 10,
                   cornerRadius: 16,
-                  height: 173,
+                  height:
+                      context.read<HomePageCubit>().state.containerHalfWidth *
+                      1.25,
                   width: context.read<HomePageCubit>().state.containerHalfWidth,
                 ),
                 MaterialShimeringPlaceHolder(
@@ -173,7 +197,9 @@ class _PlaceHolder extends StatelessWidget {
                   shimeringColor: context.appColorScheme.outline,
                   cycleLongevityFactor: 900,
                   cornerRadius: 16,
-                  height: 173,
+                  height:
+                      context.read<HomePageCubit>().state.containerHalfWidth *
+                      1.25,
                   width: context.read<HomePageCubit>().state.containerHalfWidth,
                 ),
               ],

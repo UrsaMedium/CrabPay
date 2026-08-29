@@ -48,7 +48,7 @@ class MaterialStorePageOG extends StatelessWidget {
                                 child: ProductCardDriver(
                                   product: products[index * 2],
                                   tag: '${products[index * 2].id}-store-$index',
-                                  height: 256,
+                                  height: 276,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
                                   cornerRadius: 16,
                                 ),
@@ -67,7 +67,7 @@ class MaterialStorePageOG extends StatelessWidget {
                                   product: products[index * 2 + 1],
                                   tag:
                                       '${products[index * 2 + 1].id}-store-$index',
-                                  height: 256,
+                                  height: 276,
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
                                   cornerRadius: 16,
                                 ),
