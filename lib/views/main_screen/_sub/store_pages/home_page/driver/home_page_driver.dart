@@ -34,7 +34,7 @@ class _HomePageDriverState extends State<HomePageDriver>
   @override
   void didChangeDependencies() {
     _homePageCubit.setLayouts(
-      containerHalfWidth: MediaQuery.widthOf(context) / 2 - 28,
+      containerWidth: MediaQuery.widthOf(context) - 32,
     );
     super.didChangeDependencies();
   }

@@ -12,18 +12,14 @@ import 'package:flutter/material.dart';
 class ProductCardDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String tag;
-  final double height;
   final double width;
   final double cornerRadius;
-  final String? optionalTag;
   const ProductCardDriver({
     super.key,
     required this.product,
     required this.tag,
-    required this.height,
     required this.width,
     required this.cornerRadius,
-    this.optionalTag,
   });
 
   @override
@@ -44,7 +40,6 @@ class ProductCardDriver extends StatelessWidget {
           productName: product.name,
           description: product.description,
           tag: tag,
-          height: height,
           width: width,
           cornerRadius: cornerRadius,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
@@ -60,7 +55,6 @@ class _MaterialProductCard extends StatelessWidget {
   final String imageUrl;
   final String productName;
   final String description;
-  final double height;
   final double width;
   final double cornerRadius;
   final Color? cardTintColor;
@@ -69,7 +63,6 @@ class _MaterialProductCard extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.tag,
-    required this.height,
     required this.width,
     required this.cornerRadius,
     this.cardTintColor,
@@ -79,7 +72,7 @@ class _MaterialProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height,
+      height: width * 1.5 + 2,
       width: width,
       child: Card(
         margin: EdgeInsets.all(0),
@@ -110,7 +103,7 @@ class _MaterialProductCard extends StatelessWidget {
                       imageUrl:
                           'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                       width: width - 8,
-                      height:width - 8,
+                      height: width - 8,
                       fit: .cover,
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
@@ -138,7 +131,7 @@ class _MaterialProductCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: .ellipsis,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: width / 8,
                     fontWeight: .w700,
                     color: context.appColorScheme.onPrimaryContainer,
                   ),
@@ -151,7 +144,7 @@ class _MaterialProductCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: .ellipsis,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: width / 12,
                     fontWeight: .w400,
                     color: context.appColorScheme.onSurface.withValues(
                       alpha: .7,
@@ -169,7 +162,7 @@ class _MaterialProductCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: .ellipsis,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: width / 10,
                     fontWeight: .w900,
                     color: context.appColorScheme.onSurface,
                   ),

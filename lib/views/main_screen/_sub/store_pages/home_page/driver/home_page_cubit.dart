@@ -12,29 +12,37 @@ class HomePageState extends Equatable {
   final List<Product>? featuredProducts;
   final List<Product>? userPreferences;
   final bool isLoading;
-  final double containerHalfWidth;
+  final double outerCornerRadius;
+  final double containerWidth;
+  final double containerPadding;
   final bool isInitialized;
 
   const HomePageState({
     this.featuredProducts,
     this.userPreferences,
     this.isLoading = true,
-    this.containerHalfWidth = 300,
     this.isInitialized = false,
+    this.outerCornerRadius = 624,
+    this.containerWidth = 24,
+    this.containerPadding = 8,
   });
 
   HomePageState copyWith({
     List<Product>? featuredProducts,
     List<Product>? userPreferences,
-    double? containerHalfWidth,
+    double? outerCornerRadius,
+    double? containerWidth,
     bool? isLoading,
     bool? isInitialized,
+    double? containerPadding,
   }) => HomePageState(
     featuredProducts: featuredProducts ?? this.featuredProducts,
     userPreferences: userPreferences ?? this.userPreferences,
-    containerHalfWidth: containerHalfWidth ?? this.containerHalfWidth,
     isLoading: isLoading ?? this.isLoading,
     isInitialized: isInitialized ?? this.isInitialized,
+    containerWidth: containerWidth ?? this.containerWidth,
+    outerCornerRadius: outerCornerRadius ?? this.outerCornerRadius,
+    containerPadding: containerPadding ?? this.containerPadding,
   );
 
   @override
@@ -43,7 +51,9 @@ class HomePageState extends Equatable {
     userPreferences,
     isLoading,
     isInitialized,
-    containerHalfWidth,
+    outerCornerRadius,
+    containerWidth,
+    containerPadding,
   ];
 }
 
@@ -66,8 +76,14 @@ class HomePageCubit extends Cubit<HomePageState> {
     emit(state.copyWith(userPreferences: _dbBloc.state.userPreferences));
   }
 
-  void setLayouts({required double containerHalfWidth}) {
-    emit(state.copyWith(containerHalfWidth: containerHalfWidth));
+  void setLayouts({required double containerWidth}) {
+    emit(
+      state.copyWith(
+        containerWidth: containerWidth,
+        outerCornerRadius: containerWidth * .05,
+        containerPadding: containerWidth * .02,
+      ),
+    );
   }
 
   @override

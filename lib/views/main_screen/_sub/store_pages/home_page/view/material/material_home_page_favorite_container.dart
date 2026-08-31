@@ -43,11 +43,13 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                             product: userPreferences[index * 2],
                             tag:
                                 '${userPreferences[index * 2].id}-favorite-$index',
-                            height: 258,
-                            width: context
-                                .read<HomePageCubit>()
-                                .state
-                                .containerHalfWidth,
+                            width:
+                                (context
+                                        .read<HomePageCubit>()
+                                        .state
+                                        .containerWidth -
+                                    24) /
+                                2,
                             cornerRadius: 16,
                           ),
                         ),
@@ -61,7 +63,10 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
               mainAxisSize: .min,
               children: [
                 Container(
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                   margin: .only(
                     bottom: (isInitialized && userPreferences.isEmpty) ? 0 : 8,
                   ),
@@ -95,11 +100,13 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                         product: userPreferences[index * 2 + 1],
                         tag:
                             '${userPreferences[index * 2 + 1].id}-favorite-$index',
-                        height: 258,
-                        width: context
-                            .read<HomePageCubit>()
-                            .state
-                            .containerHalfWidth,
+                        width:
+                            (context
+                                    .read<HomePageCubit>()
+                                    .state
+                                    .containerWidth -
+                                24) /
+                            2,
                         cornerRadius: 16,
                       ),
                     ),
@@ -125,7 +132,7 @@ class _PlaceHolder extends StatelessWidget {
       cycleLongevityFactor: 278 * 10,
       cornerRadius: 16,
       height: 256,
-      width: context.read<HomePageCubit>().state.containerHalfWidth,
+      width: (context.read<HomePageCubit>().state.containerWidth - 24) / 2,
     );
   }
 }

@@ -14,16 +14,12 @@ class ProductCardHorizontalDriver extends StatelessWidget {
   final String tag;
   final double height;
   final double width;
-  final double cornerRadius;
-  final String? optionalTag;
   const ProductCardHorizontalDriver({
     super.key,
     required this.product,
     required this.tag,
     required this.height,
     required this.width,
-    required this.cornerRadius,
-    this.optionalTag,
   });
 
   @override
@@ -46,7 +42,6 @@ class ProductCardHorizontalDriver extends StatelessWidget {
           tag: tag,
           height: height,
           width: width,
-          cornerRadius: cornerRadius,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
         );
       },
@@ -62,7 +57,6 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
   final String description;
   final double height;
   final double width;
-  final double cornerRadius;
   final Color? cardTintColor;
   const _MaterialProductCardHorizontal({
     required this.id,
@@ -72,12 +66,14 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
     required this.description,
     required this.height,
     required this.width,
-    required this.cornerRadius,
     this.cardTintColor,
   });
 
+  static const _paddingCoef = .02;
+
   @override
   Widget build(BuildContext context) {
+    final cornerRadius = height * .1;
     return Material(
       clipBehavior: .antiAlias,
       shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
@@ -96,19 +92,21 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(4.0),
+                padding: .all(height * _paddingCoef),
                 child: Hero(
                   tag: tag,
                   createRectTween: (begin, end) =>
                       MaterialRectArcTween(begin: begin, end: end),
                   child: Material(
-                    borderRadius: .circular(cornerRadius - 4),
+                    borderRadius: .circular(
+                      cornerRadius - height * _paddingCoef,
+                    ),
                     clipBehavior: .antiAlias,
                     child: CachedNetworkImage(
                       imageUrl:
                           'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
-                      width: height - 8,
-                      height: height - 8,
+                      width: height * (1 - _paddingCoef * 2),
+                      height: height * (1 - _paddingCoef * 2),
                       fit: .cover,
                       errorWidget: (context, error, stackTrace) => Container(
                         color: context.appColorScheme.onInverseSurface,
@@ -117,69 +115,66 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
                       ),
                       placeholder: (context, url) =>
                           MaterialShimeringPlaceHolder(
-                            width: width - 8,
-                            height: height - 110,
-                            cornerRadius: cornerRadius - 4,
+                            width: height * (1 - _paddingCoef),
+                            height: height * (1 - _paddingCoef),
+                            cornerRadius: cornerRadius - _paddingCoef,
                             color: context.appColorScheme.surfaceContainerHigh,
                           ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                width: width - height - 8 - 4,
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                        vertical: 2,
+              Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Padding(
+                    padding: .symmetric(
+                      horizontal: 10.0,
+                      vertical: height * .05,
+                    ),
+                    child: Text(
+                      productName,
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                      style: TextStyle(
+                        fontSize: height / 8,
+                        fontWeight: .w700,
+                        color: context.appColorScheme.onPrimaryContainer,
                       ),
-                      child: Text(
-                        productName,
-                        maxLines: 1,
-                        overflow: .ellipsis,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: .w700,
-                          color: context.appColorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      'Battle Pass & Credits',
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                      style: TextStyle(
+                        fontSize: height / 12,
+                        fontWeight: .w400,
+                        color: context.appColorScheme.onSurface.withValues(
+                          alpha: .7,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        'Battle Pass & Credits',
-                        maxLines: 1,
-                        overflow: .ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: .w400,
-                          color: context.appColorScheme.onSurface.withValues(
-                            alpha: .7,
-                          ),
-                        ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4,
+                    ),
+                    child: Text(
+                      '\$2.49',
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                      style: TextStyle(
+                        fontSize: height / 10,
+                        fontWeight: .w900,
+                        color: context.appColorScheme.onSurface,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4,
-                      ),
-                      child: Text(
-                        '\$2.49',
-                        maxLines: 1,
-                        overflow: .ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: .w900,
-                          color: context.appColorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

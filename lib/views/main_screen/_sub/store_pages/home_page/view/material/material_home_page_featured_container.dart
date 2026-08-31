@@ -20,98 +20,103 @@ class MaterialHomePageFeaturedContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: context.appColorScheme.tertiaryContainer,
-        borderRadius: .circular(24),
+        borderRadius: .circular(
+          context.read<HomePageCubit>().state.outerCornerRadius,
+        ),
       ),
-      height: 445,
-      width: double.maxFinite,
+      // height: context.read<HomePageCubit>().state.containerWidth,
+      width: context.read<HomePageCubit>().state.containerWidth,
       child: featuredProducts.isNotEmpty
           ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
+              padding: .all(
+                context.read<HomePageCubit>().state.containerPadding,
+              ),
+              child: Column(
                 spacing: 8,
-                mainAxisAlignment: .spaceEvenly,
                 children: [
-                  Column(
+                  Row(
                     spacing: 8,
-                    crossAxisAlignment: .start,
+                    mainAxisAlignment: .spaceEvenly,
                     children: [
-                      Container(
-                        width: context
-                            .read<HomePageCubit>()
-                            .state
-                            .containerHalfWidth,
-                        height: 68,
-                        decoration: BoxDecoration(
-                          borderRadius: .circular(16),
-                          color: context.appColorScheme.onTertiaryContainer,
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              context.l10n.featuredndeals,
-                              textAlign: .center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: .w700,
-                                color: context.appColorScheme.tertiaryContainer,
+                      Column(
+                        spacing: 8,
+                        crossAxisAlignment: .start,
+                        children: [
+                          Container(
+                            width:
+                                (context
+                                        .read<HomePageCubit>()
+                                        .state
+                                        .containerWidth -
+                                    24) /
+                                2,
+                            decoration: BoxDecoration(
+                              borderRadius: .circular(16),
+                              color: context.appColorScheme.onTertiaryContainer,
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  context.l10n.featuredndeals,
+                                  textAlign: .center,
+                                  style: TextStyle(
+                                    fontSize:
+                                        (context
+                                                .read<HomePageCubit>()
+                                                .state
+                                                .containerWidth -
+                                            24) /
+                                        2 /
+                                        18,
+                                    fontWeight: .w700,
+                                    color: context
+                                        .appColorScheme
+                                        .tertiaryContainer,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      ProductCardDriver(
-                        product: featuredProducts[0],
-                        tag: '${featuredProducts[0].id}-featuredProduct-0',
-                        width: context
-                            .read<HomePageCubit>()
-                            .state
-                            .containerHalfWidth,
-                        height: 269,
-                        cornerRadius: 16,
-                      ),
-                      ProductCardHorizontalDriver(
-                        product: featuredProducts[1],
-                        tag: '${featuredProducts[1].id}-featuredProduct-1',
-                        height: 75,
-                        width: context
-                            .read<HomePageCubit>()
-                            .state
-                            .containerHalfWidth,
-                        cornerRadius: 16,
-                      ),
-                    ],
-                  ),
-                  if (featuredProducts.length > 1)
-                    Column(
-                      spacing: 8,
-                      crossAxisAlignment: .start,
-                      children: [
-                        ProductCardSmallDriver(
-                          margin: 0,
-                          padding: 4,
-                          product: featuredProducts[2],
-                          tag: '${featuredProducts[2].id}-featuredProduct-2',
-                          width: context
-                              .read<HomePageCubit>()
-                              .state
-                              .containerHalfWidth,
-                          cornerRadius: 16,
-                        ),
-                        if (featuredProducts.length > 2)
                           ProductCardSmallDriver(
-                            margin: 0,
                             padding: 4,
-                            product: featuredProducts[3],
-                            tag: '${featuredProducts[3].id}-featuredProduct-3',
-                            width: context
-                                .read<HomePageCubit>()
-                                .state
-                                .containerHalfWidth,
+                            product: featuredProducts[0],
+                            tag: '${featuredProducts[0].id}-featuredProduct-0',
+                            width:
+                                (context
+                                        .read<HomePageCubit>()
+                                        .state
+                                        .containerWidth -
+                                    24) /
+                                2,
                             cornerRadius: 16,
                           ),
-                      ],
-                    ),
+                        ],
+                      ),
+                      if (featuredProducts.length > 1)
+                        ProductCardDriver(
+                          product: featuredProducts[2],
+                          tag: '${featuredProducts[2].id}-featuredProduct-2',
+                          width:
+                              (context
+                                      .read<HomePageCubit>()
+                                      .state
+                                      .containerWidth -
+                                  24) /
+                              2,
+                          cornerRadius: 16,
+                        ),
+                    ],
+                  ),
+                  ProductCardHorizontalDriver(
+                    product: featuredProducts[1],
+                    tag: '${featuredProducts[1].id}-featuredProduct-1',
+                    height:
+                        (context.read<HomePageCubit>().state.containerWidth -
+                            24) /
+                        2,
+                    width: MediaQuery.widthOf(context) - 48,
+                  ),
                 ],
               ),
             )
@@ -139,7 +144,10 @@ class _PlaceHolder extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Container(
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                   height: 68,
                   decoration: BoxDecoration(
                     borderRadius: .circular(16),
@@ -166,7 +174,10 @@ class _PlaceHolder extends StatelessWidget {
                   cycleLongevityFactor: 278 * 10,
                   cornerRadius: 16,
                   height: 270,
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                 ),
                 MaterialShimeringPlaceHolder(
                   color: context.appColorScheme.surfaceContainerHigh,
@@ -174,7 +185,10 @@ class _PlaceHolder extends StatelessWidget {
                   cycleLongevityFactor: 278 * 10,
                   cornerRadius: 16,
                   height: 75,
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                 ),
               ],
             ),
@@ -188,9 +202,14 @@ class _PlaceHolder extends StatelessWidget {
                   cycleLongevityFactor: 173 * 10,
                   cornerRadius: 16,
                   height:
-                      context.read<HomePageCubit>().state.containerHalfWidth *
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2 *
                       1.25,
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                 ),
                 MaterialShimeringPlaceHolder(
                   color: context.appColorScheme.surfaceContainerHigh,
@@ -198,9 +217,14 @@ class _PlaceHolder extends StatelessWidget {
                   cycleLongevityFactor: 900,
                   cornerRadius: 16,
                   height:
-                      context.read<HomePageCubit>().state.containerHalfWidth *
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2 *
                       1.25,
-                  width: context.read<HomePageCubit>().state.containerHalfWidth,
+                  width:
+                      (context.read<HomePageCubit>().state.containerWidth -
+                          24) /
+                      2,
                 ),
               ],
             ),

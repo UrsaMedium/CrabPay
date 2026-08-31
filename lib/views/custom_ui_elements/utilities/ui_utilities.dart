@@ -7,4 +7,4 @@ extension ContextExtensions on BuildContext {
   // bool get highGraphics => true;
 }
 
-const double cornerRadius = 24;
+const double globalCornerRadius = 24;

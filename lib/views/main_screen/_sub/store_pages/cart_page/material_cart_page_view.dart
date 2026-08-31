@@ -102,7 +102,7 @@ class _ListOfCartItemsWidget extends StatelessWidget {
                 padding: .only(
                   top: 8,
                   bottom:
-                      MediaQuery.paddingOf(context).bottom + 64 - cornerRadius,
+                      MediaQuery.paddingOf(context).bottom + 64 - globalCornerRadius,
                 ),
                 shrinkWrap: true,
                 // itemExtent: 84,

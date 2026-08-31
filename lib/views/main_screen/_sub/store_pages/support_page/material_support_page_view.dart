@@ -82,7 +82,7 @@ class MaterialSupportPageView extends StatelessWidget {
                       return Material(
                         color: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: .circular(cornerRadius),
+                          borderRadius: .circular(globalCornerRadius),
                         ),
                         clipBehavior: .antiAlias,
                         child: BackdropFilter(
@@ -135,7 +135,7 @@ class MaterialSupportPageView extends StatelessWidget {
                       child: Container(
                         height: 100,
                         decoration: BoxDecoration(
-                          borderRadius: .circular(cornerRadius),
+                          borderRadius: .circular(globalCornerRadius),
                           border: .all(color: Colors.white),
                         ),
                       ),
@@ -153,7 +153,7 @@ class MaterialSupportPageView extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: context.appColorScheme.surface,
-                    borderRadius: .circular(cornerRadius),
+                    borderRadius: .circular(globalCornerRadius),
                   ),
                   child: Badge(
                     isLabelVisible: true,
