@@ -77,8 +77,7 @@ class DatabaseState extends Equatable {
   }) {
     return DatabaseState(
       products: products ?? this.products,
-      currencies:
-          currencies ?? (this.currencies == [] ? null : this.currencies),
+      currencies: currencies ?? (this.currencies == [] ? null : this.currencies),
       // productFields:
       //     productFields ??
       //     (this.productFields == [] ? null : this.productFields),
@@ -88,9 +87,7 @@ class DatabaseState extends Equatable {
       userPreferences: userPreferences ?? this.userPreferences,
       //
       cachedProductFields: cachedProductFields ?? this.cachedProductFields,
-      cachedProductImageDominantColor:
-          cachedProductImageDominantColor ??
-          this.cachedProductImageDominantColor,
+      cachedProductImageDominantColor: cachedProductImageDominantColor ?? this.cachedProductImageDominantColor,
     );
   }
 

@@ -31,10 +31,9 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
               ),
               sliver: Builder(
                 builder: (context) {
-                  final crabOrders = context
-                      .select<OrdersViewCubit, List<CrabOrder>>(
-                        (cubit) => cubit.state.crabSearchedOrders ?? [],
-                      );
+                  final crabOrders = context.select<OrdersViewCubit, List<CrabOrder>>(
+                    (cubit) => cubit.state.crabSearchedOrders ?? [],
+                  );
 
                   return crabOrders.isEmpty
                       ? SliverToBoxAdapter(
@@ -45,10 +44,8 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return MaterialOrderCard(
                               crabOrder: crabOrders[index],
-                              onSupportSendMessagePressed: (message) =>
-                                  onSupportSendMessagePressed(message),
-                              onOrederCardPressed: () =>
-                                  onOpenCardDetails(crabOrders[index]),
+                              onSupportSendMessagePressed: (message) => onSupportSendMessagePressed(message),
+                              onOrederCardPressed: () => onOpenCardDetails(crabOrders[index]),
                             );
                           },
                         );
@@ -67,9 +64,7 @@ class MaterialSearchedOrdersPage extends StatelessWidget {
                       horizontal: 100,
                     ),
                     child: SizedBox.shrink(
-                      child: isLoadingMore
-                          ? CircularProgressIndicator()
-                          : Text(context.l10n.yourSearchedOrders),
+                      child: isLoadingMore ? CircularProgressIndicator() : Text(context.l10n.yourSearchedOrders),
                     ),
                   );
                 },

@@ -49,8 +49,7 @@ class DatabaseEventUpdateProductFieldAdmin implements DatabaseEventAdmin {
   DatabaseEventUpdateProductFieldAdmin({required this.field});
 }
 
-class DatabaseEventUpdateProductFieldSwapImageFieldAdmin
-    implements DatabaseEventAdmin {
+class DatabaseEventUpdateProductFieldSwapImageFieldAdmin implements DatabaseEventAdmin {
   final ProductField? oldImageField;
   final ProductField newImageField;
   DatabaseEventUpdateProductFieldSwapImageFieldAdmin({

@@ -8,8 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
-  PaymentBloc(PaymentOuterHandler paymentHandler)
-    : super(PaymentStateSilence()) {
+  PaymentBloc(PaymentOuterHandler paymentHandler) : super(PaymentStateSilence()) {
     on<PaymentEventPay>((event, emit) async {
       developer.log('----');
       developer.log('CartEventOnPayCall fired');

@@ -136,8 +136,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                               setState(() {
                                 _optionsFields.add(
                                   OptionField(
-                                    optionsFieldNameChange:
-                                        _optionsFieldNameChange,
+                                    optionsFieldNameChange: _optionsFieldNameChange,
                                     onOptionFieldDelete: _onOptionFieldDelete,
                                   ),
                                 );
@@ -177,9 +176,7 @@ class _AddFieldBottomSheetState extends State<AddFieldBottomSheet> {
                           fieldName: fieldName!,
                           isPriceImage: false,
                           handler: handler!,
-                          expectedData: handler! == 'InputField'
-                              ? [fieldName!]
-                              : expetedDataBoundToAField.values.toList(),
+                          expectedData: handler! == 'InputField' ? [fieldName!] : expetedDataBoundToAField.values.toList(),
                         ),
                       );
                       context.pop();

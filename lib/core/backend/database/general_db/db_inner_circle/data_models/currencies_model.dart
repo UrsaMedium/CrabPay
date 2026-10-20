@@ -13,6 +13,5 @@ class Currencies {
     required this.usd,
   });
 
-  factory Currencies.intial() =>
-      Currencies(id: '', name: '', mainCurrency: '', rub: 0, usd: 0);
+  factory Currencies.intial() => Currencies(id: '', name: '', mainCurrency: '', rub: 0, usd: 0);
 }

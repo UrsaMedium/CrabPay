@@ -4,8 +4,7 @@ import 'package:crabpay/views/main_screen/_sub/product_view/driver/product_cubit
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MaterialProductViewAppbar extends StatelessWidget
-    implements PreferredSizeWidget {
+class MaterialProductViewAppbar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final VoidCallback onBackButtonPressed;
   final VoidCallback onAdminProductPanelPressed;
@@ -51,10 +50,9 @@ class MaterialProductViewAppbar extends StatelessWidget
                   ),
                   child: Builder(
                     builder: (context) {
-                      final highGraphics = context
-                          .select<GlobalGraphicBloc, bool>(
-                            (bloc) => bloc.state.highGraphics,
-                          );
+                      final highGraphics = context.select<GlobalGraphicBloc, bool>(
+                        (bloc) => bloc.state.highGraphics,
+                      );
                       return Row(
                         mainAxisAlignment: .spaceBetween,
                         mainAxisSize: .max,
@@ -73,12 +71,9 @@ class MaterialProductViewAppbar extends StatelessWidget
                                     height: 46,
                                     width: 46,
                                     decoration: BoxDecoration(
-                                      color: context
-                                          .appColorScheme
-                                          .surfaceContainerHigh
-                                          .withValues(
-                                            alpha: highGraphics ? .5 : .97,
-                                          ),
+                                      color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                        alpha: highGraphics ? .5 : .97,
+                                      ),
                                     ),
                                     child: IconButton(
                                       onPressed: onBackButtonPressed,
@@ -121,10 +116,7 @@ class MaterialProductViewAppbar extends StatelessWidget
                           Row(
                             spacing: 8,
                             children: [
-                              if (context
-                                  .read<ProductViewCubit>()
-                                  .state
-                                  .isAdmin)
+                              if (context.read<ProductViewCubit>().state.isAdmin)
                                 Stack(
                                   children: [
                                     Material(
@@ -139,43 +131,31 @@ class MaterialProductViewAppbar extends StatelessWidget
                                           height: 46,
                                           width: 46,
                                           decoration: BoxDecoration(
-                                            color: context
-                                                .appColorScheme
-                                                .surfaceContainerHigh
-                                                .withValues(
-                                                  alpha: highGraphics
-                                                      ? .5
-                                                      : .97,
-                                                ),
+                                            color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                              alpha: highGraphics ? .5 : .97,
+                                            ),
                                           ),
                                           child: IconButton(
-                                            onPressed:
-                                                onAdminProductPanelPressed,
+                                            onPressed: onAdminProductPanelPressed,
                                             icon: const Icon(Icons.settings),
-                                            color: context
-                                                .appColorScheme
-                                                .errorContainer,
+                                            color: context.appColorScheme.errorContainer,
                                           ),
                                         ),
                                       ),
                                     ),
                                     IgnorePointer(
                                       child: ShaderMask(
-                                        shaderCallback: (bounds) =>
-                                            LinearGradient(
-                                              begin: .topCenter,
-                                              end: .bottomCenter,
-                                              colors: [
-                                                context.appColorScheme.outline
-                                                    .withValues(alpha: .2),
-                                                context.appColorScheme.outline
-                                                    .withValues(alpha: .1),
-                                                Colors.transparent,
-                                                Colors.transparent,
-                                                context.appColorScheme.outline
-                                                    .withValues(alpha: .1),
-                                              ],
-                                            ).createShader(bounds),
+                                        shaderCallback: (bounds) => LinearGradient(
+                                          begin: .topCenter,
+                                          end: .bottomCenter,
+                                          colors: [
+                                            context.appColorScheme.outline.withValues(alpha: .2),
+                                            context.appColorScheme.outline.withValues(alpha: .1),
+                                            Colors.transparent,
+                                            Colors.transparent,
+                                            context.appColorScheme.outline.withValues(alpha: .1),
+                                          ],
+                                        ).createShader(bounds),
                                         child: Container(
                                           height: 46,
                                           width: 46,
@@ -202,40 +182,26 @@ class MaterialProductViewAppbar extends StatelessWidget
                                         height: 46,
                                         width: 46,
                                         decoration: BoxDecoration(
-                                          color: context
-                                              .appColorScheme
-                                              .surfaceContainerHigh
-                                              .withValues(
-                                                alpha: highGraphics ? .5 : .97,
-                                              ),
+                                          color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                            alpha: highGraphics ? .5 : .97,
+                                          ),
                                         ),
                                         child: Builder(
                                           builder: (context) {
-                                            final isFavoriteLoading = context
-                                                .select<ProductViewCubit, bool>(
-                                                  (cubit) => cubit
-                                                      .state
-                                                      .isFavoriteLoading,
-                                                );
-                                            final isFavorite = context
-                                                .select<ProductViewCubit, bool>(
-                                                  (cubit) =>
-                                                      cubit.state.isFavorite,
-                                                );
+                                            final isFavoriteLoading = context.select<ProductViewCubit, bool>(
+                                              (cubit) => cubit.state.isFavoriteLoading,
+                                            );
+                                            final isFavorite = context.select<ProductViewCubit, bool>(
+                                              (cubit) => cubit.state.isFavorite,
+                                            );
                                             return IconButton(
                                               iconSize: 32,
                                               onPressed: onFavoritePressed,
                                               icon: isFavoriteLoading
                                                   ? const CircularProgressIndicator()
                                                   : Icon(
-                                                      isFavorite
-                                                          ? Icons
-                                                                .favorite_rounded
-                                                          : Icons
-                                                                .favorite_border_rounded,
-                                                      color: isFavorite
-                                                          ? Colors.red
-                                                          : null,
+                                                      isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                                                      color: isFavorite ? Colors.red : null,
                                                     ),
                                             );
                                           },
@@ -245,21 +211,17 @@ class MaterialProductViewAppbar extends StatelessWidget
                                   ),
                                   IgnorePointer(
                                     child: ShaderMask(
-                                      shaderCallback: (bounds) =>
-                                          LinearGradient(
-                                            begin: .topCenter,
-                                            end: .bottomCenter,
-                                            colors: [
-                                              context.appColorScheme.outline
-                                                  .withValues(alpha: .2),
-                                              context.appColorScheme.outline
-                                                  .withValues(alpha: .1),
-                                              Colors.transparent,
-                                              Colors.transparent,
-                                              context.appColorScheme.outline
-                                                  .withValues(alpha: .1),
-                                            ],
-                                          ).createShader(bounds),
+                                      shaderCallback: (bounds) => LinearGradient(
+                                        begin: .topCenter,
+                                        end: .bottomCenter,
+                                        colors: [
+                                          context.appColorScheme.outline.withValues(alpha: .2),
+                                          context.appColorScheme.outline.withValues(alpha: .1),
+                                          Colors.transparent,
+                                          Colors.transparent,
+                                          context.appColorScheme.outline.withValues(alpha: .1),
+                                        ],
+                                      ).createShader(bounds),
                                       child: Container(
                                         height: 46,
                                         width: 46,

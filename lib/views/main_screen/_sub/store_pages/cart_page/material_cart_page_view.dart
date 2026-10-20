@@ -101,8 +101,7 @@ class _ListOfCartItemsWidget extends StatelessWidget {
                 itemCount: cartItemsToBuy.length,
                 padding: .only(
                   top: 8,
-                  bottom:
-                      MediaQuery.paddingOf(context).bottom + 64 - globalCornerRadius,
+                  bottom: MediaQuery.paddingOf(context).bottom + 64 - globalCornerRadius,
                 ),
                 shrinkWrap: true,
                 // itemExtent: 84,
@@ -110,14 +109,9 @@ class _ListOfCartItemsWidget extends StatelessWidget {
                   return CartItemWidgetDriver(
                     onACartItemDelete: onACartItemDelete,
                     cartItem: cartItemsToBuy[index],
-                    product: context
-                        .read<CartPageCubit>()
-                        .state
-                        .products
-                        .firstWhere(
-                          (product) =>
-                              product.id == cartItemsToBuy[index].productId,
-                        ),
+                    product: context.read<CartPageCubit>().state.products.firstWhere(
+                      (product) => product.id == cartItemsToBuy[index].productId,
+                    ),
                   );
                 },
               ),
@@ -193,9 +187,7 @@ class _BuyPannelWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ElevatedButton(
-                          onPressed: cartItemsToBuy.isEmpty
-                              ? null
-                              : onBuyPressed,
+                          onPressed: cartItemsToBuy.isEmpty ? null : onBuyPressed,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: context.appColorScheme.primary,
                             foregroundColor: context.appColorScheme.onPrimary,
@@ -225,9 +217,7 @@ class _BuyPannelWidget extends StatelessWidget {
                               minimumSize: Size(double.maxFinite, 50),
                             ),
                             child: Text(
-                              pendingOrders.length == 1
-                                  ? context.l10n.youHave1UnpaidOrder
-                                  : '${context.l10n.youHavenUnpaidOrdersSTART} ${pendingOrders.length} ${context.l10n.youHavenUnpaidOrdersEND}',
+                              pendingOrders.length == 1 ? context.l10n.youHave1UnpaidOrder : '${context.l10n.youHavenUnpaidOrdersSTART} ${pendingOrders.length} ${context.l10n.youHavenUnpaidOrdersEND}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,

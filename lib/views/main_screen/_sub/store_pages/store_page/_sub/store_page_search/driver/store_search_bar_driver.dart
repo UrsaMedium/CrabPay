@@ -16,12 +16,10 @@ class MaterialStoreSearchBarDriver extends StatefulWidget {
   });
 
   @override
-  State<MaterialStoreSearchBarDriver> createState() =>
-      _MaterialStoreSearchBarDriverState();
+  State<MaterialStoreSearchBarDriver> createState() => _MaterialStoreSearchBarDriverState();
 }
 
-class _MaterialStoreSearchBarDriverState
-    extends State<MaterialStoreSearchBarDriver> {
+class _MaterialStoreSearchBarDriverState extends State<MaterialStoreSearchBarDriver> {
   late KeyboardDetectionController _keyboardDetectionController;
   late final TextEditingController _universalController;
   KeyboardState _keyboardState = KeyboardState.hidden;
@@ -36,8 +34,7 @@ class _MaterialStoreSearchBarDriverState
     );
 
     _keyboardDetectionController.registerCallback((state) {
-      if (_keyBoardEventCanBeTriggered &&
-          _keyboardState == KeyboardState.hiding) {
+      if (_keyBoardEventCanBeTriggered && _keyboardState == KeyboardState.hiding) {
         _keyBoardEventCanBeTriggered = false;
         _universalController.clear();
         setState(() {
@@ -83,8 +80,7 @@ class _MaterialStoreSearchBarDriverState
     });
     final filtered = widget.products
         .where(
-          (product) =>
-              product.name.toLowerCase().contains(query.toLowerCase().trim()),
+          (product) => product.name.toLowerCase().contains(query.toLowerCase().trim()),
         )
         .toList();
     widget.onSearchSubmitedCallBack(filtered);
@@ -118,8 +114,7 @@ class _MaterialStoreSearchBarDriverState
         onOpenSearch: _onOpenSearch,
         onClear: _onClear,
         onSubmitted: _onSubmitted,
-        onProductSelected: (product, tag) =>
-            _onProductSelected(context, product, tag),
+        onProductSelected: (product, tag) => _onProductSelected(context, product, tag),
       ),
     );
   }

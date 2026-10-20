@@ -60,9 +60,7 @@ class MaterialColorExtractor {
 
     final List<int> rankedSeedColors = Score.score(result.colorToCount);
 
-    final int? primarySeedRgb = rankedSeedColors.isNotEmpty
-        ? rankedSeedColors.first
-        : null;
+    final int? primarySeedRgb = rankedSeedColors.isNotEmpty ? rankedSeedColors.first : null;
 
     if (primarySeedRgb == null) return null;
 

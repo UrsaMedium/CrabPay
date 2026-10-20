@@ -18,12 +18,10 @@ class CustomSyncfusionDateRangeDialog extends StatefulWidget {
   const CustomSyncfusionDateRangeDialog({super.key});
 
   @override
-  State<CustomSyncfusionDateRangeDialog> createState() =>
-      _CustomSyncfusionDateRangeDialogState();
+  State<CustomSyncfusionDateRangeDialog> createState() => _CustomSyncfusionDateRangeDialogState();
 }
 
-class _CustomSyncfusionDateRangeDialogState
-    extends State<CustomSyncfusionDateRangeDialog> {
+class _CustomSyncfusionDateRangeDialogState extends State<CustomSyncfusionDateRangeDialog> {
   PickerDateRange? _selectedRange;
   @override
   Widget build(BuildContext context) {
@@ -41,8 +39,7 @@ class _CustomSyncfusionDateRangeDialogState
               backgroundColor: Colors.transparent,
               selectionMode: .range,
               showNavigationArrow: true,
-              rangeSelectionColor:
-                  context.appColorScheme.surfaceContainerHighest,
+              rangeSelectionColor: context.appColorScheme.surfaceContainerHighest,
               startRangeSelectionColor: context.appColorScheme.primary,
               endRangeSelectionColor: context.appColorScheme.primary,
               todayHighlightColor: context.appColorScheme.tertiary,

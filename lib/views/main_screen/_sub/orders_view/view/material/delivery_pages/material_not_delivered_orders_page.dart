@@ -17,13 +17,10 @@ class MaterialNotDeliveredOrdersPage extends StatefulWidget {
   });
 
   @override
-  State<MaterialNotDeliveredOrdersPage> createState() =>
-      _MaterialNotDeliveredOrdersPageState();
+  State<MaterialNotDeliveredOrdersPage> createState() => _MaterialNotDeliveredOrdersPageState();
 }
 
-class _MaterialNotDeliveredOrdersPageState
-    extends State<MaterialNotDeliveredOrdersPage>
-    with AutomaticKeepAliveClientMixin {
+class _MaterialNotDeliveredOrdersPageState extends State<MaterialNotDeliveredOrdersPage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -42,10 +39,9 @@ class _MaterialNotDeliveredOrdersPageState
               ),
               sliver: Builder(
                 builder: (context) {
-                  final crabOrders = context
-                      .select<OrdersViewCubit, List<CrabOrder>>(
-                        (cubit) => cubit.state.crabNotDeliveredOrders ?? [],
-                      );
+                  final crabOrders = context.select<OrdersViewCubit, List<CrabOrder>>(
+                    (cubit) => cubit.state.crabNotDeliveredOrders ?? [],
+                  );
 
                   return crabOrders.isEmpty
                       ? SliverToBoxAdapter(
@@ -56,10 +52,8 @@ class _MaterialNotDeliveredOrdersPageState
                           itemBuilder: (context, index) {
                             return MaterialOrderCard(
                               crabOrder: crabOrders[index],
-                              onSupportSendMessagePressed: (message) =>
-                                  widget.onSupportSendMessagePressed(message),
-                              onOrederCardPressed: () =>
-                                  widget.onOpenCardDetails(crabOrders[index]),
+                              onSupportSendMessagePressed: (message) => widget.onSupportSendMessagePressed(message),
+                              onOrederCardPressed: () => widget.onOpenCardDetails(crabOrders[index]),
                             );
                           },
                         );
@@ -81,12 +75,8 @@ class _MaterialNotDeliveredOrdersPageState
                       horizontal: 100,
                     ),
                     child: ElevatedButton(
-                      onPressed: hasMore
-                          ? widget.onLoadMoreNotDeliveredOrders
-                          : null,
-                      child: isLoadingMore
-                          ? CircularProgressIndicator()
-                          : Text(hasMore ? 'Load More' : 'That\'s it'),
+                      onPressed: hasMore ? widget.onLoadMoreNotDeliveredOrders : null,
+                      child: isLoadingMore ? CircularProgressIndicator() : Text(hasMore ? 'Load More' : 'That\'s it'),
                     ),
                   );
                 },

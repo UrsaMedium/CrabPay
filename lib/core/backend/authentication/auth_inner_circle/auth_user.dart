@@ -32,18 +32,11 @@ class AppAuthUser {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is AppAuthUser &&
-        other.email == email &&
-        other.id == id &&
-        other.isAdmin == isAdmin &&
-        other.isAnonymous == isAnonymous &&
-        other.isEmailVerified == isEmailVerified &&
-        other.isLimbo == isLimbo;
+    return other is AppAuthUser && other.email == email && other.id == id && other.isAdmin == isAdmin && other.isAnonymous == isAnonymous && other.isEmailVerified == isEmailVerified && other.isLimbo == isLimbo;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, email, isAdmin, isAnonymous, isEmailVerified, isLimbo);
+  int get hashCode => Object.hash(id, email, isAdmin, isAnonymous, isEmailVerified, isLimbo);
 
   @override
   String toString() {

@@ -46,8 +46,7 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
               builder: (context, state) {
                 _dataAndWidgetsPreperation = state.dataAndWidgetsPreperation;
                 if (state.dataAndWidgetsPreperation != null) {
-                  if (state.dataAndWidgetsPreperation!.priceImageWidget !=
-                      null) {
+                  if (state.dataAndWidgetsPreperation!.priceImageWidget != null) {
                     return state.dataAndWidgetsPreperation!.priceImageWidget!;
                   }
                 }
@@ -81,10 +80,8 @@ class _PriceSpaceFillViewState extends State<PriceSpaceFillView> {
                           context.read<AdminBloc>().add(
                             AdminEventSubmitsPriceImage(
                               priceImage: priceImages,
-                              imageField:
-                                  _dataAndWidgetsPreperation!.imageField!,
-                              fieldsList:
-                                  _dataAndWidgetsPreperation!.productFields!,
+                              imageField: _dataAndWidgetsPreperation!.imageField!,
+                              fieldsList: _dataAndWidgetsPreperation!.productFields!,
                             ),
                           );
                           context.pushNamed(AppRoutes.dataOverview.name);

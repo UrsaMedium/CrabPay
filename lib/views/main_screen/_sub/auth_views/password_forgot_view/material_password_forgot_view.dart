@@ -58,17 +58,13 @@ class MaterialPasswordForgotView extends StatelessWidget {
                 label: Text('Email'),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(100)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(100)),
                 ),

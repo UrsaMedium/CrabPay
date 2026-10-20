@@ -83,8 +83,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
     int imageChecker = 0;
     List<ProductField> result = [];
     for (int i = 0; i < _fieldWidgetsMap.length; i++) {
-      if (_fieldWidgetsMap.keys.toList()[i].fieldName != '' &&
-          _fieldWidgetsMap.keys.toList()[i].handler != '') {
+      if (_fieldWidgetsMap.keys.toList()[i].fieldName != '' && _fieldWidgetsMap.keys.toList()[i].handler != '') {
         result.add(
           ProductField(
             id: '$i',
@@ -168,10 +167,8 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          context.appColorScheme.onPrimary,
-                                      foregroundColor:
-                                          context.appColorScheme.primary,
+                                      backgroundColor: context.appColorScheme.onPrimary,
+                                      foregroundColor: context.appColorScheme.primary,
                                       // minimumSize: Size(double.infinity, 50),
                                     ),
                                     label: Icon(Icons.add),
@@ -204,8 +201,7 @@ class _AddProductFieldsViewState extends State<AddProductFieldsView> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              List<ProductField>? collectFields =
-                                  _collectFields();
+                              List<ProductField>? collectFields = _collectFields();
                               if (collectFields != null) {
                                 context.read<AdminBloc>().add(
                                   AdminEventSubmitsFields(
@@ -265,9 +261,7 @@ class _AFieldState extends State<AField> {
           InkWell(
             onTap: () => widget.fieldIsImage(widget.field),
             child: Icon(
-              widget.field.isPriceImage
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_off,
+              widget.field.isPriceImage ? Icons.radio_button_checked : Icons.radio_button_off,
             ),
           ),
         Expanded(

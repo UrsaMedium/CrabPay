@@ -48,14 +48,12 @@ class MaterialProductBuyLayer extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    final layer = context
-                        .select<ProductViewCubit, ProductViewLayers>(
-                          (value) => value.state.layer,
-                        );
-                    final createBuyLayer = context
-                        .select<ProductViewCubit, bool>(
-                          (cubit) => cubit.state.createBuyLayer,
-                        );
+                    final layer = context.select<ProductViewCubit, ProductViewLayers>(
+                      (value) => value.state.layer,
+                    );
+                    final createBuyLayer = context.select<ProductViewCubit, bool>(
+                      (cubit) => cubit.state.createBuyLayer,
+                    );
                     return !createBuyLayer
                         ? Padding(
                             padding: const EdgeInsets.only(
@@ -99,15 +97,12 @@ class MaterialProductBuyLayer extends StatelessWidget {
                                     children: [
                                       MaterialBuyLayerCostDisplay(
                                         onAddFieldPressed: onAddFieldPressed,
-                                        onResetImageFieldPressed:
-                                            onResetImageFieldPressed,
+                                        onResetImageFieldPressed: onResetImageFieldPressed,
                                       ),
                                       MaterialBuyLayerButtonRow(
-                                        onAddCartItemPressed:
-                                            onAddCartItemPressed,
+                                        onAddCartItemPressed: onAddCartItemPressed,
                                         onCartIconPressed: onCartIconPressed,
-                                        onDeleteLastAddedItem:
-                                            onDeleteLastAddedItem,
+                                        onDeleteLastAddedItem: onDeleteLastAddedItem,
                                       ),
                                     ],
                                   ),
@@ -186,9 +181,7 @@ class MaterialBuyLayerFields extends StatelessWidget {
           ),
           child: SizedBox(
             child: Text(
-              layer != ProductViewLayers.buyLayer
-                  ? context.l10n.readDescription
-                  : context.l10n.fillAllTheFields,
+              layer != ProductViewLayers.buyLayer ? context.l10n.readDescription : context.l10n.fillAllTheFields,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: .w700,
@@ -225,11 +218,7 @@ class MaterialBuyLayerFields extends StatelessWidget {
                                   'update_price_images_field_admin_panel_view',
                                   pathParameters: {
                                     'fieldId': field.id,
-                                    'productId': context
-                                        .read<ProductViewCubit>()
-                                        .state
-                                        .product!
-                                        .id,
+                                    'productId': context.read<ProductViewCubit>().state.product!.id,
                                   },
                                 );
                               },
@@ -248,11 +237,7 @@ class MaterialBuyLayerFields extends StatelessWidget {
                                 'update_field_admin_panel_view',
                                 pathParameters: {
                                   'fieldId': field.id,
-                                  'productId': context
-                                      .read<ProductViewCubit>()
-                                      .state
-                                      .product!
-                                      .id,
+                                  'productId': context.read<ProductViewCubit>().state.product!.id,
                                 },
                               );
                             },
@@ -363,8 +348,7 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                               IconButton(
                                 onPressed: onCartIconPressed,
                                 icon: Badge(
-                                  backgroundColor:
-                                      context.appColorScheme.onError,
+                                  backgroundColor: context.appColorScheme.onError,
                                   textColor: context.appColorScheme.error,
                                   label: AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 250),
@@ -411,10 +395,9 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                       filter: .blur(sigmaX: 12, sigmaY: 12),
                       child: Builder(
                         builder: (context) {
-                          final isEveryFieldSatisfied = context
-                              .select<ProductViewCubit, bool>(
-                                (cubit) => cubit.state.isEveryFieldSatisfied,
-                              );
+                          final isEveryFieldSatisfied = context.select<ProductViewCubit, bool>(
+                            (cubit) => cubit.state.isEveryFieldSatisfied,
+                          );
                           return ElevatedButton(
                             onPressed: onAddCartItemPressed,
                             style: ElevatedButton.styleFrom(
@@ -425,19 +408,16 @@ class MaterialBuyLayerButtonRow extends StatelessWidget {
                                   : context.appColorScheme.onPrimary.withValues(
                                       alpha: highGraphics ? .5 : .95,
                                     ),
-                              foregroundColor: isEveryFieldSatisfied
-                                  ? context.appColorScheme.onPrimary
-                                  : context.appColorScheme.primary,
+                              foregroundColor: isEveryFieldSatisfied ? context.appColorScheme.onPrimary : context.appColorScheme.primary,
                               minimumSize: Size(double.maxFinite, 45),
                               side: BorderSide(
                                 color: isEveryFieldSatisfied
                                     ? context.appColorScheme.primary.withValues(
                                         alpha: highGraphics ? .5 : .95,
                                       )
-                                    : context.appColorScheme.onPrimary
-                                          .withValues(
-                                            alpha: highGraphics ? .5 : .95,
-                                          ),
+                                    : context.appColorScheme.onPrimary.withValues(
+                                        alpha: highGraphics ? .5 : .95,
+                                      ),
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -510,10 +490,9 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
               filter: .blur(sigmaX: 12, sigmaY: 12),
               child: Builder(
                 builder: (context) {
-                  final precalculatedPrice = context
-                      .select<ProductViewCubit, double>(
-                        (cubit) => cubit.state.precalculatedPrice,
-                      );
+                  final precalculatedPrice = context.select<ProductViewCubit, double>(
+                    (cubit) => cubit.state.precalculatedPrice,
+                  );
                   return Container(
                     height: 44,
                     width: 100,
@@ -521,17 +500,13 @@ class MaterialBuyLayerCostDisplay extends StatelessWidget {
                     padding: .only(left: 16, right: 16),
                     decoration: BoxDecoration(
                       color: precalculatedPrice == 0
-                          ? context.appColorScheme.surfaceContainerHigh
-                                .withValues(alpha: highGraphics ? .5 : .95)
+                          ? context.appColorScheme.surfaceContainerHigh.withValues(alpha: highGraphics ? .5 : .95)
                           : context.appColorScheme.onPrimary.withValues(
                               alpha: highGraphics ? .5 : .95,
                             ),
                       borderRadius: BorderRadius.circular(30),
                       border: BoxBorder.all(
-                        color: precalculatedPrice == 0
-                            ? context.appColorScheme.surfaceContainer
-                                  .withValues(alpha: highGraphics ? .5 : .95)
-                            : context.appColorScheme.onPrimary,
+                        color: precalculatedPrice == 0 ? context.appColorScheme.surfaceContainer.withValues(alpha: highGraphics ? .5 : .95) : context.appColorScheme.onPrimary,
                       ),
                     ),
                     child: Text(

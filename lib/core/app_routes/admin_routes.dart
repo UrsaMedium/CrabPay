@@ -19,8 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final RouteBase adminShellRoute = ShellRoute(
-  builder: (context, state, child) =>
-      BlocProvider(create: (context) => AdminBloc(), child: child),
+  builder: (context, state, child) => BlocProvider(create: (context) => AdminBloc(), child: child),
   routes: [
     GoRoute(
       path: AppRoutes.addCompleteProduct.path,

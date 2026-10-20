@@ -20,8 +20,7 @@ class AddFeaturedProductView extends StatefulWidget {
 }
 
 class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
-  final TextEditingController _suggestionInputController =
-      TextEditingController();
+  final TextEditingController _suggestionInputController = TextEditingController();
   List<Product>? products;
   Product? _product;
 
@@ -59,9 +58,7 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.support.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.support.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -102,8 +99,7 @@ class _AddFeaturedProductViewState extends State<AddFeaturedProductView> {
             ElevatedButton(
               onPressed: () {
                 getIt<InnerLoggerHandler>().logBreadcrumb(
-                  message:
-                      'AddFeaturedProductView: onPressed: Add Featured Product button pressed',
+                  message: 'AddFeaturedProductView: onPressed: Add Featured Product button pressed',
                   data: {'product': _product},
                 );
                 if (_product != null) {

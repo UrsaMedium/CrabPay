@@ -51,6 +51,5 @@ class AppUpwardReveresClipper extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(covariant AppUpwardReveresClipper oldClipper) =>
-      oldClipper.radius != radius;
+  bool shouldReclip(covariant AppUpwardReveresClipper oldClipper) => oldClipper.radius != radius;
 }

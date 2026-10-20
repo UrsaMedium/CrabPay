@@ -19,12 +19,10 @@ class ResetPriceImageFieldAdminPanelView extends StatefulWidget {
   const ResetPriceImageFieldAdminPanelView({super.key, this.productId});
 
   @override
-  State<ResetPriceImageFieldAdminPanelView> createState() =>
-      _ResetPriceImageFieldAdminPanelViewState();
+  State<ResetPriceImageFieldAdminPanelView> createState() => _ResetPriceImageFieldAdminPanelViewState();
 }
 
-class _ResetPriceImageFieldAdminPanelViewState
-    extends State<ResetPriceImageFieldAdminPanelView> {
+class _ResetPriceImageFieldAdminPanelViewState extends State<ResetPriceImageFieldAdminPanelView> {
   late final List<ProductField>? _productFields;
   ProductField? _groupValue;
   late final ProductField? oldImageField;
@@ -34,10 +32,7 @@ class _ResetPriceImageFieldAdminPanelViewState
     if (widget.productId == null) {
       context.pop();
     }
-    _productFields = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductFields?[widget.productId];
+    _productFields = context.read<DatabaseBloc>().state.cachedProductFields?[widget.productId];
     if (_productFields == null) {
       Fluttertoast.showToast(msg: context.l10n.strangeErrorNoFieldsDetected);
       context.read<DatabaseBloc>().add(
@@ -45,12 +40,9 @@ class _ResetPriceImageFieldAdminPanelViewState
       );
       context.pop();
     }
-    oldImageField = _productFields!
-        .where((element) => element.isPriceImage)
-        .firstOrNull;
+    oldImageField = _productFields!.where((element) => element.isPriceImage).firstOrNull;
     getIt<InnerLoggerHandler>().logBreadcrumb(
-      message:
-          'ResetPriceImageFieldAdminPanelView: initState: oldImageField: $oldImageField',
+      message: 'ResetPriceImageFieldAdminPanelView: initState: oldImageField: $oldImageField',
     );
     super.initState();
   }
@@ -101,21 +93,17 @@ class _ResetPriceImageFieldAdminPanelViewState
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         getIt<InnerLoggerHandler>().logBreadcrumb(
-          message:
-              'ResetPriceImageFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
+          message: 'ResetPriceImageFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
               getIt<InnerLoggerHandler>().logBreadcrumb(
-                message:
-                    'ResetPriceImageFieldAdminPanelView: onBackButtonPressed',
+                message: 'ResetPriceImageFieldAdminPanelView: onBackButtonPressed',
               );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
@@ -144,8 +132,7 @@ class _ResetPriceImageFieldAdminPanelViewState
             BlocListener<DatabaseBlocAdmin, DatabaseStateAdmin>(
               listener: (context, state) {
                 getIt<InnerLoggerHandler>().logBreadcrumb(
-                  message:
-                      'ResetPriceImageFieldAdminPanelView: BlocListener: DatabaseState changed',
+                  message: 'ResetPriceImageFieldAdminPanelView: BlocListener: DatabaseState changed',
                   data: {'state': state.states.toString()},
                 );
                 if (state.states == DatabaseStatesAdmin.dbLoading) {
@@ -158,8 +145,7 @@ class _ResetPriceImageFieldAdminPanelViewState
                     ? null
                     : () {
                         getIt<InnerLoggerHandler>().logBreadcrumb(
-                          message:
-                              'ResetPriceImageFieldAdminPanelView: onPressed',
+                          message: 'ResetPriceImageFieldAdminPanelView: onPressed',
                           data: {'newImageField': _groupValue},
                         );
                         _execute(context: context, newImageField: _groupValue!);

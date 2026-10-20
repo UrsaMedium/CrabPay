@@ -26,12 +26,10 @@ class UpdatePriceImagesFieldAdminPanelView extends StatefulWidget {
   });
 
   @override
-  State<UpdatePriceImagesFieldAdminPanelView> createState() =>
-      _UpdatePriceImagesFieldAdminPanelViewState();
+  State<UpdatePriceImagesFieldAdminPanelView> createState() => _UpdatePriceImagesFieldAdminPanelViewState();
 }
 
-class _UpdatePriceImagesFieldAdminPanelViewState
-    extends State<UpdatePriceImagesFieldAdminPanelView> {
+class _UpdatePriceImagesFieldAdminPanelViewState extends State<UpdatePriceImagesFieldAdminPanelView> {
   ProductField? _currentField;
   Map<String, TextEditingController>? _textEditingControllers;
 
@@ -40,16 +38,13 @@ class _UpdatePriceImagesFieldAdminPanelViewState
     if (widget.fieldId == null || widget.productId == null) {
       Fluttertoast.showToast(msg: context.l10n.failedToPassFieldData);
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message:
-            'UpdatePriceImagesFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
+        message: 'UpdatePriceImagesFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
       );
       context.pop();
     }
-    _currentField = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductFields![widget.productId]
-        ?.firstWhere((element) => element.id == widget.fieldId);
+    _currentField = context.read<DatabaseBloc>().state.cachedProductFields![widget.productId]?.firstWhere(
+      (element) => element.id == widget.fieldId,
+    );
 
     if (_currentField != null) {
       if (_currentField!.isPriceImage) {
@@ -69,22 +64,18 @@ class _UpdatePriceImagesFieldAdminPanelViewState
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         getIt<InnerLoggerHandler>().logBreadcrumb(
-          message:
-              'UpdatePriceImagesFieldAdminPanelView onPopInvokedWithResult',
+          message: 'UpdatePriceImagesFieldAdminPanelView onPopInvokedWithResult',
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.support.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.support.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
               getIt<InnerLoggerHandler>().logBreadcrumb(
-                message:
-                    'UpdatePriceImagesFieldAdminPanelView onBackButtonPressed',
+                message: 'UpdatePriceImagesFieldAdminPanelView onBackButtonPressed',
               );
               if (GoRouter.of(context).canPop()) {
                 context.pop();
@@ -101,8 +92,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                 padding: const EdgeInsets.only(right: 20.0),
                 child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                   builder: (context, state) {
-                    final bool beingLoaded =
-                        state.states == DatabaseStatesAdmin.dbLoading;
+                    final bool beingLoaded = state.states == DatabaseStatesAdmin.dbLoading;
                     return Row(
                       children: [
                         Text(context.l10n.delete),
@@ -115,13 +105,10 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                               );
                             } else {
                               getIt<InnerLoggerHandler>().logBreadcrumb(
-                                message:
-                                    'UpdatePriceImagesFieldAdminPanelView onDeleteButtonPressed',
+                                message: 'UpdatePriceImagesFieldAdminPanelView onDeleteButtonPressed',
                                 data: {'currentField': _currentField},
                               );
-                              final delete =
-                                  await showOnDatabaseItemDelete(context) ??
-                                  false;
+                              final delete = await showOnDatabaseItemDelete(context) ?? false;
                               if (delete && context.mounted) {
                                 Fluttertoast.showToast(
                                   msg: context.l10n.deleting,
@@ -177,27 +164,20 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                           return ElevatedButton(
                             onPressed: () {
                               getIt<InnerLoggerHandler>().logBreadcrumb(
-                                message:
-                                    'UpdatePriceImagesFieldAdminPanelView onUpdateButtonPressed',
+                                message: 'UpdatePriceImagesFieldAdminPanelView onUpdateButtonPressed',
                                 data: {
                                   'currentField': _currentField,
-                                  'beingLoaded':
-                                      state.states ==
-                                      DatabaseStatesAdmin.dbLoading,
+                                  'beingLoaded': state.states == DatabaseStatesAdmin.dbLoading,
                                 },
                               );
-                              if (state.states !=
-                                  DatabaseStatesAdmin.dbLoading) {
+                              if (state.states != DatabaseStatesAdmin.dbLoading) {
                                 Map<String, double>? priceImages;
                                 if (_currentField!.isPriceImage) {
                                   priceImages = {};
-                                  for (var nominalName
-                                      in _textEditingControllers!.keys) {
+                                  for (var nominalName in _textEditingControllers!.keys) {
                                     priceImages[nominalName] =
                                         double.tryParse(
-                                          _textEditingControllers![nominalName]
-                                                  ?.text ??
-                                              '-1',
+                                          _textEditingControllers![nominalName]?.text ?? '-1',
                                         ) ??
                                         -1;
                                   }
@@ -210,10 +190,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                                   handler: _currentField!.handler,
                                   isPriceImage: true,
                                   priceImages: priceImages,
-                                  expectedData:
-                                      _currentField!.handler == 'InputField'
-                                      ? [_currentField!.fieldName]
-                                      : _currentField!.expectedData,
+                                  expectedData: _currentField!.handler == 'InputField' ? [_currentField!.fieldName] : _currentField!.expectedData,
                                 );
                                 context.read<DatabaseBlocAdmin>().add(
                                   DatabaseEventUpdateProductFieldAdmin(
@@ -228,9 +205,7 @@ class _UpdatePriceImagesFieldAdminPanelViewState
                                 Fluttertoast.showToast(msg: context.l10n.wait);
                               }
                             },
-                            child: state.states != DatabaseStatesAdmin.dbLoading
-                                ? Text(context.l10n.updateTheField)
-                                : CircularProgressIndicator(),
+                            child: state.states != DatabaseStatesAdmin.dbLoading ? Text(context.l10n.updateTheField) : CircularProgressIndicator(),
                           );
                         },
                       ),

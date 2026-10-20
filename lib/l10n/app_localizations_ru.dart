@@ -9,8 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get failedToGetOrCreate =>
-      'Не удалось получить или создать чат поддержки';
+  String get failedToGetOrCreate => 'Не удалось получить или создать чат поддержки';
 
   @override
   String get favorite => 'Избранное';
@@ -19,8 +18,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get favoriteEmpty => 'Избранное? :(';
 
   @override
-  String get failedToSendMessagePlease =>
-      'Не удалось отправить сообщение. Пожалуйста, попробуйте снова.';
+  String get failedToSendMessagePlease => 'Не удалось отправить сообщение. Пожалуйста, попробуйте снова.';
 
   @override
   String get failedToFetchAllThreads => 'Не удалось загрузить все чаты';
@@ -44,12 +42,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get failedToDeleteTheCurrencies => 'Не удалось удалить валюты';
 
   @override
-  String get failedToAddFeaturedProduct =>
-      'Не удалось добавить рекомендуемый товар';
+  String get failedToAddFeaturedProduct => 'Не удалось добавить рекомендуемый товар';
 
   @override
-  String get failedToDeleteFeaturedProduct =>
-      'Не удалось удалить рекомендуемый товар';
+  String get failedToDeleteFeaturedProduct => 'Не удалось удалить рекомендуемый товар';
 
   @override
   String get failedToFetchProducts => 'Не удалось загрузить товары';
@@ -61,20 +57,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get failedToFetchCurrencies => 'Не удалось загрузить валюты';
 
   @override
-  String get failedToFetchFeaturedProducts =>
-      'Не удалось загрузить рекомендуемые товары';
+  String get failedToFetchFeaturedProducts => 'Не удалось загрузить рекомендуемые товары';
 
   @override
-  String get failedToAddUserPreference =>
-      'Не удалось добавить настройки пользователя';
+  String get failedToAddUserPreference => 'Не удалось добавить настройки пользователя';
 
   @override
-  String get failedToFetchUserPreference =>
-      'Не удалось загрузить настройки пользователя';
+  String get failedToFetchUserPreference => 'Не удалось загрузить настройки пользователя';
 
   @override
-  String get failedToDeleteUserPreference =>
-      'Не удалось удалить настройки пользователя';
+  String get failedToDeleteUserPreference => 'Не удалось удалить настройки пользователя';
 
   @override
   String get failedToFetchCartItems => 'Не удалось загрузить товары в корзине';
@@ -83,8 +75,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get failedToLoadOrderHistory => 'Не удалось загрузить историю заказов';
 
   @override
-  String get failedToFilterOrderHistory =>
-      'Не удалось отфильтровать историю заказов';
+  String get failedToFilterOrderHistory => 'Не удалось отфильтровать историю заказов';
 
   @override
   String get failedToDeleteTheCart => 'Не удалось удалить товар из корзины';
@@ -93,8 +84,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get failedToAddTheCart => 'Не удалось добавить товар в корзину';
 
   @override
-  String get failedToFetchPendingOrders =>
-      'Не удалось загрузить ожидающие заказы';
+  String get failedToFetchPendingOrders => 'Не удалось загрузить ожидающие заказы';
 
   @override
   String get orders => 'Заказы';
@@ -219,8 +209,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noFieldsIsCreated => 'Поля не созданы';
 
   @override
-  String get howComeThereIsNot =>
-      'Как так вышло, что нет ни одного поля с изображением';
+  String get howComeThereIsNot => 'Как так вышло, что нет ни одного поля с изображением';
 
   @override
   String get fillThePriceOptions => 'Заполните варианты цен';
@@ -282,8 +271,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pushTheFields => 'Отправить поля';
 
   @override
-  String get somethingWentWronNoProduct =>
-      'Что-то пошло не так. Нет id товара :()';
+  String get somethingWentWronNoProduct => 'Что-то пошло не так. Нет id товара :()';
 
   @override
   String get typeYourQuestion => 'Введите ваш вопрос...';
@@ -318,14 +306,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hey => 'Привет :)';
 
   @override
-  String userInfoDebug(
-    String id,
-    String email,
-    String isEmailVerified,
-    String isAnonymous,
-    String isAdmin,
-    String isLimbo,
-  ) {
+  String userInfoDebug(String id, String email, String isEmailVerified, String isAnonymous, String isAdmin, String isLimbo) {
     return 'Id: $id\nemail: $email\nver: $isEmailVerified\nanon: $isAnonymous\nadmin: $isAdmin\nlimbo: $isLimbo';
   }
 
@@ -336,8 +317,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get field => 'Поле';
 
   @override
-  String get strangeErrorNoFieldsDetected =>
-      'Странная ошибка. Поля не обнаружены';
+  String get strangeErrorNoFieldsDetected => 'Странная ошибка. Поля не обнаружены';
 
   @override
   String get setNewPriceImage => 'Установить новое изображение цены';
@@ -428,8 +408,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrongWithDescription =>
-      'Ой-йойю Что-то пошло не так с описанием';
+  String get somethingWentWrongWithDescription => 'Ой-йойю Что-то пошло не так с описанием';
 
   @override
   String get chooseAproductToModify => 'Выберите товар для изменения';
@@ -438,15 +417,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pushTheChanges => 'Применить изменения';
 
   @override
-  String get wrongCredentialsPleaseTryAgain =>
-      'Неверные учетные данные. Пожалуйста, попробуйте снова.';
+  String get wrongCredentialsPleaseTryAgain => 'Неверные учетные данные. Пожалуйста, попробуйте снова.';
 
   @override
   String get pleaseSignIn => 'Пожалуйста, войдите';
 
   @override
-  String get authorizationWillBeHappeningHere =>
-      'Здесь будет проходить авторизация';
+  String get authorizationWillBeHappeningHere => 'Здесь будет проходить авторизация';
 
   @override
   String get forgotPassword => 'Забыли пароль?';
@@ -473,8 +450,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createAccount => 'Создать аккаунт';
 
   @override
-  String get createAnAccountToShop =>
-      'Создайте аккаунт, чтобы совершать покупки, пополнять баланс и получать поддержку.';
+  String get createAnAccountToShop => 'Создайте аккаунт, чтобы совершать покупки, пополнять баланс и получать поддержку.';
 
   @override
   String get submit => 'Подтвердить';
@@ -615,8 +591,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmThePurchase => 'Подтвердите покупку';
 
   @override
-  String get contctOurSupportTeamFoAssistance =>
-      'Свяжитесь с поддержкой\n для помощи';
+  String get contctOurSupportTeamFoAssistance => 'Свяжитесь с поддержкой\n для помощи';
 
   @override
   String get heyYouHaven => 'Эй, вы не выбрали ничего';

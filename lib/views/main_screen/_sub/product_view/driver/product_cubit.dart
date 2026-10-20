@@ -127,10 +127,8 @@ class ProductViewState extends Equatable {
       imageField: imageField ?? this.imageField,
       priceFunction: priceFunction ?? this.priceFunction,
       isLinearFunction: isLinearFunction ?? this.isLinearFunction,
-      amountOfRequiredFields:
-          amountOfRequiredFields ?? this.amountOfRequiredFields,
-      isEveryFieldSatisfied:
-          isEveryFieldSatisfied ?? this.isEveryFieldSatisfied,
+      amountOfRequiredFields: amountOfRequiredFields ?? this.amountOfRequiredFields,
+      isEveryFieldSatisfied: isEveryFieldSatisfied ?? this.isEveryFieldSatisfied,
       precalculatedPrice: precalculatedPrice ?? this.precalculatedPrice,
       retrievedData: retrievedData ?? this.retrievedData,
       itemsInCart: itemsInCart ?? this.itemsInCart,
@@ -251,8 +249,7 @@ class ProductViewCubit extends Cubit<ProductViewState> {
         ),
       );
     }
-    if (databaseState.states == DatabaseStates.fieldsFetched ||
-        databaseState.states == DatabaseStates.fieldsNotFetched) {
+    if (databaseState.states == DatabaseStates.fieldsFetched || databaseState.states == DatabaseStates.fieldsNotFetched) {
       List<ProductField> fields = [
         ...databaseState.cachedProductFields?[state.product!.id] ?? [],
       ];
@@ -278,20 +275,15 @@ class ProductViewCubit extends Cubit<ProductViewState> {
         ),
       );
     }
-    if (cartState.states == CartStates.failedToAdd ||
-        cartState.states == CartStates.failedToDeleteLastAddedProductCartItem) {
+    if (cartState.states == CartStates.failedToAdd || cartState.states == CartStates.failedToDeleteLastAddedProductCartItem) {
       Fluttertoast.showToast(msg: 'failed');
       emit(state.copyWith(isCartLoading: false));
     }
   }
 
   void setLayoutBoundries(Map<String, double> layoutBoundries) {
-    final descPosition =
-        layoutBoundries['height']! -
-        layoutBoundries['paddingBottom']! -
-        layoutBoundries['width']!;
-    final buyPosition =
-        layoutBoundries['height']! - layoutBoundries['paddingBottom']! - 54;
+    final descPosition = layoutBoundries['height']! - layoutBoundries['paddingBottom']! - layoutBoundries['width']!;
+    final buyPosition = layoutBoundries['height']! - layoutBoundries['paddingBottom']! - 54;
 
     emit(
       state.copyWith(
@@ -316,13 +308,7 @@ class ProductViewCubit extends Cubit<ProductViewState> {
       switch (state.layer) {
         case ProductViewLayers.groundLayer:
           if (isUp) {
-            final descTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                (descLayerHeight > state.descMinPosition!
-                    ? descLayerHeight
-                    : state.descMinPosition!) -
-                64;
+            final descTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - (descLayerHeight > state.descMinPosition! ? descLayerHeight : state.descMinPosition!) - 64;
             emit(
               state.copyWith(
                 layer: ProductViewLayers.descriptionLayer,
@@ -334,10 +320,7 @@ class ProductViewCubit extends Cubit<ProductViewState> {
           break;
         case ProductViewLayers.descriptionLayer:
           if (isUp) {
-            final buyTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                buyLayerHeight;
+            final buyTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - buyLayerHeight;
             final descTopPosition = buyTopPosition - 46;
             emit(
               state.copyWith(
@@ -347,14 +330,8 @@ class ProductViewCubit extends Cubit<ProductViewState> {
               ),
             );
           } else {
-            final buyTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                54;
-            final descTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                state.layoutBoundries!['width']!;
+            final buyTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - 54;
+            final descTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - state.layoutBoundries!['width']!;
             emit(
               state.copyWith(
                 layer: ProductViewLayers.groundLayer,
@@ -366,17 +343,8 @@ class ProductViewCubit extends Cubit<ProductViewState> {
           break;
         case ProductViewLayers.buyLayer:
           if (!isUp) {
-            final descTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                (descLayerHeight > state.descMinPosition!
-                    ? descLayerHeight
-                    : state.descMinPosition!) -
-                64;
-            final buyTopPosition =
-                state.layoutBoundries!['height']! -
-                state.layoutBoundries!['paddingBottom']! -
-                54;
+            final descTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - (descLayerHeight > state.descMinPosition! ? descLayerHeight : state.descMinPosition!) - 64;
+            final buyTopPosition = state.layoutBoundries!['height']! - state.layoutBoundries!['paddingBottom']! - 54;
             emit(
               state.copyWith(
                 layer: ProductViewLayers.descriptionLayer,
@@ -409,15 +377,12 @@ class ProductViewCubit extends Cubit<ProductViewState> {
     inputMap[fieldName] = dataReceived;
     double precalculatedPrice = 0;
     if (state.isLinearFunction! && fieldName == state.imageField!.fieldName) {
-      precalculatedPrice =
-          (double.tryParse(dataReceived) ?? 0) *
-          (state.priceFunction?.values.first ?? 0);
+      precalculatedPrice = (double.tryParse(dataReceived) ?? 0) * (state.priceFunction?.values.first ?? 0);
     } else {
       precalculatedPrice = state.priceFunction?[dataReceived] ?? 0;
     }
 
-    bool isEveryFieldSatisfied =
-        (inputMap.length == state.amountOfRequiredFields);
+    bool isEveryFieldSatisfied = (inputMap.length == state.amountOfRequiredFields);
     if (isEveryFieldSatisfied) {
       for (var field in inputMap.keys) {
         if (inputMap[field]?.isEmpty ?? true) {

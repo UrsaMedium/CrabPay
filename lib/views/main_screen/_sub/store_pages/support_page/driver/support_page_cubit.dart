@@ -47,8 +47,7 @@ class SupportPageState extends Equatable {
     return SupportPageState(
       showDownScrollArrow: showDownScrollArrow ?? this.showDownScrollArrow,
       scrollController: scrollController ?? this.scrollController,
-      messageInputController:
-          messageInputController ?? this.messageInputController,
+      messageInputController: messageInputController ?? this.messageInputController,
       isSubscribed: isSubscribed ?? this.isSubscribed,
       currentUser: currentUser ?? this.currentUser,
       messages: messages ?? this.messages,
@@ -100,19 +99,15 @@ class SupportPageCubit extends Cubit<SupportPageState> {
       _onNewMessage(chatState.messages ?? []);
     }
     _whatchSubStatus(chatState);
-    if (chatState.status == ChatStates.messageSent ||
-        chatState.status == ChatStates.shadowMessageSent) {
-      final msgs = state.messages == null
-          ? <ChatMessage>[]
-          : [...state.messages!];
+    if (chatState.status == ChatStates.messageSent || chatState.status == ChatStates.shadowMessageSent) {
+      final msgs = state.messages == null ? <ChatMessage>[] : [...state.messages!];
       if (state.sentMessage != null) {
         msgs.add(state.sentMessage!);
         emit(state.copyWith(isSendingMessage: false, messages: msgs));
       } else {
         emit(state.copyWith(isSendingMessage: false));
       }
-    } else if (chatState.status == ChatStates.messageSentFailed ||
-        chatState.status == ChatStates.shadowMessageSentFailed) {
+    } else if (chatState.status == ChatStates.messageSentFailed || chatState.status == ChatStates.shadowMessageSentFailed) {
       emit(state.copyWith(isSendingMessage: false));
       Fluttertoast.showToast(msg: 'failedToSendTheMessage');
     }

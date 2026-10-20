@@ -38,14 +38,11 @@ class AppExpandingCircleTransitionClipper extends CustomClipper<Path> {
 
     final double currentRadius = maxRadius * transitionFraction;
 
-    return Path()
-      ..addOval(Rect.fromCircle(center: center, radius: currentRadius));
+    return Path()..addOval(Rect.fromCircle(center: center, radius: currentRadius));
   }
 
   @override
-  bool shouldReclip(covariant AppExpandingCircleTransitionClipper oldClipper) =>
-      oldClipper.transitionFraction != transitionFraction ||
-      oldClipper.center != center;
+  bool shouldReclip(covariant AppExpandingCircleTransitionClipper oldClipper) => oldClipper.transitionFraction != transitionFraction || oldClipper.center != center;
 }
 
 class AppExpandingCircleTransitionRoute {
@@ -54,8 +51,7 @@ class AppExpandingCircleTransitionRoute {
     required GoRouterState state,
     required Widget child,
   }) {
-    if (defaultTargetPlatform != TargetPlatform.android &&
-        defaultTargetPlatform != TargetPlatform.iOS) {
+    if (defaultTargetPlatform != TargetPlatform.android && defaultTargetPlatform != TargetPlatform.iOS) {
       return MaterialPage<void>(key: state.pageKey, child: child);
     }
 

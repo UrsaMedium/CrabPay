@@ -135,8 +135,7 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
         data: {'email': email, 'password': password},
       );
       final response = await retryer.retry(
-        () =>
-            _supabase.auth.signInWithPassword(email: email, password: password),
+        () => _supabase.auth.signInWithPassword(email: email, password: password),
       );
 
       if (response.user != null) {
@@ -157,8 +156,7 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
   }
 
   @override
-  Future<void> logOut() async =>
-      await retryer.retry(() => _supabase.auth.signOut());
+  Future<void> logOut() async => await retryer.retry(() => _supabase.auth.signOut());
 
   @override
   Future<void> sendEmailVerification() async {}
@@ -203,9 +201,7 @@ class SupabaseOuterAuthInterface implements AuthInnerInterface {
       data: {'user': user},
     );
     final bool isAdminFlag = user.appMetadata['role'] == 'admin';
-    final bool isVerified =
-        user.emailConfirmedAt != null ||
-        (user.userMetadata?['email_verified'] == true);
+    final bool isVerified = user.emailConfirmedAt != null || (user.userMetadata?['email_verified'] == true);
     getIt<InnerLoggerHandler>().setDiagnosticUser(
       id: user.id,
       email: user.email,

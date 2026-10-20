@@ -22,8 +22,7 @@ class StoreSearchBarState extends Equatable {
   }) => StoreSearchBarState(
     isSearchOpen: isSearchOpen ?? this.isSearchOpen,
     products: products ?? this.products,
-    keyBoardEventCanBeTriggered:
-        keyBoardEventCanBeTriggered ?? this.keyBoardEventCanBeTriggered,
+    keyBoardEventCanBeTriggered: keyBoardEventCanBeTriggered ?? this.keyBoardEventCanBeTriggered,
   );
 
   @override

@@ -9,6 +9,7 @@ import 'package:crabpay/core/backend/database/general_db/db_inner_circle/inner_d
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_event.dart';
 import 'package:crabpay/core/backend/database/general_db/db_inner_circle/database_bloc/database_state.dart';
 import 'package:crabpay/views/custom_ui_elements/utilities/color_generator.dart';
+
 // import 'package:uuid/uuid.dart';
 // import 'package:uuid/v4.dart';
 
@@ -31,8 +32,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
         final products = await databaseHandler.fetchAllProducts();
-        final featuredProductIds = await databaseHandler
-            .fetchAllFeaturedProducts();
+        final featuredProductIds = await databaseHandler.fetchAllFeaturedProducts();
         List<String> userPreferenceProductIds = [];
         if (!event.currentUser.isAnonymous) {
           userPreferenceProductIds = await databaseHandler.fetchUserPreferences(
@@ -162,8 +162,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       developer.log('---');
       try {
         emit(state.copyWith(states: DatabaseStates.dbLoading));
-        final featuredProductIds = await databaseHandler
-            .fetchAllFeaturedProducts();
+        final featuredProductIds = await databaseHandler.fetchAllFeaturedProducts();
         List<Product> featuredProducts = [];
         for (var productId in featuredProductIds) {
           featuredProducts.add(
@@ -278,8 +277,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       developer.log('--- DatabaseEventGetProductCardTintColor fired');
       developer.log('---');
       try {
-        CachedNetworkImageProvider?
-        cachedNetworkImageProvider = CachedNetworkImageProvider(
+        CachedNetworkImageProvider? cachedNetworkImageProvider = CachedNetworkImageProvider(
           'https://regred-rainbowbridge.ru/crabpay/images/products/${event.product.image}.png',
         );
         final futureOfColor = MaterialColorExtractor.extractColorScheme(

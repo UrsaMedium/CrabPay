@@ -13,12 +13,10 @@ class MaterialCustomOrdersViewPageBar extends StatefulWidget {
   });
 
   @override
-  State<MaterialCustomOrdersViewPageBar> createState() =>
-      _MaterialCustomOrdersViewPageBarState();
+  State<MaterialCustomOrdersViewPageBar> createState() => _MaterialCustomOrdersViewPageBarState();
 }
 
-class _MaterialCustomOrdersViewPageBarState
-    extends State<MaterialCustomOrdersViewPageBar> {
+class _MaterialCustomOrdersViewPageBarState extends State<MaterialCustomOrdersViewPageBar> {
   final GlobalKey _stackKey = GlobalKey();
   final GlobalKey _tab0Key = GlobalKey();
   final GlobalKey _tab1Key = GlobalKey();
@@ -107,8 +105,7 @@ class _MaterialCustomOrdersViewPageBarState
                       child: Container(
                         padding: .symmetric(horizontal: 16, vertical: 2),
                         decoration: BoxDecoration(
-                          color: context.appColorScheme.secondaryContainer
-                              .withValues(alpha: .8),
+                          color: context.appColorScheme.secondaryContainer.withValues(alpha: .8),
                           borderRadius: .circular(16),
                         ),
                       ),
@@ -122,9 +119,7 @@ class _MaterialCustomOrdersViewPageBarState
                         child: Text(
                           context.l10n.beingDelivered,
                           style: TextStyle(
-                            color: page == 0
-                                ? context.appColorScheme.primary
-                                : context.appColorScheme.onSurface,
+                            color: page == 0 ? context.appColorScheme.primary : context.appColorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -134,9 +129,7 @@ class _MaterialCustomOrdersViewPageBarState
                         child: Text(
                           context.l10n.delivered,
                           style: TextStyle(
-                            color: page == 1
-                                ? context.appColorScheme.primary
-                                : context.appColorScheme.onSurface,
+                            color: page == 1 ? context.appColorScheme.primary : context.appColorScheme.onSurface,
                           ),
                         ),
                       ),

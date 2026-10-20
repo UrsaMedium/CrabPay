@@ -55,10 +55,9 @@ class MaterialOrderCard extends StatelessWidget {
                       ),
                       Builder(
                         builder: (context) {
-                          final isMessageSending = context
-                              .select<OrdersViewCubit, bool>(
-                                (cubit) => cubit.state.isSupportMessageSending,
-                              );
+                          final isMessageSending = context.select<OrdersViewCubit, bool>(
+                            (cubit) => cubit.state.isSupportMessageSending,
+                          );
                           return IconButton(
                             onPressed: isMessageSending
                                 ? null
@@ -71,18 +70,14 @@ class MaterialOrderCard extends StatelessWidget {
                                   context.l10n.support,
                                   style: TextStyle(
                                     fontWeight: .w500,
-                                    color: context
-                                        .appColorScheme
-                                        .onPrimaryContainer,
+                                    color: context.appColorScheme.onPrimaryContainer,
                                   ),
                                 ),
                                 isMessageSending
                                     ? CircularProgressIndicator()
                                     : Icon(
                                         Icons.send_rounded,
-                                        color: context
-                                            .appColorScheme
-                                            .onPrimaryContainer,
+                                        color: context.appColorScheme.onPrimaryContainer,
                                       ),
                               ],
                             ),
@@ -153,8 +148,7 @@ class _MaterialCustomWidgetRowOfImages extends StatelessWidget {
           decoration: BoxDecoration(borderRadius: .circular(4)),
           clipBehavior: .antiAlias,
           child: CachedNetworkImage(
-            imageUrl:
-                'https://regred-rainbowbridge.ru/crabpay/images/products/$image.png',
+            imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/$image.png',
             fit: .cover,
             errorWidget: (context, error, stackTrace) => Container(
               color: context.appColorScheme.onInverseSurface,

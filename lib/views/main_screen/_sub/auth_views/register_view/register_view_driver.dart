@@ -54,8 +54,7 @@ class _RegisterViewDriverState extends State<RegisterViewDriver> {
           }
           if (authState is AuthStateLoggedOut) {
             Fluttertoast.showToast(
-              msg:
-                  'Registration failed: ${authState.bloodyAuthException.toString()}',
+              msg: 'Registration failed: ${authState.bloodyAuthException.toString()}',
               toastLength: Toast.LENGTH_LONG,
             );
             context.read<RegisterViewCubit>().setErrors(

@@ -32,13 +32,11 @@ class _AdminSupportChatViewState extends State<AdminSupportChatView> {
         ChatEventSubscribeToMessages(threadId: widget.threadId!),
       );
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message:
-            'AdminSupportChatView initState: Subscribed to messages for threadId: ${widget.threadId}',
+        message: 'AdminSupportChatView initState: Subscribed to messages for threadId: ${widget.threadId}',
       );
     } else {
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message:
-            'AdminSupportChatView initState: No threadId provided, cannot subscribe to messages.',
+        message: 'AdminSupportChatView initState: No threadId provided, cannot subscribe to messages.',
       );
       context.pop();
     }
@@ -125,9 +123,7 @@ class MaterialAdminSupportPageView extends StatelessWidget {
                     horizontal: 8,
                   ),
                   child: Align(
-                    alignment: isMe
-                        ? AlignmentGeometry.centerRight
-                        : AlignmentGeometry.centerLeft,
+                    alignment: isMe ? AlignmentGeometry.centerRight : AlignmentGeometry.centerLeft,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusGeometry.circular(30),

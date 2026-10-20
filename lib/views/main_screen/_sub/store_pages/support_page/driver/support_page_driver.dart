@@ -17,8 +17,7 @@ class SupportPageDriver extends StatefulWidget {
   State<SupportPageDriver> createState() => _SupportPageDriverState();
 }
 
-class _SupportPageDriverState extends State<SupportPageDriver>
-    with AutomaticKeepAliveClientMixin {
+class _SupportPageDriverState extends State<SupportPageDriver> with AutomaticKeepAliveClientMixin {
   late final SupportPageCubit _supportPageCubit;
 
   @override

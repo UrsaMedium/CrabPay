@@ -60,17 +60,13 @@ class OrdersViewState extends Equatable {
     return OrdersViewState(
       page: page ?? this.page,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      hasMoreNotDeliveredOrders:
-          hasMoreNotDeliveredOrders ?? this.hasMoreNotDeliveredOrders,
-      crabNotDeliveredOrders:
-          crabNotDeliveredOrders ?? this.crabNotDeliveredOrders,
+      hasMoreNotDeliveredOrders: hasMoreNotDeliveredOrders ?? this.hasMoreNotDeliveredOrders,
+      crabNotDeliveredOrders: crabNotDeliveredOrders ?? this.crabNotDeliveredOrders,
       crabDeliveredOrders: crabDeliveredOrders ?? this.crabDeliveredOrders,
-      hasMoreDeliveredOrders:
-          hasMoreDeliveredOrders ?? this.hasMoreDeliveredOrders,
+      hasMoreDeliveredOrders: hasMoreDeliveredOrders ?? this.hasMoreDeliveredOrders,
       isSyncingPages: isSyncingPages ?? this.isSyncingPages,
       isSerchOpen: isSerchOpen ?? this.isSerchOpen,
-      hasMoreSearchedOrders:
-          hasMoreSearchedOrders ?? this.hasMoreSearchedOrders,
+      hasMoreSearchedOrders: hasMoreSearchedOrders ?? this.hasMoreSearchedOrders,
       crabSearchedOrders: crabSearchedOrders ?? this.crabSearchedOrders,
       fromDate: fromDate == null
           ? this.fromDate
@@ -82,8 +78,7 @@ class OrdersViewState extends Equatable {
           : toDate == DateTime(0)
           ? null
           : toDate,
-      isSupportMessageSending:
-          isSupportMessageSending ?? this.isSupportMessageSending,
+      isSupportMessageSending: isSupportMessageSending ?? this.isSupportMessageSending,
     );
   }
 

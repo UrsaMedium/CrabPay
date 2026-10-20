@@ -14,8 +14,7 @@ class PasswordForgotViewDriver extends StatefulWidget {
   const PasswordForgotViewDriver({super.key});
 
   @override
-  State<PasswordForgotViewDriver> createState() =>
-      _PasswordForgotViewDriverState();
+  State<PasswordForgotViewDriver> createState() => _PasswordForgotViewDriverState();
 }
 
 class _PasswordForgotViewDriverState extends State<PasswordForgotViewDriver> {

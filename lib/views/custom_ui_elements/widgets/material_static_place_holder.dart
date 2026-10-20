@@ -3,13 +3,13 @@ import 'package:flutter/widgets.dart';
 class MaterialStaticPlaceHolder extends StatelessWidget {
   final double width;
   final double height;
-  final double cornerRadius;
+  final double? cornerRadius;
   final Color color;
   const MaterialStaticPlaceHolder({
     super.key,
     required this.width,
     required this.height,
-    required this.cornerRadius,
+    this.cornerRadius,
     required this.color,
   });
 
@@ -19,7 +19,9 @@ class MaterialStaticPlaceHolder extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        borderRadius: .circular(cornerRadius),
+        borderRadius: .circular(
+          cornerRadius ?? (width > height ? height * .1 : width * .1),
+        ),
         color: color,
       ),
     );

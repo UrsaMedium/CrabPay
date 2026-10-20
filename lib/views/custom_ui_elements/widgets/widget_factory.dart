@@ -127,8 +127,7 @@ class DropdownMenuConstructor extends StatefulWidget {
   });
 
   @override
-  State<DropdownMenuConstructor> createState() =>
-      _DropdownMenuConstructorState();
+  State<DropdownMenuConstructor> createState() => _DropdownMenuConstructorState();
 }
 
 class _DropdownMenuConstructorState extends State<DropdownMenuConstructor> {

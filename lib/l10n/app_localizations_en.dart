@@ -18,8 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteEmpty => 'Favorite? :(';
 
   @override
-  String get failedToSendMessagePlease =>
-      'Failed to send message. Please try again.';
+  String get failedToSendMessagePlease => 'Failed to send message. Please try again.';
 
   @override
   String get failedToFetchAllThreads => 'Failed to fetch all threads';
@@ -46,8 +45,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToAddFeaturedProduct => 'Failed to add Featured Product';
 
   @override
-  String get failedToDeleteFeaturedProduct =>
-      'Failed to delete Featured Product';
+  String get failedToDeleteFeaturedProduct => 'Failed to delete Featured Product';
 
   @override
   String get failedToFetchProducts => 'Failed to fetch products';
@@ -59,8 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToFetchCurrencies => 'Failed to fetch currencies';
 
   @override
-  String get failedToFetchFeaturedProducts =>
-      'Failed to fetch Featured Products';
+  String get failedToFetchFeaturedProducts => 'Failed to fetch Featured Products';
 
   @override
   String get failedToAddUserPreference => 'Failed to add User Preference';
@@ -87,8 +84,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToAddTheCart => 'Failed to add the cart item';
 
   @override
-  String get failedToFetchPendingOrders =>
-      'Failed to fetch pending orders cart items';
+  String get failedToFetchPendingOrders => 'Failed to fetch pending orders cart items';
 
   @override
   String get orders => 'Orders';
@@ -204,8 +200,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorNoAppproduct => 'ERROR no AppProduct';
 
   @override
-  String get errorAFieldWithThe =>
-      'ERROR A field with the same name already exists';
+  String get errorAFieldWithThe => 'ERROR A field with the same name already exists';
 
   @override
   String get everyFieldMustHasA => 'Every field must has a name and a handler';
@@ -276,8 +271,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pushTheFields => 'Push The Fields';
 
   @override
-  String get somethingWentWronNoProduct =>
-      'Something went wron. No product id :()';
+  String get somethingWentWronNoProduct => 'Something went wron. No product id :()';
 
   @override
   String get typeYourQuestion => 'Type your question...';
@@ -312,14 +306,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hey => 'Hey :)';
 
   @override
-  String userInfoDebug(
-    String id,
-    String email,
-    String isEmailVerified,
-    String isAnonymous,
-    String isAdmin,
-    String isLimbo,
-  ) {
+  String userInfoDebug(String id, String email, String isEmailVerified, String isAnonymous, String isAdmin, String isLimbo) {
     return 'Id: $id\nemail: $email\nver: $isEmailVerified\nanon: $isAnonymous\nadmin: $isAdmin\nlimbo: $isLimbo';
   }
 
@@ -330,8 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get field => 'Field';
 
   @override
-  String get strangeErrorNoFieldsDetected =>
-      'Strange error. No fields detected';
+  String get strangeErrorNoFieldsDetected => 'Strange error. No fields detected';
 
   @override
   String get setNewPriceImage => 'Set new price image';
@@ -422,8 +408,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrongWithDescription =>
-      'Oh-oh. Something went wrong with the description';
+  String get somethingWentWrongWithDescription => 'Oh-oh. Something went wrong with the description';
 
   @override
   String get chooseAproductToModify => 'Choose aproduct to modify';
@@ -432,15 +417,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pushTheChanges => 'Push the changes';
 
   @override
-  String get wrongCredentialsPleaseTryAgain =>
-      'Wrong credentials. Please try again.';
+  String get wrongCredentialsPleaseTryAgain => 'Wrong credentials. Please try again.';
 
   @override
   String get pleaseSignIn => 'Please, Sign In';
 
   @override
-  String get authorizationWillBeHappeningHere =>
-      'Authorization will be happening here';
+  String get authorizationWillBeHappeningHere => 'Authorization will be happening here';
 
   @override
   String get forgotPassword => 'Forgot Password?';
@@ -467,8 +450,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
-  String get createAnAccountToShop =>
-      'Create an account to shop, top up your ballance, and get support.';
+  String get createAnAccountToShop => 'Create an account to shop, top up your ballance, and get support.';
 
   @override
   String get submit => 'Submit';
@@ -609,8 +591,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmThePurchase => 'Confirm the purchase';
 
   @override
-  String get contctOurSupportTeamFoAssistance =>
-      'Contact our support team\n for assistance';
+  String get contctOurSupportTeamFoAssistance => 'Contact our support team\n for assistance';
 
   @override
   String get heyYouHaven => 'Hey, You haven\'t picked anything yet';

@@ -53,12 +53,10 @@ class HeroFlightObserverWithFallBack extends StatefulWidget {
   });
 
   @override
-  State<HeroFlightObserverWithFallBack> createState() =>
-      _HeroFlightObserverWithFallBackState();
+  State<HeroFlightObserverWithFallBack> createState() => _HeroFlightObserverWithFallBackState();
 }
 
-class _HeroFlightObserverWithFallBackState
-    extends State<HeroFlightObserverWithFallBack> {
+class _HeroFlightObserverWithFallBackState extends State<HeroFlightObserverWithFallBack> {
   bool _flightStarted = false;
   bool _hasExecuted = false;
 

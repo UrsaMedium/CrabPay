@@ -21,12 +21,10 @@ Future<bool?> showOnUnauthBuyToRegister(BuildContext context) {
             message: 'RegisterViewDriver AuthState change',
             data: {'authState': authState},
           );
-          if (authState is AuthStateLoggedIn &&
-              !authState.currentUser.isAnonymous) {
+          if (authState is AuthStateLoggedIn && !authState.currentUser.isAnonymous) {
             return Navigator.pop(context, true);
           }
-          if (authState is AuthStateLoggedOut ||
-              authState.currentUser.isAnonymous) {
+          if (authState is AuthStateLoggedOut || authState.currentUser.isAnonymous) {
             Fluttertoast.showToast(
               msg: context.l10n.registrationFailed,
               toastLength: Toast.LENGTH_LONG,

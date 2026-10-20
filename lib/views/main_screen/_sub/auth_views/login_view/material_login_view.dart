@@ -66,17 +66,13 @@ class MaterialLoginView extends StatelessWidget {
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
@@ -92,17 +88,13 @@ class MaterialLoginView extends StatelessWidget {
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: emailError != null
-                        ? context.appColorScheme.error
-                        : context.appColorScheme.primaryFixed,
+                    color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
@@ -129,7 +121,7 @@ class MaterialLoginView extends StatelessWidget {
               ),
               child: isSubmitting
                   ? const CircularProgressIndicator()
-                  :  Text(
+                  : Text(
                       context.l10n.signIn,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

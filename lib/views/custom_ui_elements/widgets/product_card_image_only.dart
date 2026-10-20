@@ -11,7 +11,7 @@ class ProductCardImageOnly extends StatelessWidget {
   final String tag;
   final double width;
   final double height;
-  final double cornerRadius;
+  final double? cornerRadius;
   final double margin;
   const ProductCardImageOnly({
     super.key,
@@ -19,12 +19,13 @@ class ProductCardImageOnly extends StatelessWidget {
     required this.tag,
     required this.width,
     required this.height,
-    required this.cornerRadius,
+    this.cornerRadius,
     required this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
+    final radius = cornerRadius ?? (width > height ? height * .1 : width * .1);
     final heroTag = '${product.id}-$tag';
     return GestureDetector(
       onTap: () => globalOpenProductCardCallBack(
@@ -36,15 +37,13 @@ class ProductCardImageOnly extends StatelessWidget {
         margin: .symmetric(horizontal: margin),
         height: height,
         width: width,
-        decoration: BoxDecoration(borderRadius: .circular(cornerRadius)),
+        decoration: BoxDecoration(borderRadius: .circular(radius)),
         clipBehavior: .antiAlias,
         child: Hero(
           tag: heroTag,
-          createRectTween: (begin, end) =>
-              MaterialRectArcTween(begin: begin, end: end),
+          createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
           child: CachedNetworkImage(
-            imageUrl:
-                'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+            imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
             fit: .cover,
             errorWidget: (context, error, stackTrace) => Container(
               color: context.appColorScheme.onInverseSurface,
@@ -54,7 +53,7 @@ class ProductCardImageOnly extends StatelessWidget {
             placeholder: (context, url) => MaterialShimeringPlaceHolder(
               width: width,
               height: height,
-              cornerRadius: cornerRadius,
+              cornerRadius: radius,
               color: context.appColorScheme.surfaceContainerHigh,
             ),
           ),

@@ -10,8 +10,7 @@ HttpLink createSupabaseGraphQLConfig() {
       'apiKey': supabaseAccessConf['publishableKey']!,
 
       // 2. Dynamically attach the active JWT user token or default to the publishable key
-      'Authorization':
-          'Bearer ${Supabase.instance.client.auth.currentSession?.accessToken ?? supabaseAccessConf['publishableKey']!}',
+      'Authorization': 'Bearer ${Supabase.instance.client.auth.currentSession?.accessToken ?? supabaseAccessConf['publishableKey']!}',
     },
   );
 }

@@ -3,25 +3,23 @@ import 'package:flutter/material.dart';
 class MaterialPulsingPlaceHolder extends StatefulWidget {
   final double width;
   final double height;
-  final double cornerRadius;
+  final double? cornerRadius;
   final Color color;
   final int? cycleLongevity;
   const MaterialPulsingPlaceHolder({
     super.key,
     required this.width,
     required this.height,
-    required this.cornerRadius,
+    this.cornerRadius,
     required this.color,
     this.cycleLongevity,
   });
 
   @override
-  State<MaterialPulsingPlaceHolder> createState() =>
-      _MaterialPulsingPlaceHolderState();
+  State<MaterialPulsingPlaceHolder> createState() => _MaterialPulsingPlaceHolderState();
 }
 
-class _MaterialPulsingPlaceHolderState extends State<MaterialPulsingPlaceHolder>
-    with SingleTickerProviderStateMixin {
+class _MaterialPulsingPlaceHolderState extends State<MaterialPulsingPlaceHolder> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _opacityImage;
 
@@ -54,7 +52,9 @@ class _MaterialPulsingPlaceHolderState extends State<MaterialPulsingPlaceHolder>
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
-          borderRadius: .circular(widget.cornerRadius),
+          borderRadius: .circular(
+            widget.cornerRadius ?? (widget.width > widget.height ? widget.height * .1 : widget.width * .1),
+          ),
           color: widget.color,
         ),
       ),

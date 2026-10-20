@@ -56,9 +56,7 @@ class StorePageState extends Equatable {
 class StorePageCubit extends Cubit<StorePageState> {
   final DatabaseBloc _dbBloc;
   late final StreamSubscription _dbSubscription;
-  StorePageCubit({required DatabaseBloc dbBLoc})
-    : _dbBloc = dbBLoc,
-      super(StorePageState()) {
+  StorePageCubit({required DatabaseBloc dbBLoc}) : _dbBloc = dbBLoc, super(StorePageState()) {
     final prdtcs = dbBLoc.state.products;
     emit(state.copyWith(products: prdtcs, productsToShow: prdtcs));
     _dbSubscription = _dbBloc.stream.listen((dbState) {
@@ -66,9 +64,7 @@ class StorePageCubit extends Cubit<StorePageState> {
         emit(
           state.copyWith(
             products: dbState.products,
-            productsToShow: (state.filterdProductList?.isEmpty ?? true)
-                ? dbState.products
-                : state.filterdProductList,
+            productsToShow: (state.filterdProductList?.isEmpty ?? true) ? dbState.products : state.filterdProductList,
           ),
         );
       }

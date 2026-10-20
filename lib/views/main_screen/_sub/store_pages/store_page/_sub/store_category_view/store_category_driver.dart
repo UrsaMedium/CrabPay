@@ -10,8 +10,7 @@ class StoreCategoryViewDriver extends StatefulWidget {
   const StoreCategoryViewDriver({super.key, required this.tag});
 
   @override
-  State<StoreCategoryViewDriver> createState() =>
-      _StoreCategoryViewDriverState();
+  State<StoreCategoryViewDriver> createState() => _StoreCategoryViewDriverState();
 }
 
 class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
@@ -21,9 +20,7 @@ class _StoreCategoryViewDriverState extends State<StoreCategoryViewDriver> {
 
   @override
   void initState() {
-    products = (context.read<DatabaseBloc>().state.products ?? [])
-        .where((element) => element.category == widget.tag)
-        .toList();
+    products = (context.read<DatabaseBloc>().state.products ?? []).where((element) => element.category == widget.tag).toList();
     super.initState();
   }
 

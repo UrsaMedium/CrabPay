@@ -38,8 +38,7 @@ class AdminState {
       appProduct: appProduct ?? this.appProduct,
       appProductFields: appProductFields ?? this.appProductFields,
       currency: currency ?? this.currency,
-      dataAndWidgetsPreperation:
-          dataAndWidgetsPreperation ?? this.dataAndWidgetsPreperation,
+      dataAndWidgetsPreperation: dataAndWidgetsPreperation ?? this.dataAndWidgetsPreperation,
       states: states ?? this.states,
     );
   }

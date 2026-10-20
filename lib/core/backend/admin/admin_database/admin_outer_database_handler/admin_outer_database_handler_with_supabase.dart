@@ -11,8 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retry/retry.dart';
 import 'package:flutter/foundation.dart';
 
-class AdminOuterDatabaseHandlerWithSupabase
-    implements AdminInnerDatabaseHandler {
+class AdminOuterDatabaseHandlerWithSupabase implements AdminInnerDatabaseHandler {
   final GraphQLClient _client = SupabaseGraphQLClient.client;
   final retryer = const RetryOptions(
     maxAttempts: 3,
@@ -158,9 +157,7 @@ class AdminOuterDatabaseHandlerWithSupabase
           'isPriceImage': field.isPriceImage,
           'handler': field.handler,
           // MAGIC FIX: Stringify the map so pg_graphql handles it correctly
-          'priceImages': field.priceImages != null
-              ? jsonEncode(field.priceImages)
-              : null,
+          'priceImages': field.priceImages != null ? jsonEncode(field.priceImages) : null,
           'expectedData': field.expectedData,
         },
       );
@@ -223,9 +220,7 @@ class AdminOuterDatabaseHandlerWithSupabase
             'fieldName': field.fieldName,
             'isPriceImage': field.isPriceImage,
             // MAGIC FIX: Stringify the map so pg_graphql handles it correctly
-            'priceImages': field.priceImages != null
-                ? jsonEncode(field.priceImages)
-                : null,
+            'priceImages': field.priceImages != null ? jsonEncode(field.priceImages) : null,
             'expectedData': field.expectedData,
           },
         },

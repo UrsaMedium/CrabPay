@@ -34,13 +34,9 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
     if (widget.productId == null) {
       context.pop();
     }
-    final originalFieldsList = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductFields?[widget.productId];
+    final originalFieldsList = context.read<DatabaseBloc>().state.cachedProductFields?[widget.productId];
     getIt<InnerLoggerHandler>().logBreadcrumb(
-      message:
-          'AddFieldAdminPanelView: initState: originalFieldsList: $originalFieldsList',
+      message: 'AddFieldAdminPanelView: initState: originalFieldsList: $originalFieldsList',
     );
     if (originalFieldsList != null) {
       for (var field in originalFieldsList) {
@@ -59,8 +55,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
   void _deleteField(ProductField fieldToDelte) {
     setState(() {
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message:
-            'AddFieldAdminPanelView: _deleteField: fieldToDelte: $fieldToDelte',
+        message: 'AddFieldAdminPanelView: _deleteField: fieldToDelte: $fieldToDelte',
       );
       _fieldNames.remove(fieldToDelte.fieldName);
       _fieldWidgetsMap.remove(fieldToDelte);
@@ -71,8 +66,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
     int imageChecker = 0;
     List<ProductField> result = [];
     for (int i = 0; i < _fieldWidgetsMap.length; i++) {
-      if (_fieldWidgetsMap.keys.toList()[i].fieldName != '' &&
-          _fieldWidgetsMap.keys.toList()[i].handler != '') {
+      if (_fieldWidgetsMap.keys.toList()[i].fieldName != '' && _fieldWidgetsMap.keys.toList()[i].handler != '') {
         result.add(
           ProductField(
             id: '$i',
@@ -123,9 +117,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.support.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.support.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -154,8 +146,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                             padding: const EdgeInsets.all(8.0),
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height * 0.8,
+                                maxHeight: MediaQuery.of(context).size.height * 0.8,
                               ),
                               child: CustomScrollView(
                                 shrinkWrap: true,
@@ -163,8 +154,7 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                   SliverList.builder(
                                     itemCount: _fieldWidgetsMap.length,
                                     itemBuilder: (context, index) {
-                                      return _fieldWidgetsMap.values
-                                          .toList()[index];
+                                      return _fieldWidgetsMap.values.toList()[index];
                                     },
                                   ),
                                   SliverToBoxAdapter(
@@ -186,21 +176,15 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                                                 isScrollControlled: true,
                                                 builder: (BuildContext context) {
                                                   return AddFieldBottomSheet(
-                                                    alreadyExistingFields:
-                                                        _fieldNames,
-                                                    onNewFieldAdding:
-                                                        _updateFieldsList,
+                                                    alreadyExistingFields: _fieldNames,
+                                                    onNewFieldAdding: _updateFieldsList,
                                                   );
                                                 },
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: context
-                                                  .appColorScheme
-                                                  .onPrimary,
-                                              foregroundColor: context
-                                                  .appColorScheme
-                                                  .primary,
+                                              backgroundColor: context.appColorScheme.onPrimary,
+                                              foregroundColor: context.appColorScheme.primary,
                                               // minimumSize: Size(double.infinity, 50),
                                             ),
                                             label: Icon(Icons.add),
@@ -220,83 +204,58 @@ class _AddFieldAdminPanelViewState extends State<AddFieldAdminPanelView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      BlocBuilder<
-                                        DatabaseBlocAdmin,
-                                        DatabaseStateAdmin
-                                      >(
-                                        builder: (context, state) {
-                                          return ElevatedButton(
-                                            onPressed: () {
-                                              final collectFields =
-                                                  _collectFields();
-                                              if (collectFields != null) {
-                                                getIt<InnerLoggerHandler>()
-                                                    .logBreadcrumb(
-                                                      message:
-                                                          'AddFieldAdminPanelView: onPressed: collectFields: $collectFields',
-                                                    );
-                                                Fluttertoast.showToast(
-                                                  msg: context.l10n.boop,
+                                  child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
+                                    builder: (context, state) {
+                                      return ElevatedButton(
+                                        onPressed: () {
+                                          final collectFields = _collectFields();
+                                          if (collectFields != null) {
+                                            getIt<InnerLoggerHandler>().logBreadcrumb(
+                                              message: 'AddFieldAdminPanelView: onPressed: collectFields: $collectFields',
+                                            );
+                                            Fluttertoast.showToast(
+                                              msg: context.l10n.boop,
+                                            );
+                                            try {
+                                              for (var field in collectFields) {
+                                                final fieldToPush = ProductField(
+                                                  id: '',
+                                                  productId: widget.productId!,
+                                                  order: field.order,
+                                                  fieldName: field.fieldName,
+                                                  isPriceImage: field.isPriceImage,
+                                                  handler: field.handler,
+                                                  priceImages: field.priceImages,
+                                                  expectedData: field.expectedData,
                                                 );
-                                                try {
-                                                  for (var field
-                                                      in collectFields) {
-                                                    final fieldToPush =
-                                                        ProductField(
-                                                          id: '',
-                                                          productId:
-                                                              widget.productId!,
-                                                          order: field.order,
-                                                          fieldName:
-                                                              field.fieldName,
-                                                          isPriceImage: field
-                                                              .isPriceImage,
-                                                          handler:
-                                                              field.handler,
-                                                          priceImages:
-                                                              field.priceImages,
-                                                          expectedData: field
-                                                              .expectedData,
-                                                        );
-                                                    context
-                                                        .read<
-                                                          DatabaseBlocAdmin
-                                                        >()
-                                                        .add(
-                                                          DatabaseEventAddProductFieldAdmin(
-                                                            productField:
-                                                                fieldToPush,
-                                                          ),
-                                                        );
-                                                  }
-                                                  context.go(
-                                                    AppRoutes.home.path,
-                                                  );
-                                                } catch (e) {
-                                                  Fluttertoast.showToast(
-                                                    msg: context.l10n.boo,
-                                                  );
-                                                }
-                                              } else {
-                                                Fluttertoast.showToast(
-                                                  msg: context
-                                                      .l10n
-                                                      .somethingWrongWithTheFields,
+                                                context.read<DatabaseBlocAdmin>().add(
+                                                  DatabaseEventAddProductFieldAdmin(
+                                                    productField: fieldToPush,
+                                                  ),
                                                 );
                                               }
-                                            },
-                                            child:
-                                                state.states !=
-                                                    DatabaseStatesAdmin
-                                                        .dbLoading
-                                                ? Text(
-                                                    context.l10n.pushTheFields,
-                                                  )
-                                                : CircularProgressIndicator(),
-                                          );
+                                              context.go(
+                                                AppRoutes.home.path,
+                                              );
+                                            } catch (e) {
+                                              Fluttertoast.showToast(
+                                                msg: context.l10n.boo,
+                                              );
+                                            }
+                                          } else {
+                                            Fluttertoast.showToast(
+                                              msg: context.l10n.somethingWrongWithTheFields,
+                                            );
+                                          }
                                         },
-                                      ),
+                                        child: state.states != DatabaseStatesAdmin.dbLoading
+                                            ? Text(
+                                                context.l10n.pushTheFields,
+                                              )
+                                            : CircularProgressIndicator(),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ],
                             ),

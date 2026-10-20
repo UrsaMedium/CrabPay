@@ -69,19 +69,7 @@ class MaterialProductDescriptionLayer extends StatelessWidget {
                               ),
                               MarkdownBody(
                                 selectable: true,
-                                data:
-                                    context
-                                        .read<ProductViewCubit>()
-                                        .state
-                                        .product!
-                                        .description
-                                        .isEmpty
-                                    ? context.l10n.somethingWentWrongWithDescription
-                                    : context
-                                          .read<ProductViewCubit>()
-                                          .state
-                                          .product!
-                                          .description,
+                                data: context.read<ProductViewCubit>().state.product!.description.isEmpty ? context.l10n.somethingWentWrongWithDescription : context.read<ProductViewCubit>().state.product!.description,
                                 builders: {'latex': LatexElementBuilder()},
                                 extensionSet: md.ExtensionSet(
                                   [LatexBlockSyntax()],

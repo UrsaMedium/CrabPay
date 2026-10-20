@@ -53,9 +53,7 @@ class _LoginViewDriverState extends State<LoginViewDriver> {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: BlocProvider(
         create: (_) => LoginViewCubit(),

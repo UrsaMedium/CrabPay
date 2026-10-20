@@ -96,8 +96,7 @@ class CartPageCubit extends Cubit<CartPageState> {
     emit(state.copyWith(totalPrice: total));
   }
 
-  void setDeletingItem(CartItem? itemToDelete) =>
-      emit(state.copyWith(itemToDelete: itemToDelete));
+  void setDeletingItem(CartItem? itemToDelete) => emit(state.copyWith(itemToDelete: itemToDelete));
 
   void flushCartItems() {
     emit(state.copyWith(cartItemsTuBuy: []));

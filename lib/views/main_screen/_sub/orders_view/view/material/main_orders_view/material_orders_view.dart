@@ -43,9 +43,7 @@ class MaterialOrdersView extends StatelessWidget {
             duration: const Duration(milliseconds: 350),
             firstCurve: Curves.easeIn,
             secondCurve: Curves.easeIn,
-            crossFadeState: isSearchOpen
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
+            crossFadeState: isSearchOpen ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             secondChild: Stack(
               children: [
                 pageBuilder(context, 2),
@@ -78,30 +76,29 @@ class MaterialOrdersView extends StatelessWidget {
                 ),
               ],
             ),
-            layoutBuilder:
-                (topChild, topChildKey, bottomChild, bottomChildKey) {
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        key: bottomChildKey,
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: bottomChild,
-                      ),
-                      Positioned(
-                        key: topChildKey,
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: topChild,
-                      ),
-                    ],
-                  );
-                },
+            layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    key: bottomChildKey,
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: bottomChild,
+                  ),
+                  Positioned(
+                    key: topChildKey,
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: topChild,
+                  ),
+                ],
+              );
+            },
           ),
         );
       },

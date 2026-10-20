@@ -15,14 +15,12 @@ final List<RouteBase> mainScreenShellRoutes = [
   GoRoute(
     path: AppRoutes.profileSheet.path,
     name: AppRoutes.profileSheet.name,
-    pageBuilder: (context, state) =>
-        BottomSheetPage(key: state.pageKey, child: const ProfileSheetDriver()),
+    pageBuilder: (context, state) => BottomSheetPage(key: state.pageKey, child: const ProfileSheetDriver()),
   ),
   GoRoute(
     path: AppRoutes.settingsSheet.path,
     name: AppRoutes.settingsSheet.name,
-    pageBuilder: (context, state) =>
-        BottomSheetPage(key: state.pageKey, child: const SettingsSheetDriver()),
+    pageBuilder: (context, state) => BottomSheetPage(key: state.pageKey, child: const SettingsSheetDriver()),
   ),
   GoRoute(
     path: AppRoutes.itemsOnPaymentSheet.path,

@@ -5,8 +5,7 @@ class GlobalLanguageState extends Equatable {
   final bool isRu;
   const GlobalLanguageState({this.isRu = false});
 
-  GlobalLanguageState copyWith({bool? isRu}) =>
-      GlobalLanguageState(isRu: isRu ?? this.isRu);
+  GlobalLanguageState copyWith({bool? isRu}) => GlobalLanguageState(isRu: isRu ?? this.isRu);
 
   @override
   List<Object?> get props => [isRu];

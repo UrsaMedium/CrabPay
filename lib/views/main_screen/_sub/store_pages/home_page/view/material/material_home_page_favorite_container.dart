@@ -23,13 +23,13 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
         color: context.appColorScheme.surfaceContainer,
         borderRadius: .circular(24),
       ),
-      width: double.maxFinite,
+      width: context.read<HomePageCubit>().state.containerWidth,
       // height: 400,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: .all(context.read<HomePageCubit>().state.containerPadding),
         child: Row(
           crossAxisAlignment: .start,
-          spacing: 8,
+          spacing: context.read<HomePageCubit>().state.containerPadding / 2,
           children: [
             userPreferences.isNotEmpty
                 ? Column(
@@ -41,16 +41,9 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                           padding: EdgeInsets.only(top: index == 0 ? 0 : 8.0),
                           child: ProductCardDriver(
                             product: userPreferences[index * 2],
-                            tag:
-                                '${userPreferences[index * 2].id}-favorite-$index',
-                            width:
-                                (context
-                                        .read<HomePageCubit>()
-                                        .state
-                                        .containerWidth -
-                                    24) /
-                                2,
-                            cornerRadius: 16,
+                            tag: '${userPreferences[index * 2].id}-favorite-$index',
+                            width: (context.read<HomePageCubit>().state.containerWidth - context.read<HomePageCubit>().state.containerPadding * 2.5) / 2,
+                            cornerRadius: context.read<HomePageCubit>().state.outerCornerRadius - context.read<HomePageCubit>().state.containerPadding / 2,
                           ),
                         ),
                       ),
@@ -63,24 +56,21 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
               mainAxisSize: .min,
               children: [
                 Container(
-                  width:
-                      (context.read<HomePageCubit>().state.containerWidth -
-                          24) /
-                      2,
+                  width: (context.read<HomePageCubit>().state.containerWidth - context.read<HomePageCubit>().state.containerPadding * 2.5) / 2,
                   margin: .only(
                     bottom: (isInitialized && userPreferences.isEmpty) ? 0 : 8,
                   ),
                   decoration: BoxDecoration(
-                    borderRadius: .circular(16),
+                    borderRadius: .circular(
+                      context.read<HomePageCubit>().state.outerCornerRadius - context.read<HomePageCubit>().state.containerPadding / 2,
+                    ),
                     color: context.appColorScheme.surfaceContainerHighest,
                   ),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        (isInitialized && userPreferences.isEmpty)
-                            ? context.l10n.favoriteEmpty
-                            : context.l10n.favorite,
+                        (isInitialized && userPreferences.isEmpty) ? context.l10n.favoriteEmpty : context.l10n.favorite,
                         textAlign: .center,
                         style: TextStyle(
                           fontSize: 18,
@@ -98,16 +88,9 @@ class MaterialHomePageFavoriteContainer extends StatelessWidget {
                       padding: EdgeInsets.only(top: index == 0 ? 0 : 8.0),
                       child: ProductCardDriver(
                         product: userPreferences[index * 2 + 1],
-                        tag:
-                            '${userPreferences[index * 2 + 1].id}-favorite-$index',
-                        width:
-                            (context
-                                    .read<HomePageCubit>()
-                                    .state
-                                    .containerWidth -
-                                24) /
-                            2,
-                        cornerRadius: 16,
+                        tag: '${userPreferences[index * 2 + 1].id}-favorite-$index',
+                        width: (context.read<HomePageCubit>().state.containerWidth - context.read<HomePageCubit>().state.containerPadding * 2.5) / 2,
+                        cornerRadius: context.read<HomePageCubit>().state.outerCornerRadius - context.read<HomePageCubit>().state.containerPadding / 2,
                       ),
                     ),
                   ),
@@ -130,9 +113,9 @@ class _PlaceHolder extends StatelessWidget {
       color: context.appColorScheme.surfaceContainerHigh,
       shimeringColor: context.appColorScheme.outline,
       cycleLongevityFactor: 278 * 10,
-      cornerRadius: 16,
       height: 256,
-      width: (context.read<HomePageCubit>().state.containerWidth - 24) / 2,
+      width: (context.read<HomePageCubit>().state.containerWidth - context.read<HomePageCubit>().state.containerPadding * 2.5) / 2,
+      cornerRadius: context.read<HomePageCubit>().state.outerCornerRadius - context.read<HomePageCubit>().state.containerPadding / 2,
     );
   }
 }

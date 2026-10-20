@@ -17,8 +17,7 @@ class HomePageDriver extends StatefulWidget {
   State<HomePageDriver> createState() => _HomePageDriverState();
 }
 
-class _HomePageDriverState extends State<HomePageDriver>
-    with AutomaticKeepAliveClientMixin {
+class _HomePageDriverState extends State<HomePageDriver> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -61,9 +60,7 @@ class _HomePageDriverState extends State<HomePageDriver>
     return BlocProvider.value(
       value: _homePageCubit,
       child: BlocListener<DatabaseBloc, DatabaseState>(
-        listenWhen: (previous, current) =>
-            previous.states == DatabaseStates.dbLoading &&
-            current.states != DatabaseStates.dbLoading,
+        listenWhen: (previous, current) => previous.states == DatabaseStates.dbLoading && current.states != DatabaseStates.dbLoading,
         listener: (context, dbState) {
           if (!(_refreshCompleter?.isCompleted ?? true)) {
             _refreshCompleter!.complete();

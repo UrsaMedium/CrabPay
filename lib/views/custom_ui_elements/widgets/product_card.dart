@@ -13,13 +13,13 @@ class ProductCardDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String tag;
   final double width;
-  final double cornerRadius;
+  final double? cornerRadius;
   const ProductCardDriver({
     super.key,
     required this.product,
     required this.tag,
     required this.width,
-    required this.cornerRadius,
+    this.cornerRadius,
   });
 
   @override
@@ -41,7 +41,7 @@ class ProductCardDriver extends StatelessWidget {
           description: product.description,
           tag: tag,
           width: width,
-          cornerRadius: cornerRadius,
+          cornerRadius: cornerRadius ?? width * .1,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
         );
       },
@@ -94,14 +94,12 @@ class _MaterialProductCard extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: Hero(
                   tag: tag,
-                  createRectTween: (begin, end) =>
-                      MaterialRectArcTween(begin: begin, end: end),
+                  createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                   child: Material(
                     borderRadius: .circular(cornerRadius - 4),
                     clipBehavior: .antiAlias,
                     child: CachedNetworkImage(
-                      imageUrl:
-                          'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                      imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                       width: width - 8,
                       height: width - 8,
                       fit: .cover,
@@ -110,13 +108,12 @@ class _MaterialProductCard extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(context.l10n.emptyKey),
                       ),
-                      placeholder: (context, url) =>
-                          MaterialShimeringPlaceHolder(
-                            width: width - 8,
-                            height: width - 8,
-                            cornerRadius: cornerRadius - 4,
-                            color: context.appColorScheme.surfaceContainerHigh,
-                          ),
+                      placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                        width: width - 8,
+                        height: width - 8,
+                        cornerRadius: cornerRadius - 4,
+                        color: context.appColorScheme.surfaceContainerHigh,
+                      ),
                     ),
                   ),
                 ),

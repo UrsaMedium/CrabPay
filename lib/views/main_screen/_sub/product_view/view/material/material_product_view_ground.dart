@@ -79,8 +79,7 @@ class MaterialProductView extends StatelessWidget {
                       builder: (context, onFlightStarted, onFlightEnded) {
                         return Hero(
                           tag: tag,
-                          createRectTween: (begin, end) =>
-                              MaterialRectArcTween(begin: begin, end: end),
+                          createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                           flightShuttleBuilder:
                               (
                                 flightContext,
@@ -102,32 +101,21 @@ class MaterialProductView extends StatelessWidget {
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOutCubic,
                               width: MediaQuery.widthOf(context),
-                              height: isPageReady
-                                  ? descPosition! + 24
-                                  : MediaQuery.widthOf(context),
+                              height: isPageReady ? descPosition! + 24 : MediaQuery.widthOf(context),
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://regred-rainbowbridge.ru/crabpay/images/products/${context.read<ProductViewCubit>().state.product!.image}.png',
+                                imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/${context.read<ProductViewCubit>().state.product!.image}.png',
                                 fit: BoxFit.cover,
-                                errorWidget: (context, error, stackTrace) =>
-                                    Container(
-                                      color: context
-                                          .appColorScheme
-                                          .onInverseSurface,
-                                      alignment: Alignment.center,
-                                      child: Text(context.l10n.emptyKey),
-                                    ),
-                                placeholder: (context, url) =>
-                                    MaterialShimeringPlaceHolder(
-                                      width: MediaQuery.widthOf(context),
-                                      height: isPageReady
-                                          ? descPosition! + 24
-                                          : MediaQuery.widthOf(context),
-                                      cornerRadius: 0,
-                                      color: context
-                                          .appColorScheme
-                                          .surfaceContainerHigh,
-                                    ),
+                                errorWidget: (context, error, stackTrace) => Container(
+                                  color: context.appColorScheme.onInverseSurface,
+                                  alignment: Alignment.center,
+                                  child: Text(context.l10n.emptyKey),
+                                ),
+                                placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                                  width: MediaQuery.widthOf(context),
+                                  height: isPageReady ? descPosition! + 24 : MediaQuery.widthOf(context),
+                                  cornerRadius: 0,
+                                  color: context.appColorScheme.surfaceContainerHigh,
+                                ),
                               ),
                             ),
                           ),
@@ -143,13 +131,7 @@ class MaterialProductView extends StatelessWidget {
                 ),
 
                 AnimatedPositioned(
-                  top:
-                      (isPageReady ? descPosition : buyPosition)! -
-                              keyboardHeight <
-                          MediaQuery.paddingOf(context).top
-                      ? MediaQuery.paddingOf(context).top
-                      : (isPageReady ? descPosition : buyPosition)! -
-                            keyboardHeight,
+                  top: (isPageReady ? descPosition : buyPosition)! - keyboardHeight < MediaQuery.paddingOf(context).top ? MediaQuery.paddingOf(context).top : (isPageReady ? descPosition : buyPosition)! - keyboardHeight,
                   left: 0,
                   right: 0,
                   duration: const Duration(milliseconds: 250),
@@ -161,17 +143,7 @@ class MaterialProductView extends StatelessWidget {
                 ),
 
                 AnimatedPositioned(
-                  top:
-                      (isPageReady
-                                  ? buyPosition
-                                  : MediaQuery.heightOf(context))! -
-                              keyboardHeight <
-                          MediaQuery.paddingOf(context).top
-                      ? MediaQuery.paddingOf(context).top + 54
-                      : (isPageReady
-                                ? buyPosition
-                                : MediaQuery.heightOf(context))! -
-                            keyboardHeight,
+                  top: (isPageReady ? buyPosition : MediaQuery.heightOf(context))! - keyboardHeight < MediaQuery.paddingOf(context).top ? MediaQuery.paddingOf(context).top + 54 : (isPageReady ? buyPosition : MediaQuery.heightOf(context))! - keyboardHeight,
                   left: 0,
                   right: 0,
                   height: context.read<ProductViewCubit>().state.buyLayerHeight,

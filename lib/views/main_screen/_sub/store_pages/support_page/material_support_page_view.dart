@@ -38,19 +38,14 @@ class MaterialSupportPageView extends StatelessWidget {
         child: Stack(
           children: [
             ListView.builder(
-              controller: context
-                  .read<SupportPageCubit>()
-                  .state
-                  .scrollController,
+              controller: context.read<SupportPageCubit>().state.scrollController,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               // addAutomaticKeepAlives: true,
               reverse: true,
               itemCount: messages.length,
               padding: EdgeInsets.only(
                 top: MediaQuery.paddingOf(context).top + 102,
-                bottom:
-                    MediaQuery.paddingOf(context).bottom +
-                    64, // - cornerRadius,
+                bottom: MediaQuery.paddingOf(context).bottom + 64, // - cornerRadius,
               ),
               itemBuilder: (context, index) {
                 return ChatBubbleDriver(
@@ -75,10 +70,9 @@ class MaterialSupportPageView extends StatelessWidget {
                 children: [
                   Builder(
                     builder: (context) {
-                      final highGraphics = context
-                          .select<GlobalGraphicBloc, bool>(
-                            (bloc) => bloc.state.highGraphics,
-                          );
+                      final highGraphics = context.select<GlobalGraphicBloc, bool>(
+                        (bloc) => bloc.state.highGraphics,
+                      );
                       return Material(
                         color: Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -90,8 +84,7 @@ class MaterialSupportPageView extends StatelessWidget {
                           filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: Container(
                             height: 100,
-                            color: context.appColorScheme.surfaceContainer
-                                .withValues(alpha: highGraphics ? .5 : .97),
+                            color: context.appColorScheme.surfaceContainer.withValues(alpha: highGraphics ? .5 : .97),
                             // height: 64,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -146,9 +139,7 @@ class MaterialSupportPageView extends StatelessWidget {
             ),
             if (showDownArrow)
               Positioned(
-                bottom:
-                    MediaQuery.paddingOf(context).bottom +
-                    84, // - cornerRadius,
+                bottom: MediaQuery.paddingOf(context).bottom + 84, // - cornerRadius,
                 right: 16,
                 child: Container(
                   decoration: BoxDecoration(
@@ -166,18 +157,16 @@ class MaterialSupportPageView extends StatelessWidget {
                 ),
               ),
             Positioned(
-              bottom:
-                  MediaQuery.paddingOf(context).bottom + 10, // - cornerRadius,
+              bottom: MediaQuery.paddingOf(context).bottom + 10, // - cornerRadius,
               right: 4,
               left: 4,
               child: Stack(
                 children: [
                   Builder(
                     builder: (context) {
-                      final highGraphics = context
-                          .select<GlobalGraphicBloc, bool>(
-                            (bloc) => bloc.state.highGraphics,
-                          );
+                      final highGraphics = context.select<GlobalGraphicBloc, bool>(
+                        (bloc) => bloc.state.highGraphics,
+                      );
                       return Material(
                         color: Colors.transparent,
                         borderRadius: .circular(22),
@@ -187,18 +176,14 @@ class MaterialSupportPageView extends StatelessWidget {
                           filter: .blur(sigmaX: 12, sigmaY: 12),
                           child: Container(
                             height: 48,
-                            color: context.appColorScheme.primaryContainer
-                                .withValues(alpha: highGraphics ? .4 : .97),
+                            color: context.appColorScheme.primaryContainer.withValues(alpha: highGraphics ? .4 : .97),
                             child: Row(
                               crossAxisAlignment: .end,
                               children: [
                                 Expanded(
                                   child: TextField(
                                     enabled: isChatStarted,
-                                    controller: context
-                                        .read<SupportPageCubit>()
-                                        .state
-                                        .messageInputController,
+                                    controller: context.read<SupportPageCubit>().state.messageInputController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 4,
                                     minLines: 1,
@@ -216,20 +201,16 @@ class MaterialSupportPageView extends StatelessWidget {
                                 ),
                                 Builder(
                                   builder: (context) {
-                                    final isSendingMessage = context
-                                        .select<SupportPageCubit, bool>(
-                                          (cubit) =>
-                                              cubit.state.isSenndingMessage,
-                                        );
+                                    final isSendingMessage = context.select<SupportPageCubit, bool>(
+                                      (cubit) => cubit.state.isSenndingMessage,
+                                    );
                                     return IconButton(
                                       onPressed: !isChatStarted
                                           ? null
                                           : isSendingMessage
                                           ? null
                                           : onSendPressed,
-                                      icon: isSendingMessage
-                                          ? CircularProgressIndicator()
-                                          : Icon(Icons.send),
+                                      icon: isSendingMessage ? CircularProgressIndicator() : Icon(Icons.send),
                                     );
                                   },
                                 ),

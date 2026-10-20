@@ -34,12 +34,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
   @override
   void initState() {
     heroTag = widget.tag;
-    final theProduct = context
-        .read<DatabaseBloc>()
-        .state
-        .products
-        ?.where((aProduct) => aProduct.id == widget.productId)
-        .firstOrNull;
+    final theProduct = context.read<DatabaseBloc>().state.products?.where((aProduct) => aProduct.id == widget.productId).firstOrNull;
 
     if (theProduct == null) {
       context.go(AppRoutes.home.path);
@@ -52,15 +47,9 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       ),
     );
 
-    final productFields = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductFields?[widget.productId];
+    final productFields = context.read<DatabaseBloc>().state.cachedProductFields?[widget.productId];
 
-    final tintColor = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductImageDominantColor?[theProduct.id];
+    final tintColor = context.read<DatabaseBloc>().state.cachedProductImageDominantColor?[theProduct.id];
 
     _productViewCubit = ProductViewCubit(
       databaseBloc: context.read<DatabaseBloc>(),
@@ -81,8 +70,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       'height': MediaQuery.heightOf(context),
       'width': MediaQuery.widthOf(context),
       'paddingTop': MediaQuery.paddingOf(context).top,
-      'paddingBottom':
-          View.of(context).padding.bottom / View.of(context).devicePixelRatio,
+      'paddingBottom': View.of(context).padding.bottom / View.of(context).devicePixelRatio,
     };
     _productViewCubit.setLayoutBoundries(layoutBoundries);
     super.didChangeDependencies();
@@ -123,9 +111,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       if ((details.primaryVelocity ?? 0) < -200) {
         _productViewCubit.setLayer(true);
       } else if ((details.primaryVelocity ?? 0) > 200) {
-        if (_productViewCubit.state.layer ==
-                ProductViewLayers.descriptionLayer ||
-            _productViewCubit.state.layer == ProductViewLayers.groundLayer) {
+        if (_productViewCubit.state.layer == ProductViewLayers.descriptionLayer || _productViewCubit.state.layer == ProductViewLayers.groundLayer) {
           context.pop();
         }
         _productViewCubit.setLayer(false);
@@ -197,9 +183,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
       CartItem cartItem = CartItem(
         id: '',
         userId: context.read<AuthBloc>().state.currentUser.id,
-        userName:
-            context.read<AuthBloc>().state.currentUser.email ??
-            'AnonUser-id:${context.read<AuthBloc>().state.currentUser.id}',
+        userName: context.read<AuthBloc>().state.currentUser.email ?? 'AnonUser-id:${context.read<AuthBloc>().state.currentUser.id}',
         productId: _productViewCubit.state.product?.id ?? 'error',
         productName: _productViewCubit.state.product?.name ?? 'error',
         purchaseData: _productViewCubit.state.retrievedData ?? {},
@@ -220,8 +204,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
   }
 
   void _onDeleteLastAddedItem(BuildContext context) {
-    if (_productViewCubit.state.itemsInCart > 0 &&
-        _productViewCubit.state.product != null) {
+    if (_productViewCubit.state.itemsInCart > 0 && _productViewCubit.state.product != null) {
       context.read<CartBloc>().add(
         CartEventDeleteLastAddedProductCartItem(
           userId: context.read<AuthBloc>().state.currentUser.id,
@@ -252,8 +235,7 @@ class _ProductViewDriverState extends State<ProductViewDriver> {
             onCartIconPressed: () => _onCartIconPressed(context),
             onDeleteLastAddedItem: () => _onDeleteLastAddedItem(context),
             onResetImageFieldPressed: () => _onResetImageFieldPressed(context),
-            onUserInput: (p0, p1) =>
-                _onUserInput(context: context, fieldName: p0, inputData: p1),
+            onUserInput: (p0, p1) => _onUserInput(context: context, fieldName: p0, inputData: p1),
             onScrollAction: (p0) => _scrollAction(p0, context),
             onPageTransitionEnd: _onPageTransitionEnd,
           );

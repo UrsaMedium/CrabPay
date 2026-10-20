@@ -5,8 +5,7 @@ import 'package:crabpay/core/backend/connection_monitoring/inner_monitor/inner_c
 import 'package:crabpay/core/backend/supabase/supabase_variable.dart';
 
 class ConnectionMonitorToSupabaseAtRegred implements InnerConnectionMonitor {
-  final StreamController<ServerConnectionStatus> _connectionController =
-      StreamController<ServerConnectionStatus>.broadcast();
+  final StreamController<ServerConnectionStatus> _connectionController = StreamController<ServerConnectionStatus>.broadcast();
 
   StreamSubscription? _appLifecycleSub;
   final AppLifecycleService _appLifecycleService;
@@ -48,11 +47,7 @@ class ConnectionMonitorToSupabaseAtRegred implements InnerConnectionMonitor {
 
   Future<void> _pingServerHealth() async {
     try {
-      await supabase
-          .from('cartItem')
-          .select('id')
-          .limit(1)
-          .timeout(const Duration(seconds: 4));
+      await supabase.from('cartItem').select('id').limit(1).timeout(const Duration(seconds: 4));
 
       if (!_connectionController.isClosed) {
         _connectionController.add(ServerConnectionStatus.online);
@@ -65,13 +60,10 @@ class ConnectionMonitorToSupabaseAtRegred implements InnerConnectionMonitor {
   }
 
   @override
-  Stream<ServerConnectionStatus> get statusStream =>
-      _connectionController.stream;
+  Stream<ServerConnectionStatus> get statusStream => _connectionController.stream;
 
   @override
-  ServerConnectionStatus get currentStatus => supabase.realtime.isConnected
-      ? ServerConnectionStatus.online
-      : ServerConnectionStatus.offline;
+  ServerConnectionStatus get currentStatus => supabase.realtime.isConnected ? ServerConnectionStatus.online : ServerConnectionStatus.offline;
 
   @override
   void dispose() {

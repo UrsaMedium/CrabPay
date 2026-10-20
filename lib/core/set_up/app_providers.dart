@@ -62,9 +62,7 @@ class AppProviders extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
-            create: (context) =>
-                AuthBloc(context.read<AuthInnerInterface>())
-                  ..add(const AuthEventInitialize()),
+            create: (context) => AuthBloc(context.read<AuthInnerInterface>())..add(const AuthEventInitialize()),
           ),
           BlocProvider<ChatBloc>(
             create: (context) => ChatBloc(
@@ -98,8 +96,7 @@ class AppProviders extends StatelessWidget {
             ),
           ),
           BlocProvider<PaymentBloc>(
-            create: (context) =>
-                PaymentBloc(context.read<PaymentOuterHandler>()),
+            create: (context) => PaymentBloc(context.read<PaymentOuterHandler>()),
           ),
           BlocProvider(create: (context) => GlobalGraphicBloc()),
           BlocProvider(create: (context) => GlobalLanguageCubit()),

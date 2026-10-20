@@ -26,12 +26,10 @@ class MaterialStoreSearchBarView extends StatefulWidget {
   });
 
   @override
-  State<MaterialStoreSearchBarView> createState() =>
-      _MaterialStoreSearchBarViewState();
+  State<MaterialStoreSearchBarView> createState() => _MaterialStoreSearchBarViewState();
 }
 
-class _MaterialStoreSearchBarViewState
-    extends State<MaterialStoreSearchBarView> {
+class _MaterialStoreSearchBarViewState extends State<MaterialStoreSearchBarView> {
   late final SearchController _materialSearchController;
 
   @override
@@ -84,9 +82,7 @@ class _MaterialStoreSearchBarViewState
         duration: Duration(milliseconds: 150),
         layoutBuilder: (currentChild, previousChildren) => Stack(
           children: [
-            widget.isSearchOpen
-                ? _expandedSearchBar(context)
-                : _collapsedSearchBar(context, highGraphics),
+            widget.isSearchOpen ? _expandedSearchBar(context) : _collapsedSearchBar(context, highGraphics),
           ],
         ),
       ),
@@ -100,8 +96,7 @@ class _MaterialStoreSearchBarViewState
     final collapsedSearchBarContext = _collapsedSearchBarKey.currentContext;
 
     if (collapsedSearchBarContext != null) {
-      final collapsedSearchBarRenderBox =
-          collapsedSearchBarContext.findRenderObject() as RenderBox;
+      final collapsedSearchBarRenderBox = collapsedSearchBarContext.findRenderObject() as RenderBox;
 
       final size = collapsedSearchBarRenderBox.size;
       if (size != _oldCollapsedSearchBarSize) {
@@ -147,9 +142,7 @@ class _MaterialStoreSearchBarViewState
                           ),
                           child: Text(
                             maxLines: 1,
-                            _isUserInputEmpty()
-                                ? context.l10n.search
-                                : widget.controller.text,
+                            _isUserInputEmpty() ? context.l10n.search : widget.controller.text,
                             overflow: .ellipsis,
                             style: const TextStyle(fontWeight: .w500),
                           ),
@@ -163,9 +156,7 @@ class _MaterialStoreSearchBarViewState
                                 widget.onClear();
                               },
                         icon: Icon(
-                          _isUserInputEmpty()
-                              ? Icons.search_rounded
-                              : Icons.clear_rounded,
+                          _isUserInputEmpty() ? Icons.search_rounded : Icons.clear_rounded,
                         ),
                         iconSize: 30,
                         constraints: const BoxConstraints(minWidth: 32),
@@ -245,8 +236,7 @@ class _MaterialStoreSearchBarViewState
               alpha: transparenvyLevel,
             ),
           ),
-          viewBackgroundColor: context.appColorScheme.surfaceContainerHigh
-              .withValues(alpha: transparenvyLevel),
+          viewBackgroundColor: context.appColorScheme.surfaceContainerHigh.withValues(alpha: transparenvyLevel),
           viewConstraints: BoxConstraints(
             maxWidth: MediaQuery.sizeOf(context).width - 64,
             maxHeight: 314,

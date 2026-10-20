@@ -55,8 +55,7 @@ String dateConversion(String date) {
     default:
       result = 'error';
   }
-  result =
-      '$result${stripedDate.substring(8, 10)}, ${stripedDate.substring(0, 4)} | ${stripedDate.substring(11, 16)}';
+  result = '$result${stripedDate.substring(8, 10)}, ${stripedDate.substring(0, 4)} | ${stripedDate.substring(11, 16)}';
   return result;
   // return stripedDate.substring(5, 7);
 }
@@ -70,12 +69,7 @@ Future<void> globalOpenProductCardCallBack({
   required String tag,
 }) async {
   developer.log(tag);
-  if (context
-          .read<DatabaseBloc>()
-          .state
-          .cachedProductFields?[productId]
-          ?.isEmpty ??
-      true) {
+  if (context.read<DatabaseBloc>().state.cachedProductFields?[productId]?.isEmpty ?? true) {
     context.read<DatabaseBloc>().add(
       DatabaseEventFetchProductFields(productId: productId),
     );

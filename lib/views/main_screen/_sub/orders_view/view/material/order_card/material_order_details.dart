@@ -72,14 +72,12 @@ class MaterialOrderDetails extends StatelessWidget {
                                 context.l10n.support,
                                 style: TextStyle(
                                   fontWeight: .w500,
-                                  color:
-                                      context.appColorScheme.onPrimaryContainer,
+                                  color: context.appColorScheme.onPrimaryContainer,
                                 ),
                               ),
                               Icon(
                                 Icons.send_rounded,
-                                color:
-                                    context.appColorScheme.onPrimaryContainer,
+                                color: context.appColorScheme.onPrimaryContainer,
                               ),
                             ],
                           ),
@@ -152,26 +150,19 @@ class MaterialOrderDetails extends StatelessWidget {
                                   ),
                                   clipBehavior: .antiAlias,
                                   child: CachedNetworkImage(
-                                    imageUrl:
-                                        'https://regred-rainbowbridge.ru/crabpay/images/products/${order.itemsToImagesMap.values.toList()[index]}.png',
+                                    imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/${order.itemsToImagesMap.values.toList()[index]}.png',
                                     fit: .cover,
-                                    errorWidget: (context, error, stackTrace) =>
-                                        Container(
-                                          color: context
-                                              .appColorScheme
-                                              .onInverseSurface,
-                                          alignment: Alignment.center,
-                                          child: Text(context.l10n.emptyKey),
-                                        ),
-                                    placeholder: (context, url) =>
-                                        MaterialShimeringPlaceHolder(
-                                          width: 40,
-                                          height: 40,
-                                          cornerRadius: 8,
-                                          color: context
-                                              .appColorScheme
-                                              .surfaceContainerHigh,
-                                        ),
+                                    errorWidget: (context, error, stackTrace) => Container(
+                                      color: context.appColorScheme.onInverseSurface,
+                                      alignment: Alignment.center,
+                                      child: Text(context.l10n.emptyKey),
+                                    ),
+                                    placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                                      width: 40,
+                                      height: 40,
+                                      cornerRadius: 8,
+                                      color: context.appColorScheme.surfaceContainerHigh,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -184,24 +175,19 @@ class MaterialOrderDetails extends StatelessWidget {
                                       crossAxisAlignment: .start,
                                       children: [
                                         Text(
-                                          order.itemsToProductMap.values
-                                              .toList()[index]
-                                              .name,
+                                          order.itemsToProductMap.values.toList()[index].name,
                                         ),
                                         Text(
                                           '${order.items[index].checkoutPrice}',
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color:
-                                                context.appColorScheme.primary,
+                                            color: context.appColorScheme.primary,
                                             fontWeight: .w600,
                                           ),
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: context
-                                                .appColorScheme
-                                                .surfaceContainerHigh,
+                                            color: context.appColorScheme.surfaceContainerHigh,
                                             borderRadius: .circular(10),
                                           ),
                                           padding: .all(4),
@@ -227,16 +213,12 @@ class MaterialOrderDetails extends StatelessWidget {
                                         context.l10n.support,
                                         style: TextStyle(
                                           fontWeight: .w500,
-                                          color: context
-                                              .appColorScheme
-                                              .onPrimaryContainer,
+                                          color: context.appColorScheme.onPrimaryContainer,
                                         ),
                                       ),
                                       Icon(
                                         Icons.send_rounded,
-                                        color: context
-                                            .appColorScheme
-                                            .onPrimaryContainer,
+                                        color: context.appColorScheme.onPrimaryContainer,
                                       ),
                                     ],
                                   ),

@@ -17,8 +17,7 @@ class DeleteInstancesFromDbView extends StatefulWidget {
   const DeleteInstancesFromDbView({super.key});
 
   @override
-  State<DeleteInstancesFromDbView> createState() =>
-      _DeleteInstancesFromDbViewState();
+  State<DeleteInstancesFromDbView> createState() => _DeleteInstancesFromDbViewState();
 }
 
 class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
@@ -73,9 +72,7 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -103,36 +100,33 @@ class _DeleteInstancesFromDbViewState extends State<DeleteInstancesFromDbView> {
                   Row(
                     children: [
                       Flexible(
-                        child:
-                            BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
-                              builder: (context, state) {
-                                return DropdownMenu<Product>(
-                                  dropdownMenuEntries:
-                                      _productDropDownMenuEntries,
-                                  controller: _productControler,
-                                  onSelected: (value) => setState(() {
-                                    _choosenProduct = value!;
-                                  }),
-                                  expandedInsets: EdgeInsets.zero,
-                                  inputDecorationTheme: InputDecorationTheme(
-                                    filled: true,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                        color: context.appColorScheme.primary,
-                                        width: 1,
-                                      ),
-                                    ),
+                        child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
+                          builder: (context, state) {
+                            return DropdownMenu<Product>(
+                              dropdownMenuEntries: _productDropDownMenuEntries,
+                              controller: _productControler,
+                              onSelected: (value) => setState(() {
+                                _choosenProduct = value!;
+                              }),
+                              expandedInsets: EdgeInsets.zero,
+                              inputDecorationTheme: InputDecorationTheme(
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide: BorderSide(
+                                    color: context.appColorScheme.primary,
+                                    width: 1,
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       IconButton(
                         onPressed: () {
                           getIt<InnerLoggerHandler>().logBreadcrumb(
-                            message:
-                                'DeleteInstancesFromDbView onDeleteButtonPressed',
+                            message: 'DeleteInstancesFromDbView onDeleteButtonPressed',
                             data: {
                               'choosenProduct': _choosenProduct?.toString(),
                             },

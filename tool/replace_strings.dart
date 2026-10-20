@@ -20,10 +20,7 @@ void main() async {
   });
 
   final dir = Directory('lib');
-  final files = dir
-      .listSync(recursive: true)
-      .whereType<File>()
-      .where((f) => f.path.endsWith('.dart'));
+  final files = dir.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.dart'));
 
   int totalReplacements = 0;
 
@@ -55,10 +52,8 @@ void main() async {
 
     if (fileChanged) {
       // Add the l10n extension import if missing so context.l10n compiles
-      if (!content.contains('l10n_extension.dart') &&
-          !content.contains('app_localizations.dart')) {
-        content =
-            "import 'package:crabpay/core/extensions/l10n_extension.dart';\n$content";
+      if (!content.contains('l10n_extension.dart') && !content.contains('app_localizations.dart')) {
+        content = "import 'package:crabpay/core/extensions/l10n_extension.dart';\n$content";
       }
       await file.writeAsString(content);
     }

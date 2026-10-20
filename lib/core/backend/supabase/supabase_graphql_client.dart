@@ -15,9 +15,7 @@ class SupabaseGraphQLClient {
       getToken: () async {
         final session = Supabase.instance.client.auth.currentSession;
         // Fallback to the publishable anon key if the user is not logged in
-        return session != null
-            ? 'Bearer ${session.accessToken}'
-            : 'Bearer ${supabaseAccessConf['publishableKey']!}';
+        return session != null ? 'Bearer ${session.accessToken}' : 'Bearer ${supabaseAccessConf['publishableKey']!}';
       },
     );
 

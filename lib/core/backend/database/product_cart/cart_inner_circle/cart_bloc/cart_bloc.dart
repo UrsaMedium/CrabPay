@@ -63,15 +63,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       await _userCartItemAmountSub?.cancel();
       _activeUserId = event.userId;
-      _userCartItemAmountSub = cartHandler
-          .streamUserCartItemAmount(_activeUserId!)
-          .listen((userCartItemAmount) {
-            add(
-              CartEventUpdateUserCartItemAmountFromStream(
-                amount: userCartItemAmount,
-              ),
-            );
-          });
+      _userCartItemAmountSub = cartHandler.streamUserCartItemAmount(_activeUserId!).listen((userCartItemAmount) {
+        add(
+          CartEventUpdateUserCartItemAmountFromStream(
+            amount: userCartItemAmount,
+          ),
+        );
+      });
     });
 
     on<CartEventUpdateUserCartItemAmountFromStream>((event, emit) {
@@ -216,9 +214,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         emit(state.copyWith(states: CartStates.loading));
         await cartHandler.deleteCartItem(event.cartItem.id);
-        final reducedListOfItmes = state.cartItemsToBuy
-            ?.where((item) => item.id != event.cartItem.id)
-            .toList();
+        final reducedListOfItmes = state.cartItemsToBuy?.where((item) => item.id != event.cartItem.id).toList();
         emit(
           state.copyWith(
             cartItemsToBuy: reducedListOfItmes,
@@ -416,8 +412,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       developer.log('----');
       try {
         emit(state.copyWith(states: CartStates.loading));
-        final productCartItemAmount = await cartHandler
-            .getProductCartItemAmount(event.userId, event.productId);
+        final productCartItemAmount = await cartHandler.getProductCartItemAmount(event.userId, event.productId);
         emit(
           state.copyWith(
             productCartItemAmount: productCartItemAmount,
@@ -443,8 +438,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           event.productId,
         );
         if (didDelete) {
-          final updatedProductAmount = await cartHandler
-              .getProductCartItemAmount(event.userId, event.productId);
+          final updatedProductAmount = await cartHandler.getProductCartItemAmount(event.userId, event.productId);
           emit(
             state.copyWith(
               productCartItemAmount: updatedProductAmount,

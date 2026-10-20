@@ -25,8 +25,7 @@ class UpdateFieldAdminPanelView extends StatefulWidget {
   });
 
   @override
-  State<UpdateFieldAdminPanelView> createState() =>
-      _UpdateFieldAdminPanelViewState();
+  State<UpdateFieldAdminPanelView> createState() => _UpdateFieldAdminPanelViewState();
 }
 
 class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
@@ -39,19 +38,15 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
     if (widget.fieldId == null || widget.productId == null) {
       Fluttertoast.showToast(msg: context.l10n.failedToPassFieldData);
       getIt<InnerLoggerHandler>().logBreadcrumb(
-        message:
-            'UpdateFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
+        message: 'UpdateFieldAdminPanelView: initState: failed to pass field data: fieldId: ${widget.fieldId} , productId: ${widget.productId}',
       );
       context.pop();
     }
-    _currentField = context
-        .read<DatabaseBloc>()
-        .state
-        .cachedProductFields![widget.productId]
-        ?.firstWhere((element) => element.id == widget.fieldId);
+    _currentField = context.read<DatabaseBloc>().state.cachedProductFields![widget.productId]?.firstWhere(
+      (element) => element.id == widget.fieldId,
+    );
     getIt<InnerLoggerHandler>().logBreadcrumb(
-      message:
-          'UpdateFieldAdminPanelView: initState: _currentField: $_currentField',
+      message: 'UpdateFieldAdminPanelView: initState: _currentField: $_currentField',
     );
     super.initState();
   }
@@ -62,13 +57,10 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         getIt<InnerLoggerHandler>().logBreadcrumb(
-          message:
-              'UpdateFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
+          message: 'UpdateFieldAdminPanelView: onPopInvokedWithResult: didPop: $didPop, result: $result',
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.support.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.support.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -92,8 +84,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                 padding: const EdgeInsets.only(right: 20.0),
                 child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                   builder: (context, state) {
-                    final bool beingLoaded =
-                        state.states == DatabaseStatesAdmin.dbLoading;
+                    final bool beingLoaded = state.states == DatabaseStatesAdmin.dbLoading;
                     return Row(
                       children: [
                         Text(context.l10n.delete),
@@ -101,8 +92,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                           iconSize: 32,
                           onPressed: () async {
                             getIt<InnerLoggerHandler>().logBreadcrumb(
-                              message:
-                                  'UpdateFieldAdminPanelView: onDeleteButtonPressed',
+                              message: 'UpdateFieldAdminPanelView: onDeleteButtonPressed',
                               data: {
                                 'currentField': _currentField,
                                 'beingLoaded': beingLoaded,
@@ -113,9 +103,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 msg: context.l10n.pleaseWait,
                               );
                             } else {
-                              final delete =
-                                  await showOnDatabaseItemDelete(context) ??
-                                  false;
+                              final delete = await showOnDatabaseItemDelete(context) ?? false;
                               if (delete && context.mounted) {
                                 Fluttertoast.showToast(
                                   msg: context.l10n.deleting,
@@ -213,23 +201,15 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                           return ElevatedButton(
                             onPressed: () {
                               getIt<InnerLoggerHandler>().logBreadcrumb(
-                                message:
-                                    'UpdateFieldAdminPanelView: onUpdateButtonPressed',
+                                message: 'UpdateFieldAdminPanelView: onUpdateButtonPressed',
                                 data: {
                                   'currentField': _currentField,
-                                  'beingLoaded':
-                                      state.states ==
-                                      DatabaseStatesAdmin.dbLoading,
+                                  'beingLoaded': state.states == DatabaseStatesAdmin.dbLoading,
                                 },
                               );
-                              if (state.states !=
-                                  DatabaseStatesAdmin.dbLoading) {
-                                final order =
-                                    int.tryParse(_fieldOrder.text.trim()) ??
-                                    _currentField!.order;
-                                final fieldName = _fieldName.text.trim() != ''
-                                    ? _fieldName.text.trim()
-                                    : _currentField!.fieldName;
+                              if (state.states != DatabaseStatesAdmin.dbLoading) {
+                                final order = int.tryParse(_fieldOrder.text.trim()) ?? _currentField!.order;
+                                final fieldName = _fieldName.text.trim() != '' ? _fieldName.text.trim() : _currentField!.fieldName;
 
                                 final newField = ProductField(
                                   id: _currentField!.id,
@@ -238,21 +218,12 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                   fieldName: fieldName,
                                   handler: _currentField!.handler,
                                   isPriceImage: _currentField!.isPriceImage,
-                                  priceImages:
-                                      _currentField!.handler == 'InputField' &&
-                                          _currentField!.isPriceImage &&
-                                          _fieldName.text.trim() != ''
+                                  priceImages: _currentField!.handler == 'InputField' && _currentField!.isPriceImage && _fieldName.text.trim() != ''
                                       ? {
-                                          fieldName: _currentField!
-                                              .priceImages!
-                                              .values
-                                              .first,
+                                          fieldName: _currentField!.priceImages!.values.first,
                                         }
                                       : _currentField!.priceImages,
-                                  expectedData:
-                                      _currentField!.handler == 'InputField'
-                                      ? [_currentField!.fieldName]
-                                      : _currentField!.expectedData,
+                                  expectedData: _currentField!.handler == 'InputField' ? [_currentField!.fieldName] : _currentField!.expectedData,
                                 );
                                 context.read<DatabaseBlocAdmin>().add(
                                   DatabaseEventUpdateProductFieldAdmin(
@@ -267,9 +238,7 @@ class _UpdateFieldAdminPanelViewState extends State<UpdateFieldAdminPanelView> {
                                 Fluttertoast.showToast(msg: 'Failed');
                               }
                             },
-                            child: state.states != DatabaseStatesAdmin.dbLoading
-                                ? Text(context.l10n.updateTheField)
-                                : CircularProgressIndicator(),
+                            child: state.states != DatabaseStatesAdmin.dbLoading ? Text(context.l10n.updateTheField) : CircularProgressIndicator(),
                           );
                         },
                       ),

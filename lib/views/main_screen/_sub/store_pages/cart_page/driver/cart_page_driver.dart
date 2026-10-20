@@ -26,8 +26,7 @@ class CartPageDriver extends StatefulWidget {
   State<CartPageDriver> createState() => _CartPageDriverState();
 }
 
-class _CartPageDriverState extends State<CartPageDriver>
-    with AutomaticKeepAliveClientMixin {
+class _CartPageDriverState extends State<CartPageDriver> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -69,8 +68,7 @@ class _CartPageDriverState extends State<CartPageDriver>
   }
 
   void _onBuyPressed(BuildContext context) async {
-    if (_cartPageCubit.state.totalPrice != 0 ||
-        (_cartPageCubit.state.cartItemsTuBuy?.isNotEmpty ?? false)) {
+    if (_cartPageCubit.state.totalPrice != 0 || (_cartPageCubit.state.cartItemsTuBuy?.isNotEmpty ?? false)) {
       if (context.read<AuthBloc>().state.currentUser.isAnonymous) {
         final didRegistered = await showOnUnauthBuyToRegister(context);
         if ((didRegistered ?? false) && context.mounted) {
@@ -124,9 +122,7 @@ class _CartPageDriverState extends State<CartPageDriver>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocListener<CartBloc, CartState>(
-      listenWhen: (previous, current) =>
-          previous.states == CartStates.loading &&
-          current.states != CartStates.loading,
+      listenWhen: (previous, current) => previous.states == CartStates.loading && current.states != CartStates.loading,
       listener: (context, state) {
         if (!(_refreshCompleter?.isCompleted ?? true)) {
           _refreshCompleter!.complete();
@@ -137,8 +133,7 @@ class _CartPageDriverState extends State<CartPageDriver>
         child: Builder(
           builder: (context) {
             return MaterialCartPageView(
-              onACartItemDelete: (toDelete) =>
-                  _onACartItemDelete(cartItem: toDelete, context: context),
+              onACartItemDelete: (toDelete) => _onACartItemDelete(cartItem: toDelete, context: context),
               onBuyPressed: () => _onBuyPressed(context),
               onShowBottonSheet: () => _onShowBottonSheet(context),
               reFresher: () => _reFresher(context),

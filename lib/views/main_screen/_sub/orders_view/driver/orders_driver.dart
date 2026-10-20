@@ -43,21 +43,13 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     context.read<CartBloc>().add(
       CartEventFetchNotDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context
-            .read<CartBloc>()
-            .state
-            .notDeliveredOrders
-            ?.nextPageToken,
+        pageToken: context.read<CartBloc>().state.notDeliveredOrders?.nextPageToken,
       ),
     );
     context.read<CartBloc>().add(
       CartEventFetchDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context
-            .read<CartBloc>()
-            .state
-            .deliveredOrders
-            ?.nextPageToken,
+        pageToken: context.read<CartBloc>().state.deliveredOrders?.nextPageToken,
       ),
     );
     _pageController = PageController(initialPage: 0);
@@ -74,17 +66,14 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     Widget result;
     if (index == 0) {
       result = MaterialNotDeliveredOrdersPage(
-        onLoadMoreNotDeliveredOrders: () =>
-            _onLoadMoreNotDeliveredOrders(context),
-        onSupportSendMessagePressed: (message) =>
-            _onSupportSendMessagePressed(context, message),
+        onLoadMoreNotDeliveredOrders: () => _onLoadMoreNotDeliveredOrders(context),
+        onSupportSendMessagePressed: (message) => _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else if (index == 1) {
       result = MaterialDeliveredOrdersPage(
         onLoadMoreDeliveredOrders: () => _onLoadMoreDeliveredOrders(context),
-        onSupportSendMessagePressed: (message) =>
-            _onSupportSendMessagePressed(context, message),
+        onSupportSendMessagePressed: (message) => _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     } else {
@@ -95,8 +84,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
           toDate: p1,
           orderId: p2,
         ),
-        onSupportSendMessagePressed: (message) =>
-            _onSupportSendMessagePressed(context, message),
+        onSupportSendMessagePressed: (message) => _onSupportSendMessagePressed(context, message),
         onOpenCardDetails: (p0) => _onOpenCardDetails(context, p0),
       );
     }
@@ -126,11 +114,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     context.read<CartBloc>().add(
       CartEventFetchNotDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context
-            .read<CartBloc>()
-            .state
-            .notDeliveredOrders
-            ?.nextPageToken,
+        pageToken: context.read<CartBloc>().state.notDeliveredOrders?.nextPageToken,
       ),
     );
   }
@@ -140,11 +124,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     context.read<CartBloc>().add(
       CartEventFetchDeliveredOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context
-            .read<CartBloc>()
-            .state
-            .deliveredOrders
-            ?.nextPageToken,
+        pageToken: context.read<CartBloc>().state.deliveredOrders?.nextPageToken,
       ),
     );
   }
@@ -159,11 +139,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
     context.read<CartBloc>().add(
       CartEventFetchSearchedOrders(
         userId: context.read<AuthBloc>().state.currentUser.id,
-        pageToken: context
-            .read<CartBloc>()
-            .state
-            .deliveredOrders
-            ?.nextPageToken,
+        pageToken: context.read<CartBloc>().state.deliveredOrders?.nextPageToken,
         fromDate: fromDate,
         toDate: toDate,
         orderId: orderId,
@@ -173,9 +149,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
 
   void _onSearchBarPressed(BuildContext context) async {
     final dateRange = await openDateRangePicker(context);
-    if (dateRange?.startDate != null &&
-        dateRange?.endDate != null &&
-        context.mounted) {
+    if (dateRange?.startDate != null && dateRange?.endDate != null && context.mounted) {
       _ordersViewCubit.setSearchFilterParameters(
         dateRange?.startDate,
         dateRange?.endDate,
@@ -221,8 +195,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
       builder: (context) {
         return MaterialOrderDetails(
           order: order,
-          onSupportSendMessagePressed: (message) =>
-              _onSupportSendMessagePressed(context, message),
+          onSupportSendMessagePressed: (message) => _onSupportSendMessagePressed(context, message),
         );
       },
     );
@@ -240,15 +213,12 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: BlocProvider.value(
         value: _ordersViewCubit,
         child: BlocListener<ChatBloc, ChatState>(
-          listenWhen: (previous, current) =>
-              current.status == ChatStates.shadowMessageSent,
+          listenWhen: (previous, current) => current.status == ChatStates.shadowMessageSent,
           listener: (context, state) {
             context.go(AppRoutes.support.path);
           },
@@ -261,8 +231,7 @@ class _OrdersViewDriverState extends State<OrdersViewDriver> {
 
               return MaterialOrdersView(
                 onBackButtonPressed: () => _onBackButtonPressed(context),
-                pageBuilder: (context, index) =>
-                    _pageBuilder(context: context, index: index),
+                pageBuilder: (context, index) => _pageBuilder(context: context, index: index),
                 onPageSwiped: (index) => _onPageSwiped(index),
                 pageController: _pageController,
                 onPageSelected: (index) => _onPageSelected(index),

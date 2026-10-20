@@ -57,8 +57,7 @@ class MaterialStorePage extends StatelessWidget {
             ),
             child: MaterialStoreSearchBarDriver(
               products: context.read<DatabaseBloc>().state.products ?? [],
-              onSearchSubmitedCallBack: (prdcts) =>
-                  onSearchSubmitedCallBack(prdcts),
+              onSearchSubmitedCallBack: (prdcts) => onSearchSubmitedCallBack(prdcts),
             ),
           ),
         ],
@@ -80,8 +79,7 @@ class _CategoryCard extends StatelessWidget {
     final products = context.select<StorePageCubit, List<Product>>(
       (cubit) => (cubit.state.products ?? [])
           .where(
-            (element) =>
-                element.category == (index == 0 ? 'Mobile Game' : 'Service'),
+            (element) => element.category == (index == 0 ? 'Mobile Game' : 'Service'),
           )
           .toList(),
     );
@@ -100,9 +98,7 @@ class _CategoryCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    index == 0
-                        ? context.l10n.mobileGames
-                        : context.l10n.services,
+                    index == 0 ? context.l10n.mobileGames : context.l10n.services,
                     style: TextStyle(
                       color: context.appColorScheme.secondary,
                       fontSize: 20,
@@ -143,8 +139,7 @@ class _CategoryCard extends StatelessWidget {
                           Spacer(),
                           Hero(
                             tag: subTag,
-                            createRectTween: (begin, end) =>
-                                MaterialRectArcTween(begin: begin, end: end),
+                            createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                             child: Material(
                               color: Colors.transparent,
                               borderRadius: .circular(24),
@@ -156,12 +151,9 @@ class _CategoryCard extends StatelessWidget {
                                   onTap: () => onCategoryViewOpen(subTag),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: context
-                                          .appColorScheme
-                                          .secondaryContainer
-                                          .withValues(
-                                            alpha: highGraphics ? .4 : .9,
-                                          ),
+                                      color: context.appColorScheme.secondaryContainer.withValues(
+                                        alpha: highGraphics ? .4 : .9,
+                                      ),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -172,9 +164,7 @@ class _CategoryCard extends StatelessWidget {
                                         context.l10n.more,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: context
-                                              .appColorScheme
-                                              .onSecondaryContainer,
+                                          color: context.appColorScheme.onSecondaryContainer,
                                         ),
                                       ),
                                     ),

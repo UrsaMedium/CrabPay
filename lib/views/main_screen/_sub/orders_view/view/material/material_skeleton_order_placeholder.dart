@@ -39,8 +39,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             'wer 23, qf32 | 23:43',
@@ -53,8 +52,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             'Order: eijslo93ie',
@@ -72,9 +70,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: .circular(8),
-                                  color: context
-                                      .appColorScheme
-                                      .surfaceContainerHighest,
+                                  color: context.appColorScheme.surfaceContainerHighest,
                                 ),
                                 child: Text(
                                   'Support',
@@ -83,9 +79,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                               ),
                               Icon(
                                 Icons.square_rounded,
-                                color: context
-                                    .appColorScheme
-                                    .surfaceContainerHighest,
+                                color: context.appColorScheme.surfaceContainerHighest,
                               ),
                             ],
                           ),
@@ -123,8 +117,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             'Delivered',
@@ -134,8 +127,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             '2',
@@ -150,8 +142,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             'Products',
@@ -161,8 +152,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             '2',
@@ -177,8 +167,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             'order PRice',
@@ -189,8 +178,7 @@ class MaterialSkeletonOrderPlaceHolder extends StatelessWidget {
                           width: 32,
                           decoration: BoxDecoration(
                             borderRadius: .circular(8),
-                            color:
-                                context.appColorScheme.surfaceContainerHighest,
+                            color: context.appColorScheme.surfaceContainerHighest,
                           ),
                           child: Text(
                             '3',

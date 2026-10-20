@@ -66,17 +66,13 @@ class MaterialRegisterView extends StatelessWidget {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: emailError != null
-                            ? context.appColorScheme.error
-                            : context.appColorScheme.primaryFixed,
+                        color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: emailError != null
-                            ? context.appColorScheme.error
-                            : context.appColorScheme.primaryFixed,
+                        color: emailError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
@@ -97,17 +93,13 @@ class MaterialRegisterView extends StatelessWidget {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: passwordError != null
-                            ? context.appColorScheme.error
-                            : context.appColorScheme.primaryFixed,
+                        color: passwordError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: passwordError != null
-                            ? context.appColorScheme.error
-                            : context.appColorScheme.primaryFixed,
+                        color: passwordError != null ? context.appColorScheme.error : context.appColorScheme.primaryFixed,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),

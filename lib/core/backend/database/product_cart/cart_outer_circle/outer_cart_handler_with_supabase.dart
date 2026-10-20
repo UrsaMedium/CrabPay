@@ -32,8 +32,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
   String? _activeUserId;
 
   final _userCartItemAmountController = StreamController<int>.broadcast();
-  final _pendingOrderController =
-      StreamController<List<PendingOrder>>.broadcast();
+  final _pendingOrderController = StreamController<List<PendingOrder>>.broadcast();
 
   final AppLifecycleService _appLifecycleService;
   OuterCartHandlerWithSupabase({
@@ -60,8 +59,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
 
   void _initConncetionMonitor() {
     _statusSub = _connectionMonitor.statusStream.listen((connectionStatus) {
-      if (connectionStatus == ServerConnectionStatus.online &&
-          _activeUserId != null) {
+      if (connectionStatus == ServerConnectionStatus.online && _activeUserId != null) {
         _connectToPendingOrder(_activeUserId!);
         _connectToSupabase(_activeUserId!);
       } else if (connectionStatus == ServerConnectionStatus.offline) {
@@ -149,8 +147,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
           })
           .handleError((Object error, StackTrace stackTrace) {
             getIt<InnerLoggerHandler>().recordException(
-              error:
-                  'Runtime WebSocket Error in userCartItemAmountStream: $error',
+              error: 'Runtime WebSocket Error in userCartItemAmountStream: $error',
               stackTrace: stackTrace,
             );
             _userCartItemAmountController.addError(error);
@@ -214,22 +211,15 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         DateTime? paredCreatedAt;
         DateTime? parsedStatusChangedAt;
 
-        if (rawCreatedAt != null &&
-            rawCreatedAt is String &&
-            rawCreatedAt.isNotEmpty) {
+        if (rawCreatedAt != null && rawCreatedAt is String && rawCreatedAt.isNotEmpty) {
           paredCreatedAt = DateTime.parse(rawCreatedAt).toLocal();
         }
 
-        if (rawStatusChangedAt != null &&
-            rawStatusChangedAt is String &&
-            rawStatusChangedAt.isNotEmpty) {
+        if (rawStatusChangedAt != null && rawStatusChangedAt is String && rawStatusChangedAt.isNotEmpty) {
           parsedStatusChangedAt = DateTime.parse(rawStatusChangedAt).toLocal();
         }
 
-        final Map<String, dynamic> decodedPurchaseData =
-            rawPurchaseData is String
-            ? jsonDecode(rawPurchaseData)
-            : Map<String, dynamic>.from(rawPurchaseData);
+        final Map<String, dynamic> decodedPurchaseData = rawPurchaseData is String ? jsonDecode(rawPurchaseData) : Map<String, dynamic>.from(rawPurchaseData);
 
         final Map<String, String> finalPurchaseData = decodedPurchaseData.map(
           (k, v) => MapEntry(k, v.toString()),
@@ -351,11 +341,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final pageInfo = collection['pageInfo'] ?? {};
       final edges = collection['edges'] as List? ?? [];
 
-      final List<String> paymentIds = edges
-          .map((edge) => edge['node']['paymentId'] as String?)
-          .where((id) => id != null && id.isNotEmpty)
-          .cast<String>()
-          .toList();
+      final List<String> paymentIds = edges.map((edge) => edge['node']['paymentId'] as String?).where((id) => id != null && id.isNotEmpty).cast<String>().toList();
 
       return PaginatedResult<String>(
         objects: paymentIds,
@@ -465,11 +451,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final collection = result.data?['userUniquePaymentCollection'] ?? {};
       final edges = collection['edges'] as List? ?? [];
 
-      final List<String> paymentIds = edges
-          .map((edge) => edge['node']['paymentId'] as String?)
-          .where((id) => id != null && id.isNotEmpty)
-          .cast<String>()
-          .toList();
+      final List<String> paymentIds = edges.map((edge) => edge['node']['paymentId'] as String?).where((id) => id != null && id.isNotEmpty).cast<String>().toList();
 
       // 6. Calculate manual pagination bounds based on offset length
       final bool hasMore = edges.length == 4;
@@ -537,11 +519,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final pageInfo = collection['pageInfo'] ?? {};
       final edges = collection['edges'] as List? ?? [];
 
-      final List<String> paymentIds = edges
-          .map((edge) => edge['node']['paymentId'] as String?)
-          .where((id) => id != null && id.isNotEmpty)
-          .cast<String>()
-          .toList();
+      final List<String> paymentIds = edges.map((edge) => edge['node']['paymentId'] as String?).where((id) => id != null && id.isNotEmpty).cast<String>().toList();
 
       return PaginatedResult<String>(
         objects: paymentIds,
@@ -748,10 +726,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
         throw Exception(result.exception.toString());
       }
 
-      final nodes =
-          result.data?['ofUserOfProductCartItemCounterCollection']['edges']
-              as List? ??
-          [];
+      final nodes = result.data?['ofUserOfProductCartItemCounterCollection']['edges'] as List? ?? [];
 
       if (nodes.isEmpty) return 0;
 
@@ -795,8 +770,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       final fetchResult = await retryer.retry(
         () => _client.query(fetchOptions),
       );
-      final nodes =
-          fetchResult.data?['cartItemCollection']['edges'] as List? ?? [];
+      final nodes = fetchResult.data?['cartItemCollection']['edges'] as List? ?? [];
 
       if (nodes.isEmpty) return false;
 
@@ -812,9 +786,7 @@ class OuterCartHandlerWithSupabase implements InnerCartHandler {
       );
 
       final deleteResult = await _mutateAndCheck(deleteOptions);
-      final rowsDeleted =
-          deleteResult.data?['deleteFromcartItemCollection']['affectedCount'] ??
-          0;
+      final rowsDeleted = deleteResult.data?['deleteFromcartItemCollection']['affectedCount'] ?? 0;
 
       return rowsDeleted > 0;
     } catch (e) {

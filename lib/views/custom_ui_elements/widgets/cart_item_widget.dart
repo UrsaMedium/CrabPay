@@ -38,18 +38,10 @@ class _CartItemWidgetDriverState extends State<CartItemWidgetDriver> {
     }
     details = details.trimRight();
 
-    surfaceTintColor =
-        context
-                .read<DatabaseBloc>()
-                .state
-                .cachedProductImageDominantColor?[widget.product.id] ==
-            null
+    surfaceTintColor = context.read<DatabaseBloc>().state.cachedProductImageDominantColor?[widget.product.id] == null
         ? null
         : Color(
-            context
-                .read<DatabaseBloc>()
-                .state
-                .cachedProductImageDominantColor![widget.product.id]!,
+            context.read<DatabaseBloc>().state.cachedProductImageDominantColor![widget.product.id]!,
           );
     super.initState();
   }
@@ -134,25 +126,21 @@ class MaterialCartItemWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: CachedNetworkImage(
-                          imageUrl:
-                              'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
+                          imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/${product.image}.png',
                           fit: .cover,
                           height: 54,
                           width: 54,
-                          errorWidget: (context, error, stackTrace) =>
-                              Container(
-                                color: context.appColorScheme.onInverseSurface,
-                                alignment: Alignment.center,
-                                child: Text(context.l10n.emptyKey),
-                              ),
-                          placeholder: (context, url) =>
-                              MaterialShimeringPlaceHolder(
-                                width: 54,
-                                height: 54,
-                                cornerRadius: 30,
-                                color:
-                                    context.appColorScheme.surfaceContainerHigh,
-                              ),
+                          errorWidget: (context, error, stackTrace) => Container(
+                            color: context.appColorScheme.onInverseSurface,
+                            alignment: Alignment.center,
+                            child: Text(context.l10n.emptyKey),
+                          ),
+                          placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                            width: 54,
+                            height: 54,
+                            cornerRadius: 30,
+                            color: context.appColorScheme.surfaceContainerHigh,
+                          ),
                         ),
                       ),
                       Expanded(

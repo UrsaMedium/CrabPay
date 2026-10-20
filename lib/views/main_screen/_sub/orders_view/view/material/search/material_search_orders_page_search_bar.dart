@@ -51,14 +51,12 @@ class MaterialSearchOrdersPageSearchBar extends StatelessWidget {
                         ),
                         Builder(
                           builder: (context) {
-                            final fromDate = context
-                                .select<OrdersViewCubit, DateTime?>(
-                                  (cubit) => cubit.state.fromDate,
-                                );
-                            final toDate = context
-                                .select<OrdersViewCubit, DateTime?>(
-                                  (cubit) => cubit.state.toDate,
-                                );
+                            final fromDate = context.select<OrdersViewCubit, DateTime?>(
+                              (cubit) => cubit.state.fromDate,
+                            );
+                            final toDate = context.select<OrdersViewCubit, DateTime?>(
+                              (cubit) => cubit.state.toDate,
+                            );
                             return Row(
                               mainAxisAlignment: .spaceAround,
                               children: [

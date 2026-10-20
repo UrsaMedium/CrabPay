@@ -36,16 +36,14 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
     });
 
     on<AdminEventEntersPriceImageFilling>((event, emit) {
-      DataAndWidgetsPreperation dataAndWidgetsPreperation =
-          DataAndWidgetsPreperation(context: event.context);
+      DataAndWidgetsPreperation dataAndWidgetsPreperation = DataAndWidgetsPreperation(context: event.context);
       emit(
         state.copyWith(dataAndWidgetsPreperation: dataAndWidgetsPreperation),
       );
     });
 
     on<AdminEventPriceFillingDataIsPrepared>(
-      (event, emit) =>
-          emit(state.copyWith(states: AdminStates.dataForSpaceFillingIsReady)),
+      (event, emit) => emit(state.copyWith(states: AdminStates.dataForSpaceFillingIsReady)),
     );
 
     on<AdminEventSubmitsPriceImage>((event, emit) {

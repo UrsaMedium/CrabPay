@@ -45,8 +45,7 @@ class OrdersOnPaymentSheetDriver extends StatelessWidget {
     );
     return MaterialOrdersOnPaymentSheet(
       orders: pendingOrders,
-      onPaymentLinkPressed: (paymentLink) =>
-          _onPaymentLinkPressed(context, paymentLink),
+      onPaymentLinkPressed: (paymentLink) => _onPaymentLinkPressed(context, paymentLink),
       onOrderDetailsPressed: (order) => _onOrderDetailsPressed(
         context,
         context.read<DatabaseBloc>().state.products ?? [],
@@ -93,9 +92,7 @@ class MaterialOrdersOnPaymentSheet extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    orders.isEmpty
-                        ? context.l10n.howDidYouGEtHere
-                        : context.l10n.waitingYourPayment,
+                    orders.isEmpty ? context.l10n.howDidYouGEtHere : context.l10n.waitingYourPayment,
                     style: TextStyle(
                       color: context.appColorScheme.onSecondary,
                       fontSize: 16,
@@ -112,13 +109,11 @@ class MaterialOrdersOnPaymentSheet extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: orders.length,
                   itemExtent: 100,
-                  itemBuilder: (context, index) =>
-                      OrderContainerForOrdersOnPaymentSheet(
-                        order: orders[index],
-                        onPaymentLinkPressed: onPaymentLinkPressed,
-                        onDetailsPressed: (order) =>
-                            onOrderDetailsPressed(order),
-                      ),
+                  itemBuilder: (context, index) => OrderContainerForOrdersOnPaymentSheet(
+                    order: orders[index],
+                    onPaymentLinkPressed: onPaymentLinkPressed,
+                    onDetailsPressed: (order) => onOrderDetailsPressed(order),
+                  ),
                 ),
               ),
             ),
@@ -307,26 +302,19 @@ class _OrderDetails extends StatelessWidget {
                                   ),
                                   clipBehavior: .antiAlias,
                                   child: CachedNetworkImage(
-                                    imageUrl:
-                                        'https://regred-rainbowbridge.ru/crabpay/images/products/${(products.firstWhere((element) => element.id == order.cartItems[index].productId)).image}.png',
+                                    imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/${(products.firstWhere((element) => element.id == order.cartItems[index].productId)).image}.png',
                                     fit: .cover,
-                                    errorWidget: (context, error, stackTrace) =>
-                                        Container(
-                                          color: context
-                                              .appColorScheme
-                                              .onInverseSurface,
-                                          alignment: Alignment.center,
-                                          child: Text(context.l10n.emptyKey),
-                                        ),
-                                    placeholder: (context, url) =>
-                                        MaterialShimeringPlaceHolder(
-                                          width: 40,
-                                          height: 40,
-                                          cornerRadius: 8,
-                                          color: context
-                                              .appColorScheme
-                                              .surfaceContainerHigh,
-                                        ),
+                                    errorWidget: (context, error, stackTrace) => Container(
+                                      color: context.appColorScheme.onInverseSurface,
+                                      alignment: Alignment.center,
+                                      child: Text(context.l10n.emptyKey),
+                                    ),
+                                    placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                                      width: 40,
+                                      height: 40,
+                                      cornerRadius: 8,
+                                      color: context.appColorScheme.surfaceContainerHigh,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -345,16 +333,13 @@ class _OrderDetails extends StatelessWidget {
                                           '${order.cartItems[index].checkoutPrice}',
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color:
-                                                context.appColorScheme.primary,
+                                            color: context.appColorScheme.primary,
                                             fontWeight: .w600,
                                           ),
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: context
-                                                .appColorScheme
-                                                .surfaceContainerHigh,
+                                            color: context.appColorScheme.surfaceContainerHigh,
                                             borderRadius: .circular(10),
                                           ),
                                           padding: .all(4),

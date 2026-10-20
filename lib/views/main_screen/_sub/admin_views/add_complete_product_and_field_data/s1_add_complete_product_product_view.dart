@@ -7,8 +7,7 @@ import 'package:crabpay/views/custom_ui_elements/utilities/ui_utilities.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_bloc.dart';
 import 'package:crabpay/views/main_screen/_sub/admin_views/add_complete_product_and_field_data/bloc/admin_event.dart';
 import 'package:crabpay/core/app_routes/app_routes.dart';
-import 'package:crabpay/views/custom_ui_elements/dialogs/generic_dialog_text_input.dart'
-    show showOnInputDialog;
+import 'package:crabpay/views/custom_ui_elements/dialogs/generic_dialog_text_input.dart' show showOnInputDialog;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,12 +20,10 @@ class AddCompleteProductProductView extends StatefulWidget {
   const AddCompleteProductProductView({super.key});
 
   @override
-  State<AddCompleteProductProductView> createState() =>
-      _AddCompleteProductProductViewState();
+  State<AddCompleteProductProductView> createState() => _AddCompleteProductProductViewState();
 }
 
-class _AddCompleteProductProductViewState
-    extends State<AddCompleteProductProductView> {
+class _AddCompleteProductProductViewState extends State<AddCompleteProductProductView> {
   String? _description;
   String? _imageUrl;
   String? _productNameUI;
@@ -78,9 +75,7 @@ class _AddCompleteProductProductViewState
         if (didPop) {
           return;
         }
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(

@@ -23,9 +23,7 @@ class ConnectionMonitorCubit extends Cubit<ConnectionState> {
   final InnerConnectionMonitor _connectionMonitor;
   late final StreamSubscription<ServerConnectionStatus> _statusSub;
 
-  ConnectionMonitorCubit({required InnerConnectionMonitor connectionMonitor})
-    : _connectionMonitor = connectionMonitor,
-      super(ConnectionState(status: connectionMonitor.currentStatus)) {
+  ConnectionMonitorCubit({required InnerConnectionMonitor connectionMonitor}) : _connectionMonitor = connectionMonitor, super(ConnectionState(status: connectionMonitor.currentStatus)) {
     _statusSub = _connectionMonitor.statusStream.listen(
       (status) => emit(ConnectionState(status: status)),
     );

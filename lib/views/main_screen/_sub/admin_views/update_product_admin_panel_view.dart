@@ -21,16 +21,13 @@ class UpdateProductAdminPanelView extends StatefulWidget {
   const UpdateProductAdminPanelView({super.key, required this.productId});
 
   @override
-  State<UpdateProductAdminPanelView> createState() =>
-      _UpdateProductAdminPanelViewState();
+  State<UpdateProductAdminPanelView> createState() => _UpdateProductAdminPanelViewState();
 }
 
-class _UpdateProductAdminPanelViewState
-    extends State<UpdateProductAdminPanelView> {
+class _UpdateProductAdminPanelViewState extends State<UpdateProductAdminPanelView> {
   List<Product>? _products;
   List<DropdownMenuEntry<Product>>? _productDropDownMenuEntries;
-  final TextEditingController _productDropDownMenuController =
-      TextEditingController();
+  final TextEditingController _productDropDownMenuController = TextEditingController();
   Product? _selectedProduct;
   final TextEditingController _imageNameController = TextEditingController();
   String _imageName = '';
@@ -103,9 +100,7 @@ class _UpdateProductAdminPanelViewState
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.support.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.support.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -128,8 +123,7 @@ class _UpdateProductAdminPanelViewState
               padding: const EdgeInsets.only(right: 20.0),
               child: BlocBuilder<DatabaseBlocAdmin, DatabaseStateAdmin>(
                 builder: (context, state) {
-                  final bool beingLoaded =
-                      state.states == DatabaseStatesAdmin.dbLoading;
+                  final bool beingLoaded = state.states == DatabaseStatesAdmin.dbLoading;
                   return Row(
                     children: [
                       Text(_selectedProduct != null ? 'Delete' : ''),
@@ -138,8 +132,7 @@ class _UpdateProductAdminPanelViewState
                         onPressed: _selectedProduct != null
                             ? () async {
                                 getIt<InnerLoggerHandler>().logBreadcrumb(
-                                  message:
-                                      'UpdateProductAdminPanelView onDeleteButtonPressed',
+                                  message: 'UpdateProductAdminPanelView onDeleteButtonPressed',
                                   data: {'selectedProduct': _selectedProduct},
                                 );
                                 if (beingLoaded) {
@@ -147,9 +140,7 @@ class _UpdateProductAdminPanelViewState
                                     msg: context.l10n.pleaseWait,
                                   );
                                 } else {
-                                  final delete =
-                                      await showOnDatabaseItemDelete(context) ??
-                                      false;
+                                  final delete = await showOnDatabaseItemDelete(context) ?? false;
                                   if (delete && context.mounted) {
                                     Fluttertoast.showToast(
                                       msg: context.l10n.deleting,
@@ -171,9 +162,7 @@ class _UpdateProductAdminPanelViewState
                             ? CircularProgressIndicator()
                             : Icon(
                                 Icons.delete_forever_rounded,
-                                color: _selectedProduct != null
-                                    ? context.appColorScheme.errorContainer
-                                    : Colors.transparent,
+                                color: _selectedProduct != null ? context.appColorScheme.errorContainer : Colors.transparent,
                               ),
                       ),
                     ],
@@ -251,8 +240,7 @@ class _UpdateProductAdminPanelViewState
                                             decoration: InputDecoration(
                                               filled: true,
                                               border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
+                                                borderRadius: BorderRadius.circular(30),
                                                 borderSide: BorderSide.none,
                                               ),
                                             ),
@@ -279,8 +267,7 @@ class _UpdateProductAdminPanelViewState
                                             decoration: InputDecoration(
                                               filled: true,
                                               border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
+                                                borderRadius: BorderRadius.circular(30),
                                                 borderSide: BorderSide.none,
                                               ),
                                             ),
@@ -307,8 +294,7 @@ class _UpdateProductAdminPanelViewState
                                             decoration: InputDecoration(
                                               filled: true,
                                               border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
+                                                borderRadius: BorderRadius.circular(30),
                                                 borderSide: BorderSide.none,
                                               ),
                                             ),
@@ -330,13 +316,10 @@ class _UpdateProductAdminPanelViewState
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed:
-                        _selectedProduct != null &&
-                            state.states != DatabaseStatesAdmin.dbLoading
+                    onPressed: _selectedProduct != null && state.states != DatabaseStatesAdmin.dbLoading
                         ? () {
                             getIt<InnerLoggerHandler>().logBreadcrumb(
-                              message:
-                                  'UpdateProductAdminPanelView onPushChangesButtonPressed',
+                              message: 'UpdateProductAdminPanelView onPushChangesButtonPressed',
                               data: {
                                 'selectedProduct': _selectedProduct,
                                 'productName': _productName,
@@ -347,15 +330,9 @@ class _UpdateProductAdminPanelViewState
                             _ignoreStates = false;
                             final updatedProduct = Product(
                               id: _selectedProduct!.id,
-                              name: _productName == ''
-                                  ? _selectedProduct!.name
-                                  : _productName,
-                              image: _imageName == ''
-                                  ? _selectedProduct!.image
-                                  : _imageName,
-                              description: _descriptionText == ''
-                                  ? _selectedProduct!.description
-                                  : _descriptionText,
+                              name: _productName == '' ? _selectedProduct!.name : _productName,
+                              image: _imageName == '' ? _selectedProduct!.image : _imageName,
+                              description: _descriptionText == '' ? _selectedProduct!.description : _descriptionText,
                               currencies: '',
                               category: '',
                             );
@@ -366,9 +343,7 @@ class _UpdateProductAdminPanelViewState
                             );
                           }
                         : null,
-                    child: state.states == DatabaseStatesAdmin.dbLoading
-                        ? CircularProgressIndicator()
-                        : Text(context.l10n.pushTheChanges),
+                    child: state.states == DatabaseStatesAdmin.dbLoading ? CircularProgressIndicator() : Text(context.l10n.pushTheChanges),
                   ),
                 ),
               ],

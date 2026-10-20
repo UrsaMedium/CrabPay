@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MaterialShimeringPlaceHolder extends StatefulWidget {
   final double width;
   final double height;
-  final double cornerRadius;
+  final double? cornerRadius;
   final Color color;
   final Color? shimeringColor;
   final int? cycleLongevityFactor;
@@ -11,20 +11,17 @@ class MaterialShimeringPlaceHolder extends StatefulWidget {
     super.key,
     required this.width,
     required this.height,
-    required this.cornerRadius,
+    this.cornerRadius,
     required this.color,
     this.shimeringColor,
     this.cycleLongevityFactor,
   });
 
   @override
-  State<MaterialShimeringPlaceHolder> createState() =>
-      _MaterialShimeringPlaceHolderState();
+  State<MaterialShimeringPlaceHolder> createState() => _MaterialShimeringPlaceHolderState();
 }
 
-class _MaterialShimeringPlaceHolderState
-    extends State<MaterialShimeringPlaceHolder>
-    with SingleTickerProviderStateMixin {
+class _MaterialShimeringPlaceHolderState extends State<MaterialShimeringPlaceHolder> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   @override
   void initState() {
@@ -69,7 +66,9 @@ class _MaterialShimeringPlaceHolderState
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
-          borderRadius: .circular(widget.cornerRadius),
+          borderRadius: .circular(
+            widget.cornerRadius ?? (widget.width > widget.height ? widget.height * .1 : widget.width * .1),
+          ),
           color: widget.color,
         ),
       ),

@@ -111,8 +111,7 @@ class _MaterialSettingsSheet extends StatelessWidget {
                               Text(context.l10n.turnOnRussian),
                               Switch(
                                 value: isRu,
-                                onChanged:
-                                    null, //(value) => onLangChange(value),
+                                onChanged: null, //(value) => onLangChange(value),
                               ),
                             ],
                           ),

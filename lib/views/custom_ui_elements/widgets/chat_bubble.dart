@@ -50,14 +50,10 @@ class MaterialChatBubble extends StatelessWidget {
         left: isMe ? 64 : 8,
       ),
       child: Align(
-        alignment: isMe
-            ? AlignmentGeometry.centerRight
-            : AlignmentGeometry.centerLeft,
+        alignment: isMe ? AlignmentGeometry.centerRight : AlignmentGeometry.centerLeft,
         child: Container(
           decoration: BoxDecoration(
-            color: isMe
-                ? context.appColorScheme.primary
-                : context.appColorScheme.secondary,
+            color: isMe ? context.appColorScheme.primary : context.appColorScheme.secondary,
             borderRadius: .circular(24),
           ),
           child: Padding(
@@ -73,9 +69,7 @@ class MaterialChatBubble extends StatelessWidget {
                   textAlign: .left,
                   style: TextStyle(
                     fontSize: 16,
-                    color: isMe
-                        ? context.appColorScheme.onPrimary
-                        : context.appColorScheme.onSecondary,
+                    color: isMe ? context.appColorScheme.onPrimary : context.appColorScheme.onSecondary,
                   ),
                 ),
                 Text(

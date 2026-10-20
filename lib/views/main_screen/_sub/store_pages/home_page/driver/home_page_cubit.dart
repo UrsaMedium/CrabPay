@@ -60,9 +60,7 @@ class HomePageState extends Equatable {
 class HomePageCubit extends Cubit<HomePageState> {
   final DatabaseBloc _dbBloc;
   late final StreamSubscription _dbSubscription;
-  HomePageCubit({required DatabaseBloc dbBloc})
-    : _dbBloc = dbBloc,
-      super(const HomePageState()) {
+  HomePageCubit({required DatabaseBloc dbBloc}) : _dbBloc = dbBloc, super(const HomePageState()) {
     _dbSubscription = _dbBloc.stream.listen((dbState) {
       _syncDabaseData(dbState);
     });
@@ -77,11 +75,12 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   void setLayouts({required double containerWidth}) {
+    double width = containerWidth < 600 ? containerWidth : 600;
     emit(
       state.copyWith(
-        containerWidth: containerWidth,
-        outerCornerRadius: containerWidth * .05,
-        containerPadding: containerWidth * .02,
+        containerWidth: width,
+        outerCornerRadius: width * .05,
+        containerPadding: width * .02,
       ),
     );
   }

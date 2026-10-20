@@ -5,8 +5,7 @@ import 'package:crabpay/views/main_screen/_sub/orders_view/driver/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MaterialCustomOrdersViewAppbar extends StatelessWidget
-    implements PreferredSizeWidget {
+class MaterialCustomOrdersViewAppbar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final VoidCallback onBackButtonPressed;
   final VoidCallback changeSearchState;
@@ -66,8 +65,9 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                             height: 46,
                             width: 46,
                             decoration: BoxDecoration(
-                              color: context.appColorScheme.surfaceContainerHigh
-                                  .withValues(alpha: highGraphics ? .5 : .97),
+                              color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                alpha: highGraphics ? .5 : .97,
+                              ),
                             ),
                             child: IconButton(
                               onPressed: onBackButtonPressed,
@@ -121,10 +121,9 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                               padding: .symmetric(horizontal: 16),
                               height: 46,
                               decoration: BoxDecoration(
-                                color: context
-                                    .appColorScheme
-                                    .surfaceContainerHigh
-                                    .withValues(alpha: highGraphics ? .5 : .97),
+                                color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                  alpha: highGraphics ? .5 : .97,
+                                ),
                               ),
                               child: Align(
                                 alignment: .centerLeft,
@@ -185,15 +184,14 @@ class MaterialCustomOrdersViewAppbar extends StatelessWidget
                             height: 46,
                             width: 46,
                             decoration: BoxDecoration(
-                              color: context.appColorScheme.surfaceContainerHigh
-                                  .withValues(alpha: highGraphics ? .5 : .97),
+                              color: context.appColorScheme.surfaceContainerHigh.withValues(
+                                alpha: highGraphics ? .5 : .97,
+                              ),
                             ),
                             child: IconButton(
                               onPressed: changeSearchState,
                               icon: Icon(
-                                isSearchOpen
-                                    ? Icons.close_rounded
-                                    : Icons.search_rounded,
+                                isSearchOpen ? Icons.close_rounded : Icons.search_rounded,
                               ),
                             ),
                           ),

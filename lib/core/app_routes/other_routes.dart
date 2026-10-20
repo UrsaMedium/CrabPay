@@ -20,11 +20,10 @@ final List<RouteBase> otherRoutes = [
       return CustomTransitionPage(
         key: state.pageKey,
         child: ProductViewDriver(productId: productId, tag: tag),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-              child: child,
-            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+          opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+          child: child,
+        ),
       );
     },
   ),

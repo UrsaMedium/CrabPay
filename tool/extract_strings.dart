@@ -51,19 +51,14 @@ void main() async {
 /// Converts "Hello World!" into "helloWorld"
 String _generateArbKey(String text) {
   final cleanText = text.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), '');
-  final words = cleanText
-      .split(RegExp(r'\s+'))
-      .where((w) => w.isNotEmpty)
-      .toList();
+  final words = cleanText.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
 
   if (words.isEmpty) return 'emptyKey';
 
   String key = words[0].toLowerCase();
   for (int i = 1; i < words.length; i++) {
     if (i > 4) break; // Keep keys reasonably short (max 5 words)
-    key +=
-        words[i].substring(0, 1).toUpperCase() +
-        words[i].substring(1).toLowerCase();
+    key += words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
   }
   return key;
 }

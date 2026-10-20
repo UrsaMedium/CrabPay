@@ -14,10 +14,7 @@ class DataOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Product? appProduct = context.read<AdminBloc>().state.appProduct;
-    final List<ProductField>? appProductFields = context
-        .read<AdminBloc>()
-        .state
-        .appProductFields;
+    final List<ProductField>? appProductFields = context.read<AdminBloc>().state.appProductFields;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

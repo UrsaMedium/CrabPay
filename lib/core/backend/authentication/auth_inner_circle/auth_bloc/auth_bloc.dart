@@ -89,8 +89,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           AuthStateLoggedOut(
             currentUser: state.currentUser,
             bloodyAuthException: e,
-            reason:
-                'Some Exception.  Password Reset Emai Is Not Sent: ${e.toString()}',
+            reason: 'Some Exception.  Password Reset Emai Is Not Sent: ${e.toString()}',
           ),
         );
       }

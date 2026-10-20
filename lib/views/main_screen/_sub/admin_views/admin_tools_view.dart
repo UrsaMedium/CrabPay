@@ -27,14 +27,11 @@ class _AdminToolsViewState extends State<AdminToolsView> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         getIt<InnerLoggerHandler>().logBreadcrumb(
-          message:
-              'AdminToolsView back button pressed, navigating to /ask or popping the current route',
+          message: 'AdminToolsView back button pressed, navigating to /ask or popping the current route',
           data: {'didPop': didPop, 'result': result},
         );
         if (didPop) return;
-        !Navigator.of(context).canPop()
-            ? context.go(AppRoutes.home.path)
-            : context.pop();
+        !Navigator.of(context).canPop() ? context.go(AppRoutes.home.path) : context.pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -68,8 +65,7 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                     child: Text(context.l10n.fetchData),
                   ),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.pushNamed(AppRoutes.addCompleteProduct.name),
+                    onPressed: () => context.pushNamed(AppRoutes.addCompleteProduct.name),
                     child: Text(context.l10n.addCompleteProduct),
                   ),
                   ElevatedButton(
@@ -77,13 +73,11 @@ class _AdminToolsViewState extends State<AdminToolsView> {
                     child: Text(context.l10n.deleteInstancesFromDb),
                   ),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.pushNamed(AppRoutes.addFeaturedProduct.name),
+                    onPressed: () => context.pushNamed(AppRoutes.addFeaturedProduct.name),
                     child: Text(context.l10n.addFeaturedProduct),
                   ),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.pushNamed(AppRoutes.chooseThread.name),
+                    onPressed: () => context.pushNamed(AppRoutes.chooseThread.name),
                     child: Text(context.l10n.answerToUsers),
                   ),
                   ElevatedButton(

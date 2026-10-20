@@ -95,12 +95,10 @@ class MaterialStoreCategoryView extends StatelessWidget {
               ),
               child: Hero(
                 tag: tag,
-                createRectTween: (begin, end) =>
-                    MaterialRectArcTween(begin: begin, end: end),
+                createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                 child: MaterialStoreSearchBarDriver(
                   products: products,
-                  onSearchSubmitedCallBack: (prdcts) =>
-                      onSearchSubmitedCallBack(prdcts),
+                  onSearchSubmitedCallBack: (prdcts) => onSearchSubmitedCallBack(prdcts),
                 ),
               ),
             ),

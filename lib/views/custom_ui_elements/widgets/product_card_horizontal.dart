@@ -14,12 +14,14 @@ class ProductCardHorizontalDriver extends StatelessWidget {
   final String tag;
   final double height;
   final double width;
+  final double? cornerRadius;
   const ProductCardHorizontalDriver({
     super.key,
     required this.product,
     required this.tag,
     required this.height,
     required this.width,
+    this.cornerRadius,
   });
 
   @override
@@ -42,6 +44,7 @@ class ProductCardHorizontalDriver extends StatelessWidget {
           tag: tag,
           height: height,
           width: width,
+          cornerRadius: cornerRadius ?? height * .1,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
         );
       },
@@ -57,6 +60,7 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
   final String description;
   final double height;
   final double width;
+  final double cornerRadius;
   final Color? cardTintColor;
   const _MaterialProductCardHorizontal({
     required this.id,
@@ -67,13 +71,13 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
     required this.height,
     required this.width,
     this.cardTintColor,
+    required this.cornerRadius,
   });
 
   static const _paddingCoef = .02;
 
   @override
   Widget build(BuildContext context) {
-    final cornerRadius = height * .1;
     return Material(
       clipBehavior: .antiAlias,
       shape: RoundedRectangleBorder(borderRadius: .circular(cornerRadius)),
@@ -95,16 +99,14 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
                 padding: .all(height * _paddingCoef),
                 child: Hero(
                   tag: tag,
-                  createRectTween: (begin, end) =>
-                      MaterialRectArcTween(begin: begin, end: end),
+                  createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                   child: Material(
                     borderRadius: .circular(
                       cornerRadius - height * _paddingCoef,
                     ),
                     clipBehavior: .antiAlias,
                     child: CachedNetworkImage(
-                      imageUrl:
-                          'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                      imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                       width: height * (1 - _paddingCoef * 2),
                       height: height * (1 - _paddingCoef * 2),
                       fit: .cover,
@@ -113,13 +115,12 @@ class _MaterialProductCardHorizontal extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(context.l10n.emptyKey),
                       ),
-                      placeholder: (context, url) =>
-                          MaterialShimeringPlaceHolder(
-                            width: height * (1 - _paddingCoef),
-                            height: height * (1 - _paddingCoef),
-                            cornerRadius: cornerRadius - _paddingCoef,
-                            color: context.appColorScheme.surfaceContainerHigh,
-                          ),
+                      placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                        width: height * (1 - _paddingCoef),
+                        height: height * (1 - _paddingCoef),
+                        cornerRadius: cornerRadius - _paddingCoef,
+                        color: context.appColorScheme.surfaceContainerHigh,
+                      ),
                     ),
                   ),
                 ),

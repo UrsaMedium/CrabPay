@@ -6,8 +6,7 @@ import 'package:crabpay/views/main_screen/driver/main_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MaterialMainScreenCustomAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
+class MaterialMainScreenCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final VoidCallback onSettingsPressed;
   final VoidCallback onOrdersPressed;
@@ -28,10 +27,7 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
     final isLoggedIn = context.select<MainScreenCubit, bool>(
       (cubit) => cubit.state.isLoggedIn,
     );
-    final profileIconButtonKey = context
-        .read<MainScreenCubit>()
-        .state
-        .profileIconButtonKey;
+    final profileIconButtonKey = context.read<MainScreenCubit>().state.profileIconButtonKey;
     final connectionStatus = context.select<ConnectionMonitorCubit, bool>(
       (cubit) => cubit.state.isOnline,
     );
@@ -70,13 +66,9 @@ class MaterialMainScreenCustomAppBar extends StatelessWidget
                       child: Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color:
-                              (connectionStatus
-                                      ? context
-                                            .appColorScheme
-                                            .surfaceContainerHigh
-                                      : context.appColorScheme.errorContainer)
-                                  .withValues(alpha: highGraphics ? .5 : .97),
+                          color: (connectionStatus ? context.appColorScheme.surfaceContainerHigh : context.appColorScheme.errorContainer).withValues(
+                            alpha: highGraphics ? .5 : .97,
+                          ),
                         ),
                       ),
                     ),

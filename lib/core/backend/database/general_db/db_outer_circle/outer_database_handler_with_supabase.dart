@@ -112,8 +112,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
       final result = await retryer.retry(() => _client.query(options));
       if (result.hasException) throw result.exception!;
 
-      final nodes =
-          result.data?['productFieldCollection']['edges'] as List? ?? [];
+      final nodes = result.data?['productFieldCollection']['edges'] as List? ?? [];
       return nodes.map((edge) {
         final node = edge['node'];
 
@@ -121,17 +120,14 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         if (node['priceImages'] != null) {
           final dynamic rawImages = node['priceImages'];
           // Safely handles both Stringified JSON and mapped JSON from the server
-          final Map<String, dynamic> decodedImages = rawImages is String
-              ? jsonDecode(rawImages)
-              : Map<String, dynamic>.from(rawImages);
+          final Map<String, dynamic> decodedImages = rawImages is String ? jsonDecode(rawImages) : Map<String, dynamic>.from(rawImages);
           priceImagesMap = decodedImages.map(
             (k, v) => MapEntry(k, (v as num).toDouble()),
           );
         }
 
         List<String>? expectedDataList;
-        if (node['expectedData'] != null &&
-            (node['expectedData'] as List).isNotEmpty) {
+        if (node['expectedData'] != null && (node['expectedData'] as List).isNotEmpty) {
           expectedDataList = List<String>.from(node['expectedData']);
         }
 
@@ -175,8 +171,7 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         '''),
       );
       final result = await retryer.retry(() => _client.query(options));
-      final nodes =
-          result.data?['currenciesCollection']['edges'] as List? ?? [];
+      final nodes = result.data?['currenciesCollection']['edges'] as List? ?? [];
       return nodes.map((e) {
         final n = e['node'];
         return Currencies(
@@ -213,11 +208,8 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         fetchPolicy: FetchPolicy.networkOnly,
       );
       final result = await retryer.retry(() => _client.query(options));
-      final nodes =
-          result.data?['featuredProductCollection']['edges'] as List? ?? [];
-      return nodes
-          .map((e) => e['node']['featuredProductId'] as String)
-          .toList();
+      final nodes = result.data?['featuredProductCollection']['edges'] as List? ?? [];
+      return nodes.map((e) => e['node']['featuredProductId'] as String).toList();
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'Failed To Fetch All Featured Products',
@@ -272,11 +264,8 @@ class OuterDatabaseHandlerWithSupabase implements InnerDatabaseHandler {
         fetchPolicy: FetchPolicy.networkOnly,
       );
       final result = await retryer.retry(() => _client.query(options));
-      final nodes =
-          result.data?['userPreferenceCollection']['edges'] as List? ?? [];
-      return nodes
-          .map((e) => e['node']['favoriteProductId'] as String)
-          .toList();
+      final nodes = result.data?['userPreferenceCollection']['edges'] as List? ?? [];
+      return nodes.map((e) => e['node']['favoriteProductId'] as String).toList();
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'Failed To Fetch User Preferences',

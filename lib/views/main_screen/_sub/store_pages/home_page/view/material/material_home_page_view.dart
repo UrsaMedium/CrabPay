@@ -3,7 +3,6 @@ import 'package:crabpay/views/main_screen/_sub/store_pages/home_page/view/materi
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-
 class MaterialHomePageView extends StatelessWidget {
   final Future<void> Function() reFresher;
   const MaterialHomePageView({super.key, required this.reFresher});
@@ -30,7 +29,7 @@ class MaterialHomePageView extends StatelessWidget {
                   padding: .symmetric(horizontal: 22, vertical: 6),
                   child: Divider(),
                 ),
-                // MaterialHomePageFavoriteContainer(),
+                MaterialHomePageFavoriteContainer(),
               ],
             ),
           ),

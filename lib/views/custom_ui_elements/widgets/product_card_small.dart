@@ -13,7 +13,7 @@ class ProductCardSmallDriver extends StatelessWidget {
   final Product product; //also tag identoty
   final String tag;
   final double width;
-  final double cornerRadius;
+  final double? cornerRadius;
   final double padding;
   final double? margin;
   const ProductCardSmallDriver({
@@ -21,7 +21,7 @@ class ProductCardSmallDriver extends StatelessWidget {
     required this.product,
     required this.tag,
     required this.width,
-    required this.cornerRadius,
+    this.cornerRadius,
     required this.padding,
     this.margin,
   });
@@ -47,7 +47,7 @@ class ProductCardSmallDriver extends StatelessWidget {
           tag: finalTag,
           width: width,
           margin: margin,
-          cornerRadius: cornerRadius,
+          cornerRadius: cornerRadius ?? width * .1,
           cardTintColor: cardTintColor == null ? null : Color(cardTintColor),
           padding: padding,
         );
@@ -105,14 +105,12 @@ class _MaterialProductCardSmall extends StatelessWidget {
                   padding: .all(padding),
                   child: Hero(
                     tag: tag,
-                    createRectTween: (begin, end) =>
-                        MaterialRectArcTween(begin: begin, end: end),
+                    createRectTween: (begin, end) => MaterialRectArcTween(begin: begin, end: end),
                     child: Material(
                       borderRadius: .circular(cornerRadius - padding),
                       clipBehavior: .antiAlias,
                       child: CachedNetworkImage(
-                        imageUrl:
-                            'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
+                        imageUrl: 'https://regred-rainbowbridge.ru/crabpay/images/products/$imageUrl.png',
                         width: width - padding * 2,
                         height: width - padding * 2,
                         fit: .cover,
@@ -121,14 +119,12 @@ class _MaterialProductCardSmall extends StatelessWidget {
                           alignment: .center,
                           child: Text(context.l10n.emptyKey),
                         ),
-                        placeholder: (context, url) =>
-                            MaterialShimeringPlaceHolder(
-                              width: width - 8,
-                              height: width - 8,
-                              cornerRadius: cornerRadius - 4,
-                              color:
-                                  context.appColorScheme.surfaceContainerHigh,
-                            ),
+                        placeholder: (context, url) => MaterialShimeringPlaceHolder(
+                          width: width - 8,
+                          height: width - 8,
+                          cornerRadius: cornerRadius - 4,
+                          color: context.appColorScheme.surfaceContainerHigh,
+                        ),
                       ),
                     ),
                   ),

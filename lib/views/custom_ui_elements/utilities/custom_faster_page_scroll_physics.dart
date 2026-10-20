@@ -9,8 +9,7 @@ class CustomFasterPageScrollPhysics extends PageScrollPhysics {
   }
 
   @override
-  SpringDescription get spring =>
-      const SpringDescription(mass: 1, stiffness: 500, damping: 40);
+  SpringDescription get spring => const SpringDescription(mass: 1, stiffness: 500, damping: 40);
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {

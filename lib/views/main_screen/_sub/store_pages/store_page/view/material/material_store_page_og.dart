@@ -33,10 +33,9 @@ class MaterialStorePageOG extends StatelessWidget {
                   ),
                   sliver: Builder(
                     builder: (context) {
-                      final products = context
-                          .select<StorePageCubit, List<Product>>(
-                            (cubit) => cubit.state.productsToShow ?? [],
-                          );
+                      final products = context.select<StorePageCubit, List<Product>>(
+                        (cubit) => cubit.state.productsToShow ?? [],
+                      );
                       return SliverCrossAxisGroup(
                         slivers: [
                           SliverPadding(
@@ -64,8 +63,7 @@ class MaterialStorePageOG extends StatelessWidget {
                                 ),
                                 child: ProductCardDriver(
                                   product: products[index * 2 + 1],
-                                  tag:
-                                      '${products[index * 2 + 1].id}-store-$index',
+                                  tag: '${products[index * 2 + 1].id}-store-$index',
                                   width: (MediaQuery.widthOf(context) - 24) / 2,
                                   cornerRadius: 16,
                                 ),
@@ -90,8 +88,7 @@ class MaterialStorePageOG extends StatelessWidget {
                 );
                 return MaterialStoreSearchBarDriver(
                   products: products,
-                  onSearchSubmitedCallBack: (prdcts) =>
-                      onSearchSubmitedCallBack(prdcts),
+                  onSearchSubmitedCallBack: (prdcts) => onSearchSubmitedCallBack(prdcts),
                 );
               },
             ),

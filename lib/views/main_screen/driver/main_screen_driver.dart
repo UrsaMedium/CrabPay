@@ -51,9 +51,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
   @override
   void didUpdateWidget(covariant MainScreenDriver oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_pageController.hasClients &&
-        _pageController.page?.round() != widget.navigationShell.currentIndex &&
-        !_mainScreenCubit.state.isSyncingByNavBarTap) {
+    if (_pageController.hasClients && _pageController.page?.round() != widget.navigationShell.currentIndex && !_mainScreenCubit.state.isSyncingByNavBarTap) {
       _mainScreenCubit.onPageSwipe(widget.navigationShell.currentIndex);
       _pageController.animateToPage(
         widget.navigationShell.currentIndex,
@@ -89,10 +87,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
     if (_mainScreenCubit.state.isLoggedIn) {
       context.push(AppRoutes.profileSheet.path);
     } else {
-      final renderBox =
-          _mainScreenCubit.state.profileIconButtonKey.currentContext
-                  ?.findRenderObject()
-              as RenderBox?;
+      final renderBox = _mainScreenCubit.state.profileIconButtonKey.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox == null) {
         Fluttertoast.showToast(msg: context.l10n.loginButtonError);
         return;
@@ -149,8 +144,7 @@ class _MainScreenDriverState extends State<MainScreenDriver> {
               navigationShell: widget.navigationShell,
               onPageSelected: (index) => _onPageSelected(index),
               onPageSwiped: (index) => _onPageSwiped(index),
-              onProfileIconPressed: () =>
-                  _onProfileIconPressed(context: context),
+              onProfileIconPressed: () => _onProfileIconPressed(context: context),
               pageController: _pageController,
               pages: widget.children,
               onOrdersPressed: () => _onOrdersPressed(context),

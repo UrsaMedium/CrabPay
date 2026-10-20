@@ -53,8 +53,9 @@ class MaterialAppNavBar extends StatelessWidget {
                       enabled: highGraphics,
                       filter: .blur(sigmaX: 12, sigmaY: 12),
                       child: Container(
-                        color: context.appColorScheme.surfaceContainerHighest
-                            .withValues(alpha: highGraphics ? 0.4 : .97),
+                        color: context.appColorScheme.surfaceContainerHighest.withValues(
+                          alpha: highGraphics ? 0.4 : .97,
+                        ),
                       ),
                     ),
                   );
@@ -96,8 +97,7 @@ class MaterialAppNavBar extends StatelessWidget {
                           bottom: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: context.appColorScheme.secondaryContainer
-                              .withValues(alpha: .8),
+                          color: context.appColorScheme.secondaryContainer.withValues(alpha: .8),
                           borderRadius: BorderRadius.circular(24),
                         ),
                       ),
@@ -126,23 +126,19 @@ class MaterialAppNavBar extends StatelessWidget {
                         ),
                         Builder(
                           builder: (context) {
-                            final itemsCount = context
-                                .select<MainScreenCubit, int>(
-                                  (cubit) => cubit.state.userCartItemAmount,
-                                );
-                            final pendingOrders = context
-                                .select<MainScreenCubit, int>(
-                                  (cubit) => cubit.state.amountOfPendingOrders,
-                                );
+                            final itemsCount = context.select<MainScreenCubit, int>(
+                              (cubit) => cubit.state.userCartItemAmount,
+                            );
+                            final pendingOrders = context.select<MainScreenCubit, int>(
+                              (cubit) => cubit.state.amountOfPendingOrders,
+                            );
                             return Badge(
                               alignment: .center,
                               offset: Offset(-16, 0),
                               backgroundColor: context.appColorScheme.secondary,
                               textColor: context.appColorScheme.onSecondary,
                               label: Text(
-                                pendingOrders > 0
-                                    ? pendingOrders.toString()
-                                    : '',
+                                pendingOrders > 0 ? pendingOrders.toString() : '',
                               ),
                               isLabelVisible: pendingOrders > 0,
                               child: Badge(
@@ -198,9 +194,7 @@ class MaterialAppNavBarItem extends StatelessWidget {
         padding: const .symmetric(horizontal: 19, vertical: 10),
         child: Icon(
           icon,
-          color: isSelected
-              ? context.appColorScheme.primary
-              : context.appColorScheme.onSurface,
+          color: isSelected ? context.appColorScheme.primary : context.appColorScheme.onSurface,
           size: 28,
         ),
       ),

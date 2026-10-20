@@ -52,9 +52,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
 
   void _initConncetionMonitor() {
     _statusSub = _connectionMonitor.statusStream.listen((connectionStatus) {
-      if (connectionStatus == ServerConnectionStatus.online &&
-          _threadId != null &&
-          keepAlive) {
+      if (connectionStatus == ServerConnectionStatus.online && _threadId != null && keepAlive) {
         _connectToSupabase(_threadId!);
       } else if (connectionStatus == ServerConnectionStatus.offline) {
         _disconnectFromSupabase();
@@ -99,9 +97,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
           .handleError((error, stackTrace) {
             getIt<InnerLoggerHandler>().recordException(
               error: 'Runtime Stream Error in subscribeToMessages: $error',
-              stackTrace: stackTrace is StackTrace
-                  ? stackTrace
-                  : StackTrace.current,
+              stackTrace: stackTrace is StackTrace ? stackTrace : StackTrace.current,
             );
             _messagesControler.addError(error);
           })
@@ -151,11 +147,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
         data: {'userId': userId},
       );
       return await retryer.retry(() async {
-        final existing = await _client
-            .from('support_threads')
-            .select()
-            .eq('user_id', userId)
-            .maybeSingle();
+        final existing = await _client.from('support_threads').select().eq('user_id', userId).maybeSingle();
 
         if (existing != null) {
           return SupportThread(
@@ -165,11 +157,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
           );
         }
 
-        final created = await _client
-            .from('support_threads')
-            .insert({'user_id': userId, 'status': 'open'})
-            .select()
-            .single();
+        final created = await _client.from('support_threads').insert({'user_id': userId, 'status': 'open'}).select().single();
 
         return SupportThread(
           id: created['id'] as String,
@@ -200,11 +188,7 @@ class OuterChatHandlerWithSupabase implements InnerChatHandler {
       final currentUserId = _client.auth.currentUser?.id;
       if (currentUserId == null) return;
 
-      await _client
-          .from('chat_messages')
-          .update({'is_read': true})
-          .eq('thread_id', threadId)
-          .neq('sender_id', currentUserId);
+      await _client.from('chat_messages').update({'is_read': true}).eq('thread_id', threadId).neq('sender_id', currentUserId);
     } catch (e) {
       getIt<InnerLoggerHandler>().recordException(
         error: 'failed exe: markMessagesAsRead',

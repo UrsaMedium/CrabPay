@@ -48,8 +48,7 @@ class MainScreenState extends Equatable {
       isAdmin: isAdmin ?? this.isAdmin,
       isSyncingByNavBarTap: isSyncingByNavBarTap ?? this.isSyncingByNavBarTap,
       profileIconButtonKey: profileIconButtonKey ?? this.profileIconButtonKey,
-      amountOfPendingOrders:
-          amountOfPendingOrders ?? this.amountOfPendingOrders,
+      amountOfPendingOrders: amountOfPendingOrders ?? this.amountOfPendingOrders,
     );
   }
 
@@ -78,9 +77,7 @@ class MainScreenCubit extends Cubit<MainScreenState> {
        _cartBloc = cartBloc,
        super(MainScreenState(profileIconButtonKey: globalKey)) {
     _authSubscription = _authBloc.stream.listen((authState) {
-      final isLoggedIn =
-          !(authState.currentUser.email == null ||
-              authState.currentUser.isAnonymous);
+      final isLoggedIn = !(authState.currentUser.email == null || authState.currentUser.isAnonymous);
       emit(
         state.copyWith(
           currentUser: authState.currentUser,

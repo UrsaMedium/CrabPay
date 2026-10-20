@@ -120,10 +120,8 @@ class _MaterialProfileSheet extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: onSignOutPressed,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      context.appColorScheme.primary,
-                                  foregroundColor:
-                                      context.appColorScheme.onPrimary,
+                                  backgroundColor: context.appColorScheme.primary,
+                                  foregroundColor: context.appColorScheme.onPrimary,
                                   minimumSize: Size(0, 50),
                                 ),
                                 child: Row(

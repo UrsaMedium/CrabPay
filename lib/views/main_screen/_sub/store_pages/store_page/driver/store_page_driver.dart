@@ -19,8 +19,7 @@ class StorePageDriver extends StatefulWidget {
   State<StorePageDriver> createState() => _StorePageDriverState();
 }
 
-class _StorePageDriverState extends State<StorePageDriver>
-    with AutomaticKeepAliveClientMixin {
+class _StorePageDriverState extends State<StorePageDriver> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -57,9 +56,7 @@ class _StorePageDriverState extends State<StorePageDriver>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocListener<DatabaseBloc, DatabaseState>(
-      listenWhen: (previous, current) =>
-          previous.states == DatabaseStates.dbLoading &&
-          current.states != DatabaseStates.dbLoading,
+      listenWhen: (previous, current) => previous.states == DatabaseStates.dbLoading && current.states != DatabaseStates.dbLoading,
       listener: (context, state) {
         if (!(_refreshCompleter?.isCompleted ?? true)) {
           _refreshCompleter!.complete();
@@ -79,10 +76,8 @@ class _StorePageDriverState extends State<StorePageDriver>
                         )
                       : MaterialStorePage(
                           reFresher: () => _reFresher(context),
-                          onCategoryViewOpen: (tag) =>
-                              _onCategoryViewOpen(context, tag),
-                          onSearchSubmitedCallBack: (p0) =>
-                              _onSearchSubmitedCallBack(p0),
+                          onCategoryViewOpen: (tag) => _onCategoryViewOpen(context, tag),
+                          onSearchSubmitedCallBack: (p0) => _onSearchSubmitedCallBack(p0),
                         ),
                   Positioned(
                     bottom: MediaQuery.paddingOf(context).bottom,

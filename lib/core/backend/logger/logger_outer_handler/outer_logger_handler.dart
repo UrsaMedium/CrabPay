@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OuterLoggerHandler implements InnerLoggerHandler {
-  final String _dsn =
-      'https://ea5b1d26b43445a99674a650104b7b51@tracker.regred-rainbowbridge.ru/1';
+  final String _dsn = 'https://ea5b1d26b43445a99674a650104b7b51@tracker.regred-rainbowbridge.ru/1';
   @override
   Future<void> init() async {
     await SentryFlutter.init((options) {

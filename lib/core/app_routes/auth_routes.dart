@@ -9,12 +9,11 @@ final List<RouteBase> authRoutes = [
   GoRoute(
     path: AppRoutes.login.path,
     name: AppRoutes.login.name,
-    pageBuilder: (context, state) =>
-        AppExpandingCircleTransitionRoute.circularReveal(
-          context: context,
-          state: state,
-          child: const LoginViewDriver(),
-        ),
+    pageBuilder: (context, state) => AppExpandingCircleTransitionRoute.circularReveal(
+      context: context,
+      state: state,
+      child: const LoginViewDriver(),
+    ),
     routes: [
       GoRoute(
         path: AppRoutes.register.path,
