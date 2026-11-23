@@ -22,8 +22,8 @@ class HomePageState extends Equatable {
     this.userPreferences,
     this.isLoading = true,
     this.isInitialized = false,
-    this.outerCornerRadius = 624,
-    this.containerWidth = 24,
+    this.outerCornerRadius = 16,
+    this.containerWidth = 600,
     this.containerPadding = 8,
   });
 
@@ -32,9 +32,9 @@ class HomePageState extends Equatable {
     List<Product>? userPreferences,
     double? outerCornerRadius,
     double? containerWidth,
+    double? containerPadding,
     bool? isLoading,
     bool? isInitialized,
-    double? containerPadding,
   }) => HomePageState(
     featuredProducts: featuredProducts ?? this.featuredProducts,
     userPreferences: userPreferences ?? this.userPreferences,

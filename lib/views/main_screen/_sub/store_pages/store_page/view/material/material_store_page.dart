@@ -22,45 +22,50 @@ class MaterialStorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        alignment: .topRight,
-        children: [
-          RefreshIndicator(
-            edgeOffset: MediaQuery.paddingOf(context).top,
-            onRefresh: reFresher,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: .only(
-                      top: 44,
-                      bottom: MediaQuery.paddingOf(context).bottom + 56,
-                    ),
+    return Center(
+      child: SizedBox(
+        width: context.read<StorePageCubit>().state.containerWidth,
+        child: Scaffold(
+          body: Stack(
+            alignment: .topRight,
+            children: [
+              RefreshIndicator(
+                edgeOffset: MediaQuery.paddingOf(context).top,
+                onRefresh: reFresher,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: .only(
+                          top: 44,
+                          bottom: MediaQuery.paddingOf(context).bottom + 56,
+                        ),
+                      ),
+                      SliverList.builder(
+                        itemCount: 2,
+                        itemBuilder: (context, index) => _CategoryCard(
+                          index: index,
+                          onCategoryViewOpen: (tag) => onCategoryViewOpen(tag),
+                        ),
+                      ),
+                    ],
                   ),
-                  SliverList.builder(
-                    itemCount: 2,
-                    itemBuilder: (context, index) => _CategoryCard(
-                      index: index,
-                      onCategoryViewOpen: (tag) => onCategoryViewOpen(tag),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              Padding(
+                padding: .only(
+                  top: MediaQuery.paddingOf(context).top + 8,
+                  left: 16,
+                ),
+                child: MaterialStoreSearchBarDriver(
+                  products: context.read<DatabaseBloc>().state.products ?? [],
+                  onSearchSubmitedCallBack: (prdcts) => onSearchSubmitedCallBack(prdcts),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: .only(
-              top: MediaQuery.paddingOf(context).top + 8,
-              left: 16,
-            ),
-            child: MaterialStoreSearchBarDriver(
-              products: context.read<DatabaseBloc>().state.products ?? [],
-              onSearchSubmitedCallBack: (prdcts) => onSearchSubmitedCallBack(prdcts),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -88,7 +93,7 @@ class _CategoryCard extends StatelessWidget {
       onTap: () => onCategoryViewOpen(subTag),
       child: Card(
         margin: .only(bottom: 32),
-        shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(context.read<StorePageCubit>().state.outerCornerRadius)),
         surfaceTintColor: context.appColorScheme.primary,
         color: context.appColorScheme.surfaceContainerHigh,
         child: Column(
@@ -110,10 +115,10 @@ class _CategoryCard extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 64 * 1.25 + 16 + 8,
+              height: context.read<StorePageCubit>().state.containerWidth * 1.6 / 8,
               width: MediaQuery.widthOf(context) - 32,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: .symmetric(vertical:  context.read<StorePageCubit>().state.outerCornerRadius/3, horizontal: context.read<StorePageCubit>().state.outerCornerRadius/3),
                 child: Stack(
                   alignment: .bottomEnd,
                   children: [
@@ -123,8 +128,8 @@ class _CategoryCard extends StatelessWidget {
                       itemBuilder: (context, index) => ProductCardSmallDriver(
                         product: products[index],
                         tag: subTag,
-                        width: 64,
-                        cornerRadius: 4,
+                        width: context.read<StorePageCubit>().state.containerWidth/8,
+                        // cornerRadius: 4,
                         padding: 0,
                         margin: 2,
                       ),

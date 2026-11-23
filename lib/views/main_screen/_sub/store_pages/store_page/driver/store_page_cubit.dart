@@ -14,6 +14,9 @@ class StorePageState extends Equatable {
   final List<Product>? filterdProductList;
   final List<Product>? products;
   final List<Product>? productsToShow;
+  final double outerCornerRadius;
+  final double containerWidth;
+  final double containerPadding;
 
   const StorePageState({
     this.filterdProductList,
@@ -21,6 +24,9 @@ class StorePageState extends Equatable {
     this.productsToShow,
     this.isHeroFlies = false,
     this.whoFlies,
+    this.outerCornerRadius = 16,
+    this.containerWidth = 600,
+    this.containerPadding = 8,
   });
 
   StorePageState copyWith({
@@ -29,6 +35,9 @@ class StorePageState extends Equatable {
     List<Product>? productsToShow,
     bool? isHeroFlies,
     String? whoFlies,
+    double? outerCornerRadius,
+    double? containerWidth,
+    double? containerPadding,
   }) {
     return StorePageState(
       filterdProductList: filterdProductList ?? this.filterdProductList,
@@ -40,6 +49,9 @@ class StorePageState extends Equatable {
           : whoFlies.isEmpty
           ? null
           : whoFlies,
+      containerWidth: containerWidth ?? this.containerWidth,
+      outerCornerRadius: outerCornerRadius ?? this.outerCornerRadius,
+      containerPadding: containerPadding ?? this.containerPadding,
     );
   }
 
@@ -50,6 +62,9 @@ class StorePageState extends Equatable {
     productsToShow,
     isHeroFlies,
     whoFlies,
+    outerCornerRadius,
+    containerWidth,
+    containerPadding,
   ];
 }
 
@@ -85,6 +100,17 @@ class StorePageCubit extends Cubit<StorePageState> {
 
   void setHeroFlightFalse() {
     emit(state.copyWith(isHeroFlies: false, whoFlies: ''));
+  }
+
+  void setLayouts({required double containerWidth}) {
+    double width = containerWidth < 600 ? containerWidth : 600;
+    emit(
+      state.copyWith(
+        containerWidth: width,
+        outerCornerRadius: width * .05,
+        containerPadding: width * .02,
+      ),
+    );
   }
 
   @override

@@ -34,6 +34,14 @@ class _StorePageDriverState extends State<StorePageDriver> with AutomaticKeepAli
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    _storePageCubit.setLayouts(
+      containerWidth: MediaQuery.widthOf(context) - 32,
+    );
+    super.didChangeDependencies();
+  }
+
   Future<void> _reFresher(BuildContext context) async {
     _refreshCompleter = Completer();
     context.read<DatabaseBloc>().add(DatabaseEventFetchAllProducts());
